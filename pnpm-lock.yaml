@@ -22,6 +22,7 @@ specifiers:
   autoprefixer: 10.4.14
   await-to-js: ^3.0.0
   axios: ^1.3.4
+  dayjs: ^1.11.7
   echarts: 5.4.0
   element-plus: 2.2.27
   eslint: 8.36.0
@@ -34,6 +35,7 @@ specifiers:
   husky: 7.0.4
   js-cookie: 3.0.1
   jsencrypt: 3.3.1
+  mitt: ^3.0.0
   nprogress: 0.2.0
   path-browserify: 1.0.1
   path-to-regexp: 6.2.0
@@ -58,6 +60,8 @@ specifiers:
   vue-i18n: 9.2.2
   vue-router: 4.1.4
   vue-tsc: 0.35.0
+  vue-types: ^5.0.3
+  web-storage-cache: ^1.1.1
 
 dependencies:
   '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.1.0_vue@3.2.45
@@ -66,12 +70,14 @@ dependencies:
   animate.css: registry.npmmirror.com/animate.css/4.1.1
   await-to-js: registry.npmmirror.com/await-to-js/3.0.0
   axios: registry.npmmirror.com/axios/1.4.0
+  dayjs: registry.npmmirror.com/dayjs/1.11.7
   echarts: registry.npmmirror.com/echarts/5.4.0
   element-plus: registry.npmmirror.com/element-plus/2.2.27_vue@3.2.45
   file-saver: registry.npmmirror.com/file-saver/2.0.5
   fuse.js: registry.npmmirror.com/fuse.js/6.6.2
   js-cookie: registry.npmmirror.com/js-cookie/3.0.1
   jsencrypt: registry.npmmirror.com/jsencrypt/3.3.1
+  mitt: registry.npmmirror.com/mitt/3.0.0
   nprogress: registry.npmmirror.com/nprogress/0.2.0
   path-browserify: registry.npmmirror.com/path-browserify/1.0.1
   path-to-regexp: registry.npmmirror.com/path-to-regexp/6.2.0
@@ -81,6 +87,8 @@ dependencies:
   vue-cropper: registry.npmmirror.com/vue-cropper/1.0.3
   vue-i18n: registry.npmmirror.com/vue-i18n/9.2.2_vue@3.2.45
   vue-router: registry.npmmirror.com/vue-router/4.1.4_vue@3.2.45
+  vue-types: registry.npmmirror.com/vue-types/5.0.3_vue@3.2.45
+  web-storage-cache: registry.npmmirror.com/web-storage-cache/1.1.1
 
 devDependencies:
   '@iconify/json': registry.npmmirror.com/@iconify/json/2.2.63
@@ -3986,6 +3994,13 @@ packages:
       isobject: registry.npmmirror.com/isobject/3.0.1
     dev: true
 
+  registry.npmmirror.com/is-plain-object/5.0.0:
+    resolution: {integrity: sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/is-plain-object/-/is-plain-object-5.0.0.tgz}
+    name: is-plain-object
+    version: 5.0.0
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   registry.npmmirror.com/is-regex/1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/is-regex/-/is-regex-1.1.4.tgz}
     name: is-regex
@@ -4519,6 +4534,12 @@ packages:
       minipass: registry.npmmirror.com/minipass/3.3.6
       yallist: registry.npmmirror.com/yallist/4.0.0
     dev: true
+
+  registry.npmmirror.com/mitt/3.0.0:
+    resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mitt/-/mitt-3.0.0.tgz}
+    name: mitt
+    version: 3.0.0
+    dev: false
 
   registry.npmmirror.com/mixin-deep/1.3.2:
     resolution: {integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mixin-deep/-/mixin-deep-1.3.2.tgz}
@@ -6440,6 +6461,22 @@ packages:
       typescript: registry.npmmirror.com/typescript/4.9.5
     dev: true
 
+  registry.npmmirror.com/vue-types/5.0.3_vue@3.2.45:
+    resolution: {integrity: sha512-7+yOUXlRrpkJ4mtgmB6nIfDYLdLmxHQ/IMZR3hsEziYnHK4Y/Rf+rlCIg1rwNnlbyTiDf4v/vz1LEumo3RgwrQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-types/-/vue-types-5.0.3.tgz}
+    id: registry.npmmirror.com/vue-types/5.0.3
+    name: vue-types
+    version: 5.0.3
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      vue: ^2.0.0 || ^3.0.0
+    peerDependenciesMeta:
+      vue:
+        optional: true
+    dependencies:
+      is-plain-object: registry.npmmirror.com/is-plain-object/5.0.0
+      vue: registry.npmmirror.com/vue/3.2.45
+    dev: false
+
   registry.npmmirror.com/vue/3.2.45:
     resolution: {integrity: sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue/-/vue-3.2.45.tgz}
     name: vue
@@ -6450,6 +6487,12 @@ packages:
       '@vue/runtime-dom': registry.npmmirror.com/@vue/runtime-dom/3.2.45
       '@vue/server-renderer': registry.npmmirror.com/@vue/server-renderer/3.2.45_vue@3.2.45
       '@vue/shared': registry.npmmirror.com/@vue/shared/3.2.45
+
+  registry.npmmirror.com/web-storage-cache/1.1.1:
+    resolution: {integrity: sha512-D0MieGooOs8RpsrK+vnejXnvh4OOv/+lTFB35JRkJJQt+uOjPE08XpaE0QBLMTRu47B1KGT/Nq3Gbag3Orinzw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/web-storage-cache/-/web-storage-cache-1.1.1.tgz}
+    name: web-storage-cache
+    version: 1.1.1
+    dev: false
 
   registry.npmmirror.com/webpack-sources/3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/webpack-sources/-/webpack-sources-3.2.3.tgz}

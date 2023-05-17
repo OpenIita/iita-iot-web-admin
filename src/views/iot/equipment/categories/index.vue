@@ -1,6 +1,6 @@
 <template>
   <basic-layout>
-    <div>你好呀你好呀你好呀你好呀</div>
+    <div class="mb-15px">你好呀你好呀你好呀你好呀</div>
     <div>{{ title }}</div>
   </basic-layout>
 </template>
