@@ -1,12 +1,29 @@
 <template>
   <basic-layout>
-    <div class="mb-15px">你好呀你好呀你好呀你好呀</div>
+    <yt-table-search :data="searchData">
+      <template #slots="item, formModel">
+        <el-input v-model="formModel[item.key]"></el-input>
+      </template>
+    </yt-table-search>
     <div>{{ title }}</div>
   </basic-layout>
 </template>
 <script lang="ts" setup>
-const title = '品类管理'
-console.log('getCurrentInstance')
-</script>
+import YtTableSearch from '@/components/common/yt-table-search'
 
-<style lang="less" scoped></style>
+import { ISearchData } from '@/components/common/types/search'
+
+const title = '品类管理'
+const searchData: ISearchData[] = [{
+  label: '产品类型',
+  key: 'type',
+}, {
+  label: '日期',
+  key: 'date',
+  type: 'dateRange'
+}, {
+  label: '插槽',
+  key: 'slots',
+  slot: true,
+}]
+</script>

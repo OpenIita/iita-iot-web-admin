@@ -18,10 +18,10 @@ const { proxy } = getCurrentInstance() as ComponentInternalInstance
 <style lang="scss" scoped>
 .basic-layout {
   .main-box {
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 5px;
-    min-height: 200px;
+    // padding: 15px;
+    // background-color: #fff;
+    // border-radius: 5px;
+    // min-height: 200px;
   }
 }
 </style>

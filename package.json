@@ -57,6 +57,7 @@
     "@unocss/preset-icons": "^0.50.6",
     "@unocss/preset-uno": "^0.50.6",
     "@vitejs/plugin-vue": "4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-sfc": "3.2.45",
     "autoprefixer": "10.4.14",
     "eslint": "8.36.0",
