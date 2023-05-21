@@ -1,9 +1,12 @@
-import { ElDialog, ElButton } from 'element-plus'
-import { propTypes } from '@/utils/propTypes'
+import { IColumn } from '@/components/common/types/tableCommon'
 import { PropType } from 'vue'
-import { IColumn } from '@/components/common/types/search'
+import { formProps } from './props/crudProps'
+import { componentMap, renderOptions } from '@/components/common/render/useRenderComponent'
 
-type TDialogType = 'add' | 'view' | 'edit'
+import { ElDialog, ElButton, ElForm, ElFormItem, FormRules, ElRow, ElCol } from 'element-plus'
+import { deepClone } from '@/utils'
+
+type TDialogType = 'add' | 'view' | 'update'
 
 export default defineComponent({
   name: 'YtTableForm',
@@ -13,9 +16,9 @@ export default defineComponent({
       type: Array as PropType<IColumn[]>,
       default: () => [],
     },
-    width: propTypes.number.def(500) || propTypes.string,
+    ...formProps,
   },
-  emtis: ['openDialog'],
+  emtis: ['openDialog', 'onSuccess'],
   setup(props, { emit, slots, expose }) {
     // 定义钩子
     const diglogRef = ref()
@@ -24,6 +27,7 @@ export default defineComponent({
     const dialogObj = reactive({
       visible: false,
       title: '详情',
+      type: 'view',
     })
     const formObj = reactive<{
       data: Recordable<string, any>
@@ -31,22 +35,47 @@ export default defineComponent({
       data: {},
     })
     const submitForm = () => {
-      console.log('submitForm')
+      formRef.value.validate(async (valid: boolean) => {
+        if (valid) {
+          emit('onSuccess', {
+            type: dialogObj.type,
+            data: formObj.data,
+          })
+        }
+      })
     }
     const cancel = () => {
+      reset()
       dialogObj.visible = false
-      console.log('cancel')
+    }
+    // 表单重置
+    const reset = () => {
+      formObj.data = {}
+      formRef.value.resetFields()
+    }
+    // 弹窗关闭前
+    const beforeClose = (done: () => void) => {
+      reset()
+      done()
+    }
+    const getAttr = (option: IColumn) => {
+      return {
+        clearable: props.formClearable,
+        placeholder: `${option.type === 'string' || !option.type ? '请输入' : '请选择'}${option.label}`,
+        ...option.componentProps,
+      }
     }
     // 打开弹窗
     const openDialog = (type: TDialogType, data?: Recordable<string, any>) => {
+      dialogObj.type = type
       const judgmentObj = {
         view: () => {
           dialogObj.title = '详情'
-          formObj.data = data || {}
+          formObj.data = deepClone(unref(data)) || {}
         },
-        edit: () => {
+        update: () => {
           dialogObj.title = '编辑'
-          formObj.data = data || {}
+          formObj.data = deepClone(unref(data)) || {}
         },
         add: () => {
           dialogObj.title = '新增'
@@ -57,19 +86,56 @@ export default defineComponent({
     }
     expose({
       openDialog,
+      cancel,
+    })
+
+    const formData = ref<IColumn[]>(toRaw(props.column))
+    const rules: FormRules = {}
+    formData.value.forEach((item: IColumn) => {
+      if (item.rules) {
+        rules[item.key] = item.rules
+      }
     })
     return () => (
-      <ElDialog ref={diglogRef} title={dialogObj.title} v-model={dialogObj.visible} width={props.width} append-to-body>
+      <ElDialog ref={diglogRef} title={dialogObj.title} v-model={dialogObj.visible} width={props.formWidth} append-to-body beforeClose={beforeClose}>
         {{
+          default: () => (
+            <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.formLabelWidth} disabled={dialogObj.type === 'view'}>
+              <ElRow gutter={props.formGutter}>
+                {props.column.map((m: IColumn) => {
+                  const type = m?.type || 'string'
+                  const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
+                  if (!m.formHide) {
+                    return (
+                      <ElCol span={props.formCol}>
+                        <ElFormItem label={m.label + ':'} prop={m.key} key={m.key}>
+                          {!m.slot ? (
+                            <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
+                              {renderOptions(m)}
+                            </Com>
+                          ) : (
+                            slots[m.key]?.(m, formObj.data)
+                          )}
+                        </ElFormItem>
+                      </ElCol>
+                    )
+                  }
+                })}
+              </ElRow>
+            </ElForm>
+          ),
           footer: () => (
             <div class="dialog-footer">
-              <ElButton type="primary" onClick={submitForm}>
-                确 定
-              </ElButton>
               <ElButton onClick={cancel}>取 消</ElButton>
+              {dialogObj.type !== 'view' && (
+                <ElButton type="primary" onClick={submitForm}>
+                  保 存
+                </ElButton>
+              )}
             </div>
           ),
         }}
+        {/* */}
       </ElDialog>
     )
   },

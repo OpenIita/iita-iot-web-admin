@@ -1,0 +1,33 @@
+import { FormItemRule } from 'element-plus'
+import { Arrayable } from 'element-plus/es/utils'
+
+export type TFormType =
+  | 'string'
+  | 'select'
+  | 'date'
+  | 'switch'
+  | 'number'
+  | 'color'
+  | 'rate'
+  | 'slider'
+  | 'selectV2'
+  | 'checkbox'
+  | 'cascader'
+  | 'radio'
+  | 'radioButton'
+  | 'checkbox'
+  | 'checkboxButton'
+  | 'treeSelect'
+
+export interface IColumn {
+  label: string // 搜索名称
+  key: string // 搜索key
+  type?: TFormType // 数据类型
+  slot?: boolean // 是否用插槽
+  componentProps?: any // 组件props
+  search?: boolean // 是否搜索
+  rules?: Arrayable<FormItemRule> // form表单校验
+  hide?: boolean // 表格隐藏项
+  formHide?: boolean // 表单隐藏项
+  tableWidth?: number | string // 表格宽度
+}

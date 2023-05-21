@@ -1,25 +1,18 @@
 import { propTypes } from '@/utils/propTypes'
+import { searchProps } from './props/crudProps'
 import { ElButton, ElDatePicker, ElForm, ElFormItem, ElInput, DateModelType } from 'element-plus'
-import { PropType } from 'vue'
-import { IColumn } from '@/components/common/types/search'
-import { useRenderSelect } from './render/useRenderSelect'
-// 支持组件集合
-const componentMap: any = {
-  string: ElInput,
-  select: ElSelect,
-  date: ElDatePicker,
-}
+import { Component, PropType } from 'vue'
+import { IColumn } from '@/components/common/types/tableCommon'
+import { componentMap, renderOptions } from '@/components/common/render/useRenderComponent'
 
 export default defineComponent({
   name: 'YtTableSearch',
   props: {
-    data: {
+    column: {
       type: Array as PropType<IColumn[]>,
       default: () => [],
     },
-    labelWidth: propTypes.number.def(80),
-    clearable: propTypes.bool.def(true),
-    loading: propTypes.bool.def(false),
+    ...searchProps,
   },
   emits: ['handleSearch'],
   setup(props, { slots, emit }) {
@@ -27,7 +20,7 @@ export default defineComponent({
     const formModel = ref<Recordable>({})
     const getAttr = (option: IColumn) => {
       return {
-        clearable: props.clearable,
+        clearable: props.searchClearable,
         placeholder: `${option.type === 'string' || !option.type ? '请输入' : '请选择'}${option.label}`,
         ...option.componentProps,
       }
@@ -40,23 +33,20 @@ export default defineComponent({
       queryFormRef.value.resetFields()
       handleQuery()
     }
-    // 渲染options
-    const renderOptions = (item: IColumn) => {
-      switch (item.type) {
-        case 'select':
-          // eslint-disable-next-line no-case-declarations
-          const { renderSelectOptions } = useRenderSelect()
-          return renderSelectOptions(item)
-        default:
-          return null
+    const searchData = ref<IColumn[]>([])
+    props.column.forEach((item: IColumn) => {
+      if (item.search) {
+        searchData.value.push(item)
       }
-    }
+    })
+
     return () => (
       <div class="search">
-        <ElForm ref={queryFormRef} inline={true} labelWidth={props.labelWidth} model={formModel}>
-          {props.data.map((m: IColumn) => {
+        <ElForm ref={queryFormRef} inline={true} labelWidth={props.searchLabelWidth} model={formModel}>
+          {searchData.value.map((m: IColumn) => {
             const type = m?.type || 'string'
-            const Com = componentMap[type] as ReturnType<typeof defineComponent>
+            console.log(type)
+            const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
             return (
               <ElFormItem label={m.label + ':'} prop={m.key}>
                 {!m.slot ? (
@@ -70,7 +60,7 @@ export default defineComponent({
             )
           })}
           <ElFormItem>
-            <ElButton type="primary" onClick={handleQuery} icon="Search" loading={props.loading}>
+            <ElButton type="primary" onClick={handleQuery} icon="Search" loading={props.searchLoing}>
               搜索
             </ElButton>
             <ElButton onClick={resetQuery} icon="Refresh">

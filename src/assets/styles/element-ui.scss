@@ -10,6 +10,19 @@
   font-weight: 400 !important;
 }
 
+.el-input__wrapper {
+  position: relative;
+
+  .el-input__inner {
+    padding-right: 18px;
+  }
+  .el-input__suffix {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
 .el-upload {
   input[type='file'] {
     display: none !important;

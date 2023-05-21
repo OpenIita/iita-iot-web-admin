@@ -1,8 +1,9 @@
 import { ElOption, ElOptionGroup } from 'element-plus'
+import { IColumn } from '../types/tableCommon'
 
 export const useRenderSelect = () => {
   // 渲染 select options
-  const renderSelectOptions = (item: any) => {
+  const renderSelectOptions = (item: IColumn) => {
     // 如果有别名，就取别名
     const labelAlias = item?.componentProps?.optionsAlias?.labelField
     return item?.componentProps?.options?.map((option: any) => {

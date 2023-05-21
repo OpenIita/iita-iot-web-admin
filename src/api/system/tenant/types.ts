@@ -17,13 +17,13 @@ export interface TenantVO extends BaseEntity {
 }
 
 export interface TenantQuery extends PageQuery {
-  tenantId: string | number
+  tenantId?: string | number
 
-  contactUserName: string
+  contactUserName?: string
 
-  contactPhone: string
+  contactPhone?: string
 
-  companyName: string
+  companyName?: string
 }
 
 export interface TenantForm {
