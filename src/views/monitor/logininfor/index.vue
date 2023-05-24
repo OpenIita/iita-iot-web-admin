@@ -120,78 +120,78 @@ const queryFormRef = ref(ElForm)
 const loginInfoTableRef = ref(ElTable)
 // 查询参数
 const queryParams = ref<LoginInfoQuery>({
-    pageNum: 1,
-    pageSize: 10,
-    ipaddr: '',
-    userName: '',
-    status: '',
-    orderByColumn: defaultSort.value.prop,
-    isAsc: defaultSort.value.order
+  pageNum: 1,
+  pageSize: 10,
+  ipaddr: '',
+  userName: '',
+  status: '',
+  orderByColumn: defaultSort.value.prop,
+  isAsc: defaultSort.value.order
 })
 
 /** 查询登录日志列表 */
 const getList = async () => {
-    loading.value = true
-    const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
-    loginInfoList.value = res.rows
-    total.value = res.total
-    loading.value = false
+  loading.value = true
+  const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
+  loginInfoList.value = res.rows
+  total.value = res.total
+  loading.value = false
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
-    queryParams.value.pageNum = 1
-    getList()
+  queryParams.value.pageNum = 1
+  getList()
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-    dateRange.value = ['', '']
-    queryFormRef.value.resetFields()
-    queryParams.value.pageNum = 1
-    loginInfoTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
+  dateRange.value = ['', '']
+  queryFormRef.value.resetFields()
+  queryParams.value.pageNum = 1
+  loginInfoTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: LoginInfoVO[]) => {
-    ids.value = selection.map(item => item.infoId)
-    multiple.value = !selection.length
-    single.value = selection.length != 1
-    selectName.value = selection.map(item => item.userName)
+  ids.value = selection.map(item => item.infoId)
+  multiple.value = !selection.length
+  single.value = selection.length != 1
+  selectName.value = selection.map(item => item.userName)
 }
 /** 排序触发事件 */
 const handleSortChange = (column: any) => {
-    queryParams.value.orderByColumn = column.prop
-    queryParams.value.isAsc = column.order
-    getList()
+  queryParams.value.orderByColumn = column.prop
+  queryParams.value.isAsc = column.order
+  getList()
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: LoginInfoVO) => {
-    const infoIds = row?.infoId || ids.value
-    await proxy?.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
-    await delLoginInfo(infoIds)
-    getList()
-    proxy?.$modal.msgSuccess("删除成功")
+  const infoIds = row?.infoId || ids.value
+  await proxy?.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
+  await delLoginInfo(infoIds)
+  getList()
+  proxy?.$modal.msgSuccess("删除成功")
 }
 /** 清空按钮操作 */
 const handleClean = async () => {
-    await proxy?.$modal.confirm("是否确认清空所有登录日志数据项?")
-    await cleanLoginInfo()
-    getList()
-    proxy?.$modal.msgSuccess("清空成功")
+  await proxy?.$modal.confirm("是否确认清空所有登录日志数据项?")
+  await cleanLoginInfo()
+  getList()
+  proxy?.$modal.msgSuccess("清空成功")
 }
 /** 解锁按钮操作 */
 const handleUnlock = async () => {
-    const username = selectName.value
-    await proxy?.$modal.confirm('是否确认解锁用户"' + username + '"数据项?')
-    await unlockLoginInfo(username)
-    proxy?.$modal.msgSuccess("用户" + username + "解锁成功")
+  const username = selectName.value
+  await proxy?.$modal.confirm('是否确认解锁用户"' + username + '"数据项?')
+  await unlockLoginInfo(username)
+  proxy?.$modal.msgSuccess("用户" + username + "解锁成功")
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-    proxy?.download("monitor/logininfor/export", {
-        ...queryParams.value,
-    }, `config_${new Date().getTime()}.xlsx`)
+  proxy?.download("monitor/logininfor/export", {
+    ...queryParams.value,
+  }, `config_${new Date().getTime()}.xlsx`)
 }
 
 onMounted(() => {
-    getList()
+  getList()
 })
 </script>

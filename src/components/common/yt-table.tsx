@@ -1,9 +1,17 @@
+/* eslint-disable no-case-declarations */
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tabelProps } from './props/crudProps'
 import { IColumn, TFormType } from '@/components/common/types/tableCommon'
 import { ElButton, ElTable, ElTableColumn, ElPopconfirm } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
+import { formatDate } from '@/utils/formatTime'
+
+interface IScope {
+  row: any
+  $index: any
+  column: any
+}
 
 export default defineComponent({
   name: 'YtTableName',
@@ -66,12 +74,38 @@ export default defineComponent({
         </div>
       )
     }
-
     // 渲染表格列
     const renderColumn = (column: IColumn) => {
+      const renDiv = (scope: IScope) => {
+        const row = toRaw(scope?.row)
+
+        if (!column.slot) {
+          switch (column.type) {
+            case 'date':
+              return formatDate(row[column.key], column?.componentProps?.format)
+            case 'select':
+            case 'radio':
+              const { options, labelAlias, valueAlias } = column.componentProps
+              const labelName = labelAlias || 'label'
+              const valueName = valueAlias || 'value'
+              const obj = toRaw(options)?.find((f: any) => {
+                // console.log(f[valueName] == toRaw(row[column.key]))
+                return f[valueName] == toRaw(row[column.key])
+              })
+              return obj ? obj[labelName] : row[column.key]
+              break
+            default:
+              break
+          }
+          return scope?.row[column.key] || ''
+        }
+        return slots[column.key]?.(scope)
+      }
       return (
-        <ElTableColumn label={column.label} align="center" width={column.tableWidth || props.tableWidth} prop={column.key}>
-          {column.slot && slots[column.key]?.(column)}
+        <ElTableColumn label={column.label} align="center" width={column.tableWidth || props.width} prop={column.key}>
+          {{
+            default: (scope: IScope) => renDiv(scope),
+          }}
         </ElTableColumn>
       )
     }

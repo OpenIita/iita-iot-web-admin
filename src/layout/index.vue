@@ -35,25 +35,25 @@ const needTagsView = computed(() => settingsStore.tagsView)
 const fixedHeader = computed(() => settingsStore.fixedHeader)
 
 const classObj = computed(() => ({
-    hideSidebar: !sidebar.value.opened,
-    openSidebar: sidebar.value.opened,
-    withoutAnimation: sidebar.value.withoutAnimation,
-    mobile: device.value === 'mobile'
+  hideSidebar: !sidebar.value.opened,
+  openSidebar: sidebar.value.opened,
+  withoutAnimation: sidebar.value.withoutAnimation,
+  mobile: device.value === 'mobile'
 }))
 
 const { width } = useWindowSize()
 const WIDTH = 992 // refer to Bootstrap's responsive design
 
 watchEffect(() => {
-    if (device.value === 'mobile' && sidebar.value.opened) {
-        useAppStore().closeSideBar({ withoutAnimation: false })
-    }
-    if (width.value - 1 < WIDTH) {
-        useAppStore().toggleDevice('mobile')
-        useAppStore().closeSideBar({ withoutAnimation: true })
-    } else {
-        useAppStore().toggleDevice('desktop')
-    }
+  if (device.value === 'mobile' && sidebar.value.opened) {
+    useAppStore().closeSideBar({ withoutAnimation: false })
+  }
+  if (width.value - 1 < WIDTH) {
+    useAppStore().toggleDevice('mobile')
+    useAppStore().closeSideBar({ withoutAnimation: true })
+  } else {
+    useAppStore().toggleDevice('desktop')
+  }
 })
 
 const navbarRef = ref(Navbar)

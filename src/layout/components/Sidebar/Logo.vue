@@ -29,10 +29,10 @@ import { ComponentInternalInstance } from "vue"
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 defineProps({
-    collapse: {
-        type: Boolean,
-        required: true
-    }
+  collapse: {
+    type: Boolean,
+    required: true
+  }
 })
 
 const title = ref(import.meta.env.VITE_APP_TITLE)

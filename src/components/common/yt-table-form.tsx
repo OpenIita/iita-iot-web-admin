@@ -60,7 +60,7 @@ export default defineComponent({
     }
     const getAttr = (option: IColumn) => {
       return {
-        clearable: props.formClearable,
+        clearable: props.clearable,
         placeholder: `${option.type === 'string' || !option.type ? '请输入' : '请选择'}${option.label}`,
         ...option.componentProps,
       }
@@ -78,6 +78,11 @@ export default defineComponent({
           formObj.data = deepClone(unref(data)) || {}
         },
         add: () => {
+          props.column.forEach((item: IColumn) => {
+            // 判断默认值
+            const defaultValue = item?.componentProps?.defaultValue
+            if (defaultValue || defaultValue === 0) formObj.data[item.key] = defaultValue
+          })
           dialogObj.title = '新增'
         },
       }
@@ -97,24 +102,27 @@ export default defineComponent({
       }
     })
     return () => (
-      <ElDialog ref={diglogRef} title={dialogObj.title} v-model={dialogObj.visible} width={props.formWidth} append-to-body beforeClose={beforeClose}>
+      <ElDialog ref={diglogRef} title={dialogObj.title} v-model={dialogObj.visible} width={props.width} append-to-body beforeClose={beforeClose}>
         {{
           default: () => (
-            <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.formLabelWidth} disabled={dialogObj.type === 'view'}>
-              <ElRow gutter={props.formGutter}>
+            <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>
+              <ElRow gutter={props.gutter}>
                 {props.column.map((m: IColumn) => {
                   const type = m?.type || 'string'
                   const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
                   if (!m.formHide) {
                     return (
-                      <ElCol span={props.formCol}>
+                      <ElCol span={props.col}>
                         <ElFormItem label={m.label + ':'} prop={m.key} key={m.key}>
-                          {!m.slot ? (
+                          {!m.formSlot ? (
                             <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
                               {renderOptions(m)}
                             </Com>
                           ) : (
-                            slots[m.key]?.(m, formObj.data)
+                            slots[m.key + 'Form']?.({
+                              column: m,
+                              row: formObj.data,
+                            })
                           )}
                         </ElFormItem>
                       </ElCol>

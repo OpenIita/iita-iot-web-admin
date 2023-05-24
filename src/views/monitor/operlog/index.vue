@@ -185,112 +185,112 @@ const operLogTableRef = ref(ElTable)
 const queryFormRef = ref(ElForm)
 
 const dialog = reactive<DialogOption>({
-    visible: false,
-    title: ''
+  visible: false,
+  title: ''
 })
 
 
 const data = reactive<PageData<OperLogForm, OperLogQuery>>({
-    form: {
-        operId: undefined,
-        tenantId: undefined,
-        title: '',
-        businessType: 0,
-        businessTypes: undefined,
-        method: '',
-        requestMethod: '',
-        operatorType: 0,
-        operName: '',
-        deptName: '',
-        operUrl: '',
-        operIp: '',
-        operLocation: '',
-        operParam: '',
-        jsonResult: '',
-        status: 0,
-        errorMsg: '',
-        operTime: '',
-        costTime: 0
-    },
-    queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        title: '',
-        operName: '',
-        businessType: '',
-        status: '',
-        orderByColumn: defaultSort.value.prop,
-        isAsc: defaultSort.value.order
-    },
-    rules: {}
+  form: {
+    operId: undefined,
+    tenantId: undefined,
+    title: '',
+    businessType: 0,
+    businessTypes: undefined,
+    method: '',
+    requestMethod: '',
+    operatorType: 0,
+    operName: '',
+    deptName: '',
+    operUrl: '',
+    operIp: '',
+    operLocation: '',
+    operParam: '',
+    jsonResult: '',
+    status: 0,
+    errorMsg: '',
+    operTime: '',
+    costTime: 0
+  },
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    title: '',
+    operName: '',
+    businessType: '',
+    status: '',
+    orderByColumn: defaultSort.value.prop,
+    isAsc: defaultSort.value.order
+  },
+  rules: {}
 })
 
 const { queryParams, form } = toRefs(data)
 
 /** 查询登录日志 */
 const getList = async () => {
-    loading.value = true
-    const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
-    operlogList.value = res.rows
-    total.value = res.total
-    loading.value = false
+  loading.value = true
+  const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
+  operlogList.value = res.rows
+  total.value = res.total
+  loading.value = false
 }
 /** 操作日志类型字典翻译 */
 const typeFormat = (row: OperLogForm) => {
-    return proxy?.selectDictLabel(sys_oper_type.value, row.businessType)
+  return proxy?.selectDictLabel(sys_oper_type.value, row.businessType)
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
-    queryParams.value.pageNum = 1
-    getList()
+  queryParams.value.pageNum = 1
+  getList()
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-    dateRange.value = ['', '']
-    queryFormRef.value.resetFields()
-    queryParams.value.pageNum = 1
-    operLogTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
+  dateRange.value = ['', '']
+  queryFormRef.value.resetFields()
+  queryParams.value.pageNum = 1
+  operLogTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: OperLogVO[]) => {
-    ids.value = selection.map(item => item.operId)
-    multiple.value = !selection.length
+  ids.value = selection.map(item => item.operId)
+  multiple.value = !selection.length
 }
 /** 排序触发事件 */
 const handleSortChange = (column: any) => {
-    queryParams.value.orderByColumn = column.prop
-    queryParams.value.isAsc = column.order
-    getList()
+  queryParams.value.orderByColumn = column.prop
+  queryParams.value.isAsc = column.order
+  getList()
 }
 /** 详细按钮操作 */
 const handleView = (row: OperLogVO) => {
-    dialog.visible = true
-    form.value = row
+  dialog.visible = true
+  form.value = row
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OperLogVO) => {
-    const operIds = row?.operId || ids.value
-    await proxy?.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?')
-    await delOperlog(operIds)
-    getList()
-    proxy?.$modal.msgSuccess("删除成功")
+  const operIds = row?.operId || ids.value
+  await proxy?.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?')
+  await delOperlog(operIds)
+  getList()
+  proxy?.$modal.msgSuccess("删除成功")
 }
 
 /** 清空按钮操作 */
 const handleClean = async () => {
-    await proxy?.$modal.confirm("是否确认清空所有操作日志数据项?")
-    await cleanOperlog()
-    getList()
-    proxy?.$modal.msgSuccess("清空成功")
+  await proxy?.$modal.confirm("是否确认清空所有操作日志数据项?")
+  await cleanOperlog()
+  getList()
+  proxy?.$modal.msgSuccess("清空成功")
 }
 
 /** 导出按钮操作 */
 const handleExport = () => {
-    proxy?.download("monitor/operlog/export", {
-        ...queryParams.value,
-    }, `config_${new Date().getTime()}.xlsx`)
+  proxy?.download("monitor/operlog/export", {
+    ...queryParams.value,
+  }, `config_${new Date().getTime()}.xlsx`)
 }
 onMounted(() => {
-    getList()
+  getList()
 })
 </script>

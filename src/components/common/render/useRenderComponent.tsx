@@ -12,14 +12,13 @@ import {
   ElRate,
   ElSlider,
   ElSelectV2,
-  ElCheckbox,
   ElCascader,
-  ElCheckboxButton,
-  ElRadioButton,
   ElTreeSelect,
   ElRadioGroup,
   ElCheckboxGroup,
 } from 'element-plus'
+import FileUpload from '@/components/FileUpload/index.vue'
+import ImageUpload from '@/components/ImageUpload/index.vue'
 import { useRenderRadio } from './useRenderRadio'
 import { useRenderCheckbox } from './useRenderCheckbox'
 
@@ -40,7 +39,8 @@ componentMap.set('cascader', ElCascader)
 componentMap.set('radio', ElRadioGroup)
 componentMap.set('radioButton', ElRadioGroup)
 componentMap.set('treeSelect', ElTreeSelect)
-
+componentMap.set('upload', FileUpload)
+componentMap.set('image', ImageUpload)
 // 渲染options
 export const renderOptions = (item: IColumn) => {
   switch (item.type) {

@@ -83,74 +83,74 @@ const title = ref("修改头像")
 const cropper = ref<any>({})
 //图片裁剪数据
 const options = reactive<Options>({
-    img: userStore.avatar,
-    autoCrop: true,
-    autoCropWidth: 200,
-    autoCropHeight: 200,
-    fixedBox: true,
-    outputType: "png",
-    fileName: '',
-    previews: {},
-    visible: false
+  img: userStore.avatar,
+  autoCrop: true,
+  autoCropWidth: 200,
+  autoCropHeight: 200,
+  fixedBox: true,
+  outputType: "png",
+  fileName: '',
+  previews: {},
+  visible: false
 })
 
 /** 编辑头像 */
 const editCropper = () => {
-    open.value = true
+  open.value = true
 }
 /** 打开弹出层结束时的回调 */
 const modalOpened = () => {
-    visible.value = true
+  visible.value = true
 }
 /** 覆盖默认上传行为 */
 const requestUpload = (): any => {}
 /** 向左旋转 */
 const rotateLeft = () => {
-    cropper.value.rotateLeft()
+  cropper.value.rotateLeft()
 }
 /** 向右旋转 */
 const rotateRight = () => {
-    cropper.value.rotateRight()
+  cropper.value.rotateRight()
 }
 /** 图片缩放 */
 const changeScale = (num: number) => {
-    num = num || 1
-    cropper.value.changeScale(num)
+  num = num || 1
+  cropper.value.changeScale(num)
 }
 /** 上传预处理 */
 const beforeUpload = (file: any) => {
-    if (file.type.indexOf("image/") == -1) {
-        proxy?.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
-    } else {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => {
-            options.img = reader.result
-            options.fileName = file.name
-        }
+  if (file.type.indexOf("image/") == -1) {
+    proxy?.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+  } else {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      options.img = reader.result
+      options.fileName = file.name
     }
+  }
 }
 /** 上传图片 */
 const uploadImg = async () => {
-    cropper.value.getCropBlob(async (data: any) => {
-        let formData = new FormData()
-        formData.append("avatarfile", data, options.fileName)
-        const res = await uploadAvatar(formData)
-        open.value = false
-        options.img = res.data.imgUrl
-        userStore.avatar = options.img as string
-        proxy?.$modal.msgSuccess("修改成功")
-        visible.value = false
-    })
+  cropper.value.getCropBlob(async (data: any) => {
+    let formData = new FormData()
+    formData.append("avatarfile", data, options.fileName)
+    const res = await uploadAvatar(formData)
+    open.value = false
+    options.img = res.data.imgUrl
+    userStore.avatar = options.img as string
+    proxy?.$modal.msgSuccess("修改成功")
+    visible.value = false
+  })
 }
 /** 实时预览 */
 const realTime = (data: any) => {
-    options.previews = data
+  options.previews = data
 }
 /** 关闭窗口 */
 const closeDialog = () => {
-    options.img = userStore.avatar
-    options.visible = false
+  options.img = userStore.avatar
+  options.visible = false
 }
 </script>
 

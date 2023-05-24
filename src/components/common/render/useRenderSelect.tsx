@@ -26,8 +26,8 @@ export const useRenderSelect = () => {
   // 渲染 select option item
   const renderSelectOptionItem = (item: any, option: any) => {
     // 如果有别名，就取别名
-    const labelAlias = item?.componentProps?.optionsAlias?.labelField
-    const valueAlias = item?.componentProps?.optionsAlias?.valueField
+    const labelAlias = item?.componentProps?.labelAlias
+    const valueAlias = item?.componentProps?.valueAlias
 
     const { label, value, ...other } = option
 

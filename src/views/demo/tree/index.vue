@@ -114,17 +114,17 @@ const treeFormRef = ref(ElForm)
 const treeTableRef = ref(ElTable)
 
 const dialog = reactive<DialogOption>({
-    visible: false,
-    title: ''
+  visible: false,
+  title: ''
 })
 
 
 const initFormData: TreeForm = {
-    id: undefined,
-    parentId: undefined,
-    deptId: undefined,
-    userId: undefined,
-    treeName: undefined,
+  id: undefined,
+  parentId: undefined,
+  deptId: undefined,
+  userId: undefined,
+  treeName: undefined,
 }
 
 const data = reactive<PageData<TreeForm, TreeQuery>>({

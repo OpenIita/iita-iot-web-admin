@@ -1,14 +1,14 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <el-row :gutter="funGutter" class="mb8">
-        <el-col :span="funSpan" v-if="addBtn">
+      <el-row :gutter="gutter" class="mb8">
+        <el-col :span="span" v-if="addBtn">
           <el-button v-bind="addBind" type="primary" plain icon="Plus" @click="emits('handleAdd')">{{ addBtnText }}</el-button>
         </el-col>
-        <el-col :span="funSpan" v-if="delBtn">
+        <el-col :span="span" v-if="delBtn">
           <el-button type="danger" plain icon="Delete" v-bind="delBind" :disabled="false" @click="emits('handleDel')">{{ delBtnText }}</el-button>
         </el-col>
-        <el-col :span="funSpan" v-if="exportBtn">
+        <el-col :span="span" v-if="exportBtn">
           <el-button v-bind="exportBind" type="warning" plain icon="Download" @click="emits('handleExport')">{{ exportBtnText }}</el-button>
         </el-col>
         <right-toolbar v-model:showSearch="showSearch" @queryTable="emits('reloadData')"></right-toolbar>

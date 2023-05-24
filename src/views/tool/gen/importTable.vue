@@ -48,59 +48,59 @@ const tableRef = ref(ElTable)
 const queryFormRef = ref(ElForm)
 
 const queryParams = reactive<DbTableQuery>({
-    pageNum: 1,
-    pageSize: 10,
-    tableName: '',
-    tableComment: ''
+  pageNum: 1,
+  pageSize: 10,
+  tableName: '',
+  tableComment: ''
 })
 
 const emit = defineEmits(["ok"])
 
 /** 查询参数列表 */
 const show = () => {
-    getList()
-    visible.value = true
+  getList()
+  visible.value = true
 }
 /** 单击选择行 */
 const clickRow = (row: DbTableVO) => {
-    tableRef.value.toggleRowSelection(row)
+  tableRef.value.toggleRowSelection(row)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: DbTableVO[]) => {
-    tables.value = selection.map(item => item.tableName)
+  tables.value = selection.map(item => item.tableName)
 }
 /** 查询表数据 */
 const getList = async () => {
-    const res = await listDbTable(queryParams)
-    dbTableList.value = res.rows
-    total.value = res.total
+  const res = await listDbTable(queryParams)
+  dbTableList.value = res.rows
+  total.value = res.total
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
-    queryParams.pageNum = 1
-    getList()
+  queryParams.pageNum = 1
+  getList()
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-    queryFormRef.value.resetFields()
-    handleQuery()
+  queryFormRef.value.resetFields()
+  handleQuery()
 }
 /** 导入按钮操作 */
 const handleImportTable = async () => {
-    const tableNames = tables.value.join(",")
-    if (tableNames == "") {
-        proxy?.$modal.msgError("请选择要导入的表")
-        return
-    }
-    const res = await importTable({ tables: tableNames })
-    proxy?.$modal.msgSuccess(res.msg)
-    if (res.code === 200) {
-        visible.value = false
-        emit("ok")
-    }
+  const tableNames = tables.value.join(",")
+  if (tableNames == "") {
+    proxy?.$modal.msgError("请选择要导入的表")
+    return
+  }
+  const res = await importTable({ tables: tableNames })
+  proxy?.$modal.msgSuccess(res.msg)
+  if (res.code === 200) {
+    visible.value = false
+    emit("ok")
+  }
 }
 
 defineExpose({
-    show,
+  show,
 })
 </script>

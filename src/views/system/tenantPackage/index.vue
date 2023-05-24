@@ -125,207 +125,207 @@ const queryFormRef = ref(ElForm)
 const tenantPackageFormRef = ref(ElForm)
 
 const dialog = reactive<DialogOption>({
-    visible: false,
-    title: ''
+  visible: false,
+  title: ''
 })
 
 
 const initFormData: TenantPkgForm = {
-    packageId: undefined,
-    packageName: '',
-    menuIds: '',
-    remark: '',
-    menuCheckStrictly: true
+  packageId: undefined,
+  packageName: '',
+  menuIds: '',
+  remark: '',
+  menuCheckStrictly: true
 }
 const data = reactive<PageData<TenantPkgForm, TenantPkgQuery>>({
-    form: {...initFormData},
-    queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        packageName: ''
-    },
-    rules: {
-        packageId: [{ required: true, message: "租户套餐id不能为空", trigger: "blur" }],
-        packageName: [{ required: true, message: "套餐名称不能为空", trigger: "blur" }]
-    }
+  form: {...initFormData},
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    packageName: ''
+  },
+  rules: {
+    packageId: [{ required: true, message: "租户套餐id不能为空", trigger: "blur" }],
+    packageName: [{ required: true, message: "套餐名称不能为空", trigger: "blur" }]
+  }
 })
 
 const { queryParams, form, rules } = toRefs(data)
 
 /** 查询菜单树结构 */
 const getMenuTreeselect = async() => {
-    const { data } = await menuTreeselect()
-    menuOptions.value = data
+  const { data } = await menuTreeselect()
+  menuOptions.value = data
 }
 
 // 所有菜单节点数据
 const getMenuAllCheckedKeys = () => {
-    // 目前被选中的菜单节点
-    let checkedKeys = menuTreeRef.value.getCheckedKeys()
-    // 半选中的菜单节点
-    let halfCheckedKeys = menuTreeRef.value.getHalfCheckedKeys()
-    checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys)
-    return checkedKeys
+  // 目前被选中的菜单节点
+  let checkedKeys = menuTreeRef.value.getCheckedKeys()
+  // 半选中的菜单节点
+  let halfCheckedKeys = menuTreeRef.value.getHalfCheckedKeys()
+  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys)
+  return checkedKeys
 }
 
 /** 根据租户套餐ID查询菜单树结构 */
 const getPackageMenuTreeselect = async(packageId: string | number) => {
-    const res = await tenantPackageMenuTreeselect(packageId)
-    menuOptions.value = res.data.menus
-    return Promise.resolve(res)
+  const res = await tenantPackageMenuTreeselect(packageId)
+  menuOptions.value = res.data.menus
+  return Promise.resolve(res)
 }
 
 /** 查询租户套餐列表 */
 const getList = async () => {
-    loading.value = true
-    const res = await listTenantPackage(queryParams.value)
-    tenantPackageList.value = res.rows
-    total.value = res.total
-    loading.value = false
+  loading.value = true
+  const res = await listTenantPackage(queryParams.value)
+  tenantPackageList.value = res.rows
+  total.value = res.total
+  loading.value = false
 }
 
 // 租户套餐状态修改
 const handleStatusChange = async (row: TenantPkgVO) => {
-    let text = row.status === "0" ? "启用" : "停用"
-    const [err] = await to(proxy?.$modal.confirm('确认要"' + text + '""' + row.packageName + '"套餐吗？') as Promise<any>)
-    if (err) {
-        row.status = row.status === "0" ? "1" : "0"
-    } else {
-        await changePackageStatus(row.packageId, row.status)
-        proxy?.$modal.msgSuccess(text + "成功")
-    }
+  let text = row.status === "0" ? "启用" : "停用"
+  const [err] = await to(proxy?.$modal.confirm('确认要"' + text + '""' + row.packageName + '"套餐吗？') as Promise<any>)
+  if (err) {
+    row.status = row.status === "0" ? "1" : "0"
+  } else {
+    await changePackageStatus(row.packageId, row.status)
+    proxy?.$modal.msgSuccess(text + "成功")
+  }
 }
 
 // 取消按钮
 const cancel = () => {
-    reset()
-    dialog.visible = false
+  reset()
+  dialog.visible = false
 }
 
 // 表单重置
 const reset = () => {
-    menuTreeRef.value.setCheckedKeys([])
-    menuExpand.value = false
-    menuNodeAll.value = false
-    form.value = {...initFormData}
-    tenantPackageFormRef.value.resetFields()
+  menuTreeRef.value.setCheckedKeys([])
+  menuExpand.value = false
+  menuNodeAll.value = false
+  form.value = {...initFormData}
+  tenantPackageFormRef.value.resetFields()
 }
 
 /** 搜索按钮操作 */
 const handleQuery = () => {
-    queryParams.value.pageNum = 1
-    getList()
+  queryParams.value.pageNum = 1
+  getList()
 }
 
 /** 重置按钮操作 */
 const resetQuery = () => {
-    queryFormRef.value.resetFields()
-    handleQuery()
+  queryFormRef.value.resetFields()
+  handleQuery()
 }
 
 // 多选框选中数据
 const handleSelectionChange = (selection: TenantPkgVO[]) => {
-    ids.value = selection.map(item => item.packageId)
-    single.value = selection.length != 1
-    multiple.value = !selection.length
+  ids.value = selection.map(item => item.packageId)
+  single.value = selection.length != 1
+  multiple.value = !selection.length
 }
 
 // 树权限（展开/折叠）
 const handleCheckedTreeExpand = (value: CheckboxValueType, type: string) => {
-    if (type == 'menu') {
-        let treeList = menuOptions.value
-        for (let i = 0; i < treeList.length; i++) {
-            menuTreeRef.value.store.nodesMap[treeList[i].id].expanded = value
-        }
+  if (type == 'menu') {
+    let treeList = menuOptions.value
+    for (let i = 0; i < treeList.length; i++) {
+      menuTreeRef.value.store.nodesMap[treeList[i].id].expanded = value
     }
+  }
 }
 
 // 树权限（全选/全不选）
 const handleCheckedTreeNodeAll = (value: CheckboxValueType, type: string) => {
-    if (type == 'menu') {
-        menuTreeRef.value.setCheckedNodes(value ? menuOptions.value: [])
-    }
+  if (type == 'menu') {
+    menuTreeRef.value.setCheckedNodes(value ? menuOptions.value: [])
+  }
 }
 
 // 树权限（父子联动）
 const handleCheckedTreeConnect = (value: CheckboxValueType, type: string) => {
-    if (type == 'menu') {
-        form.value.menuCheckStrictly = value as boolean
-    }
+  if (type == 'menu') {
+    form.value.menuCheckStrictly = value as boolean
+  }
 }
 
 /** 新增按钮操作 */
 const handleAdd = () => {
-    dialog.visible = true
-    dialog.title = "添加租户套餐"
-    nextTick(() => {
-        reset()
-        getMenuTreeselect()
-    })
+  dialog.visible = true
+  dialog.title = "添加租户套餐"
+  nextTick(() => {
+    reset()
+    getMenuTreeselect()
+  })
 }
 
 /** 修改按钮操作 */
 const handleUpdate = (row?: TenantPkgVO) => {
-    loading.value = true
-    dialog.visible = true
-    dialog.title = "修改租户套餐"
+  loading.value = true
+  dialog.visible = true
+  dialog.title = "修改租户套餐"
+  nextTick(async () => {
+    reset()
+    const _packageId = row?.packageId || ids.value[0]
+    const packageMenu = getPackageMenuTreeselect(_packageId)
+    const response = await getTenantPackage(_packageId)
+    loading.value = false
+    form.value = response.data
     nextTick(async () => {
-        reset()
-        const _packageId = row?.packageId || ids.value[0]
-        const packageMenu = getPackageMenuTreeselect(_packageId)
-        const response = await getTenantPackage(_packageId)
-        loading.value = false
-        form.value = response.data
-        nextTick(async () => {
-            const res = await packageMenu
-            let checkedKeys = res.data.checkedKeys
-            checkedKeys.forEach((v) => {
-                nextTick(() => {
-                    menuTreeRef.value.setChecked(v, true ,false)
-                })
-            })
+      const res = await packageMenu
+      let checkedKeys = res.data.checkedKeys
+      checkedKeys.forEach((v) => {
+        nextTick(() => {
+          menuTreeRef.value.setChecked(v, true ,false)
         })
+      })
     })
+  })
 }
 
 /** 提交按钮 */
 const submitForm = () => {
-    tenantPackageFormRef.value.validate(async (valid: boolean) => {
-        if (valid) {
-            buttonLoading.value = true
-            form.value.menuIds = getMenuAllCheckedKeys()
-            if (form.value.packageId != null) {
-                await updateTenantPackage(form.value).finally(() => buttonLoading.value = false)
-            } else {
-                await addTenantPackage(form.value).finally(() => buttonLoading.value = false)
-            }
-            proxy?.$modal.msgSuccess("操作成功")
-            dialog.visible = false
-            getList()
-        }
-    })
+  tenantPackageFormRef.value.validate(async (valid: boolean) => {
+    if (valid) {
+      buttonLoading.value = true
+      form.value.menuIds = getMenuAllCheckedKeys()
+      if (form.value.packageId != null) {
+        await updateTenantPackage(form.value).finally(() => buttonLoading.value = false)
+      } else {
+        await addTenantPackage(form.value).finally(() => buttonLoading.value = false)
+      }
+      proxy?.$modal.msgSuccess("操作成功")
+      dialog.visible = false
+      getList()
+    }
+  })
 }
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: TenantPkgVO) => {
-    const _packageIds = row?.packageId || ids.value
-    await proxy?.$modal.confirm('是否确认删除租户套餐编号为"' + _packageIds + '"的数据项？').finally(() => {
-        loading.value = false
-    })
-    await delTenantPackage(_packageIds)
-    loading.value = true
-    getList()
-    proxy?.$modal.msgSuccess("删除成功")
+  const _packageIds = row?.packageId || ids.value
+  await proxy?.$modal.confirm('是否确认删除租户套餐编号为"' + _packageIds + '"的数据项？').finally(() => {
+    loading.value = false
+  })
+  await delTenantPackage(_packageIds)
+  loading.value = true
+  getList()
+  proxy?.$modal.msgSuccess("删除成功")
 }
 
 /** 导出按钮操作 */
 const handleExport = () => {
-    proxy?.download('system/tenantPackage/export', {
-        ...queryParams.value
-    }, `tenantPackage_${new Date().getTime()}.xlsx`)
+  proxy?.download('system/tenantPackage/export', {
+    ...queryParams.value
+  }, `tenantPackage_${new Date().getTime()}.xlsx`)
 }
 
 onMounted(() => {
-    getList()
+  getList()
 })
 </script>

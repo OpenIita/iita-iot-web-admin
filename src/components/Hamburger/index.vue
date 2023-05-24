@@ -10,15 +10,15 @@
 
 <script setup lang="ts">
 defineProps({
-    isActive: {
-        type: Boolean,
-        default: false
-    }
+  isActive: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits(['toggleClick'])
 const toggleClick = () => {
-    emit('toggleClick')
+  emit('toggleClick')
 }
 </script>
 

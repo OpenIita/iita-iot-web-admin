@@ -8,8 +8,6 @@
     @save-fun="saveFun"
     @change="onLoad"
   ></yt-crud>
-  <!-- 和saveFun用一个就行 @add-fun="addFun"
-    @update-fun="updateFun" -->
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'

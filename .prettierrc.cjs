@@ -10,6 +10,7 @@ module.exports = {
     useTabs: false,
     // 在语句末尾是否需要分号
     semi: false,
+    indent: 2,
     // 是否使用单引号
     singleQuote: true,
     // 更改引用对象属性的时间 可选值"<as-needed|consistent|preserve>"

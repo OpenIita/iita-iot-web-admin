@@ -1,5 +1,15 @@
 <template>
-  <yt-crud ref="crudRef" :data="data" :column="column"></yt-crud>
+  <yt-crud ref="crudRef" :data="data" :column="column">
+    <template #sloo="scope">
+      <el-input v-model="scope.row.sloo"></el-input>
+    </template>
+    <template #slots3Form="scope">
+      <el-input v-model="scope.row.sloo"></el-input>
+    </template>
+    <template #slots2Search="scope">
+      <el-input v-model="scope.row.sloo"></el-input>
+    </template>
+  </yt-crud>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
@@ -38,8 +48,19 @@ const column: IColumn[] = [{
   rules: [{ required: true, message: '字符串不能为空' }],
 }, {
   label: '插槽',
-  key: 'slots',
+  key: 'sloo',
   slot: true,
+}, {
+  label: '搜索插槽',
+  key: 'slots2',
+  search: true,
+  hide: true,
+  searchSlot: true,
+}, {
+  label: '表单插槽',
+  key: 'slots3',
+  hide: true,
+  formSlot: true,
 }, {
   label: '开关',
   key: 'switch',
@@ -94,7 +115,7 @@ const data = ref([{
   type: 1,
   date: '1990-10-10',
   string: '字符串1',
-  slots: true,
+  sloo: '1111',
   switch: true,
   number: 111,
   color: '#fff',
@@ -102,6 +123,9 @@ const data = ref([{
   radio: '1',
   checkbox: '1,2'
 }])
+const getScope = (s) => {
+  console.log('s', s)
+}
 </script>
 
 <!-- <style lang="scss" scoped>

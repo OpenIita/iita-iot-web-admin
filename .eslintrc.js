@@ -27,6 +27,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'vue/no-v-model-argument': 'off',
+    'indent': ['error', 2],
     'semi': [2, 'never'], // 结尾分号
     '@typescript-eslint/no-this-alias': 'error',
     '@typescript-eslint/ban-types': [

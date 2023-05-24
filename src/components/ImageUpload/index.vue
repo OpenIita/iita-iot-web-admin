@@ -17,7 +17,9 @@
       :on-preview="handlePictureCardPreview"
       :class="{ hide: fileList.length >= limit }"
     >
-      <el-icon class="avatar-uploader-icon"><plus /></el-icon>
+      <el-icon class="avatar-uploader-icon">
+        <plus />
+      </el-icon>
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip">
@@ -45,27 +47,27 @@ import { OssVO } from "@/api/system/oss/types"
 import { ElUpload, UploadFile } from "element-plus"
 
 const props = defineProps({
-    modelValue: [String, Object, Array],
-    // 图片数量限制
-    limit: {
-        type: Number,
-        default: 5,
-    },
-    // 大小限制(MB)
-    fileSize: {
-        type: Number,
-        default: 5,
-    },
-    // 文件类型, 例如['png', 'jpg', 'jpeg']
-    fileType: {
-        type: Array as PropType<string[]>,
-        default: () => ["png", "jpg", "jpeg"],
-    },
-    // 是否显示提示
-    isShowTip: {
-        type: Boolean,
-        default: true
-    },
+  modelValue: [String, Object, Array],
+  // 图片数量限制
+  limit: {
+    type: Number,
+    default: 5,
+  },
+  // 大小限制(MB)
+  fileSize: {
+    type: Number,
+    default: 5,
+  },
+  // 文件类型, 例如['png', 'jpg', 'jpeg']
+  fileType: {
+    type: Array as PropType<string[]>,
+    default: () => ["png", "jpg", "jpeg"],
+  },
+  // 是否显示提示
+  isShowTip: {
+    type: Boolean,
+    default: true
+  },
 })
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -81,143 +83,143 @@ const headers = ref({ Authorization: "Bearer " + getToken() })
 
 const fileList = ref<any[]>([])
 const showTip = computed(
-    () => props.isShowTip && (props.fileType || props.fileSize)
+  () => props.isShowTip && (props.fileType || props.fileSize)
 )
 
 const imageUploadRef = ref(ElUpload)
 
 watch(() => props.modelValue, async val => {
-    if (val) {
-        // 首先将值转为数组
-        let list:OssVO[] = []
-        if (Array.isArray(val)) {
-            list = val as OssVO[]
-        } else {
-            const res = await listByIds(val as string)
-            list = res.data
-        }
-        // 然后将数组转为对象数组
-        fileList.value = list.map(item => {
-            // 字符串回显处理 如果此处存的是url可直接回显 如果存的是id需要调用接口查出来
-            let itemData
-            if (typeof item === "string") {
-                itemData = { name: item, url: item }
-            } else {
-                // 此处name使用ossId 防止删除出现重名
-                itemData = { name: item.ossId, url: item.url, ossId: item.ossId }
-            }
-            return itemData
-        })
+  if (val) {
+    // 首先将值转为数组
+    let list: OssVO[] = []
+    if (Array.isArray(val)) {
+      list = val as OssVO[]
     } else {
-        fileList.value = []
-        return []
+      const res = await listByIds(val as string)
+      list = res.data
     }
-},{ deep: true, immediate: true })
+    // 然后将数组转为对象数组
+    fileList.value = list.map(item => {
+      // 字符串回显处理 如果此处存的是url可直接回显 如果存的是id需要调用接口查出来
+      let itemData
+      if (typeof item === "string") {
+        itemData = { name: item, url: item }
+      } else {
+        // 此处name使用ossId 防止删除出现重名
+        itemData = { name: item.ossId, url: item.url, ossId: item.ossId }
+      }
+      return itemData
+    })
+  } else {
+    fileList.value = []
+    return []
+  }
+}, { deep: true, immediate: true })
 
 /** 上传前loading加载 */
 const handleBeforeUpload = (file: any) => {
-    let isImg = false
-    if (props.fileType.length) {
-        let fileExtension = ""
-        if (file.name.lastIndexOf(".") > -1) {
-            fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1)
-        }
-        isImg = props.fileType.some((type) => {
-            if (file.type.indexOf(type) > -1) return true
-            if (fileExtension && fileExtension.indexOf(type) > -1) return true
-            return false
-        })
-    } else {
-        isImg = file.type.indexOf("image") > -1
+  let isImg = false
+  if (props.fileType.length) {
+    let fileExtension = ""
+    if (file.name.lastIndexOf(".") > -1) {
+      fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1)
     }
-    if (!isImg) {
-        proxy?.$modal.msgError(
-            `文件格式不正确, 请上传${props.fileType.join("/")}图片格式文件!`
-        )
-        return false
+    isImg = props.fileType.some((type) => {
+      if (file.type.indexOf(type) > -1) return true
+      if (fileExtension && fileExtension.indexOf(type) > -1) return true
+      return false
+    })
+  } else {
+    isImg = file.type.indexOf("image") > -1
+  }
+  if (!isImg) {
+    proxy?.$modal.msgError(
+      `文件格式不正确, 请上传${props.fileType.join("/")}图片格式文件!`
+    )
+    return false
+  }
+  if (props.fileSize) {
+    const isLt = file.size / 1024 / 1024 < props.fileSize
+    if (!isLt) {
+      proxy?.$modal.msgError(`上传头像图片大小不能超过 ${props.fileSize} MB!`)
+      return false
     }
-    if (props.fileSize) {
-        const isLt = file.size / 1024 / 1024 < props.fileSize
-        if (!isLt) {
-            proxy?.$modal.msgError(`上传头像图片大小不能超过 ${props.fileSize} MB!`)
-            return false
-        }
-    }
-    proxy?.$modal.loading("正在上传图片，请稍候...")
-    number.value++
+  }
+  proxy?.$modal.loading("正在上传图片，请稍候...")
+  number.value++
 }
 
 // 文件个数超出
 const handleExceed = () => {
-    proxy?.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`)
+  proxy?.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`)
 }
 
 // 上传成功回调
 const handleUploadSuccess = (res: any, file: UploadFile) => {
-    if (res.code === 200) {
-        uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
-        uploadedSuccessfully()
-    } else {
-        number.value--
-        proxy?.$modal.closeLoading()
-        proxy?.$modal.msgError(res.msg)
-        imageUploadRef.value.handleRemove(file)
-        uploadedSuccessfully()
-    }
+  if (res.code === 200) {
+    uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
+    uploadedSuccessfully()
+  } else {
+    number.value--
+    proxy?.$modal.closeLoading()
+    proxy?.$modal.msgError(res.msg)
+    imageUploadRef.value.handleRemove(file)
+    uploadedSuccessfully()
+  }
 }
 
 // 删除图片
 const handleDelete = (file: UploadFile): boolean => {
-    const findex = fileList.value.map(f => f.name).indexOf(file.name)
-    if (findex > -1 && uploadList.value.length === number.value) {
-        let ossId = fileList.value[findex].ossId
-        delOss(ossId)
-        fileList.value.splice(findex, 1)
-        emit("update:modelValue", listToString(fileList.value))
-        return false
-    }
-    return true
+  const findex = fileList.value.map(f => f.name).indexOf(file.name)
+  if (findex > -1 && uploadList.value.length === number.value) {
+    let ossId = fileList.value[findex].ossId
+    delOss(ossId)
+    fileList.value.splice(findex, 1)
+    emit("update:modelValue", listToString(fileList.value))
+    return false
+  }
+  return true
 }
 
 // 上传结束处理
 const uploadedSuccessfully = () => {
-    if (number.value > 0 && uploadList.value.length === number.value) {
-        fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
-        uploadList.value = []
-        number.value = 0
-        emit("update:modelValue", listToString(fileList.value))
-        proxy?.$modal.closeLoading()
-    }
+  if (number.value > 0 && uploadList.value.length === number.value) {
+    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
+    uploadList.value = []
+    number.value = 0
+    emit("update:modelValue", listToString(fileList.value))
+    proxy?.$modal.closeLoading()
+  }
 }
 
 // 上传失败
 const handleUploadError = () => {
-    proxy?.$modal.msgError("上传图片失败")
-    proxy?.$modal.closeLoading()
+  proxy?.$modal.msgError("上传图片失败")
+  proxy?.$modal.closeLoading()
 }
 
 // 预览
 const handlePictureCardPreview = (file: any) => {
-    dialogImageUrl.value = file.url
-    dialogVisible.value = true
+  dialogImageUrl.value = file.url
+  dialogVisible.value = true
 }
 
 // 对象转成指定字符串分隔
 const listToString = (list: any[], separator?: string) => {
-    let strs = ""
-    separator = separator || ","
-    for (let i in list) {
-        if(undefined !== list[i].ossId && list[i].url.indexOf("blob:") !== 0) {
-            strs += list[i].ossId + separator
-        }
+  let strs = ""
+  separator = separator || ","
+  for (let i in list) {
+    if (undefined !== list[i].ossId && list[i].url.indexOf("blob:") !== 0) {
+      strs += list[i].ossId + separator
     }
-    return strs != "" ? strs.substring(0, strs.length - 1) : ""
+  }
+  return strs != "" ? strs.substring(0, strs.length - 1) : ""
 }
 </script>
 
 <style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 :deep(.hide .el-upload--picture-card) {
-    display: none;
+  display: none;
 }
 </style>

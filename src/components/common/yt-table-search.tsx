@@ -20,7 +20,7 @@ export default defineComponent({
     const formModel = ref<Recordable>({})
     const getAttr = (option: IColumn) => {
       return {
-        clearable: props.searchClearable,
+        clearable: props.clearable,
         placeholder: `${option.type === 'string' || !option.type ? '请输入' : '请选择'}${option.label}`,
         ...option.componentProps,
       }
@@ -40,35 +40,41 @@ export default defineComponent({
       }
     })
 
-    return () => (
-      <div class="search">
-        <ElForm ref={queryFormRef} inline={true} labelWidth={props.searchLabelWidth} model={formModel}>
-          {searchData.value.map((m: IColumn) => {
-            const type = m?.type || 'string'
-            console.log(type)
-            const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
-            return (
-              <ElFormItem label={m.label + ':'} prop={m.key}>
-                {!m.slot ? (
-                  <Com v-model={formModel.value[m.key]} {...getAttr(m)}>
-                    {renderOptions(m)}
-                  </Com>
-                ) : (
-                  slots[m.key]?.(m, formModel.value)
-                )}
+    return () => {
+      return (
+        searchData.value?.length > 0 && (
+          <div class="search">
+            <ElForm ref={queryFormRef} inline={true} labelWidth={props.labelWidth} model={formModel}>
+              {searchData.value.map((m: IColumn) => {
+                const type = m?.type || 'string'
+                const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
+                return (
+                  <ElFormItem label={m.label + ':'} prop={m.key}>
+                    {!m.searchSlot ? (
+                      <Com v-model={formModel.value[m.key]} {...getAttr(m)}>
+                        {renderOptions(m)}
+                      </Com>
+                    ) : (
+                      slots[m.key + 'Search']?.({
+                        column: m,
+                        row: formModel.value,
+                      })
+                    )}
+                  </ElFormItem>
+                )
+              })}
+              <ElFormItem>
+                <ElButton type="primary" onClick={handleQuery} icon="Search" loading={props.loading}>
+                  搜索
+                </ElButton>
+                <ElButton onClick={resetQuery} icon="Refresh">
+                  重置
+                </ElButton>
               </ElFormItem>
-            )
-          })}
-          <ElFormItem>
-            <ElButton type="primary" onClick={handleQuery} icon="Search" loading={props.searchLoing}>
-              搜索
-            </ElButton>
-            <ElButton onClick={resetQuery} icon="Refresh">
-              重置
-            </ElButton>
-          </ElFormItem>
-        </ElForm>
-      </div>
-    )
+            </ElForm>
+          </div>
+        )
+      )
+    }
   },
 })

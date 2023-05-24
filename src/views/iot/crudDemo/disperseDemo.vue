@@ -7,8 +7,8 @@
     </yt-table-search>
     <yt-table-fun @handle-add="handleAdd()">
       <yt-table :data="data" :column="column" @handle-update="handleUpdate" @handle-delete="handleDel" @handle-view="handleView">
-        <template #switch="row">
-          <el-switch v-model="row.switch"></el-switch>
+        <template #slots="row">
+          <el-switch v-model="row.slots"></el-switch>
         </template>
       </yt-table>
     </yt-table-fun>

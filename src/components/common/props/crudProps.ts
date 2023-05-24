@@ -5,16 +5,17 @@ import { AxiosPromise } from 'axios'
 
 // 搜索组件参数
 export const searchProps = {
-  searchLoing: propTypes.bool.def(false), // 搜索loading
-  searchLabelWidth: propTypes.number.def(80), // 搜索label宽度
-  searchClearable: propTypes.bool.def(true), // 搜索是否有控件取消
+  slot: propTypes.bool.def(false), // 搜索插槽
+  loading: propTypes.bool.def(false), // 搜索loading
+  labelWidth: propTypes.number.def(80), // 搜索label宽度
+  clearable: propTypes.bool.def(true), // 搜索是否有控件取消
 }
 
 // 功能区组件参数
 export const funProps = {
   // 布局
-  funGutter: propTypes.number.def(10),
-  funSpan: propTypes.number.def(1.5),
+  gutter: propTypes.number.def(10),
+  span: propTypes.number.def(1.5),
   // 按钮权限
   addPermi: {
     type: Array as PropType<string[]>,
@@ -42,7 +43,7 @@ export const funProps = {
 
 // 表格组件参数
 export const tabelProps = {
-  tableWidth: propTypes.number || propTypes.string,
+  width: propTypes.number || propTypes.string,
   menuWidth: propTypes.number.def(200) || propTypes.string,
   // 序号
   index: propTypes.bool.def(true),
@@ -67,11 +68,11 @@ export const tabelProps = {
 
 // 表单组件参数
 export const formProps = {
-  formLabelWidth: propTypes.string.def('120px'),
-  formClearable: propTypes.bool.def(true),
-  formWidth: propTypes.number.def(600) || propTypes.string,
-  formGutter: propTypes.number.def(0),
-  formCol: propTypes.number.def(12),
+  labelWidth: propTypes.string.def('120px'),
+  clearable: propTypes.bool.def(true),
+  width: propTypes.number.def(600) || propTypes.string,
+  gutter: propTypes.number.def(0),
+  col: propTypes.number.def(24),
 }
 
 export const crudProps = {
@@ -83,8 +84,9 @@ export const crudProps = {
     type: Array as PropType<IColumn[]>,
     default: () => [],
   },
-  ...searchProps,
-  ...funProps,
-  ...tabelProps,
-  ...formProps,
+  loading: propTypes.bool.def(false),
+  searchProps: propTypes.object.def(searchProps),
+  funProps: propTypes.object.def(funProps),
+  tabelProps: propTypes.object.def(tabelProps),
+  formProps: propTypes.object.def(formProps),
 }

@@ -51,9 +51,9 @@ const topMenus = computed(() => {
     if (menu.hidden !== true) {
       // 兼容顶部栏一级菜单内部跳转
       if (menu.path === "/") {
-          topMenus.push(menu.children? menu.children[0] : menu)
+        topMenus.push(menu.children? menu.children[0] : menu)
       } else {
-          topMenus.push(menu)
+        topMenus.push(menu)
       }
     }
   })
@@ -89,7 +89,7 @@ const activeMenu = computed(() => {
     const tmpPath = path.substring(1, path.length)
     activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"))
     if (!route.meta.link) {
-        appStore.toggleSideBarHide(false)
+      appStore.toggleSideBarHide(false)
     }
   } else if(!route.children) {
     activePath = path

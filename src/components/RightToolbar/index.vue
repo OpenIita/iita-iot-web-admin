@@ -22,21 +22,21 @@ import { TransferKey } from "element-plus"
 import { PropType } from "vue"
 
 const props = defineProps({
-    showSearch: {
-        type: Boolean,
-        default: true,
-    },
-    columns: {
-        type: Array as PropType<FieldOption[]>,
-    },
-    search: {
-        type: Boolean,
-        default: true,
-    },
-    gutter: {
-        type: Number,
-        default: 10,
-    },
+  showSearch: {
+    type: Boolean,
+    default: true,
+  },
+  columns: {
+    type: Array as PropType<FieldOption[]>,
+  },
+  search: {
+    type: Boolean,
+    default: true,
+  },
+  gutter: {
+    type: Number,
+    default: 10,
+  },
 })
 
 const emits = defineEmits(['update:showSearch', 'queryTable'])
@@ -49,42 +49,42 @@ const title = ref("显示/隐藏")
 const open = ref(false)
 
 const style = computed(() => {
-    const ret: any = {}
-    if (props.gutter) {
-        ret.marginRight = `${props.gutter / 2}px`
-    }
-    return ret
+  const ret: any = {}
+  if (props.gutter) {
+    ret.marginRight = `${props.gutter / 2}px`
+  }
+  return ret
 })
 
 // 搜索
 function toggleSearch() {
-    emits("update:showSearch", !props.showSearch)
+  emits("update:showSearch", !props.showSearch)
 }
 
 // 刷新
 function refresh() {
-    emits("queryTable")
+  emits("queryTable")
 }
 
 // 右侧列表元素变化
 function dataChange(data: TransferKey[]) {
-    props.columns?.forEach((item) => {
-        item.visible = !data.includes(item.key)
-    })
+  props.columns?.forEach((item) => {
+    item.visible = !data.includes(item.key)
+  })
 }
 
 // 打开显隐列dialog
 const showColumn = () => {
-    open.value = true
+  open.value = true
 }
 
 // 显隐列初始默认隐藏列
 onMounted(() => {
-    props.columns?.forEach((item) => {
-        if (!item.visible) {
-            value.value.push(item.key)
-        }
-    })
+  props.columns?.forEach((item) => {
+    if (!item.visible) {
+      value.value.push(item.key)
+    }
+  })
 })
 </script>
 

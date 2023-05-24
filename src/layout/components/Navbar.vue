@@ -92,62 +92,62 @@ const tenantEnabled = ref(true)
 
 // 动态切换
 const dynamicTenantEvent = async (tenantId: string) => {
-    if (companyName.value != null && companyName.value !== '') {
-        await dynamicTenant(tenantId)
-        dynamic.value = true
-        proxy?.$tab.closeAllPage()
-        proxy?.$router.push('/')
-    }
+  if (companyName.value != null && companyName.value !== '') {
+    await dynamicTenant(tenantId)
+    dynamic.value = true
+    proxy?.$tab.closeAllPage()
+    proxy?.$router.push('/')
+  }
 }
 
 const dynamicClearEvent = async () => {
-    await dynamicClear()
-    dynamic.value = false
-    proxy?.$tab.closeAllPage()
-    proxy?.$router.push('/')
+  await dynamicClear()
+  dynamic.value = false
+  proxy?.$tab.closeAllPage()
+  proxy?.$router.push('/')
 }
 
 /** 租户列表 */
 const initTenantList = async () => {
-    const { data } = await getTenantList()
-    tenantEnabled.value = data.tenantEnabled === undefined ? true : data.tenantEnabled
-    if (tenantEnabled.value) {
-        tenantList.value = data.voList
-    }
+  const { data } = await getTenantList()
+  tenantEnabled.value = data.tenantEnabled === undefined ? true : data.tenantEnabled
+  if (tenantEnabled.value) {
+    tenantList.value = data.voList
+  }
 }
 
 defineExpose({
-    initTenantList,
+  initTenantList,
 })
 
 const toggleSideBar = () => {
-    appStore.toggleSideBar(false)
+  appStore.toggleSideBar(false)
 }
 
 const logout = async () => {
-    await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-    })
-    await userStore.logout()
-    location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index'
+  await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+  await userStore.logout()
+  location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index'
 }
 
 const emits = defineEmits(['setLayout'])
 const setLayout = () => {
-    emits('setLayout')
+  emits('setLayout')
 }
 // 定义Command方法对象 通过key直接调用方法
 const commandMap: {[key: string]: any} = {
-    setLayout,
-    logout
+  setLayout,
+  logout
 }
 const handleCommand = (command: string) => {
-    // 判断是否存在该方法
-    if (commandMap[command]) {
-        commandMap[command]()
-    }
+  // 判断是否存在该方法
+  if (commandMap[command]) {
+    commandMap[command]()
+  }
 }
 </script>
 

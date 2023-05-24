@@ -18,6 +18,8 @@ export type TFormType =
   | 'checkbox'
   | 'checkboxButton'
   | 'treeSelect'
+  | 'upload'
+  | 'image'
 
 export interface IColumn {
   label: string // 搜索名称
@@ -26,8 +28,11 @@ export interface IColumn {
   slot?: boolean // 是否用插槽
   componentProps?: any // 组件props
   search?: boolean // 是否搜索
+  searchLabelWidth?: number // 搜索label宽度
   rules?: Arrayable<FormItemRule> // form表单校验
   hide?: boolean // 表格隐藏项
   formHide?: boolean // 表单隐藏项
   tableWidth?: number | string // 表格宽度
+  searchSlot?: boolean // 搜索插槽
+  formSlot?: boolean // form插槽
 }
