@@ -19,6 +19,8 @@ import {
 } from 'element-plus'
 import FileUpload from '@/components/FileUpload/index.vue'
 import ImageUpload from '@/components/ImageUpload/index.vue'
+import CronTabBox from '@/components/Crontab/index.vue'
+
 import { useRenderRadio } from './useRenderRadio'
 import { useRenderCheckbox } from './useRenderCheckbox'
 
@@ -41,6 +43,7 @@ componentMap.set('radioButton', ElRadioGroup)
 componentMap.set('treeSelect', ElTreeSelect)
 componentMap.set('upload', FileUpload)
 componentMap.set('image', ImageUpload)
+componentMap.set('cron', CronTabBox)
 // 渲染options
 export const renderOptions = (item: IColumn) => {
   switch (item.type) {

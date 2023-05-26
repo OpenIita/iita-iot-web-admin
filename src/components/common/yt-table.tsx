@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
-import { tabelProps } from './props/crudProps'
+import { tableProps } from './props/crudProps'
 import { IColumn, TFormType } from '@/components/common/types/tableCommon'
 import { ElButton, ElTable, ElTableColumn, ElPopconfirm } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
@@ -26,7 +26,7 @@ export default defineComponent({
       type: Array as PropType<Record<string, any>[]>,
       default: () => [],
     },
-    ...tabelProps,
+    ...tableProps,
   },
   emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage'],
   setup(props, { emit, slots }) {
@@ -35,9 +35,20 @@ export default defineComponent({
     const renderMenus = (scope: { row: any }) => {
       return (
         <div>
-          <ElButton link type="primary" icon="View" onClick={() => emit('handleView', scope.row)}>
-            详情
-          </ElButton>
+          {props.viewBtn && (
+            <ElButton
+              link
+              type="primary"
+              icon="View"
+              {...() => {
+                if (props.viewPermi) return { vHasPermi: props.viewPermi }
+                return {}
+              }}
+              onClick={() => emit('handleView', scope.row)}
+            >
+              详情
+            </ElButton>
+          )}
           {props.editBtn && (
             <ElButton
               link
@@ -71,6 +82,7 @@ export default defineComponent({
               }}
             </ElPopconfirm>
           )}
+          {props.menuSlot && slots.menuSlot?.(scope)}
         </div>
       )
     }
@@ -85,6 +97,7 @@ export default defineComponent({
               return formatDate(row[column.key], column?.componentProps?.format)
             case 'select':
             case 'radio':
+              if (!column.componentProps) return
               const { options, labelAlias, valueAlias } = column.componentProps
               const labelName = labelAlias || 'label'
               const valueName = valueAlias || 'value'

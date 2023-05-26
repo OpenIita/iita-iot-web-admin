@@ -1,19 +1,17 @@
 <template>
   <yt-crud v-bind="options">
-    <template #sloo="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
-    </template>
-    <template #slots3Form="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
-    </template>
-    <template #slots2Search="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
+    <template #menuSlot="scope">
+      <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)">物模型</el-button>
     </template>
   </yt-crud>
+  <el-dialog title="产品物模型" v-model="objectModel.visible" append-to-body destroy-on-close top="20px">
+    <object-model ref="objectModelRef"></object-model>
+  </el-dialog>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
+import ObjectModel from './modules/objectModel.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 
 // 分类字典
@@ -233,12 +231,25 @@ const data = ref([
     "createAt": 1659872083990
   }
 ])
+// 打开物模型
+const objectModel = reactive({
+  visible: false,
+})
+const objectModelRef = ref()
+const openObjectModel = (row: any) => {
+  objectModel.visible = true
+  nextTick(() => {
+    objectModelRef.value.getInfo(row.id)
+  })
+}
 
 const options = reactive({
   ref: 'crudRef',
   tableProps: {
     selection: false,
     delBtn: false,
+    menuSlot: true,
+    menuWidth: 240,
   },
   searchProps: {
     labelWidth: 120,

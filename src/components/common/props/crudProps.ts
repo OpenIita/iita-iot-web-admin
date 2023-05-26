@@ -42,7 +42,7 @@ export const funProps = {
 }
 
 // 表格组件参数
-export const tabelProps = {
+export const tableProps = {
   width: propTypes.number || propTypes.string,
   menuWidth: propTypes.number.def(200) || propTypes.string,
   // 序号
@@ -53,6 +53,10 @@ export const tabelProps = {
   // 菜单
   menu: propTypes.bool.def(true),
   // 按钮权限
+  viewPermi: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
   delPermi: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -62,8 +66,11 @@ export const tabelProps = {
     default: () => [],
   },
   // 按钮显示
+  viewBtn: propTypes.bool.def(true),
   delBtn: propTypes.bool.def(true),
   editBtn: propTypes.bool.def(true),
+  // 菜单插槽
+  menuSlot: propTypes.bool.def(false),
 }
 
 // 表单组件参数
@@ -85,8 +92,8 @@ export const crudProps = {
     default: () => [],
   },
   loading: propTypes.bool.def(false),
-  searchProps: propTypes.object.def(searchProps),
-  funProps: propTypes.object.def(funProps),
-  tabelProps: propTypes.object.def(tabelProps),
-  formProps: propTypes.object.def(formProps),
+  searchProps: Object,
+  funProps: Object,
+  tableProps: Object,
+  formProps: Object,
 }

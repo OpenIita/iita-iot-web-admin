@@ -20,6 +20,7 @@ export type TFormType =
   | 'treeSelect'
   | 'upload'
   | 'image'
+  | 'cron'
 
 export interface IColumn {
   label: string // 搜索名称
@@ -35,4 +36,5 @@ export interface IColumn {
   tableWidth?: number | string // 表格宽度
   searchSlot?: boolean // 搜索插槽
   formSlot?: boolean // form插槽
+  formItemSlot?: boolean // formItem替换插槽
 }

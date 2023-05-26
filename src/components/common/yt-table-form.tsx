@@ -20,6 +20,7 @@ export default defineComponent({
   },
   emtis: ['openDialog', 'onSuccess'],
   setup(props, { emit, slots, expose }) {
+    console.log('formprops', props)
     // 定义钩子
     const diglogRef = ref()
     const formRef = ref()
@@ -108,23 +109,31 @@ export default defineComponent({
             <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>
               <ElRow gutter={props.gutter}>
                 {props.column.map((m: IColumn) => {
+                  console.log(slots)
                   const type = m?.type || 'string'
                   const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
                   if (!m.formHide) {
                     return (
                       <ElCol span={props.col}>
-                        <ElFormItem label={m.label + ':'} prop={m.key} key={m.key}>
-                          {!m.formSlot ? (
-                            <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
-                              {renderOptions(m)}
-                            </Com>
-                          ) : (
-                            slots[m.key + 'Form']?.({
-                              column: m,
-                              row: formObj.data,
-                            })
-                          )}
-                        </ElFormItem>
+                        {!m.formItemSlot ? (
+                          <ElFormItem label={m.label + ':'} prop={m.key} key={m.key}>
+                            {!m.formSlot ? (
+                              <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
+                                {renderOptions(m)}
+                              </Com>
+                            ) : (
+                              slots[m.key + 'Form']?.({
+                                column: m,
+                                row: formObj.data,
+                              })
+                            )}
+                          </ElFormItem>
+                        ) : (
+                          slots[m.key + 'FormItem']?.({
+                            column: m,
+                            row: formObj.data,
+                          })
+                        )}
                       </ElCol>
                     )
                   }

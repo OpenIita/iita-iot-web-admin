@@ -21,8 +21,7 @@
 </template>
 <script lang="ts" setup>
 import { funProps } from './props/crudProps'
-const props = defineProps(funProps)
-
+const props = defineProps({...funProps})
 const exportBind = reactive(props.exportPermi ? {
   vHasPermi: props.exportPermi
 } : {})
