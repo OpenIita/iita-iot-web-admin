@@ -71,6 +71,8 @@ export const tableProps = {
   editBtn: propTypes.bool.def(true),
   // 菜单插槽
   menuSlot: propTypes.bool.def(false),
+  // 隐藏分页
+  pageHide: propTypes.bool.def(false),
 }
 
 // 表单组件参数

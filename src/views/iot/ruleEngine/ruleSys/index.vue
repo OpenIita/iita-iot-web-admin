@@ -1,0 +1,185 @@
+<template>
+  <div>
+    <yt-crud v-bind="options" ref="crudRef" :data="data" :column="column">
+      <template #state="scope">
+        <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
+        <div v-if="scope.row.state === 'running'" style="color: green;">运行中</div>
+      </template>
+      <template #log="scope">
+        <el-button size="small" type="primary" @click="handleViewLog(scope.row.id)">查看</el-button>
+      </template>
+      <template #menuSlot="scope">
+        <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close">停止</el-button>
+        <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open">开启</el-button>
+      </template>
+    </yt-crud>
+    <log-dialog ref="logDialogRef" title="场景执行日志"></log-dialog>
+  </div>
+</template>
+<script lang="ts" setup>
+import { IColumn } from '@/components/common/types/tableCommon'
+
+import LogDialog from '../modules/logDialog.vue'
+import YtCrud from '@/components/common/yt-crud.vue'
+
+// 查看日志
+const logDialogRef = ref()
+const handleViewLog = (id: string) => {
+  logDialogRef.value.openDialog(id)
+}
+
+const column: IColumn[] = [{
+  label: '规则名称',
+  key: 'name',
+  rules: [{ required: true, message: '规则名称不能为空' }],
+}, {
+  label: '状态',
+  key: 'state',
+  slot: true,
+  formHide: true,
+}, {
+  label: '规则类型',
+  key: 'type',
+  type: 'select',
+  search: true,
+  componentProps: {
+    defaultValue: 'scene',
+    clearable: false,
+    options: [{
+      label: '场景联动',
+      value: 'scene',
+    }, {
+      label: '数据流转',
+      value: 'flow'
+    }]
+  }
+}, {
+  label: '执行日志',
+  key: 'log',
+  slot: true,
+  formHide: true,
+}, {
+  label: '场景描述',
+  key: 'desc',
+  hide: true,
+  componentProps: {
+    type: 'textarea',
+    row: 3,
+  }
+}, {
+  label: '创建时间',
+  key: 'createAt',
+  type: 'date',
+  formHide: true,
+}]
+
+const data = ref([
+  {
+    "id": "2820c218-660e-48ff-a234-c7b6793a5bb8",
+    "name": "测试场景1",
+    "type": "scene",
+    "listeners": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"4ff98e8c-e6f6-4e96-8932-de488a0a4bfb\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.8212160690052512,\"type\":\"property\",\"device\":\"Rf4QSjbm65X45753/ABC12400001\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\">\",\"value\":\"0\"}]}]}"
+      }
+    ],
+    "filters": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"24b4b975-d8ac-431d-881d-8c8b40e92861\",\"type\":\"device\",\"conditions\":[{\"id\":0.08981222614734863,\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"powerSwitch\",\"type\":\"property\",\"comparator\":\"==\",\"value\":\"0\"}]}"
+      }
+    ],
+    "actions": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"fde024b5-5105-4639-8602-d04300613af9\",\"type\":\"device\",\"services\":[{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"powerSwitch\",\"value\":\"1\"}]},{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"windSpeed\",\"value\":\"20\"}]}]}"
+      }
+    ],
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "state": "running",
+    "desc": "test",
+    "createAt": 1649167998895
+  },
+  {
+    "id": "6b253651-f4f9-44b9-a802-115b668b68e1",
+    "name": "天猫精灵设备属性和状态推送",
+    "type": "flow",
+    "listeners": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"077319c3-325b-4bb6-8e07-dd2eed617f6f\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.6683545166149798,\"type\":\"property\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]},{\"id\":0.6047040921280786,\"type\":\"state\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"state:*\",\"parameters\":[]}]}"
+      },
+      {
+        "type": "device",
+        "config": "{\"id\":\"08d72321-39d4-4dcc-ba69-b09c4af187a3\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.7992853094329277,\"type\":\"event\",\"device\":\"KdJYpTp5ywNhmrmC/001\",\"identifier\":\"userDevicesChange\",\"parameters\":[{\"comparator\":\"*\"}]}]}"
+      },
+      {
+        "type": "device",
+        "config": "{\"id\":\"554aba1c-9684-4e36-8f72-cdb325f86712\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.9179545682030454,\"type\":\"property\",\"device\":\"PN3EDmkBZDD8whDd/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"doorStatus\",\"comparator\":\"*\"}]}]}"
+      }
+    ],
+    "filters": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"0a8285df-f778-4e20-b26b-2b569fc1d3dd\",\"type\":\"device\",\"conditions\":[{\"id\":0.11425312074571847,\"device\":\"\",\"type\":\"tag\",\"identifier\":\"aligenie\",\"value\":\"是\",\"comparator\":\"==\"}]}"
+      }
+    ],
+    "actions": [
+      {
+        "type": "http",
+        "config": "{\"id\":\"de533da1-18cb-48ef-b913-22bdd96dcac9\",\"type\":\"http\",\"services\":[{\"url\":\"http://localhost:8087/aligenie/push\",\"script\":\"this.translate=function(msg){\\n  var data={};\\n  for(var p in msg.data){\\n\\tdata[p]=msg.data[p];\\n  }\\n  \\nreturn {\\n\\t//指定相对路径\\n    path:\\\"/\\\",\\n    method:\\\"post\\\",\\n    header:{\\n      //指定请求头\\n      contentType:\\\"application/json; charset=utf-8\\\"\\n    },\\n    body:JSON.stringify({\\n      deviceId:msg.deviceId,\\n      type:msg.type,\\n      identifier:msg.identifier,\\n      data:data\\n    })\\n  }\\n}\"}]}"
+      }
+    ],
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "state": "stopped",
+    "desc": "ss",
+    "createAt": 1649218592640
+  },
+  {
+    "id": "2c10229b-dcb2-439e-b411-5425b49657a1",
+    "name": "小度设备属性更新推送",
+    "type": "flow",
+    "listeners": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"11ae4827-d58b-44d7-8a4d-090bac2ddce8\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.5375444987425966,\"type\":\"property\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]}]}"
+      },
+      {
+        "type": "device",
+        "config": "{\"id\":\"f0752ba9-38d8-4ee8-91cc-7f267875c358\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.20619179667807042,\"type\":\"property\",\"device\":\"Rf4QSjbm65X45753/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]}]}"
+      }
+    ],
+    "filters": [
+      {
+        "type": "device",
+        "config": "{\"id\":\"747eb070-92ed-4e60-9a39-3b9a71afee9e\",\"type\":\"device\",\"conditions\":[{\"id\":0.7199397992080254,\"device\":\"\",\"type\":\"tag\",\"comparator\":\"==\",\"identifier\":\"dueros\",\"value\":\"是\"}]}"
+      }
+    ],
+    "actions": [
+      {
+        "type": "http",
+        "config": "{\"id\":\"35781aae-360f-4931-9d72-69f27e326e68\",\"type\":\"http\",\"services\":[{\"url\":\"https://xiaodu.baidu.com/saiya/smarthome/changereport\",\"script\":\"this.translate=function(msg,device){\\n  var pk=msg.productKey;\\n  var attributeName=\\\"\\\";\\n  //插座/开关\\n  if(pk==\\\"cGCrkK7Ex4FESAwe\\\" || pk==\\\"Rf4QSjbm65X45753\\\"){\\n\\tattributeName=\\\"turnOnState\\\";\\n  }\\n  //取openUid\\n  var tag=device.tag;\\n  if(!tag || !tag.duerosOpenUid){\\n\\treturn null;\\n  }\\n  var openUid=tag.duerosOpenUid.value;\\n  \\n  return {\\n    \\\"path\\\":\\\"\\\",\\n    \\\"method\\\":\\\"post\\\",\\n    \\\"header\\\":{\\n      //指定请求头\\n      \\\"contentType\\\":\\\"application/json; charset=utf-8\\\"\\n    },\\n    \\\"body\\\":JSON.stringify({\\n\\t  \\\"header\\\": {\\n\\t\\t  \\\"namespace\\\": \\\"DuerOS.ConnectedHome.Control\\\",\\n\\t\\t  \\\"name\\\": \\\"ChangeReportRequest\\\",\\n\\t\\t  \\\"messageId\\\": new Date().getTime()+\\\"\\\",\\n\\t\\t  \\\"payloadVersion\\\": \\\"1\\\"\\n\\t  },\\n\\t  \\\"payload\\\": {\\n\\t\\t  \\\"botId\\\": \\\"eb20e515-f505-8d31-abef-46da3345f114\\\",\\n\\t\\t  \\\"openUid\\\": openUid,\\n\\t\\t  \\\"appliance\\\": {\\n\\t\\t\\t  \\\"applianceId\\\": msg.deviceId,\\n\\t\\t\\t  \\\"attributeName\\\": attributeName\\n\\t\\t  }\\n\\t  }\\n  \\t})\\n  }\\n}\"}]}"
+      }
+    ],
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "state": "running",
+    "desc": "开关插座开关状态推送",
+    "createAt": 1652515471242
+  }
+])
+
+const options = reactive({
+  tableProps: {
+    selection: false,
+    viewBtn: false,
+    menuSlot: true,
+    menuWidth: 300,
+  },
+  searchProps: {},
+})
+</script>
+
+<!-- <style lang="scss" scoped>
+
+</style> -->

@@ -1,27 +1,29 @@
 <template>
-  <yt-crud v-bind="options">
-    <template #menuSlot="scope">
-      <el-button link type="primary" icon="Setting">配置</el-button>
-    </template>
-    <template #state="scope">
-      <el-tag v-if="scope.row.state === 'running'" type="success" size="mini">运行中</el-tag>
-      <el-tag v-else-if="scope.row.state === 'stopped'" type="danger" size="mini">已停止</el-tag>
-    </template>
-    <template #triggerExpression1FormItem="{column, row}">
-      <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
-        <crontab-box v-model="row[column.key]"></crontab-box>
-      </el-form-item>
-    </template>
-    <template #triggerExpression2FormItem="{column, row}">
-      <el-form-item v-if="row.trigger === 'random'" :label="column.label" :prop="column.key">
-        <el-radio-group v-model="row[column.key]">
-          <el-radio-button label="second">秒</el-radio-button>
-          <el-radio-button label="minute">分</el-radio-button>
-          <el-radio-button label="hour">时</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-    </template>
-  </yt-crud>
+  <div>
+    <yt-crud v-bind="options">
+      <template #menuSlot="scope">
+        <el-button link type="primary" icon="Setting">配置</el-button>
+      </template>
+      <template #state="scope">
+        <el-tag v-if="scope.row.state === 'running'" type="success" size="mini">运行中</el-tag>
+        <el-tag v-else-if="scope.row.state === 'stopped'" type="danger" size="mini">已停止</el-tag>
+      </template>
+      <template #triggerExpression1FormItem="{column, row}">
+        <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
+          <crontab-box v-model="row[column.key]"></crontab-box>
+        </el-form-item>
+      </template>
+      <template #triggerExpression2FormItem="{column, row}">
+        <el-form-item v-if="row.trigger === 'random'" :label="column.label" :prop="column.key">
+          <el-radio-group v-model="row[column.key]">
+            <el-radio-button label="second">秒</el-radio-button>
+            <el-radio-button label="minute">分</el-radio-button>
+            <el-radio-button label="hour">时</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+      </template>
+    </yt-crud>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'

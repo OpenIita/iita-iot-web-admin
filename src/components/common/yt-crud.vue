@@ -1,8 +1,33 @@
 <template>
-  <transition>
-    <div>
-      <yt-table-search v-bind="bind.searchBind" @handle-search="search">
-        <template v-for="(item, index) in searchSlots" :key="index" #[item]="scope">
+  <div>
+    <yt-table-search v-bind="bind.searchBind" @handle-search="search">
+      <template v-for="(item, index) in searchSlots" :key="index" #[item]="scope">
+        <slot
+          :name="item"
+          v-bind="{
+            ...scope,
+          }"
+        ></slot>
+      </template>
+    </yt-table-search>
+    <yt-table-fun v-bind="bind.funBind" v-loading="loading" @handle-add="handleAdd()">
+      <yt-table
+        v-bind="bind.tableBind"
+        ref="ytTableRef"
+        @handle-update="handleUpdate"
+        @handle-delete="handleDel"
+        @handle-view="handleView"
+        @change-page="changePage"
+      >
+        <template #menuSlot="scope">
+          <slot
+            name="menuSlot"
+            v-bind="{
+            ...scope,
+          }"
+          ></slot>
+        </template>
+        <template v-for="(item, index) in tableSlots" :key="index" #[item]="scope">
           <slot
             :name="item"
             v-bind="{
@@ -10,55 +35,28 @@
             }"
           ></slot>
         </template>
-      </yt-table-search>
-      <yt-table-fun v-bind="bind.funBind" v-loading="loading" @handle-add="handleAdd()">
-        <yt-table
-          v-bind="bind.tableBind"
-          ref="ytTableRef"
-          @handle-update="handleUpdate"
-          @handle-delete="handleDel"
-          @handle-view="handleView"
-          @change-page="changePage"
-        >
-          <template #menuSlot="scope">
-            <slot
-              name="menuSlot"
-              v-bind="{
-              ...scope,
-            }"
-            ></slot>
-          </template>
-          <template v-for="(item, index) in tableSlots" :key="index" #[item]="scope">
-            <slot
-              :name="item"
-              v-bind="{
-                ...scope,
-              }"
-            ></slot>
-          </template>
-        </yt-table>
-      </yt-table-fun>
+      </yt-table>
+    </yt-table-fun>
 
-      <yt-table-form ref="tableFormRef" v-bind="bind.formBind" :column="column" @on-success="onSuccess">
-        <template v-for="(item, index) in formSlots" :key="index" #[item]="scope">
-          <slot
-            :name="item"
-            v-bind="{
-              ...scope,
-            }"
-          ></slot>
-        </template>
-        <template v-for="(item, index) in formItemSlots" :key="index" #[item]="scope">
-          <slot
-            :name="item"
-            v-bind="{
-              ...scope,
-            }"
-          ></slot>
-        </template>
-      </yt-table-form>
-    </div>
-  </transition>
+    <yt-table-form ref="tableFormRef" v-bind="bind.formBind" :column="column" @on-success="onSuccess">
+      <template v-for="(item, index) in formSlots" :key="index" #[item]="scope">
+        <slot
+          :name="item"
+          v-bind="{
+            ...scope,
+          }"
+        ></slot>
+      </template>
+      <template v-for="(item, index) in formItemSlots" :key="index" #[item]="scope">
+        <slot
+          :name="item"
+          v-bind="{
+            ...scope,
+          }"
+        ></slot>
+      </template>
+    </yt-table-form>
+  </div>
 </template>
 <script lang="ts" setup>
 import { crudProps } from './props/crudProps'

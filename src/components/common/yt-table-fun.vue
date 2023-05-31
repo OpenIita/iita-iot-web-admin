@@ -34,7 +34,7 @@ const delBind = reactive(props.delPermi ? {
 } : {})
 
 // 参数
-const showSearch = ref(true)
+const showSearch = ref(false)
 
 const emits = defineEmits(['handleAdd', 'handleDel', 'handleExport', 'reloadData'])
 </script>

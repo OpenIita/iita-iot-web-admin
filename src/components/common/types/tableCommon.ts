@@ -37,4 +37,5 @@ export interface IColumn {
   searchSlot?: boolean // 搜索插槽
   formSlot?: boolean // form插槽
   formItemSlot?: boolean // formItem替换插槽
+  formWatch?: (scope: any) => void // form监听
 }

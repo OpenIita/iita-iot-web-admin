@@ -1,12 +1,14 @@
 <template>
-  <yt-crud v-bind="options">
-    <template #menuSlot="scope">
-      <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)">物模型</el-button>
-    </template>
-  </yt-crud>
-  <el-dialog title="产品物模型" v-model="objectModel.visible" append-to-body destroy-on-close top="20px">
-    <object-model ref="objectModelRef"></object-model>
-  </el-dialog>
+  <div>
+    <yt-crud v-bind="options">
+      <template #menuSlot="scope">
+        <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)">物模型</el-button>
+      </template>
+    </yt-crud>
+    <el-dialog title="产品物模型" width="70%" v-model="objectModel.visible" append-to-body destroy-on-close top="20px">
+      <object-model ref="objectModelRef"></object-model>
+    </el-dialog>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'

@@ -1,10 +1,12 @@
 <template>
-  <yt-crud v-bind="options">
-    <template #state="scope">
-      <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
-      <el-tag v-else type="danger" size="mini">离线</el-tag>
-    </template>
-  </yt-crud>
+  <div>
+    <yt-crud v-bind="options">
+      <template #state="scope">
+        <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
+        <el-tag v-else type="danger" size="mini">离线</el-tag>
+      </template>
+    </yt-crud>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'

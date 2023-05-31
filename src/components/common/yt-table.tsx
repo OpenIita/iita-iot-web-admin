@@ -149,7 +149,7 @@ export default defineComponent({
             </ElTableColumn>
           )}
         </ElTable>
-        {pageObj.total > 0 && (
+        {pageObj.total > 0 && !props.pageHide && (
           <Pagination
             total={pageObj.total}
             v-model:page={pageObj.queryParams.pageNum}

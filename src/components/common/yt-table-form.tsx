@@ -20,7 +20,18 @@ export default defineComponent({
   },
   emtis: ['openDialog', 'onSuccess'],
   setup(props, { emit, slots, expose }) {
-    console.log('formprops', props)
+    const columns = ref<IColumn[]>([])
+    watch(
+      () => props.column,
+      (newV) => {
+        columns.value = toRaw(newV)
+        console.log('columns', columns)
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
     // 定义钩子
     const diglogRef = ref()
     const formRef = ref()
@@ -69,17 +80,16 @@ export default defineComponent({
     // 打开弹窗
     const openDialog = (type: TDialogType, data?: Recordable<string, any>) => {
       dialogObj.type = type
+      formObj.data = deepClone(toRaw(data || {}))
       const judgmentObj = {
         view: () => {
           dialogObj.title = '详情'
-          formObj.data = deepClone(unref(data)) || {}
         },
         update: () => {
           dialogObj.title = '编辑'
-          formObj.data = deepClone(unref(data)) || {}
         },
         add: () => {
-          props.column.forEach((item: IColumn) => {
+          columns.value.forEach((item: IColumn) => {
             // 判断默认值
             const defaultValue = item?.componentProps?.defaultValue
             if (defaultValue || defaultValue === 0) formObj.data[item.key] = defaultValue
@@ -108,11 +118,31 @@ export default defineComponent({
           default: () => (
             <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>
               <ElRow gutter={props.gutter}>
-                {props.column.map((m: IColumn) => {
-                  console.log(slots)
+                {console.log('item', columns)}
+                {columns.value.map((m: IColumn) => {
                   const type = m?.type || 'string'
                   const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
+                  if (m.key === 'converter') {
+                    console.log(m.formHide)
+                  }
                   if (!m.formHide) {
+                    if (m.formWatch) {
+                      watch(
+                        () => formObj.data[m.key],
+                        (newV) => {
+                          m.formWatch({
+                            col: m,
+                            column: columns.value,
+                            data: formObj.data,
+                            value: newV,
+                          })
+                        },
+                        {
+                          immediate: true,
+                          deep: true,
+                        }
+                      )
+                    }
                     return (
                       <ElCol span={props.col}>
                         {!m.formItemSlot ? (

@@ -17,12 +17,17 @@
     "url": "https://gitee.com/JavaLionLi/plus-ui.git"
   },
   "dependencies": {
+    "@codemirror/lang-html": "^6.4.3",
+    "@codemirror/lang-javascript": "^6.1.8",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
     "@element-plus/icons-vue": "2.1.0",
     "@vueup/vue-quill": "1.1.0",
     "@vueuse/core": "9.5.0",
     "animate.css": "4.1.1",
     "await-to-js": "^3.0.0",
     "axios": "^1.3.4",
+    "codemirror": "^6.0.1",
     "dayjs": "^1.11.7",
     "echarts": "5.4.0",
     "element-plus": "2.2.27",
@@ -37,10 +42,12 @@
     "pinia": "2.0.22",
     "screenfull": "6.0.0",
     "vue": "3.2.45",
+    "vue-codemirror": "^6.1.1",
     "vue-cropper": "1.0.3",
     "vue-i18n": "9.2.2",
     "vue-router": "4.1.4",
     "vue-types": "^5.0.3",
+    "vue3-ts-jsoneditor": "^2.9.0",
     "web-storage-cache": "^1.1.1"
   },
   "devDependencies": {

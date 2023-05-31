@@ -1,15 +1,7 @@
 <template>
-  <yt-crud ref="crudRef" :data="data" :column="column" :selection="false">
-    <template #sloo="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
-    </template>
-    <template #slots3Form="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
-    </template>
-    <template #slots2Search="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
-    </template>
-  </yt-crud>
+  <div>
+    <yt-crud ref="crudRef" :data="data" :column="column"></yt-crud>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
