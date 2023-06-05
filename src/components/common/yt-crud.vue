@@ -18,6 +18,7 @@
         @handle-delete="handleDel"
         @handle-view="handleView"
         @change-page="changePage"
+        @row-click="rowClick"
       >
         <template #menuSlot="scope">
           <slot
@@ -37,7 +38,6 @@
         </template>
       </yt-table>
     </yt-table-fun>
-
     <yt-table-form ref="tableFormRef" v-bind="bind.formBind" :column="column" @on-success="onSuccess">
       <template v-for="(item, index) in formSlots" :key="index" #[item]="scope">
         <slot
@@ -98,8 +98,11 @@ watch(() => props.column, (newV) => {
   deep: true,
 })
 
-const emits = defineEmits(['change', 'update:queryParams', 'saveFun'])
+const emits = defineEmits(['change', 'update:queryParams', 'saveFun', 'rowClick'])
 const ytTableRef = ref()
+const getTableRef = () => {
+  return ytTableRef.value
+}
 const tableFormRef = ref()
 const handleAdd = () => {
   tableFormRef.value?.openDialog('add')
@@ -113,7 +116,9 @@ const handleUpdate = (row: any) => {
 const handleView = (row: any) => {
   tableFormRef.value?.openDialog('view', row)
 }
-
+const rowClick = (row: any) => {
+  emits('rowClick', row)
+}
 // 表单保存
 const onSuccess = (obj: any) => {
   const { type, data } = obj
@@ -177,6 +182,10 @@ if (props.formProps) bind.formBind = {
   ...bind.formBind,
   ...props.formProps,
 }
+
+defineExpose({
+  getTableRef,
+})
 </script>
 
 <!-- <style lang="scss" scoped>

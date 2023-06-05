@@ -12,6 +12,15 @@
         <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close">停止</el-button>
         <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open">开启</el-button>
       </template>
+      <template #customFormItem="{row}">
+        <el-tabs v-model="activeName" type="border-card">
+          <el-tab-pane label="监听器" :name="1">
+            <listener :row="row"></listener>
+          </el-tab-pane>
+          <el-tab-pane label="过滤器" :name="2">过滤器</el-tab-pane>
+          <el-tab-pane label="输出" :name="3">输出</el-tab-pane>
+        </el-tabs>
+      </template>
     </yt-crud>
     <log-dialog ref="logDialogRef" title="场景执行日志"></log-dialog>
   </div>
@@ -19,6 +28,7 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
+import Listener from './modules/listener.vue'
 import LogDialog from '../modules/logDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 
@@ -27,7 +37,7 @@ const logDialogRef = ref()
 const handleViewLog = (id: string) => {
   logDialogRef.value.openDialog(id)
 }
-
+const activeName = ref(1)
 const column: IColumn[] = [{
   label: '规则名称',
   key: 'name',
@@ -66,6 +76,11 @@ const column: IColumn[] = [{
     type: 'textarea',
     row: 3,
   }
+}, {
+  label: '自定义表单项',
+  key: 'custom',
+  hide: true,
+  formItemSlot: true,
 }, {
   label: '创建时间',
   key: 'createAt',
@@ -170,6 +185,9 @@ const data = ref([
 ])
 
 const options = reactive({
+  formProps: {
+    width: 1200,
+  },
   tableProps: {
     selection: false,
     viewBtn: false,

@@ -39,11 +39,14 @@ export const funProps = {
   addBtnText: propTypes.string.def('新增'),
   delBtnText: propTypes.string.def('删除'),
   exportBtnText: propTypes.string.def('导出'),
+  hide: propTypes.bool.def(false),
 }
 
 // 表格组件参数
 export const tableProps = {
   width: propTypes.number || propTypes.string,
+  size: propTypes.string.def('default '),
+  columnKey: propTypes.string.def('id'),
   menuWidth: propTypes.number.def(200) || propTypes.string,
   // 序号
   index: propTypes.bool.def(true),

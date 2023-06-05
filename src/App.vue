@@ -19,3 +19,9 @@ onMounted(() => {
   })
 })
 </script>
+
+<style lang="scss">
+.el-table__body-wrapper .el-table-column--selection>.cell {
+  display: block;
+}
+</style>

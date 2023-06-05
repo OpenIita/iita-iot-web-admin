@@ -2,7 +2,7 @@
   <div>
     <yt-crud v-bind="options">
       <template #menuSlot="scope">
-        <el-button link type="primary" icon="Setting">配置</el-button>
+        <el-button link type="primary" icon="Setting" @click="handleConfig(scope.row.id)">配置</el-button>
       </template>
       <template #state="scope">
         <el-tag v-if="scope.row.state === 'running'" type="success" size="mini">运行中</el-tag>
@@ -30,7 +30,14 @@ import { IColumn } from '@/components/common/types/tableCommon'
 
 import CrontabBox from '@/components/Crontab/index.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
-const crontabModel = ref('')
+
+// 跳转配置
+const router = useRouter()
+const handleConfig = (id: string) => {
+  if (!id) return
+  router.push(`virtualDeviceConfig/${id}`)
+}
+
 // 产品字典
 const productOptions = [
   {
@@ -382,6 +389,7 @@ const options = reactive({
     selection: false,
     delBtn: false,
     menuSlot: true,
+    menuWidth: 220,
   },
   searchProps: {
     labelWidth: 120,

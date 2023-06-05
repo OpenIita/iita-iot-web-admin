@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="never">
+  <el-card shadow="never" v-if="!hide">
     <template #header>
       <el-row :gutter="gutter" class="mb8">
         <el-col :span="span" v-if="addBtn">
@@ -18,6 +18,9 @@
       <slot></slot>
     </div>
   </el-card>
+  <div v-else>
+    <slot></slot>
+  </div>
 </template>
 <script lang="ts" setup>
 import { funProps } from './props/crudProps'

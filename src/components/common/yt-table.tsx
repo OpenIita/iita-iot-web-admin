@@ -28,8 +28,8 @@ export default defineComponent({
     },
     ...tableProps,
   },
-  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage'],
-  setup(props, { emit, slots }) {
+  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick'],
+  setup(props, { emit, slots, expose }) {
     const tableRef = ref()
     // 渲染菜单
     const renderMenus = (scope: { row: any }) => {
@@ -129,15 +129,29 @@ export default defineComponent({
         pageSize: 10,
       },
     })
+    // 单选
+    const rowClick = (row: any) => {
+      emit('rowClick', row)
+    }
     const onLoad = (params: any) => {
       const listParams = {
         ...params,
         ...pageObj,
       }
     }
+    expose({
+      tableRef,
+    })
     return () => (
       <div>
-        <ElTable ref={tableRef} data={props.data} onSelection-change={() => emit('handleSelectionChange')}>
+        <ElTable
+          ref={tableRef}
+          data={props.data}
+          onSelection-change={() => emit('handleSelectionChange')}
+          size={props.size}
+          column-key={props.columnKey}
+          onCurrent-change={rowClick}
+        >
           {props.selection && <ElTableColumn type="selection" width="55" align="center" />}
           {props.index && <ElTableColumn type="index" width="55" align="center" label="序号" />}
           {props.column.map((m: IColumn) => {

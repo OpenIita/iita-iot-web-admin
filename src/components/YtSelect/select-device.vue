@@ -1,47 +1,89 @@
 <template>
-  <div>
-    <yt-crud v-bind="options">
-      <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
-        <el-tag v-else type="danger" size="mini">离线</el-tag>
-      </template>
-      <template #menuSlot="scope">
-        <!-- TODO: 没接口,nodeType无法获取，得改成 ！= 0 -->
-        <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope)">子设备</el-button>
-        <el-button link type="primary" icon="View" @click="handleView(scope.row.id)">详情</el-button>
-        <el-popconfirm title="是否确认删除该数据" @confirm="handleDelete(scope.row)">
-          <template #reference>
-            <el-button link type="danger" icon="Delete">删除</el-button>
-          </template>
-        </el-popconfirm>
-      </template>
-    </yt-crud>
-    <children-dialog ref="childrenDialogRef"></children-dialog>
-  </div>
+  <el-input class="cu-input" :placeholder="placeholder" v-model.trim="name" @clear="onClear" clearable @click="handleSelect">
+    <template #append>
+      <el-button type="primaqry" @click="handleSelect">选择</el-button>
+    </template>
+  </el-input>
+  <el-dialog title="选择设备" v-model="dialogState.show" width="1200px">
+    <yt-crud
+      ref="ytCrudRef"
+      :data="data"
+      :column="column"
+      :table-props="{
+        menu: false,
+        selection: multiple,
+      }"
+      :fun-props="{
+        hide: true
+      }"
+      @row-click="rowClick"
+    ></yt-crud>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogState.show = false">取消</el-button>
+        <el-button type="primary" @click="handleMultiple">确定</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 <script lang="ts" setup>
-import { IColumn } from '@/components/common/types/tableCommon'
+import { propTypes } from '@/utils/propTypes'
+import { IColumn } from '../common/types/tableCommon'
 
-import ChildrenDialog from './modules/childrenDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
-import { ElPopconfirm } from 'element-plus'
 
-const handleDelete = (row: any) => {
+const props = defineProps({
+  id: propTypes.string.def(''),
+  // TODO:调接口时有产品id就传入
+  // 固定产品id
+  productId: propTypes.string,
+  // 是否多选
+  multiple: propTypes.bool.def(false),
+  placeholder: propTypes.string.def('请选择设备'),
+})
+const emits = defineEmits(['onSelect', 'update:id'])
+
+// 单击
+const ytCrudRef = ref()
+
+const rowClick = (row: any) => {
+  if (props.multiple) {
+    ytCrudRef.value.getTableRef().tableRef.toggleRowSelection(toRaw(row), undefined)
+    return
+  }
+  emits('onSelect', row)
+  emits('update:id', row.id)
+  dialogState.data = row
+  dialogState.show = false
   console.log(row)
 }
-// 查看详情
-const router = useRouter()
-const handleView = (id: string) => {
-  if (!id) return
-  router.push(`devicesDetail/${id}`)
+// 多选
+const handleMultiple = () => {
+  const rows = ytCrudRef.value.getTableRef().tableRef.getSelectionRows()
+  dialogState.data = {
+    id: rows.map((m: any) => m.id),
+    deviceName: rows.map((m: any) => m.deviceName).join(',')
+  }
+  emits('update:id', dialogState.data.id)
+  dialogState.show = false
 }
 
-// 打开子设备
-const childrenDialogRef = ref()
-const showChidrenDevices = (row: any) => {
-  childrenDialogRef.value.openDialog(row)
+// 清空
+const onClear = () => {
+  emits('update:id', '')
+  dialogState.data = {}
 }
-
+const dialogState = reactive({
+  show: false,
+  data: {} as any,
+})
+const name = computed(() => {
+  return dialogState.data?.deviceName || ''
+})
+const handleSelect = () => {
+  console.log('handleSelect')
+  dialogState.show = true
+}
 // 产品字典
 const productOptions = [
   {
@@ -243,16 +285,10 @@ const groupOptions = [
   }
 ]
 const column: IColumn[] = [{
-  label: '设备ID',
-  key: 'deviceId',
-  formHide: true,
-  tableWidth: 250,
-  rules: [{ required: true, message: 'ProductKey不能为空' }],
-}, {
   label: '产品',
   key: 'productKey',
   type: 'select',
-  search: true,
+  search: !!props.productId,
   tableWidth: 120,
   componentProps: {
     labelAlias: 'name',
@@ -298,7 +334,6 @@ const column: IColumn[] = [{
   type: 'date',
   formHide: true,
 }]
-
 const data = ref([
   {
     "id": "16818017836420test100000000000056",
@@ -501,23 +536,14 @@ const data = ref([
     "createAt": 1660486958952
   }
 ])
-
-const options = reactive({
-  ref: 'crudRef',
-  tableProps: {
-    selection: false,
-    delBtn: false,
-    viewBtn: false,
-    editBtn: false,
-    menuSlot: true,
-    menuWidth: 250,
-  },
-  searchProps: {},
-  data,
-  column,
-})
 </script>
 
-<!-- <style lang="scss" scoped>
-
-</style> -->
+<style lang="scss" scoped>
+.cu-input {
+  cursor: pointer;
+}
+::v-deep(.el-input-group__append) {
+  background-color: var(--el-color-primary);
+  color: #fff;
+}
+</style>
