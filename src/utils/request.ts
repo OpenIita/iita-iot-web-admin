@@ -8,6 +8,7 @@ import { errorCode } from '@/utils/errorCode'
 import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 import FileSaver from 'file-saver'
 import { getLanguage } from '@/lang'
+import { deepClone } from '.'
 
 let downloadLoadingInstance: LoadingInstance
 // 是否显示重新登录
@@ -41,10 +42,16 @@ service.interceptors.request.use(
     }
 
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
+      const { pageNum, pageSize, ...otherData } = deepClone(config.data)
+      const pageObj: any = {}
+      if (pageNum) pageObj.pageNum = pageNum
+      if (pageSize) pageObj.pageSize = pageSize
+      const data = typeof otherData === 'object' ? JSON.stringify(otherData) : otherData
       const requestObj = {
         url: config.url,
         data: {
-          data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
+          data,
+          ...pageObj,
         },
         time: new Date().getTime(),
       }
