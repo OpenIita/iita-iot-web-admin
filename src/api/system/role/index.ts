@@ -8,7 +8,7 @@ export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
   return request({
     url: '/system/role/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -17,8 +17,11 @@ export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
  */
 export const getRole = (roleId: string | number): AxiosPromise<RoleVO> => {
   return request({
-    url: '/system/role/' + roleId,
+    url: '/system/role',
     method: 'post',
+    data: {
+      roleId,
+    },
   })
 }
 
@@ -29,7 +32,7 @@ export const addRole = (data: any) => {
   return request({
     url: '/system/role',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -41,7 +44,7 @@ export const updateRole = (data: any) => {
   return request({
     url: '/system/role',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -52,7 +55,7 @@ export const dataScope = (data: any) => {
   return request({
     url: '/system/role/dataScope',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -67,7 +70,7 @@ export const changeRoleStatus = (roleId: string | number, status: string) => {
   return request({
     url: '/system/role/changeStatus',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -76,8 +79,11 @@ export const changeRoleStatus = (roleId: string | number, status: string) => {
  */
 export const delRole = (roleId: Array<string | number> | string | number) => {
   return request({
-    url: '/system/role/' + roleId,
+    url: '/system/role',
     method: 'post',
+    data: {
+      roleId,
+    },
   })
 }
 
@@ -88,7 +94,7 @@ export const allocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> => {
   return request({
     url: '/system/role/authUser/allocatedList',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -99,7 +105,7 @@ export const unallocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> =>
   return request({
     url: '/system/role/authUser/unallocatedList',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -110,7 +116,7 @@ export const authUserCancel = (data: any) => {
   return request({
     url: '/system/role/authUser/cancel',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -121,7 +127,7 @@ export const authUserCancelAll = (data: any) => {
   return request({
     url: '/system/role/authUser/cancelAll',
     method: 'post',
-    params: data,
+    data,
   })
 }
 
@@ -132,13 +138,16 @@ export const authUserSelectAll = (data: any) => {
   return request({
     url: '/system/role/authUser/selectAll',
     method: 'post',
-    params: data,
+    data,
   })
 }
 // 根据角色ID查询部门树结构
 export const deptTreeSelect = (roleId: string | number): AxiosPromise<RoleDeptTree> => {
   return request({
-    url: '/system/role/deptTree/' + roleId,
+    url: '/system/role/deptTree',
     method: 'post',
+    data: {
+      roleId,
+    },
   })
 }

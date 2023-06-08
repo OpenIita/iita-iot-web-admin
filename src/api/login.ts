@@ -33,7 +33,7 @@ export function register(data: any) {
       isToken: false,
     },
     method: 'post',
-    data: data,
+    data,
   })
 }
 

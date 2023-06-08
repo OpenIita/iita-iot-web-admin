@@ -8,7 +8,7 @@ export const listTable = (query: TableQuery): AxiosPromise<TableVO[]> => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 // 查询db数据库列表
@@ -17,7 +17,7 @@ export const listDbTable = (query: DbTableQuery): AxiosPromise<DbTableVO[]> => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/db/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -25,8 +25,11 @@ export const listDbTable = (query: DbTableQuery): AxiosPromise<DbTableVO[]> => {
 export const getGenTable = (tableId: string | number): AxiosPromise<GenTableVO> => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen/' + tableId,
+    url: '/tool/gen',
     method: 'post',
+    data: {
+      tableId,
+    },
   })
 }
 
@@ -36,7 +39,7 @@ export const updateGenTable = (data: DbTableForm) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -46,7 +49,7 @@ export const importTable = (data: { tables: string }) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/importTable',
     method: 'post',
-    params: data,
+    data,
   })
 }
 
@@ -54,8 +57,11 @@ export const importTable = (data: { tables: string }) => {
 export const previewTable = (tableId: string | number) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen/preview/' + tableId,
+    url: '/tool/gen/preview',
     method: 'post',
+    data: {
+      tableId,
+    },
   })
 }
 
@@ -63,8 +69,11 @@ export const previewTable = (tableId: string | number) => {
 export const delTable = (tableId: string | number | Array<string | number>) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen/' + tableId,
+    url: '/tool/gen',
     method: 'post',
+    data: {
+      tableId,
+    },
   })
 }
 
@@ -72,8 +81,11 @@ export const delTable = (tableId: string | number | Array<string | number>) => {
 export const genCode = (tableName: string) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen/genCode/' + tableName,
+    url: '/tool/gen/genCode',
     method: 'post',
+    data: {
+      tableName,
+    },
   })
 }
 
@@ -81,7 +93,10 @@ export const genCode = (tableName: string) => {
 export const synchDb = (tableName: string) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen/synchDb/' + tableName,
+    url: '/tool/gen/synchDb',
     method: 'post',
+    data: {
+      tableName,
+    },
   })
 }

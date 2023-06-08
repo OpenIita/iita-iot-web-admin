@@ -43,7 +43,9 @@ service.interceptors.request.use(
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
         url: config.url,
-        data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
+        data: {
+          data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
+        },
         time: new Date().getTime(),
       }
       const sessionObj = cache.session.getJSON('sessionObj')

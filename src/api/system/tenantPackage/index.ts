@@ -7,7 +7,7 @@ export function listTenantPackage(query?: TenantPkgQuery): AxiosPromise<TenantPk
   return request({
     url: '/system/tenant/package/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -22,8 +22,11 @@ export function selectTenantPackage(): AxiosPromise<TenantPkgVO[]> {
 // 查询租户套餐详细
 export function getTenantPackage(packageId: string | number): AxiosPromise<TenantPkgVO> {
   return request({
-    url: '/system/tenant/package/' + packageId,
+    url: '/system/tenant/package',
     method: 'post',
+    data: {
+      packageId,
+    },
   })
 }
 
@@ -32,7 +35,7 @@ export function addTenantPackage(data: TenantPkgForm) {
   return request({
     url: '/system/tenant/package',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -41,7 +44,7 @@ export function updateTenantPackage(data: TenantPkgForm) {
   return request({
     url: '/system/tenant/package',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -54,14 +57,17 @@ export function changePackageStatus(packageId: number | string, status: string) 
   return request({
     url: '/system/tenant/package/changeStatus',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
 // 删除租户套餐
 export function delTenantPackage(packageId: string | number | Array<string | number>) {
   return request({
-    url: '/system/tenant/package/' + packageId,
+    url: '/system/tenant/package',
     method: 'post',
+    data: {
+      packageId,
+    },
   })
 }

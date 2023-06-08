@@ -7,15 +7,18 @@ export function listPost(query: PostQuery): AxiosPromise<PostVO[]> {
   return request({
     url: '/system/post/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 查询岗位详细
 export function getPost(postId: string | number): AxiosPromise<PostVO> {
   return request({
-    url: '/system/post/' + postId,
+    url: '/system/post',
     method: 'post',
+    data: {
+      postId,
+    },
   })
 }
 
@@ -24,7 +27,7 @@ export function addPost(data: PostForm) {
   return request({
     url: '/system/post',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -33,14 +36,17 @@ export function updatePost(data: PostForm) {
   return request({
     url: '/system/post',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
 // 删除岗位
 export function delPost(postId: string | number | (string | number)[]) {
   return request({
-    url: '/system/post/' + postId,
+    url: '/system/post',
     method: 'post',
+    data: {
+      postId,
+    },
   })
 }

@@ -7,15 +7,18 @@ export function listOssConfig(query: OssConfigQuery): AxiosPromise<OssConfigVO[]
   return request({
     url: '/resource/oss/config/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 查询对象存储配置详细
 export function getOssConfig(ossConfigId: string | number): AxiosPromise<OssConfigVO> {
   return request({
-    url: '/resource/oss/config/' + ossConfigId,
+    url: '/resource/oss/config',
     method: 'post',
+    data: {
+      ossConfigId,
+    },
   })
 }
 
@@ -24,7 +27,7 @@ export function addOssConfig(data: OssConfigForm) {
   return request({
     url: '/resource/oss/config',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -33,15 +36,18 @@ export function updateOssConfig(data: OssConfigForm) {
   return request({
     url: '/resource/oss/config',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
 // 删除对象存储配置
 export function delOssConfig(ossConfigId: string | number | Array<string | number>) {
   return request({
-    url: '/resource/oss/config/' + ossConfigId,
+    url: '/resource/oss/config',
     method: 'post',
+    data: {
+      ossConfigId,
+    },
   })
 }
 
@@ -55,6 +61,6 @@ export function changeOssConfigStatus(ossConfigId: string | number, status: stri
   return request({
     url: '/resource/oss/config/changeStatus',
     method: 'post',
-    data: data,
+    data,
   })
 }

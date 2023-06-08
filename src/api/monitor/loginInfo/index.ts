@@ -7,23 +7,29 @@ export function list(query: LoginInfoQuery): AxiosPromise<LoginInfoVO[]> {
   return request({
     url: '/monitor/logininfor/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 删除登录日志
 export function delLoginInfo(infoId: string | number | Array<string | number>) {
   return request({
-    url: '/monitor/logininfor/' + infoId,
+    url: '/monitor/logininfor',
     method: 'post',
+    data: {
+      infoId,
+    },
   })
 }
 
 // 解锁用户登录状态
 export function unlockLoginInfo(userName: string | Array<string>) {
   return request({
-    url: '/monitor/logininfor/unlock/' + userName,
+    url: '/monitor/logininfor/unlock',
     method: 'post',
+    data: {
+      userName,
+    },
   })
 }
 

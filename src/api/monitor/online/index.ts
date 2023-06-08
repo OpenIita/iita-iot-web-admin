@@ -7,14 +7,14 @@ export function list(query: OnlineQuery): AxiosPromise<OnlineVO[]> {
   return request({
     url: '/monitor/online/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 强退用户
 export function forceLogout(tokenId: string) {
   return request({
-    url: '/monitor/online/' + tokenId,
+    url: '/monitor/online' + tokenId,
     method: 'post',
   })
 }

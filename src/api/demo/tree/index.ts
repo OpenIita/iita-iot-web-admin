@@ -11,7 +11,7 @@ export const listTree = (query?: TreeQuery): AxiosPromise<TreeVO[]> => {
   return request({
     url: '/demo/tree/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -21,8 +21,11 @@ export const listTree = (query?: TreeQuery): AxiosPromise<TreeVO[]> => {
  */
 export const getTree = (id: string | number): AxiosPromise<TreeVO> => {
   return request({
-    url: '/demo/tree/' + id,
+    url: '/demo/tree',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }
 
@@ -34,7 +37,7 @@ export const addTree = (data: TreeForm) => {
   return request({
     url: '/demo/tree',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -46,7 +49,7 @@ export const updateTree = (data: TreeForm) => {
   return request({
     url: '/demo/tree',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -56,7 +59,10 @@ export const updateTree = (data: TreeForm) => {
  */
 export const delTree = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/demo/tree/' + id,
+    url: '/demo/tree',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }

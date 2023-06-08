@@ -7,22 +7,28 @@ export function listOss(query: OssQuery): AxiosPromise<OssVO[]> {
   return request({
     url: '/resource/oss/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 查询OSS对象基于id串
 export function listByIds(ossId: string | number): AxiosPromise<OssVO[]> {
   return request({
-    url: '/resource/oss/listByIds/' + ossId,
+    url: '/resource/oss/listByIds',
     method: 'post',
+    data: {
+      ossId,
+    },
   })
 }
 
 // 删除OSS对象存储
 export function delOss(ossId: string | number | Array<string | number>) {
   return request({
-    url: '/resource/oss/' + ossId,
+    url: '/resource/oss',
     method: 'post',
+    data: {
+      ossId,
+    },
   })
 }

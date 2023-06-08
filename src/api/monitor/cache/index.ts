@@ -21,32 +21,46 @@ export function listCacheName() {
 // 查询缓存键名列表
 export function listCacheKey(cacheName: string) {
   return request({
-    url: '/monitor/cache/getKeys/' + cacheName,
+    url: '/monitor/cache/getKeys',
     method: 'post',
+    data: {
+      cacheName,
+    },
   })
 }
 
 // 查询缓存内容
 export function getCacheValue(cacheName: string, cacheKey: string) {
   return request({
-    url: '/monitor/cache/getValue/' + cacheName + '/' + cacheKey,
+    url: '/monitor/cache/getValue',
     method: 'post',
+    data: {
+      cacheName,
+      cacheKey,
+    },
   })
 }
 
 // 清理指定名称缓存
 export function clearCacheName(cacheName: string) {
   return request({
-    url: '/monitor/cache/clearCacheName/' + cacheName,
+    url: '/monitor/cache/clearCacheName',
     method: 'post',
+    data: {
+      cacheName,
+    },
   })
 }
 
 // 清理指定键名缓存
 export function clearCacheKey(cacheName: string, cacheKey: string) {
   return request({
-    url: '/monitor/cache/clearCacheKey/' + cacheName + '/' + cacheKey,
+    url: '/monitor/cache/clearCacheKey',
     method: 'post',
+    data: {
+      cacheName,
+      cacheKey,
+    },
   })
 }
 

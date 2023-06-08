@@ -11,7 +11,7 @@ export const listDemo = (query?: DemoQuery): AxiosPromise<DemoVO[]> => {
   return request({
     url: '/demo/demo/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
@@ -21,8 +21,11 @@ export const listDemo = (query?: DemoQuery): AxiosPromise<DemoVO[]> => {
  */
 export const getDemo = (id: string | number): AxiosPromise<DemoVO> => {
   return request({
-    url: '/demo/demo/' + id,
+    url: '/demo/demo',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }
 
@@ -34,7 +37,7 @@ export const addDemo = (data: DemoForm) => {
   return request({
     url: '/demo/demo',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -46,7 +49,7 @@ export const updateDemo = (data: DemoForm) => {
   return request({
     url: '/demo/demo',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -56,7 +59,10 @@ export const updateDemo = (data: DemoForm) => {
  */
 export const delDemo = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/demo/demo/' + id,
+    url: '/demo/demo',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }

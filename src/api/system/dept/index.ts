@@ -7,23 +7,29 @@ export const listDept = (query?: DeptQuery) => {
   return request({
     url: '/system/dept/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 查询部门列表（排除节点）
 export const listDeptExcludeChild = (deptId: string | number): AxiosPromise<DeptVO[]> => {
   return request({
-    url: '/system/dept/list/exclude/' + deptId,
+    url: '/system/dept/list/exclude',
     method: 'post',
+    data: {
+      deptId,
+    },
   })
 }
 
 // 查询部门详细
 export const getDept = (deptId: string | number): AxiosPromise<DeptVO> => {
   return request({
-    url: '/system/dept/' + deptId,
+    url: '/system/dept',
     method: 'post',
+    data: {
+      deptId,
+    },
   })
 }
 
@@ -40,7 +46,7 @@ export const addDept = (data: DeptForm) => {
   return request({
     url: '/system/dept',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -49,14 +55,17 @@ export const updateDept = (data: DeptForm) => {
   return request({
     url: '/system/dept',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
 // 删除部门
 export const delDept = (deptId: number | string) => {
   return request({
-    url: '/system/dept/' + deptId,
+    url: '/system/dept',
     method: 'post',
+    data: {
+      deptId,
+    },
   })
 }

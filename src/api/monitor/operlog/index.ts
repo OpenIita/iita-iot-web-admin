@@ -7,14 +7,14 @@ export function list(query: OperLogQuery): AxiosPromise<OperLogVO[]> {
   return request({
     url: '/monitor/operlog/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 删除操作日志
 export function delOperlog(operId: string | number | Array<string | number>) {
   return request({
-    url: '/monitor/operlog/' + operId,
+    url: '/monitor/operlog' + operId,
     method: 'post',
   })
 }

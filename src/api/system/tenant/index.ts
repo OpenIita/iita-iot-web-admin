@@ -7,15 +7,18 @@ export function listTenant(query: TenantQuery): AxiosPromise<TenantVO[]> {
   return request({
     url: '/system/tenant/list',
     method: 'post',
-    params: query,
+    data: query,
   })
 }
 
 // 查询租户详细
 export function getTenant(id: string | number): AxiosPromise<TenantVO> {
   return request({
-    url: '/system/tenant/' + id,
+    url: '/system/tenant',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }
 
@@ -24,7 +27,7 @@ export function addTenant(data: TenantForm) {
   return request({
     url: '/system/tenant',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -33,7 +36,7 @@ export function updateTenant(data: TenantForm) {
   return request({
     url: '/system/tenant',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
@@ -47,23 +50,29 @@ export function changeTenantStatus(id: string | number, tenantId: string | numbe
   return request({
     url: '/system/tenant/changeStatus',
     method: 'post',
-    data: data,
+    data,
   })
 }
 
 // 删除租户
 export function delTenant(id: string | number | Array<string | number>) {
   return request({
-    url: '/system/tenant/' + id,
+    url: '/system/tenant',
     method: 'post',
+    data: {
+      id,
+    },
   })
 }
 
 // 动态切换租户
 export function dynamicTenant(tenantId: string | number) {
   return request({
-    url: '/system/tenant/dynamic/' + tenantId,
+    url: '/system/tenant/dynamic',
     method: 'post',
+    data: {
+      tenantId,
+    },
   })
 }
 
@@ -84,6 +93,6 @@ export function syncTenantPackage(tenantId: string | number, packageId: string |
   return request({
     url: '/system/tenant/syncTenantPackage',
     method: 'post',
-    params: data,
+    data,
   })
 }
