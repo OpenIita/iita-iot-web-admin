@@ -8,7 +8,6 @@ import { errorCode } from '@/utils/errorCode'
 import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 import FileSaver from 'file-saver'
 import { getLanguage } from '@/lang'
-import { deepClone } from '.'
 
 let downloadLoadingInstance: LoadingInstance
 // 是否显示重新登录
@@ -40,7 +39,7 @@ service.interceptors.request.use(
       config.params = {}
       config.url = url
     }
-    const { pageNum, pageSize, ...otherData } = deepClone(config.data)
+    const { pageNum, pageSize, ...otherData } = config.data || {}
     const pageObj: any = {}
     if (pageNum) pageObj.pageNum = pageNum
     if (pageSize) pageObj.pageSize = pageSize
