@@ -39,15 +39,21 @@ service.interceptors.request.use(
       config.params = {}
       config.url = url
     }
-    const { pageNum, pageSize, ...otherData } = config.data || {}
-    const pageObj: any = {}
-    const data: any = {}
-    if (pageNum) pageObj.pageNum = pageNum
-    if (pageSize) pageObj.pageSize = pageSize
-    if (otherData) data.data = otherData
-    config.data = {
-      ...pageObj,
-      ...data,
+    if (config.data && config.data.constructor == Object) {
+      const { pageNum, pageSize, ...otherData } = config.data || {}
+      const pageObj: any = {}
+      const data: any = {}
+      if (pageNum) pageObj.pageNum = pageNum
+      if (pageSize) pageObj.pageSize = pageSize
+      if (otherData) data.data = otherData
+      config.data = {
+        ...pageObj,
+        ...data,
+      }
+    } else {
+      config.data = {
+        data: config.data,
+      }
     }
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
