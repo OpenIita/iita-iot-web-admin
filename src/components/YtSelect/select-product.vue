@@ -1,5 +1,5 @@
 <template>
-  <el-input class="cu-input" placeholder="请选择产品" v-model.trim="name" @clear="onClear" clearable @click="handleSelect">
+  <el-input class="cu-input" size="small" placeholder="请选择产品" v-model.trim="name" @clear="onClear" clearable @click="handleSelect">
     <template #append>
       <el-button type="primaqry" @click="handleSelect">选择</el-button>
     </template>
