@@ -65,7 +65,7 @@ export function getCodeImg(): AxiosPromise<VerifyCodeResult> {
 export function getInfo(): AxiosPromise<UserInfo> {
   return request({
     url: '/system/user/getInfo',
-    method: 'get',
+    method: 'post',
   })
 }
 

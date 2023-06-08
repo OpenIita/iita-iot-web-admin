@@ -6,6 +6,6 @@ import { RouteRecordRaw } from 'vue-router'
 export function getRouters(): AxiosPromise<RouteRecordRaw[]> {
   return request({
     url: '/system/menu/getRouters',
-    method: 'get',
+    method: 'post',
   })
 }
