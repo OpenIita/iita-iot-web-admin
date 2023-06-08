@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function list(query: OnlineQuery): AxiosPromise<OnlineVO[]> {
   return request({
     url: '/monitor/online/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,6 +15,6 @@ export function list(query: OnlineQuery): AxiosPromise<OnlineVO[]> {
 export function forceLogout(tokenId: string) {
   return request({
     url: '/monitor/online/' + tokenId,
-    method: 'delete',
+    method: 'post',
   })
 }

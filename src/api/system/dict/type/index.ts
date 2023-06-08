@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listType(query: DictTypeQuery): AxiosPromise<DictTypeVO[]> {
   return request({
     url: '/system/dict/type/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listType(query: DictTypeQuery): AxiosPromise<DictTypeVO[]> {
 export function getType(dictId: number | string): AxiosPromise<DictTypeVO> {
   return request({
     url: '/system/dict/type/' + dictId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -32,7 +32,7 @@ export function addType(data: DictTypeForm) {
 export function updateType(data: DictTypeForm) {
   return request({
     url: '/system/dict/type',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -41,7 +41,7 @@ export function updateType(data: DictTypeForm) {
 export function delType(dictId: string | number | Array<string | number>) {
   return request({
     url: '/system/dict/type/' + dictId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -49,7 +49,7 @@ export function delType(dictId: string | number | Array<string | number>) {
 export function refreshCache() {
   return request({
     url: '/system/dict/type/refreshCache',
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -57,6 +57,6 @@ export function refreshCache() {
 export function optionselect(): AxiosPromise<DictTypeVO[]> {
   return request({
     url: '/system/dict/type/optionselect',
-    method: 'get',
+    method: 'post',
   })
 }

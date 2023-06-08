@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listConfig(query: ConfigQuery): AxiosPromise<ConfigVO[]> {
   return request({
     url: '/system/config/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listConfig(query: ConfigQuery): AxiosPromise<ConfigVO[]> {
 export function getConfig(configId: string | number): AxiosPromise<ConfigVO> {
   return request({
     url: '/system/config/' + configId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -23,7 +23,7 @@ export function getConfig(configId: string | number): AxiosPromise<ConfigVO> {
 export function getConfigKey(configKey: string): AxiosPromise<ConfigVO> {
   return request({
     url: '/system/config/configKey/' + configKey,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -40,7 +40,7 @@ export function addConfig(data: ConfigForm) {
 export function updateConfig(data: ConfigForm) {
   return request({
     url: '/system/config',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -49,7 +49,7 @@ export function updateConfig(data: ConfigForm) {
 export function updateConfigByKey(key: string, value: any) {
   return request({
     url: '/system/config/updateByKey',
-    method: 'put',
+    method: 'post',
     data: {
       configKey: key,
       configValue: value,
@@ -61,7 +61,7 @@ export function updateConfigByKey(key: string, value: any) {
 export function delConfig(configId: string | number | Array<string | number>) {
   return request({
     url: '/system/config/' + configId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -69,6 +69,6 @@ export function delConfig(configId: string | number | Array<string | number>) {
 export function refreshCache() {
   return request({
     url: '/system/config/refreshCache',
-    method: 'delete',
+    method: 'post',
   })
 }

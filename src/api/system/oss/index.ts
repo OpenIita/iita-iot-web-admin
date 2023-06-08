@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listOss(query: OssQuery): AxiosPromise<OssVO[]> {
   return request({
     url: '/resource/oss/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listOss(query: OssQuery): AxiosPromise<OssVO[]> {
 export function listByIds(ossId: string | number): AxiosPromise<OssVO[]> {
   return request({
     url: '/resource/oss/listByIds/' + ossId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -23,6 +23,6 @@ export function listByIds(ossId: string | number): AxiosPromise<OssVO[]> {
 export function delOss(ossId: string | number | Array<string | number>) {
   return request({
     url: '/resource/oss/' + ossId,
-    method: 'delete',
+    method: 'post',
   })
 }

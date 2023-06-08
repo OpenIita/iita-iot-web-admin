@@ -12,7 +12,7 @@ import { parseStrEmpty } from '@/utils/ruoyi'
 export function listUser(query: UserQuery): AxiosPromise<UserVO[]> {
   return request({
     url: '/system/user/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -24,7 +24,7 @@ export function listUser(query: UserQuery): AxiosPromise<UserVO[]> {
 export function getUser(userId?: string | number): AxiosPromise<UserInfoVO> {
   return request({
     url: '/system/user/' + parseStrEmpty(userId),
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -45,7 +45,7 @@ export function addUser(data: UserForm) {
 export function updateUser(data: UserForm) {
   return request({
     url: '/system/user',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -57,7 +57,7 @@ export function updateUser(data: UserForm) {
 export function delUser(userId: Array<string | number> | string | number) {
   return request({
     url: '/system/user/' + userId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -73,7 +73,7 @@ export function resetUserPwd(userId: string | number, password: string) {
   }
   return request({
     url: '/system/user/resetPwd',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -90,7 +90,7 @@ export function changeUserStatus(userId: number | string, status: string) {
   }
   return request({
     url: '/system/user/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -101,7 +101,7 @@ export function changeUserStatus(userId: number | string, status: string) {
 export function getUserProfile(): AxiosPromise<UserInfoVO> {
   return request({
     url: '/system/user/profile',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -112,7 +112,7 @@ export function getUserProfile(): AxiosPromise<UserInfoVO> {
 export function updateUserProfile(data: UserForm) {
   return request({
     url: '/system/user/profile',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -129,7 +129,7 @@ export function updateUserPwd(oldPassword: string, newPassword: string) {
   }
   return request({
     url: '/system/user/profile/updatePwd',
-    method: 'put',
+    method: 'post',
     params: data,
   })
 }
@@ -153,7 +153,7 @@ export function uploadAvatar(data: FormData) {
 export function getAuthRole(userId: string | number): AxiosPromise<{ user: UserVO; roles: RoleVO[] }> {
   return request({
     url: '/system/user/authRole/' + userId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -164,7 +164,7 @@ export function getAuthRole(userId: string | number): AxiosPromise<{ user: UserV
 export function updateAuthRole(data: { userId: string; roleIds: string }) {
   return request({
     url: '/system/user/authRole',
-    method: 'put',
+    method: 'post',
     params: data,
   })
 }
@@ -175,6 +175,6 @@ export function updateAuthRole(data: { userId: string; roleIds: string }) {
 export function deptTreeSelect(): AxiosPromise<DeptVO[]> {
   return request({
     url: '/system/user/deptTree',
-    method: 'get',
+    method: 'post',
   })
 }

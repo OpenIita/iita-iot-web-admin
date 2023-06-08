@@ -6,7 +6,7 @@ import { MenuQuery, MenuVO, MenuForm, MenuTreeOption, RoleMenuTree } from './typ
 export const listMenu = (query?: MenuQuery): AxiosPromise<MenuVO[]> => {
   return request({
     url: '/system/menu/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export const listMenu = (query?: MenuQuery): AxiosPromise<MenuVO[]> => {
 export const getMenu = (menuId: string | number): AxiosPromise<MenuVO> => {
   return request({
     url: '/system/menu/' + menuId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -23,7 +23,7 @@ export const getMenu = (menuId: string | number): AxiosPromise<MenuVO> => {
 export const treeselect = (): AxiosPromise<MenuTreeOption[]> => {
   return request({
     url: '/system/menu/treeselect',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -31,7 +31,7 @@ export const treeselect = (): AxiosPromise<MenuTreeOption[]> => {
 export const roleMenuTreeselect = (roleId: string | number): AxiosPromise<RoleMenuTree> => {
   return request({
     url: '/system/menu/roleMenuTreeselect/' + roleId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -39,7 +39,7 @@ export const roleMenuTreeselect = (roleId: string | number): AxiosPromise<RoleMe
 export const tenantPackageMenuTreeselect = (packageId: string | number): AxiosPromise<RoleMenuTree> => {
   return request({
     url: '/system/menu/tenantPackageMenuTreeselect/' + packageId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -56,7 +56,7 @@ export const addMenu = (data: MenuForm) => {
 export const updateMenu = (data: MenuForm) => {
   return request({
     url: '/system/menu',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -65,6 +65,6 @@ export const updateMenu = (data: MenuForm) => {
 export const delMenu = (menuId: string | number) => {
   return request({
     url: '/system/menu/' + menuId,
-    method: 'delete',
+    method: 'post',
   })
 }

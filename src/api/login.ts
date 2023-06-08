@@ -56,7 +56,7 @@ export function getCodeImg(): AxiosPromise<VerifyCodeResult> {
     headers: {
       isToken: false,
     },
-    method: 'get',
+    method: 'post',
     timeout: 20000,
   })
 }
@@ -76,6 +76,6 @@ export function getTenantList(): AxiosPromise<TenantInfo> {
     headers: {
       isToken: false,
     },
-    method: 'get',
+    method: 'post',
   })
 }

@@ -5,7 +5,7 @@ import { DictDataForm, DictDataQuery, DictDataVO } from './types'
 export function getDicts(dictType: string): AxiosPromise<DictDataVO[]> {
   return request({
     url: '/system/dict/data/type/' + dictType,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -13,7 +13,7 @@ export function getDicts(dictType: string): AxiosPromise<DictDataVO[]> {
 export function listData(query: DictDataQuery): AxiosPromise<DictDataVO[]> {
   return request({
     url: '/system/dict/data/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -22,7 +22,7 @@ export function listData(query: DictDataQuery): AxiosPromise<DictDataVO[]> {
 export function getData(dictCode: string | number): AxiosPromise<DictDataVO> {
   return request({
     url: '/system/dict/data/' + dictCode,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -39,7 +39,7 @@ export function addData(data: DictDataForm) {
 export function updateData(data: DictDataForm) {
   return request({
     url: '/system/dict/data',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -48,6 +48,6 @@ export function updateData(data: DictDataForm) {
 export function delData(dictCode: string | number | Array<string | number>) {
   return request({
     url: '/system/dict/data/' + dictCode,
-    method: 'delete',
+    method: 'post',
   })
 }

@@ -10,7 +10,7 @@ import { DemoVO, DemoForm, DemoQuery } from '@/api/demo/demo/types'
 export const listDemo = (query?: DemoQuery): AxiosPromise<DemoVO[]> => {
   return request({
     url: '/demo/demo/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -22,7 +22,7 @@ export const listDemo = (query?: DemoQuery): AxiosPromise<DemoVO[]> => {
 export const getDemo = (id: string | number): AxiosPromise<DemoVO> => {
   return request({
     url: '/demo/demo/' + id,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -45,7 +45,7 @@ export const addDemo = (data: DemoForm) => {
 export const updateDemo = (data: DemoForm) => {
   return request({
     url: '/demo/demo',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -57,6 +57,6 @@ export const updateDemo = (data: DemoForm) => {
 export const delDemo = (id: string | number | Array<string | number>) => {
   return request({
     url: '/demo/demo/' + id,
-    method: 'delete',
+    method: 'post',
   })
 }

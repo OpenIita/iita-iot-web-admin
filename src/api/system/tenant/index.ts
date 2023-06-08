@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listTenant(query: TenantQuery): AxiosPromise<TenantVO[]> {
   return request({
     url: '/system/tenant/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listTenant(query: TenantQuery): AxiosPromise<TenantVO[]> {
 export function getTenant(id: string | number): AxiosPromise<TenantVO> {
   return request({
     url: '/system/tenant/' + id,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -32,7 +32,7 @@ export function addTenant(data: TenantForm) {
 export function updateTenant(data: TenantForm) {
   return request({
     url: '/system/tenant',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -46,7 +46,7 @@ export function changeTenantStatus(id: string | number, tenantId: string | numbe
   }
   return request({
     url: '/system/tenant/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -55,7 +55,7 @@ export function changeTenantStatus(id: string | number, tenantId: string | numbe
 export function delTenant(id: string | number | Array<string | number>) {
   return request({
     url: '/system/tenant/' + id,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -63,7 +63,7 @@ export function delTenant(id: string | number | Array<string | number>) {
 export function dynamicTenant(tenantId: string | number) {
   return request({
     url: '/system/tenant/dynamic/' + tenantId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -71,7 +71,7 @@ export function dynamicTenant(tenantId: string | number) {
 export function dynamicClear() {
   return request({
     url: '/system/tenant/dynamic/clear',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -83,7 +83,7 @@ export function syncTenantPackage(tenantId: string | number, packageId: string |
   }
   return request({
     url: '/system/tenant/syncTenantPackage',
-    method: 'get',
+    method: 'post',
     params: data,
   })
 }

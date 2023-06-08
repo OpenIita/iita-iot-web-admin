@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function list(query: LoginInfoQuery): AxiosPromise<LoginInfoVO[]> {
   return request({
     url: '/monitor/logininfor/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function list(query: LoginInfoQuery): AxiosPromise<LoginInfoVO[]> {
 export function delLoginInfo(infoId: string | number | Array<string | number>) {
   return request({
     url: '/monitor/logininfor/' + infoId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -23,7 +23,7 @@ export function delLoginInfo(infoId: string | number | Array<string | number>) {
 export function unlockLoginInfo(userName: string | Array<string>) {
   return request({
     url: '/monitor/logininfor/unlock/' + userName,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -31,6 +31,6 @@ export function unlockLoginInfo(userName: string | Array<string>) {
 export function cleanLoginInfo() {
   return request({
     url: '/monitor/logininfor/clean',
-    method: 'delete',
+    method: 'post',
   })
 }

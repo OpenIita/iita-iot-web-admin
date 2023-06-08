@@ -10,7 +10,7 @@ import { TreeVO, TreeForm, TreeQuery } from '@/api/demo/tree/types'
 export const listTree = (query?: TreeQuery): AxiosPromise<TreeVO[]> => {
   return request({
     url: '/demo/tree/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -22,7 +22,7 @@ export const listTree = (query?: TreeQuery): AxiosPromise<TreeVO[]> => {
 export const getTree = (id: string | number): AxiosPromise<TreeVO> => {
   return request({
     url: '/demo/tree/' + id,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -45,7 +45,7 @@ export const addTree = (data: TreeForm) => {
 export const updateTree = (data: TreeForm) => {
   return request({
     url: '/demo/tree',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -57,6 +57,6 @@ export const updateTree = (data: TreeForm) => {
 export const delTree = (id: string | number | Array<string | number>) => {
   return request({
     url: '/demo/tree/' + id,
-    method: 'delete',
+    method: 'post',
   })
 }

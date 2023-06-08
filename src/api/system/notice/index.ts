@@ -5,7 +5,7 @@ import { AxiosPromise } from 'axios'
 export function listNotice(query: NoticeQuery): AxiosPromise<NoticeVO[]> {
   return request({
     url: '/system/notice/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -14,7 +14,7 @@ export function listNotice(query: NoticeQuery): AxiosPromise<NoticeVO[]> {
 export function getNotice(noticeId: string | number): AxiosPromise<NoticeVO> {
   return request({
     url: '/system/notice/' + noticeId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -31,7 +31,7 @@ export function addNotice(data: NoticeForm) {
 export function updateNotice(data: NoticeForm) {
   return request({
     url: '/system/notice',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -40,6 +40,6 @@ export function updateNotice(data: NoticeForm) {
 export function delNotice(noticeId: string | number | Array<string | number>) {
   return request({
     url: '/system/notice/' + noticeId,
-    method: 'delete',
+    method: 'post',
   })
 }

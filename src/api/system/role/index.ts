@@ -7,7 +7,7 @@ import request from '@/utils/request'
 export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
   return request({
     url: '/system/role/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -18,7 +18,7 @@ export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
 export const getRole = (roleId: string | number): AxiosPromise<RoleVO> => {
   return request({
     url: '/system/role/' + roleId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -40,7 +40,7 @@ export const addRole = (data: any) => {
 export const updateRole = (data: any) => {
   return request({
     url: '/system/role',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -51,7 +51,7 @@ export const updateRole = (data: any) => {
 export const dataScope = (data: any) => {
   return request({
     url: '/system/role/dataScope',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -66,7 +66,7 @@ export const changeRoleStatus = (roleId: string | number, status: string) => {
   }
   return request({
     url: '/system/role/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -77,7 +77,7 @@ export const changeRoleStatus = (roleId: string | number, status: string) => {
 export const delRole = (roleId: Array<string | number> | string | number) => {
   return request({
     url: '/system/role/' + roleId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -87,7 +87,7 @@ export const delRole = (roleId: Array<string | number> | string | number) => {
 export const allocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> => {
   return request({
     url: '/system/role/authUser/allocatedList',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -98,7 +98,7 @@ export const allocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> => {
 export const unallocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> => {
   return request({
     url: '/system/role/authUser/unallocatedList',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -109,7 +109,7 @@ export const unallocatedUserList = (query: UserQuery): AxiosPromise<UserVO[]> =>
 export const authUserCancel = (data: any) => {
   return request({
     url: '/system/role/authUser/cancel',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -120,7 +120,7 @@ export const authUserCancel = (data: any) => {
 export const authUserCancelAll = (data: any) => {
   return request({
     url: '/system/role/authUser/cancelAll',
-    method: 'put',
+    method: 'post',
     params: data,
   })
 }
@@ -131,7 +131,7 @@ export const authUserCancelAll = (data: any) => {
 export const authUserSelectAll = (data: any) => {
   return request({
     url: '/system/role/authUser/selectAll',
-    method: 'put',
+    method: 'post',
     params: data,
   })
 }
@@ -139,6 +139,6 @@ export const authUserSelectAll = (data: any) => {
 export const deptTreeSelect = (roleId: string | number): AxiosPromise<RoleDeptTree> => {
   return request({
     url: '/system/role/deptTree/' + roleId,
-    method: 'get',
+    method: 'post',
   })
 }

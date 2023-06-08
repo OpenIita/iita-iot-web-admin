@@ -6,7 +6,7 @@ import { CacheVO } from './types'
 export function getCache(): AxiosPromise<CacheVO> {
   return request({
     url: '/monitor/cache',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -14,7 +14,7 @@ export function getCache(): AxiosPromise<CacheVO> {
 export function listCacheName() {
   return request({
     url: '/monitor/cache/getNames',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -22,7 +22,7 @@ export function listCacheName() {
 export function listCacheKey(cacheName: string) {
   return request({
     url: '/monitor/cache/getKeys/' + cacheName,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -30,7 +30,7 @@ export function listCacheKey(cacheName: string) {
 export function getCacheValue(cacheName: string, cacheKey: string) {
   return request({
     url: '/monitor/cache/getValue/' + cacheName + '/' + cacheKey,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -38,7 +38,7 @@ export function getCacheValue(cacheName: string, cacheKey: string) {
 export function clearCacheName(cacheName: string) {
   return request({
     url: '/monitor/cache/clearCacheName/' + cacheName,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -46,7 +46,7 @@ export function clearCacheName(cacheName: string) {
 export function clearCacheKey(cacheName: string, cacheKey: string) {
   return request({
     url: '/monitor/cache/clearCacheKey/' + cacheName + '/' + cacheKey,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -54,6 +54,6 @@ export function clearCacheKey(cacheName: string, cacheKey: string) {
 export function clearCacheAll() {
   return request({
     url: '/monitor/cache/clearCacheAll',
-    method: 'delete',
+    method: 'post',
   })
 }

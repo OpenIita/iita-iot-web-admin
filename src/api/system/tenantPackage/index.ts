@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listTenantPackage(query?: TenantPkgQuery): AxiosPromise<TenantPkgVO[]> {
   return request({
     url: '/system/tenant/package/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listTenantPackage(query?: TenantPkgQuery): AxiosPromise<TenantPk
 export function selectTenantPackage(): AxiosPromise<TenantPkgVO[]> {
   return request({
     url: '/system/tenant/package/selectList',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -23,7 +23,7 @@ export function selectTenantPackage(): AxiosPromise<TenantPkgVO[]> {
 export function getTenantPackage(packageId: string | number): AxiosPromise<TenantPkgVO> {
   return request({
     url: '/system/tenant/package/' + packageId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -40,7 +40,7 @@ export function addTenantPackage(data: TenantPkgForm) {
 export function updateTenantPackage(data: TenantPkgForm) {
   return request({
     url: '/system/tenant/package',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -53,7 +53,7 @@ export function changePackageStatus(packageId: number | string, status: string) 
   }
   return request({
     url: '/system/tenant/package/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -62,6 +62,6 @@ export function changePackageStatus(packageId: number | string, status: string) 
 export function delTenantPackage(packageId: string | number | Array<string | number>) {
   return request({
     url: '/system/tenant/package/' + packageId,
-    method: 'delete',
+    method: 'post',
   })
 }

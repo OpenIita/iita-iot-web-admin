@@ -6,7 +6,7 @@ import { DeptForm, DeptQuery, DeptVO } from './types'
 export const listDept = (query?: DeptQuery) => {
   return request({
     url: '/system/dept/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export const listDept = (query?: DeptQuery) => {
 export const listDeptExcludeChild = (deptId: string | number): AxiosPromise<DeptVO[]> => {
   return request({
     url: '/system/dept/list/exclude/' + deptId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -23,7 +23,7 @@ export const listDeptExcludeChild = (deptId: string | number): AxiosPromise<Dept
 export const getDept = (deptId: string | number): AxiosPromise<DeptVO> => {
   return request({
     url: '/system/dept/' + deptId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -31,7 +31,7 @@ export const getDept = (deptId: string | number): AxiosPromise<DeptVO> => {
 export const treeselect = (): AxiosPromise<DeptVO[]> => {
   return request({
     url: '/system/dept/treeselect',
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -48,7 +48,7 @@ export const addDept = (data: DeptForm) => {
 export const updateDept = (data: DeptForm) => {
   return request({
     url: '/system/dept',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -57,6 +57,6 @@ export const updateDept = (data: DeptForm) => {
 export const delDept = (deptId: number | string) => {
   return request({
     url: '/system/dept/' + deptId,
-    method: 'delete',
+    method: 'post',
   })
 }

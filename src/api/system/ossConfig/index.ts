@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listOssConfig(query: OssConfigQuery): AxiosPromise<OssConfigVO[]> {
   return request({
     url: '/resource/oss/config/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listOssConfig(query: OssConfigQuery): AxiosPromise<OssConfigVO[]
 export function getOssConfig(ossConfigId: string | number): AxiosPromise<OssConfigVO> {
   return request({
     url: '/resource/oss/config/' + ossConfigId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -32,7 +32,7 @@ export function addOssConfig(data: OssConfigForm) {
 export function updateOssConfig(data: OssConfigForm) {
   return request({
     url: '/resource/oss/config',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -41,7 +41,7 @@ export function updateOssConfig(data: OssConfigForm) {
 export function delOssConfig(ossConfigId: string | number | Array<string | number>) {
   return request({
     url: '/resource/oss/config/' + ossConfigId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -54,7 +54,7 @@ export function changeOssConfigStatus(ossConfigId: string | number, status: stri
   }
   return request({
     url: '/resource/oss/config/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }

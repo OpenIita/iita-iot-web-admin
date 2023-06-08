@@ -7,7 +7,7 @@ export const listTable = (query: TableQuery): AxiosPromise<TableVO[]> => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -16,7 +16,7 @@ export const listDbTable = (query: DbTableQuery): AxiosPromise<DbTableVO[]> => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/db/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -26,7 +26,7 @@ export const getGenTable = (tableId: string | number): AxiosPromise<GenTableVO> 
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/' + tableId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -35,7 +35,7 @@ export const updateGenTable = (data: DbTableForm) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -55,7 +55,7 @@ export const previewTable = (tableId: string | number) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/preview/' + tableId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -64,7 +64,7 @@ export const delTable = (tableId: string | number | Array<string | number>) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/' + tableId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -73,7 +73,7 @@ export const genCode = (tableName: string) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/genCode/' + tableName,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -82,6 +82,6 @@ export const synchDb = (tableName: string) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/synchDb/' + tableName,
-    method: 'get',
+    method: 'post',
   })
 }

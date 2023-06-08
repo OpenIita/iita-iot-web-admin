@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function list(query: OperLogQuery): AxiosPromise<OperLogVO[]> {
   return request({
     url: '/monitor/operlog/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function list(query: OperLogQuery): AxiosPromise<OperLogVO[]> {
 export function delOperlog(operId: string | number | Array<string | number>) {
   return request({
     url: '/monitor/operlog/' + operId,
-    method: 'delete',
+    method: 'post',
   })
 }
 
@@ -23,6 +23,6 @@ export function delOperlog(operId: string | number | Array<string | number>) {
 export function cleanOperlog() {
   return request({
     url: '/monitor/operlog/clean',
-    method: 'delete',
+    method: 'post',
   })
 }

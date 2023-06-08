@@ -6,7 +6,7 @@ import { AxiosPromise } from 'axios'
 export function listPost(query: PostQuery): AxiosPromise<PostVO[]> {
   return request({
     url: '/system/post/list',
-    method: 'get',
+    method: 'post',
     params: query,
   })
 }
@@ -15,7 +15,7 @@ export function listPost(query: PostQuery): AxiosPromise<PostVO[]> {
 export function getPost(postId: string | number): AxiosPromise<PostVO> {
   return request({
     url: '/system/post/' + postId,
-    method: 'get',
+    method: 'post',
   })
 }
 
@@ -32,7 +32,7 @@ export function addPost(data: PostForm) {
 export function updatePost(data: PostForm) {
   return request({
     url: '/system/post',
-    method: 'put',
+    method: 'post',
     data: data,
   })
 }
@@ -41,6 +41,6 @@ export function updatePost(data: PostForm) {
 export function delPost(postId: string | number | (string | number)[]) {
   return request({
     url: '/system/post/' + postId,
-    method: 'delete',
+    method: 'post',
   })
 }
