@@ -41,11 +41,13 @@ service.interceptors.request.use(
     }
     const { pageNum, pageSize, ...otherData } = config.data || {}
     const pageObj: any = {}
+    const data: any = {}
     if (pageNum) pageObj.pageNum = pageNum
     if (pageSize) pageObj.pageSize = pageSize
+    if (otherData) data.data = otherData
     config.data = {
       ...pageObj,
-      data: otherData,
+      ...data,
     }
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
