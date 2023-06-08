@@ -40,21 +40,20 @@ service.interceptors.request.use(
       config.url = url
     }
     if (config.data && config.data.constructor == Object) {
-      const { pageNum, pageSize, ...otherData } = config.data || {}
+      const { pageNum, pageSize, ...data } = config.data || {}
       const pageObj: any = {}
-      const data: any = {}
       if (pageNum) pageObj.pageNum = pageNum
       if (pageSize) pageObj.pageSize = pageSize
-      if (otherData) data.data = otherData
       config.data = {
         ...pageObj,
-        ...data,
+        data,
       }
     } else {
       config.data = {
-        data: config.data,
+        data: config.data || {},
       }
     }
+    console.log(config.data)
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
         url: config.url,
