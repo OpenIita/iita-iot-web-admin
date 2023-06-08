@@ -40,19 +40,18 @@ service.interceptors.request.use(
       config.params = {}
       config.url = url
     }
-
+    const { pageNum, pageSize, ...otherData } = deepClone(config.data)
+    const pageObj: any = {}
+    if (pageNum) pageObj.pageNum = pageNum
+    if (pageSize) pageObj.pageSize = pageSize
+    config.data = {
+      ...pageObj,
+      data: otherData,
+    }
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
-      const { pageNum, pageSize, ...otherData } = deepClone(config.data)
-      const pageObj: any = {}
-      if (pageNum) pageObj.pageNum = pageNum
-      if (pageSize) pageObj.pageSize = pageSize
-      const data = typeof otherData === 'object' ? JSON.stringify(otherData) : otherData
       const requestObj = {
         url: config.url,
-        data: {
-          data,
-          ...pageObj,
-        },
+        data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
         time: new Date().getTime(),
       }
       const sessionObj = cache.session.getJSON('sessionObj')
