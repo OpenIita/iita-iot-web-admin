@@ -8,6 +8,7 @@ import { errorCode } from '@/utils/errorCode'
 import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 import FileSaver from 'file-saver'
 import { getLanguage } from '@/lang'
+import { ElLoading, ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 
 let downloadLoadingInstance: LoadingInstance
 // 是否显示重新登录
@@ -50,7 +51,7 @@ service.interceptors.request.use(
       }
     } else {
       config.data = {
-        data: config.data || {},
+        data: config.data === 0 || config.data ? config.data : {},
       }
     }
     console.log(config.data)
