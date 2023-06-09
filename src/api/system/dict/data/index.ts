@@ -6,9 +6,7 @@ export function getDicts(dictType: string): AxiosPromise<DictDataVO[]> {
   return request({
     url: '/system/dict/data/type',
     method: 'post',
-    data: {
-      dictType,
-    },
+    data: dictType
   })
 }
 

@@ -12,12 +12,12 @@ export function listType(query: DictTypeQuery): AxiosPromise<DictTypeVO[]> {
 }
 
 // 查询字典类型详细
-export function getType(dictId: number | string): AxiosPromise<DictTypeVO> {
+export function getType(id: number | string): AxiosPromise<DictTypeVO> {
   return request({
-    url: '/system/dict/type',
+    url: '/system/dict/type/getById',
     method: 'post',
     data: {
-      dictId,
+      id,
     },
   })
 }
@@ -25,7 +25,7 @@ export function getType(dictId: number | string): AxiosPromise<DictTypeVO> {
 // 新增字典类型
 export function addType(data: DictTypeForm) {
   return request({
-    url: '/system/dict/type',
+    url: '/system/dict/type/add',
     method: 'post',
     data,
   })
@@ -34,7 +34,7 @@ export function addType(data: DictTypeForm) {
 // 修改字典类型
 export function updateType(data: DictTypeForm) {
   return request({
-    url: '/system/dict/type',
+    url: '/system/dict/type/edit',
     method: 'post',
     data,
   })

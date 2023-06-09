@@ -1,5 +1,5 @@
 export interface DictTypeVO extends BaseEntity {
-  dictId: number | string
+  id: number | string
   dictName: string
   dictType: string
   status: string
@@ -7,7 +7,7 @@ export interface DictTypeVO extends BaseEntity {
 }
 
 export interface DictTypeForm {
-  dictId: number | string | undefined
+  id: number | string | undefined
   dictName: string
   dictType: string
   status: string

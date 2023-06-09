@@ -23,11 +23,9 @@ export function listUser(query: UserQuery): AxiosPromise<UserVO[]> {
  */
 export function getUser(userId?: string | number): AxiosPromise<UserInfoVO> {
   return request({
-    url: '/system/user',
+    url: '/system/user/getDetail',
     method: 'post',
-    data: {
-      userId: parseStrEmpty(userId),
-    },
+    data: parseStrEmpty(userId),
   })
 }
 

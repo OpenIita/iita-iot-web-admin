@@ -213,9 +213,9 @@
               <el-select v-model="form.postIds" multiple placeholder="请选择">
                 <el-option
                   v-for="item in postOptions"
-                  :key="item.postId"
+                  :key="item.id"
                   :label="item.postName"
-                  :value="item.postId"
+                  :value="item.id"
                   :disabled="item.status == '1'"
                 ></el-option>
               </el-select>
@@ -421,8 +421,8 @@ const getList = async () => {
   loading.value = true
   const res = await listUser(proxy?.addDateRange(queryParams.value, dateRange.value))
   loading.value = false
-  userList.value = res.rows
-  total.value = res.total
+  userList.value = res.data.rows
+  total.value = res.data.total
 }
 
 /** 节点单击事件 */

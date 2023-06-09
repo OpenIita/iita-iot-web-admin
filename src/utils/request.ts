@@ -53,7 +53,6 @@ service.interceptors.request.use(
         data: config.data || {},
       }
     }
-    console.log(config.data)
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
         url: config.url,

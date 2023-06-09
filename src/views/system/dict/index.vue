@@ -149,7 +149,7 @@ const dialog = reactive<DialogOption>({
 })
 
 const initFormData: DictTypeForm = {
-  dictId: undefined,
+  id: undefined,
   dictName: '',
   dictType: '',
   status: "0",
@@ -176,8 +176,8 @@ const { queryParams, form, rules } = toRefs(data)
 const getList = () => {
   loading.value = true
   listType(proxy?.addDateRange(queryParams.value, dateRange.value)).then(res => {
-    typeList.value = res.rows
-    total.value = res.total
+    typeList.value = res.data.rows
+    total.value = res.data.total
     loading.value = false
   })
 }
@@ -212,7 +212,7 @@ const handleAdd = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: DictTypeVO[]) =>  {
-  ids.value = selection.map(item => item.dictId)
+  ids.value = selection.map(item => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -220,7 +220,7 @@ const handleSelectionChange = (selection: DictTypeVO[]) =>  {
 const handleUpdate = (row?: DictTypeVO) => {
   dialog.visible = true
   dialog.title = "修改字典类型"
-  const dictId = row?.dictId || ids.value[0]
+  const dictId = row?.id || ids.value[0]
   nextTick(async () => {
     reset()
     const res = await getType(dictId)
@@ -232,7 +232,7 @@ const handleUpdate = (row?: DictTypeVO) => {
 const submitForm = () => {
   dictFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.dictId ? await updateType(form.value) : await addType(form.value)
+      form.value.id ? await updateType(form.value) : await addType(form.value)
       proxy?.$modal.msgSuccess("操作成功")
       dialog.visible = false
       getList()
@@ -241,7 +241,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: DictTypeVO) => {
-  const dictIds = row?.dictId || ids.value
+  const dictIds = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？')
   await delType(dictIds)
   getList()
