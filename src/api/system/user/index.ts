@@ -34,7 +34,7 @@ export function getUser(userId?: string | number): AxiosPromise<UserInfoVO> {
  */
 export function addUser(data: UserForm) {
   return request({
-    url: '/system/user',
+    url: '/system/user/add',
     method: 'post',
     data,
   })
@@ -45,7 +45,7 @@ export function addUser(data: UserForm) {
  */
 export function updateUser(data: UserForm) {
   return request({
-    url: '/system/user',
+    url: '/system/user/edit',
     method: 'post',
     data,
   })
@@ -57,7 +57,7 @@ export function updateUser(data: UserForm) {
  */
 export function delUser(userId: Array<string | number> | string | number) {
   return request({
-    url: '/system/user',
+    url: '/system/user/delete',
     method: 'post',
     data: {
       userId,
@@ -84,12 +84,12 @@ export function resetUserPwd(userId: string | number, password: string) {
 
 /**
  * 用户状态修改
- * @param userId 用户ID
+ * @param id 用户ID
  * @param status 用户状态
  */
-export function changeUserStatus(userId: number | string, status: string) {
+export function changeUserStatus(id: number | string, status: string) {
   const data = {
-    userId,
+    id,
     status,
   }
   return request({

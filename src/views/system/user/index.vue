@@ -288,29 +288,19 @@
 </template>
 
 <script setup name="User" lang="ts">
-import {
-  changeUserStatus,
-  listUser,
-  resetUserPwd,
-  delUser,
-  getUser,
-  updateUser,
-  addUser,
-  deptTreeSelect
-} from "@/api/system/user"
+import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from '@/api/system/user'
 import { UserForm, UserQuery, UserVO } from '@/api/system/user/types'
-import { ComponentInternalInstance } from "vue"
-import { getToken } from "@/utils/auth"
-import { treeselect } from "@/api/system/dept"
-import { DeptVO } from "@/api/system/dept/types"
-import { RoleVO } from "@/api/system/role/types"
-import { PostVO } from "@/api/system/post/types"
+import { ComponentInternalInstance } from 'vue'
+import { getToken } from '@/utils/auth'
+import { treeselect } from '@/api/system/dept'
+import { DeptVO } from '@/api/system/dept/types'
+import { RoleVO } from '@/api/system/role/types'
+import { PostVO } from '@/api/system/post/types'
 import { DateModelType, ElTree, ElUpload, UploadFile, ElForm } from 'element-plus'
-import { to } from "await-to-js"
+import { to } from 'await-to-js'
 const router = useRouter()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_normal_disable, sys_user_sex } = toRefs<any>(proxy?.useDict('sys_normal_disable', 'sys_user_sex'))
-
 
 const userList = ref<UserVO[]>()
 const loading = ref(true)
@@ -319,7 +309,7 @@ const ids = ref<Array<number | string>>([])
 const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
-const dateRange = ref<[DateModelType, DateModelType]>(['',''])
+const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 const deptName = ref('')
 const deptOptions = ref<DeptVO[]>([])
 const initPassword = ref('123456')
@@ -330,15 +320,15 @@ const upload = reactive<ImportOption>({
   // 是否显示弹出层（用户导入）
   open: false,
   // 弹出层标题（用户导入）
-  title: "",
+  title: '',
   // 是否禁用上传
   isUploading: false,
   // 是否更新已经存在的用户数据
   updateSupport: 0,
   // 设置上传的请求头部
-  headers: { Authorization: "Bearer " + getToken() },
+  headers: { Authorization: 'Bearer ' + getToken() },
   // 上传的地址
-  url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData"
+  url: import.meta.env.VITE_APP_BASE_API + '/system/user/importData',
 })
 // 列显隐信息
 const columns = ref<FieldOption[]>([
@@ -348,9 +338,8 @@ const columns = ref<FieldOption[]>([
   { key: 3, label: `部门`, visible: true },
   { key: 4, label: `手机号码`, visible: true },
   { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true }
+  { key: 6, label: `创建时间`, visible: true },
 ])
-
 
 const deptTreeRef = ref(ElTree)
 const queryFormRef = ref(ElForm)
@@ -359,7 +348,7 @@ const uploadRef = ref(ElUpload)
 
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 const initFormData: UserForm = {
@@ -371,10 +360,10 @@ const initFormData: UserForm = {
   phonenumber: undefined,
   email: undefined,
   sex: undefined,
-  status: "0",
+  status: '0',
   remark: '',
   postIds: [],
-  roleIds: []
+  roleIds: [],
 }
 const data = reactive<PageData<UserForm, UserQuery>>({
   form: { ...initFormData },
@@ -384,15 +373,21 @@ const data = reactive<PageData<UserForm, UserQuery>>({
     userName: '',
     phonenumber: '',
     status: '',
-    deptId: ''
+    deptId: '',
   },
   rules: {
-    userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
-    nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "用户密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
-  }
+    userName: [
+      { required: true, message: '用户名称不能为空', trigger: 'blur' },
+      { min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' },
+    ],
+    nickName: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
+    password: [
+      { required: true, message: '用户密码不能为空', trigger: 'blur' },
+      { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' },
+    ],
+    email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' }],
+  },
 })
 
 const { queryParams, form, rules } = toRefs<PageData<UserForm, UserQuery>>(data)
@@ -404,9 +399,11 @@ const filterNode = (value: string, data: any) => {
 }
 /** 根据名称筛选部门树 */
 watchEffect(
-  () => {deptTreeRef.value.filter(deptName.value)},
+  () => {
+    deptTreeRef.value.filter(deptName.value)
+  },
   {
-    flush: 'post' // watchEffect会在DOM挂载或者更新之前就会触发，此属性控制在DOM元素更新后运行
+    flush: 'post', // watchEffect会在DOM挂载或者更新之前就会触发，此属性控制在DOM元素更新后运行
   }
 )
 
@@ -431,7 +428,6 @@ const handleNodeClick = (data: DeptVO) => {
   handleQuery()
 }
 
-
 /** 搜索按钮操作 */
 const handleQuery = () => {
   queryParams.value.pageNum = 1
@@ -439,7 +435,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  dateRange.value = ['','']
+  dateRange.value = ['', '']
   queryFormRef.value.resetFields()
   queryParams.value.pageNum = 1
   handleQuery()
@@ -452,39 +448,41 @@ const handleDelete = async (row?: UserVO) => {
   if (!err) {
     await delUser(userIds)
     await getList()
-    proxy?.$modal.msgSuccess("删除成功")
+    proxy?.$modal.msgSuccess('删除成功')
   }
 }
 
 /** 用户状态修改  */
 const handleStatusChange = async (row: UserVO) => {
-  let text = row.status === "0" ? "启用" : "停用"
+  let text = row.status === '0' ? '启用' : '停用'
   try {
     await proxy?.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗?')
-    await changeUserStatus(row.userId, row.status)
-    proxy?.$modal.msgSuccess(text + "成功")
+    await changeUserStatus(row.id, row.status)
+    proxy?.$modal.msgSuccess(text + '成功')
   } catch (err) {
-    row.status = row.status === "0" ? "1" : "0"
+    row.status = row.status === '0' ? '1' : '0'
   }
 }
 /** 跳转角色分配 */
 const handleAuthRole = (row: UserVO) => {
   const userId = row.userId
-  router.push("/system/user-auth/role/" + userId)
+  router.push('/system/user-auth/role/' + userId)
 }
 
 /** 重置密码按钮操作 */
 const handleResetPwd = async (row: UserVO) => {
-  const [err, res] = await to(ElMessageBox.prompt('请输入"' + row.userName + '"的新密码', "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    closeOnClickModal: false,
-    inputPattern: /^.{5,20}$/,
-    inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
-  }))
+  const [err, res] = await to(
+    ElMessageBox.prompt('请输入"' + row.userName + '"的新密码', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      closeOnClickModal: false,
+      inputPattern: /^.{5,20}$/,
+      inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
+    })
+  )
   if (!err) {
     await resetUserPwd(row.userId, res.value)
-    proxy?.$modal.msgSuccess("修改成功，新密码是：" + res.value)
+    proxy?.$modal.msgSuccess('修改成功，新密码是：' + res.value)
   }
 }
 
@@ -497,19 +495,22 @@ const handleSelectionChange = (selection: UserVO[]) => {
 
 /** 导入按钮操作 */
 const handleImport = () => {
-  upload.title = "用户导入"
+  upload.title = '用户导入'
   upload.open = true
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/user/export", {
-    ...queryParams.value,
-  }, `user_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/user/export',
+    {
+      ...queryParams.value,
+    },
+    `user_${new Date().getTime()}.xlsx`
+  )
 }
 /** 下载模板操作 */
 const importTemplate = () => {
-  proxy?.download("system/user/importTemplate", {
-  }, `user_template_${new Date().getTime()}.xlsx`)
+  proxy?.download('system/user/importTemplate', {}, `user_template_${new Date().getTime()}.xlsx`)
 }
 
 /**文件上传中处理 */
@@ -521,7 +522,9 @@ const handleFileSuccess = (response: any, file: UploadFile) => {
   upload.open = false
   upload.isUploading = false
   uploadRef.value.handleRemove(file)
-  ElMessageBox.alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
+  ElMessageBox.alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + '</div>', '导入结果', {
+    dangerouslyUseHTMLString: true,
+  })
   getList()
 }
 
@@ -539,7 +542,6 @@ const initTreeData = async () => {
   }
 }
 
-
 /** 重置操作表单 */
 const reset = () => {
   form.value = { ...initFormData }
@@ -554,7 +556,7 @@ const cancel = () => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "新增用户"
+  dialog.title = '新增用户'
   nextTick(async () => {
     reset()
     await initTreeData()
@@ -567,7 +569,7 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = (row?: UserForm) => {
   dialog.visible = true
-  dialog.title = "修改用户"
+  dialog.title = '修改用户'
   nextTick(async () => {
     reset()
     await initTreeData()
@@ -578,9 +580,8 @@ const handleUpdate = (row?: UserForm) => {
     roleOptions.value = data.roles
     form.value.postIds = data.postIds
     form.value.roleIds = data.roleIds
-    form.value.password = ""
+    form.value.password = ''
   })
-
 }
 
 /** 提交按钮 */
@@ -588,13 +589,12 @@ const submitForm = () => {
   userFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.userId ? await updateUser(form.value) : await addUser(form.value)
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       await getList()
     }
   })
 }
-
 
 /**
  * 关闭用户弹窗

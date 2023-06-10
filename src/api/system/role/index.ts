@@ -15,12 +15,12 @@ export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
 /**
  * 查询角色详细
  */
-export const getRole = (roleId: string | number): AxiosPromise<RoleVO> => {
+export const getRole = (id: string | number): AxiosPromise<RoleVO> => {
   return request({
     url: '/system/role',
     method: 'post',
     data: {
-      roleId,
+      id,
     },
   })
 }
@@ -62,9 +62,9 @@ export const dataScope = (data: any) => {
 /**
  * 角色状态修改
  */
-export const changeRoleStatus = (roleId: string | number, status: string) => {
+export const changeRoleStatus = (id: string | number, status: string) => {
   const data = {
-    roleId,
+    id,
     status,
   }
   return request({
@@ -77,12 +77,12 @@ export const changeRoleStatus = (roleId: string | number, status: string) => {
 /**
  * 删除角色
  */
-export const delRole = (roleId: Array<string | number> | string | number) => {
+export const delRole = (id: Array<string | number> | string | number) => {
   return request({
     url: '/system/role',
     method: 'post',
     data: {
-      roleId,
+      id,
     },
   })
 }
@@ -142,12 +142,12 @@ export const authUserSelectAll = (data: any) => {
   })
 }
 // 根据角色ID查询部门树结构
-export const deptTreeSelect = (roleId: string | number): AxiosPromise<RoleDeptTree> => {
+export const deptTreeSelect = (id: string | number): AxiosPromise<RoleDeptTree> => {
   return request({
     url: '/system/role/deptTree',
     method: 'post',
     data: {
-      roleId,
+      id,
     },
   })
 }

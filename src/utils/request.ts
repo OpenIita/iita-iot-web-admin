@@ -9,6 +9,7 @@ import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 import FileSaver from 'file-saver'
 import { getLanguage } from '@/lang'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { generateUUID } from '.'
 
 let downloadLoadingInstance: LoadingInstance
 // 是否显示重新登录
@@ -40,6 +41,7 @@ service.interceptors.request.use(
       config.params = {}
       config.url = url
     }
+    const reqeuestId = generateUUID()
     if (config.data && config.data.constructor == Object) {
       const { pageNum, pageSize, ...data } = config.data || {}
       const pageObj: any = {}
@@ -47,13 +49,16 @@ service.interceptors.request.use(
       if (pageSize) pageObj.pageSize = pageSize
       config.data = {
         ...pageObj,
-        data,
+        requestId:reqeuestId,
+        data:data==null?{}:data,
       }
     } else {
       config.data = {
-        data: config.data === 0 || config.data ? config.data : {},
+        requestId:reqeuestId,
+        data: typeof(config.data)=='undefined'? {}:config.data,
       }
     }
+
     if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
       const requestObj = {
         url: config.url,
@@ -95,7 +100,7 @@ service.interceptors.response.use(
     // 未设置状态码则默认成功状态
     const code = res.data.code || HttpStatus.SUCCESS
     // 获取错误信息
-    const msg = errorCode[code] || res.data.msg || errorCode['default']
+    const msg = errorCode[code] || res.data.message || errorCode['default']
     // 二进制数据则直接返回
     if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
       return res.data
@@ -125,7 +130,10 @@ service.interceptors.response.use(
     } else if (code === HttpStatus.WARN) {
       ElMessage({ message: msg, type: 'warning' })
       return Promise.reject(new Error(msg))
-    } else if (code !== HttpStatus.SUCCESS) {
+    } else if (code>10000) {
+      ElMessage({ message: msg, type: 'warning' })
+      return Promise.reject(new Error(msg))
+    }else if (code !== HttpStatus.SUCCESS) {
       ElNotification.error({ title: msg })
       return Promise.reject('error')
     } else {
