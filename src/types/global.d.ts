@@ -56,6 +56,7 @@ declare global {
   }
 
   interface BaseEntity {
+    id?: any
     createBy?: any
     createDept?: any
     createTime?: string

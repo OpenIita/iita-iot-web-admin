@@ -129,19 +129,18 @@
 </template>
 
 <script setup name="Dept" lang="ts">
-import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept"
+import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from '@/api/system/dept'
 import { ComponentInternalInstance } from 'vue'
-import { DeptForm, DeptQuery, DeptVO } from "@/api/system/dept/types"
+import { DeptForm, DeptQuery, DeptVO } from '@/api/system/dept/types'
 
 interface DeptOptionsType {
-    deptId: number | string;
-    deptName: string;
-    children: DeptOptionsType[];
-
+  deptId: number | string
+  deptName: string
+  children: DeptOptionsType[]
 }
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_normal_disable } = toRefs<any>(proxy?.useDict("sys_normal_disable"))
+const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
 
 const deptList = ref<DeptVO[]>([])
 const loading = ref(true)
@@ -149,10 +148,9 @@ const showSearch = ref(true)
 const deptOptions = ref<DeptOptionsType[]>([])
 const isExpandAll = ref(true)
 
-
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 const deptTableRef = ref(ElTable)
@@ -167,22 +165,22 @@ const initFormData: DeptForm = {
   leader: undefined,
   phone: undefined,
   email: undefined,
-  status: "0"
+  status: '0',
 }
 const data = reactive<PageData<DeptForm, DeptQuery>>({
-  form: {...initFormData},
+  form: { ...initFormData },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
     deptName: undefined,
-    status: undefined
+    status: undefined,
   },
   rules: {
-    parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
-    deptName: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
-    orderNum: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
+    deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
+    orderNum: [{ required: true, message: '显示排序不能为空', trigger: 'blur' }],
+    email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' }],
   },
 })
 
@@ -192,7 +190,7 @@ const { queryParams, form, rules } = toRefs<PageData<DeptForm, DeptQuery>>(data)
 const getList = async () => {
   loading.value = true
   const res = await listDept(queryParams.value)
-  const data = proxy?.handleTree<DeptVO>(res.data, "deptId")
+  const data = proxy?.handleTree<DeptVO>(res.data, 'deptId')
   if (data) {
     deptList.value = data
   }
@@ -205,7 +203,7 @@ const cancel = () => {
 }
 /** 表单重置 */
 const reset = () => {
-  form.value = {...initFormData}
+  form.value = { ...initFormData }
   deptFormRef.value.resetFields()
 }
 
@@ -220,16 +218,16 @@ const resetQuery = () => {
 }
 /** 新增按钮操作 */
 const handleAdd = (row?: DeptVO) => {
-  listDept().then(res => {
-    const data = proxy?.handleTree<DeptOptionsType>(res.data, "deptId")
+  listDept().then((res) => {
+    const data = proxy?.handleTree<DeptOptionsType>(res.data, 'deptId')
     if (data) {
       deptOptions.value = data
       dialog.visible = true
-      dialog.title = "添加部门"
+      dialog.title = '添加部门'
       nextTick(() => {
         reset()
-        if (row && row.deptId) {
-          form.value.parentId = row?.deptId
+        if (row && row.id) {
+          form.value.parentId = row?.id
         }
       })
     }
@@ -244,20 +242,20 @@ const handleToggleExpandAll = () => {
 const toggleExpandAll = (data: DeptVO[], status: boolean) => {
   data.forEach((item) => {
     deptTableRef.value.toggleRowExpansion(item, status)
-    if(item.children && item.children.length > 0) toggleExpandAll(item.children, status)
+    if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
 
 /** 修改按钮操作 */
 const handleUpdate = async (row: DeptVO) => {
-  const res = await getDept(row.deptId)
+  const res = await getDept(row.id)
   dialog.visible = true
-  dialog.title = "修改部门"
+  dialog.title = '修改部门'
   nextTick(async () => {
     reset()
     form.value = res.data
-    const response = await listDeptExcludeChild(row.deptId)
-    const data = proxy?.handleTree<DeptOptionsType>(response.data, "deptId")
+    const response = await listDeptExcludeChild(row.id)
+    const data = proxy?.handleTree<DeptOptionsType>(response.data, 'deptId')
     if (data) {
       deptOptions.value = data
       if (data.length === 0) {
@@ -272,7 +270,7 @@ const submitForm = () => {
   deptFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.deptId ? await updateDept(form.value) : await addDept(form.value)
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -281,9 +279,9 @@ const submitForm = () => {
 /** 删除按钮操作 */
 const handleDelete = async (row: DeptVO) => {
   await proxy?.$modal.confirm('是否确认删除名称为"' + row.deptName + '"的数据项?')
-  await delDept(row.deptId)
+  await delDept(row.id)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {

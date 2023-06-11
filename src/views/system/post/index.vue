@@ -44,7 +44,7 @@
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="岗位编号" align="center" prop="postId" v-if="false" />
+        <el-table-column label="岗位编号" align="center" prop="id" v-if="false" />
         <el-table-column label="岗位编码" align="center" prop="postCode" />
         <el-table-column label="岗位名称" align="center" prop="postName" />
         <el-table-column label="岗位排序" align="center" prop="postSort" />
@@ -105,12 +105,12 @@
 </template>
 
 <script setup name="Post" lang="ts">
-import { listPost, addPost, delPost, getPost, updatePost } from "@/api/system/post"
-import { PostForm, PostQuery, PostVO } from "@/api/system/post/types"
-import { ComponentInternalInstance } from "vue"
+import { listPost, addPost, delPost, getPost, updatePost } from '@/api/system/post'
+import { PostForm, PostQuery, PostVO } from '@/api/system/post/types'
+import { ComponentInternalInstance } from 'vue'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_normal_disable } = toRefs<any>(proxy?.useDict("sys_normal_disable"))
+const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
 
 const postList = ref<PostVO[]>([])
 const loading = ref(true)
@@ -125,32 +125,32 @@ const queryFormRef = ref(ElForm)
 
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 const initFormData: PostForm = {
-  postId: undefined,
+  id: undefined,
   postCode: '',
   postName: '',
   postSort: 0,
-  status: "0",
-  remark: ''
+  status: '0',
+  remark: '',
 }
 
 const data = reactive<PageData<PostForm, PostQuery>>({
-  form: {...initFormData},
+  form: { ...initFormData },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
     postCode: '',
     postName: '',
-    status: ''
+    status: '',
   },
   rules: {
-    postName: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    postCode: [{ required: true, message: "岗位编码不能为空", trigger: "blur" }],
-    postSort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
-  }
+    postName: [{ required: true, message: '岗位名称不能为空', trigger: 'blur' }],
+    postCode: [{ required: true, message: '岗位编码不能为空', trigger: 'blur' }],
+    postSort: [{ required: true, message: '岗位顺序不能为空', trigger: 'blur' }],
+  },
 })
 
 const { queryParams, form, rules } = toRefs<PageData<PostForm, PostQuery>>(data)
@@ -159,7 +159,7 @@ const { queryParams, form, rules } = toRefs<PageData<PostForm, PostQuery>>(data)
 const getList = async () => {
   loading.value = true
   const res = await listPost(queryParams.value)
-  postList.value = res.rows
+  postList.value = res.data.rows
   total.value = res.total
   loading.value = false
 }
@@ -170,7 +170,7 @@ const cancel = () => {
 }
 /** 表单重置 */
 const reset = () => {
-  form.value = {...initFormData}
+  form.value = { ...initFormData }
   postFormRef.value.resetFields()
 }
 /** 搜索按钮操作 */
@@ -185,14 +185,14 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: PostVO[]) => {
-  ids.value = selection.map(item => item.postId)
+  ids.value = selection.map((item) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加岗位"
+  dialog.title = '添加岗位'
   nextTick(() => {
     reset()
   })
@@ -200,10 +200,10 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = (row?: PostVO) => {
   dialog.visible = true
-  dialog.title = "修改岗位"
+  dialog.title = '修改岗位'
   nextTick(async () => {
     reset()
-    const postId = row?.postId || ids.value[0]
+    const postId = row?.id || ids.value[0]
     const res = await getPost(postId)
     form.value = res.data
   })
@@ -212,8 +212,8 @@ const handleUpdate = (row?: PostVO) => {
 const submitForm = () => {
   postFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.postId ? await updatePost(form.value) : await addPost(form.value)
-      proxy?.$modal.msgSuccess("操作成功")
+      form.value.id ? await updatePost(form.value) : await addPost(form.value)
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -221,17 +221,21 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: PostVO) => {
-  const postIds = row?.postId || ids.value
+  const postIds = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
   await delPost(postIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/post/export", {
-    ...queryParams.value
-  }, `post_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/post/export',
+    {
+      ...queryParams.value,
+    },
+    `post_${new Date().getTime()}.xlsx`
+  )
 }
 
 onMounted(() => {

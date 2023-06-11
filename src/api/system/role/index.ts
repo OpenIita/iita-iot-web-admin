@@ -17,11 +17,9 @@ export const listRole = (query: RoleQuery): AxiosPromise<RoleVO[]> => {
  */
 export const getRole = (id: string | number): AxiosPromise<RoleVO> => {
   return request({
-    url: '/system/role',
+    url: '/system/role/getInfo',
     method: 'post',
-    data: {
-      id,
-    },
+    data: id,
   })
 }
 
@@ -79,11 +77,9 @@ export const changeRoleStatus = (id: string | number, status: string) => {
  */
 export const delRole = (id: Array<string | number> | string | number) => {
   return request({
-    url: '/system/role',
+    url: '/system/role/delete',
     method: 'post',
-    data: {
-      id,
-    },
+    data: id,
   })
 }
 

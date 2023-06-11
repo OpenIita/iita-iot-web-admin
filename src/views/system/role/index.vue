@@ -375,7 +375,7 @@ const handleAdd = () => {
 }
 /** 修改角色 */
 const handleUpdate = async (row?: RoleVO) => {
-  const roleId = row?.roleId || ids.value[0]
+  const roleId = row?.id || ids.value[0]
   const roleMenu = getRoleMenuTreeselect(roleId)
   const { data } = await getRole(roleId)
   dialog.visible = true

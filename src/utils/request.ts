@@ -49,13 +49,13 @@ service.interceptors.request.use(
       if (pageSize) pageObj.pageSize = pageSize
       config.data = {
         ...pageObj,
-        requestId:reqeuestId,
-        data:data==null?{}:data,
+        requestId: reqeuestId,
+        data: data == null ? {} : data,
       }
     } else {
       config.data = {
-        requestId:reqeuestId,
-        data: typeof(config.data)=='undefined'? {}:config.data,
+        requestId: reqeuestId,
+        data: typeof(config.data) == 'undefined' ? {} : config.data,
       }
     }
 
@@ -130,10 +130,10 @@ service.interceptors.response.use(
     } else if (code === HttpStatus.WARN) {
       ElMessage({ message: msg, type: 'warning' })
       return Promise.reject(new Error(msg))
-    } else if (code>10000) {
+    } else if (code > 10000) {
       ElMessage({ message: msg, type: 'warning' })
       return Promise.reject(new Error(msg))
-    }else if (code !== HttpStatus.SUCCESS) {
+    } else if (code !== HttpStatus.SUCCESS) {
       ElNotification.error({ title: msg })
       return Promise.reject('error')
     } else {
@@ -141,7 +141,12 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
-    let { message } = error
+    let { message , response } = error
+    if (response.status == 401) {
+      ElMessage({ message: '未授权的请求', type: 'error', duration: 5 * 1000 })
+      return Promise.reject(error)
+    }
+
     if (message == 'Network Error') {
       message = '后端接口连接异常'
     } else if (message.includes('timeout')) {

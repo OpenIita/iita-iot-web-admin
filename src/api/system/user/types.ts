@@ -26,7 +26,7 @@ export interface UserQuery extends PageQuery {
  * 用户返回对象
  */
 export interface UserVO extends BaseEntity {
-  userId: string | number
+  id: string | number
   deptId: number
   userName: string
   nickName: string

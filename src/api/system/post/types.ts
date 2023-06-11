@@ -1,5 +1,5 @@
 export interface PostVO extends BaseEntity {
-  postId: number | string
+  id: number | string
   postCode: string
   postName: string
   postSort: number
@@ -8,7 +8,7 @@ export interface PostVO extends BaseEntity {
 }
 
 export interface PostForm {
-  postId: number | string | undefined
+  id: number | string | undefined
   postCode: string
   postName: string
   postSort: number

@@ -12,13 +12,11 @@ export const listMenu = (query?: MenuQuery): AxiosPromise<MenuVO[]> => {
 }
 
 // 查询菜单详细
-export const getMenu = (menuId: string | number): AxiosPromise<MenuVO> => {
+export const getMenu = (id: string | number): AxiosPromise<MenuVO> => {
   return request({
-    url: '/system/menu',
+    url: '/system/menu/getInfo',
     method: 'post',
-    data: {
-      menuId,
-    },
+    data: id,
   })
 }
 
@@ -33,11 +31,9 @@ export const treeselect = (): AxiosPromise<MenuTreeOption[]> => {
 // 根据角色ID查询菜单下拉树结构
 export const roleMenuTreeselect = (roleId: string | number): AxiosPromise<RoleMenuTree> => {
   return request({
-    url: '/system/menu/roleMenuTreeselect',
+    url: '/system/menu/roleMenuTreeselectByRoleId',
     method: 'post',
-    data: {
-      roleId,
-    },
+    data: roleId,
   })
 }
 
@@ -71,12 +67,10 @@ export const updateMenu = (data: MenuForm) => {
 }
 
 // 删除菜单
-export const delMenu = (menuId: string | number) => {
+export const delMenu = (id: string | number) => {
   return request({
-    url: '/system/menu',
+    url: '/system/menu/delete',
     method: 'post',
-    data: {
-      menuId,
-    },
+    data: id,
   })
 }
