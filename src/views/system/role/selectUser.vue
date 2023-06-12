@@ -96,8 +96,8 @@ const handleSelectionChange = (selection: UserVO[]) => {
 /** 查询数据 */
 const getList = async () => {
   const res = await unallocatedUserList(queryParams)
-  userList.value = res.rows
-  total.value = res.total
+  userList.value = res.data.rows
+  total.value = res.data.total
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {

@@ -99,8 +99,8 @@ const queryParams = reactive<UserQuery>({
 const getList = async () => {
   loading.value = true
   const res = await allocatedUserList(queryParams)
-  userList.value = res.rows
-  total.value = res.total
+  userList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 // 返回按钮
