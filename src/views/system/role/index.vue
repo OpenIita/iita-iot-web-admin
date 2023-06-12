@@ -192,7 +192,7 @@
 </template>
 
 <script setup name="Role" lang="ts">
-import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelect } from '@/api/system/role'
+import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelectByRoleId } from '@/api/system/role'
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu/index'
 import { RoleVO, RoleForm, RoleQuery, DeptTreeOption } from '@/api/system/role/types'
 import { MenuTreeOption, RoleMenuTree } from '@/api/system/menu/types'
@@ -404,7 +404,7 @@ const getRoleMenuTreeselect = (roleId: string | number) => {
 }
 /** 根据角色ID查询部门树结构 */
 const getRoleDeptTreeSelect = async (roleId: string | number) => {
-  const res = await deptTreeSelect(roleId)
+  const res = await deptTreeSelectByRoleId(roleId)
   deptOptions.value = res.data.depts
   return res.data
 }

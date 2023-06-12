@@ -138,12 +138,10 @@ export const authUserSelectAll = (data: any) => {
   })
 }
 // 根据角色ID查询部门树结构
-export const deptTreeSelect = (id: string | number): AxiosPromise<RoleDeptTree> => {
+export const deptTreeSelectByRoleId = (id: string | number): AxiosPromise<RoleDeptTree> => {
   return request({
-    url: '/system/role/deptTree',
+    url: '/system/role/deptTreeByRoleId',
     method: 'post',
-    data: {
-      id,
-    },
+    data: id,
   })
 }
