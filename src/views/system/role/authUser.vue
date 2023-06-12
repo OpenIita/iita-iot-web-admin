@@ -120,7 +120,7 @@ const resetQuery=() =>{
 }
 // 多选框选中数据
 const handleSelectionChange = (selection: UserVO[]) =>{
-  userIds.value = selection.map(item => item.userId)
+  userIds.value = selection.map(item => item.id)
   multiple.value = !selection.length
 }
 /** 打开授权用户表弹窗 */
@@ -130,7 +130,7 @@ const openSelectUser = () => {
 /** 取消授权按钮操作 */
 const cancelAuthUser = async (row: UserVO) => {
   await proxy?.$modal.confirm('确认要取消该用户"' + row.userName + '"角色吗？')
-  await authUserCancel({ userId: row.userId, roleId: queryParams.roleId })
+  await authUserCancel({ userId: row.id, roleId: queryParams.roleId })
   getList()
   proxy?.$modal.msgSuccess("取消授权成功")
 }
