@@ -28,7 +28,7 @@ export const getRole = (id: string | number): AxiosPromise<RoleVO> => {
  */
 export const addRole = (data: any) => {
   return request({
-    url: '/system/role',
+    url: '/system/role/add',
     method: 'post',
     data,
   })
@@ -40,7 +40,7 @@ export const addRole = (data: any) => {
  */
 export const updateRole = (data: any) => {
   return request({
-    url: '/system/role',
+    url: '/system/role/edit',
     method: 'post',
     data,
   })

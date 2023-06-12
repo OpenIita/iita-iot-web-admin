@@ -55,7 +55,7 @@
 
       <el-table ref="roleTableRef" v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="角色编号" prop="roleId" width="120" v-if="false" />
+        <el-table-column label="角色编号" prop="id" width="120" v-if="false" />
         <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
         <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="200" />
         <el-table-column label="显示顺序" prop="roleSort" width="100" />
@@ -235,7 +235,7 @@ const menuRef = ref(ElTree)
 const deptRef = ref(ElTree)
 
 const initForm: RoleForm = {
-  roleId: undefined,
+  id: undefined,
   roleSort: 1,
   status: '0',
   roleName: '',
@@ -317,7 +317,7 @@ const handleExport = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: RoleVO[]) => {
-  ids.value = selection.map((item: RoleVO) => item.roleId)
+  ids.value = selection.map((item: RoleVO) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -375,9 +375,9 @@ const handleAdd = () => {
 }
 /** 修改角色 */
 const handleUpdate = async (row?: RoleVO) => {
-  const roleId = row?.id || ids.value[0]
-  const roleMenu = getRoleMenuTreeselect(roleId)
-  const { data } = await getRole(roleId)
+  const id = row?.id || ids.value[0]
+  const roleMenu = getRoleMenuTreeselect(id)
+  const { data } = await getRole(id)
   dialog.visible = true
   dialog.title = '修改角色'
   nextTick(() => {
@@ -452,7 +452,7 @@ const submitForm = () => {
   roleFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.menuIds = getMenuAllCheckedKeys()
-      form.value.roleId ? await updateRole(form.value) : await addRole(form.value)
+      form.value.id ? await updateRole(form.value) : await addRole(form.value)
       proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
@@ -488,7 +488,7 @@ const handleDataScope = async (row: RoleVO) => {
 }
 /** 提交按钮（数据权限） */
 const submitDataScope = async () => {
-  if (form.value.roleId) {
+  if (form.value.id) {
     form.value.deptIds = getDeptAllCheckedKeys()
     await dataScope(form.value)
     proxy?.$modal.msgSuccess('修改成功')

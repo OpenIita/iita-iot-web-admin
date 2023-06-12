@@ -15,7 +15,7 @@ export interface RoleDeptTree {
 }
 
 export interface RoleVO extends BaseEntity {
-  roleId: string | number
+  id: string | number
   roleName: string
   roleKey: string
   roleSort: number
@@ -46,7 +46,7 @@ export interface RoleForm {
   deptCheckStrictly: boolean
   remark: string
   dataScope?: string
-  roleId: string | undefined
+  id: string | undefined
   menuIds: Array<string | number>
   deptIds: Array<string | number>
 }

@@ -90,7 +90,7 @@ const clickRow = (row: any) => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: UserVO[]) => {
-  userIds.value = selection.map((item: UserVO) => item.userId)
+  userIds.value = selection.map((item: UserVO) => item.id)
 }
 
 /** 查询数据 */
