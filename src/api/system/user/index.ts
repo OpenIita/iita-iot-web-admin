@@ -156,11 +156,9 @@ export function uploadAvatar(data: FormData) {
  */
 export function getAuthRole(userId: string | number): AxiosPromise<{ user: UserVO; roles: RoleVO[] }> {
   return request({
-    url: '/system/user/authRole',
+    url: '/system/user/authRoleByUserId',
     method: 'post',
-    data: {
-      userId,
-    },
+    data: userId,
   })
 }
 
