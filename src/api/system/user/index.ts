@@ -70,9 +70,9 @@ export function delUser(userId: Array<string | number> | string | number) {
  * @param userId 用户ID
  * @param password 密码
  */
-export function resetUserPwd(userId: string | number, password: string) {
+export function resetUserPwd(id: string | number, password: string) {
   const data = {
-    userId,
+    id,
     password,
   }
   return request({
