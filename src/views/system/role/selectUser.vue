@@ -114,7 +114,7 @@ const emit = defineEmits(["ok"])
 /**选择授权用户操作 */
 const handleSelectUser = async () => {
   const roleId = queryParams.roleId
-  const ids = userIds.value.join(',')
+  const ids = userIds.value
   if (ids == "") {
     proxy?.$modal.msgError('请选择要分配的用户')
     return

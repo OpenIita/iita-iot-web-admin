@@ -137,7 +137,7 @@ const cancelAuthUser = async (row: UserVO) => {
 /** 批量取消授权按钮操作 */
 const cancelAuthUserAll = async () => {
   const roleId = queryParams.roleId
-  const uIds = userIds.value.join(",")
+  const uIds = userIds.value
   await proxy?.$modal.confirm("是否取消选中用户授权数据项?")
   await authUserCancelAll({ roleId: roleId, userIds: uIds })
   getList()
