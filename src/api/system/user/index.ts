@@ -164,7 +164,7 @@ export function getAuthRole(userId: string | number): AxiosPromise<{ user: UserV
  * 保存授权角色
  * @param data 用户ID
  */
-export function updateAuthRole(data: { userId: string; roleIds: string }) {
+export function updateAuthRole(data: { userId: string; roleIds: (string | number)[] }) {
   return request({
     url: '/system/user/authRole',
     method: 'post',

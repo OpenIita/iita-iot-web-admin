@@ -83,11 +83,11 @@ const clickRow = (row: RoleVO) => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: RoleVO[]) => {
-  roleIds.value = selection.map(item => item.roleId)
+  roleIds.value = selection.map(item => item.id)
 }
 /** 保存选中的数据编号 */
 const getRowKey = (row: RoleVO): string => {
-  return String(row.roleId)
+  return String(row.id)
 }
 /** 关闭按钮 */
 const close = () => {
@@ -97,7 +97,7 @@ const close = () => {
 /** 提交按钮 */
 const submitForm = async () => {
   const userId = form.value.userId
-  const rIds = roleIds.value.join(",")
+  const rIds = roleIds.value
   await updateAuthRole({ userId: userId as string, roleIds: rIds })
   proxy?.$modal.msgSuccess("授权成功")
   close()
