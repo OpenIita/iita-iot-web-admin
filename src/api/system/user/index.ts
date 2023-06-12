@@ -59,9 +59,7 @@ export function delUser(userId: Array<string | number> | string | number) {
   return request({
     url: '/system/user/delete',
     method: 'post',
-    data: {
-      userId,
-    },
+    data: [userId],
   })
 }
 
