@@ -226,9 +226,9 @@
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
                 <el-option
                   v-for="item in roleOptions"
-                  :key="item.roleId"
+                  :key="item.id"
                   :label="item.roleName"
-                  :value="item.roleId"
+                  :value="item.id"
                   :disabled="item.status == '1'"
                 ></el-option>
               </el-select>
