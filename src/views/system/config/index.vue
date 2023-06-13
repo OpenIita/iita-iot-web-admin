@@ -145,7 +145,7 @@ const dialog = reactive<DialogOption>({
   title: ''
 })
 const initFormData: ConfigForm = {
-  configId: undefined,
+  id: undefined,
   configName: '',
   configKey: '',
   configValue: '',
@@ -174,8 +174,8 @@ const { queryParams, form, rules } = toRefs(data)
 const getList = async () => {
   loading.value = true
   const res = await listConfig(proxy?.addDateRange(queryParams.value, dateRange.value))
-  configList.value = res.rows
-  total.value = res.total
+  configList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 取消按钮 */
@@ -217,7 +217,7 @@ const handleAdd = () => {
 const handleUpdate = (row?: ConfigVO) => {
   dialog.visible = true
   dialog.title = "修改参数"
-  const configId = row?.configId || ids.value[0]
+  const configId = row?.id ? row.id: ids.value[0]
   nextTick(async () => {
     reset()
     const res = await getConfig(configId)
@@ -228,7 +228,7 @@ const handleUpdate = (row?: ConfigVO) => {
 const submitForm = () => {
   configFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.configId ? await updateConfig(form.value) : await addConfig(form.value)
+      form.value.id ? await updateConfig(form.value) : await addConfig(form.value)
       proxy?.$modal.msgSuccess("操作成功")
       dialog.visible = false
       getList()
@@ -237,7 +237,8 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: ConfigVO) => {
-  const configIds = row?.configId || ids.value
+  const configIds = row?.id ? [row.id]: ids.value[0]
+
   await proxy?.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
   await delConfig(configIds)
   getList()

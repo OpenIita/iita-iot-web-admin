@@ -14,11 +14,9 @@ export function listConfig(query: ConfigQuery): AxiosPromise<ConfigVO[]> {
 // 查询参数详细
 export function getConfig(configId: string | number): AxiosPromise<ConfigVO> {
   return request({
-    url: '/system/config',
+    url: '/system/config/getDetail',
     method: 'post',
-    data: {
-      configId,
-    },
+    data: configId,
   })
 }
 
@@ -36,7 +34,7 @@ export function getConfigKey(configKey: string): AxiosPromise<ConfigVO> {
 // 新增参数配置
 export function addConfig(data: ConfigForm) {
   return request({
-    url: '/system/config',
+    url: '/system/config/add',
     method: 'post',
     data,
   })
@@ -45,7 +43,7 @@ export function addConfig(data: ConfigForm) {
 // 修改参数配置
 export function updateConfig(data: ConfigForm) {
   return request({
-    url: '/system/config',
+    url: '/system/config/edit',
     method: 'post',
     data,
   })
@@ -66,11 +64,9 @@ export function updateConfigByKey(key: string, value: any) {
 // 删除参数配置
 export function delConfig(configId: string | number | Array<string | number>) {
   return request({
-    url: '/system/config',
+    url: '/system/config/delete',
     method: 'post',
-    data: {
-      configId,
-    },
+    data: configId,
   })
 }
 
