@@ -1,5 +1,5 @@
 export interface LoginInfoVO {
-  infoId: string | number
+  id: string | number
   tenantId: string | number
   userName: string
   status: string

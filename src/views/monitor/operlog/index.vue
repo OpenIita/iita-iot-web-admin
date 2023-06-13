@@ -231,8 +231,8 @@ const { queryParams, form } = toRefs(data)
 const getList = async () => {
   loading.value = true
   const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
-  operlogList.value = res.rows
-  total.value = res.total
+  operlogList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 操作日志类型字典翻译 */
@@ -253,7 +253,7 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: OperLogVO[]) => {
-  ids.value = selection.map(item => item.operId)
+  ids.value = selection.map(item => item.id)
   multiple.value = !selection.length
 }
 /** 排序触发事件 */
@@ -269,7 +269,7 @@ const handleView = (row: OperLogVO) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OperLogVO) => {
-  const operIds = row?.operId || ids.value
+  const operIds = row?.id ? [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?')
   await delOperlog(operIds)
   getList()
