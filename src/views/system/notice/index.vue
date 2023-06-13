@@ -144,7 +144,7 @@ const dialog = reactive<DialogOption>({
 })
 
 const initFormData: NoticeForm = {
-  noticeId: undefined,
+  id: undefined,
   noticeTitle: '',
   noticeType: '',
   noticeContent: '',
@@ -174,8 +174,8 @@ const { queryParams, form, rules } = toRefs(data)
 const getList = async () => {
   loading.value = true
   const res = await listNotice(queryParams.value)
-  noticeList.value = res.rows
-  total.value = res.total
+  noticeList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 取消按钮 */
@@ -200,7 +200,7 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: NoticeVO[]) => {
-  ids.value = selection.map(item => item.noticeId)
+  ids.value = selection.map(item => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -217,7 +217,7 @@ const handleUpdate = (row?: NoticeVO) => {
   dialog.visible = true
   dialog.title = "修改公告"
   nextTick(async () => {
-    const noticeId = row?.noticeId || ids.value[0]
+    const noticeId = row?.id || ids.value[0]
     reset()
     const { data } = await getNotice(noticeId)
     form.value = data
@@ -227,7 +227,7 @@ const handleUpdate = (row?: NoticeVO) => {
 const submitForm = () => {
   noticeFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.noticeId ? await updateNotice(form.value) : await addNotice(form.value)
+      form.value.id ? await updateNotice(form.value) : await addNotice(form.value)
       proxy?.$modal.msgSuccess("修改成功")
       dialog.visible = false
       getList()
@@ -236,7 +236,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: NoticeVO) => {
-  const noticeIds = row?.noticeId || ids.value
+  const noticeIds = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？')
   await delNotice(noticeIds)
   getList()
