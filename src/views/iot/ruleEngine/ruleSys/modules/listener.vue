@@ -17,34 +17,36 @@
             <div class="main">
               <div class="title">条件筛选</div>
               <div class="main-box">
-                <div class="item" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
-                  <el-row style="width: 100%;">
-                    <el-col :span="6">
-                      <el-select v-model="cond.identifier" @change="typeChanged">
-                        <el-option-group v-for="group in types" :key="group.name" :label="group.name">
-                          <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
-                        </el-option-group>
-                      </el-select>
-                    </el-col>
-                    <el-col :span="18" v-if="!cond?.identifier?.endsWith(':*')">
-                      {{ JSON.stringify(cond.parameters) }}
-                      <el-row v-for="param in cond.parameters" :key="param.identifier">
-                        <el-col :span="11" v-if="cond.type == 'property' && cond.identifier == 'report'">
-                          <el-select size="mini" v-model="param.identifier">
-                            <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
-                          </el-select>
-                        </el-col>
-                        <el-col :span="6">
-                          <el-select size="mini" v-model="param.comparator">
-                            <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
-                          </el-select>
-                        </el-col>
-                        <el-col :span="4">
-                          <el-input size="mini" v-model="param.value" auto-complete="off"></el-input>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                  </el-row>
+                <div class="box" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
+                  <div class="item">
+                    <el-row style="width: 100%;">
+                      <el-col :span="6">
+                        <el-select v-model="cond.identifier" @change="typeChanged">
+                          <el-option-group v-for="group in types" :key="group.name" :label="group.name">
+                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
+                          </el-option-group>
+                        </el-select>
+                      </el-col>
+                      {{ JSON.stringify(cond) }}
+                      <el-col :span="18" v-if="!cond?.identifier?.endsWith(':*')">
+                        <el-row v-for="param in cond.parameters" :key="param.identifier">
+                          <el-col :span="11" v-if="cond.type == 'property' && cond.identifier == 'report'">
+                            <el-select size="mini" v-model="param.identifier">
+                              <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
+                            </el-select>
+                          </el-col>
+                          <el-col :span="6">
+                            <el-select size="mini" v-model="param.comparator">
+                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
+                            </el-select>
+                          </el-col>
+                          <el-col :span="4">
+                            <el-input size="mini" v-model="param.value" auto-complete="off"></el-input>
+                          </el-col>
+                        </el-row>
+                      </el-col>
+                    </el-row>
+                  </div>
                   <el-button
                     type="danger"
                     size="small"
@@ -298,12 +300,21 @@ onUnmounted(() => {
     }
     .main-box {
       padding: 10px;
-      .item {
-        border: 2px dashed rgb(217, 217, 217);
-        padding: 10px;
+      .box {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        .item {
+          border: 2px dashed rgb(217, 217, 217);
+          padding: 6px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 10px;
+          flex: 1;
+        }
+        .el-button {
+          width: 50px;
+        }
       }
     }
   }
