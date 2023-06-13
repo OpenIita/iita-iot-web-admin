@@ -52,6 +52,7 @@ export default defineComponent({
           emit('onSuccess', {
             type: dialogObj.type,
             data: formObj.data,
+            cancel,
           })
         }
       })

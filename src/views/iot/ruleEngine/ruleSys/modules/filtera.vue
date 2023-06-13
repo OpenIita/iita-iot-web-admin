@@ -7,13 +7,16 @@
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
                 <el-radio-group style="margin-right: 20px;" model-value="1" class="ml-4">
-                  <el-radio label="1" size="large">设备监听</el-radio>
+                  <el-radio label="1" size="large">设备数据过滤</el-radio>
                 </el-radio-group>
                 <div class="item">
-                  <select-product v-model:id="data.id"></select-product>
+                  <el-radio-group v-model="item.deviceRadio">
+                    <el-radio-button label="指定设备" />
+                    <el-radio-button label="使用当前设备" />
+                  </el-radio-group>
                 </div>
-                <div class="item">
-                  <select-device placeholder="默认全部设备" product-id="11111"></select-device>
+                <div class="item" v-if="item.deviceRadio === '指定设备'">
+                  <select-device placeholder="选择设备"></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -82,7 +85,7 @@
         </el-collapse-item>
       </el-collapse>
     </div>
-    <el-button style="margin-top: 10px;" @click="handleAdd">新增监听器</el-button>
+    <el-button style="margin-top: 10px;" @click="handleAdd">新增过滤器</el-button>
   </div>
 </template>
 <script lang="ts" setup>
@@ -100,10 +103,10 @@ for (let i = 0; i < 100; i++) {
 }
 const activeName = ref<number[]>(arr)
 const list = ref<any[]>([])
-
 // 新增监听器
 const handleAdd = () => {
   list.value.push({
+    deviceRadio: '指定设备',
     conditions: [{
       parameters: [],
     }],
