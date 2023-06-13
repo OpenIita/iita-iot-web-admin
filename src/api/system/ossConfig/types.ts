@@ -1,5 +1,5 @@
 export interface OssConfigVO extends BaseEntity {
-  ossConfigId: number | string
+  id: number | string
   configKey: string
   accessKey: string
   secretKey: string

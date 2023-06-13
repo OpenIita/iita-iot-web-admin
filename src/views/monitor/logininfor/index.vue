@@ -133,8 +133,8 @@ const queryParams = ref<LoginInfoQuery>({
 const getList = async () => {
   loading.value = true
   const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
-  loginInfoList.value = res.rows
-  total.value = res.total
+  loginInfoList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 搜索按钮操作 */
@@ -151,7 +151,7 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: LoginInfoVO[]) => {
-  ids.value = selection.map(item => item.infoId)
+  ids.value = selection.map(item => item.id)
   multiple.value = !selection.length
   single.value = selection.length != 1
   selectName.value = selection.map(item => item.userName)
@@ -164,7 +164,7 @@ const handleSortChange = (column: any) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: LoginInfoVO) => {
-  const infoIds = row?.infoId || ids.value
+  const infoIds = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
   await delLoginInfo(infoIds)
   getList()

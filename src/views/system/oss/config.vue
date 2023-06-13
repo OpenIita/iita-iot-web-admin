@@ -43,7 +43,7 @@
 
       <el-table v-loading="loading" :data="ossConfigList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="主建" align="center" prop="ossConfigId" v-if="columns[0].visible" />
+        <el-table-column label="主建" align="center" prop="id" v-if="columns[0].visible" />
         <el-table-column label="配置key" align="center" prop="configKey" v-if="columns[1].visible" />
         <el-table-column label="访问站点" align="center" prop="endpoint" v-if="columns[2].visible" width="200" />
         <el-table-column label="自定义域名" align="center" prop="domain" v-if="columns[3].visible" width="200" />
@@ -178,7 +178,7 @@ const columns = ref<FieldOption[]>([
 
 
 const initFormData: OssConfigForm = {
-  ossConfigId: undefined,
+  id: undefined,
   configKey: '',
   accessKey: '',
   secretKey: '',
@@ -250,8 +250,8 @@ const { queryParams, form, rules } = toRefs(data)
 const getList = async () => {
   loading.value = true
   const res = await listOssConfig(queryParams.value)
-  ossConfigList.value = res.rows
-  total.value = res.total
+  ossConfigList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 取消按钮 */
@@ -276,7 +276,7 @@ const resetQuery = () => {
 }
 /** 选择条数  */
 const handleSelectionChange = (selection: OssConfigVO[]) => {
-  ids.value = selection.map(item => item.ossConfigId)
+  ids.value = selection.map(item => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -293,7 +293,7 @@ const handleUpdate = (row?: OssConfigVO) => {
   loading.value = true
   dialog.visible = true
   dialog.title = "修改对象存储配置"
-  const ossConfigId = row?.ossConfigId || ids.value[0]
+  const ossConfigId = row?.id || ids.value[0]
   nextTick(async () => {
     reset()
     const res = await getOssConfig(ossConfigId)
@@ -322,7 +322,7 @@ const  handleStatusChange = async (row: OssConfigVO) => {
   let text = row.status === "0" ? "启用" : "停用"
   try {
     await proxy?.$modal.confirm('确认要"' + text + '""' + row.configKey + '"配置吗?')
-    await changeOssConfigStatus(row.ossConfigId, row.status, row.configKey)
+    await changeOssConfigStatus(row.id, row.status, row.configKey)
     getList()
     proxy?.$modal.msgSuccess(text + "成功")
   } catch { return } finally {
@@ -332,7 +332,7 @@ const  handleStatusChange = async (row: OssConfigVO) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OssConfigVO) => {
-  const ossConfigIds = row?.ossConfigId || ids.value
+  const ossConfigIds = row?.id ?  [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除OSS配置编号为"' + ossConfigIds + '"的数据项?')
   loading.value = true
   await delOssConfig(ossConfigIds).finally(() => loading.value = false)
