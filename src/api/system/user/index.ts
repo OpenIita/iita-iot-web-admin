@@ -55,11 +55,11 @@ export function updateUser(data: UserForm) {
  * 删除用户
  * @param userId 用户ID
  */
-export function delUser(userId: Array<string | number> | string | number) {
+export function delUser(userId: Array<string | number>) {
   return request({
     url: '/system/user/delete',
     method: 'post',
-    data: [userId],
+    data: userId,
   })
 }
 

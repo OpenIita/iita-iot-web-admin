@@ -443,9 +443,9 @@ const resetQuery = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: UserVO) => {
-  const userIds = row?.id || ids.value
+  const userIds = row?.id ? [row?.id] : ids.value
   const [err] = await to(proxy?.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？') as any)
-  if (!err) {
+  if (!err && userIds) {
     await delUser(userIds)
     await getList()
     proxy?.$modal.msgSuccess('删除成功')

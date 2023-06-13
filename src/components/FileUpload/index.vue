@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { getToken } from "@/utils/auth"
-import { listByIds, delOss } from "@/api/system/oss"
-import { ComponentInternalInstance } from "vue"
-import { ElUpload, UploadFile } from "element-plus"
+import { getToken } from '@/utils/auth'
+import { listByIds, delOss } from '@/api/system/oss'
+import { ComponentInternalInstance } from 'vue'
+import { ElUpload, UploadFile } from 'element-plus'
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -63,7 +63,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
-    default: () => ["doc", "xls", "ppt", "txt", "pdf"],
+    default: () => ['doc', 'xls', 'ppt', 'txt', 'pdf'],
   },
   // 是否显示提示
   isShowTip: {
@@ -78,8 +78,8 @@ const number = ref(0)
 const uploadList = ref<any[]>([])
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadFileUrl = ref(baseUrl + "/resource/oss/upload") // 上传文件服务器地址
-const headers = ref({ Authorization: "Bearer " + getToken() })
+const uploadFileUrl = ref(baseUrl + '/resource/oss/upload') // 上传文件服务器地址
+const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
 const showTip = computed(
@@ -135,7 +135,7 @@ const handleBeforeUpload = (file: any) => {
       return false
     }
   }
-  proxy?.$modal.loading("正在上传文件，请稍候...")
+  proxy?.$modal.loading('正在上传文件，请稍候...')
   number.value++
   return true
 }

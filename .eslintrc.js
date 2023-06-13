@@ -29,6 +29,7 @@ module.exports = {
     'vue/no-v-model-argument': 'off',
     // 'indent': ['error', 2],
     'semi': [2, 'never'], // 结尾分号
+    'quotes': [2, 'single', 'avoid-escape'],
     '@typescript-eslint/no-this-alias': 'error',
     '@typescript-eslint/ban-types': [
       'error',
@@ -39,7 +40,7 @@ module.exports = {
           '{}': false
         }
       }
-    ]
+    ],
   },
   globals: {
     DialogOption: 'readonly',

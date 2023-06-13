@@ -19,23 +19,24 @@
               <div class="main-box">
                 <div class="item" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
                   <el-row style="width: 100%;">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <el-select v-model="cond.identifier" @change="typeChanged">
                         <el-option-group v-for="group in types" :key="group.name" :label="group.name">
                           <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                         </el-option-group>
                       </el-select>
                     </el-col>
-                    <el-col :span="16" v-if="!cond?.identifier?.endsWith(':*')">
-                      <el-row v-for="param in data.parameters" :key="param.identifier">
-                        <el-col :span="11">
-                          <el-select size="mini" v-if="cond.type == 'property' && cond.identifier == 'report'" v-model="param.identifier">
-                            <el-option v-for="p in data.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
+                    <el-col :span="18" v-if="!cond?.identifier?.endsWith(':*')">
+                      {{ JSON.stringify(cond.parameters) }}
+                      <el-row v-for="param in cond.parameters" :key="param.identifier">
+                        <el-col :span="11" v-if="cond.type == 'property' && cond.identifier == 'report'">
+                          <el-select size="mini" v-model="param.identifier">
+                            <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
                           </el-select>
                         </el-col>
                         <el-col :span="6">
                           <el-select size="mini" v-model="param.comparator">
-                            <el-option v-for="cp in data.comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
+                            <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
                           </el-select>
                         </el-col>
                         <el-col :span="4">
@@ -81,9 +82,46 @@ const list = ref<any[]>([])
 // 新增
 const handleAdd = () => {
   list.value.push({
-    conditions: [{}],
+    conditions: [{
+      parameters: [{}],
+    }],
   })
 }
+// 条件
+const comparators = ref([
+  {
+    name: '大于',
+    value: '>',
+  },
+  {
+    name: '等于',
+    value: '==',
+  },
+  {
+    name: '小于',
+    value: '<',
+  },
+  {
+    name: '不等于',
+    value: '!=',
+  },
+  {
+    name: '包含',
+    value: 'in',
+  },
+  {
+    name: '不包含',
+    value: 'notin',
+  },
+  {
+    name: '相似',
+    value: 'like',
+  },
+  {
+    name: '任意',
+    value: '*',
+  },
+])
 
 // 新增条件
 const handleAddCondition = (item: any) => {
@@ -96,84 +134,84 @@ const handleRemoveCondition = (item: any, index: number) => {
 }
 const data = ref(toRaw(props.row))
 data.value.model = {
-  "properties": [
+  properties: [
     {
-      "identifier": "powerstate",
-      "dataType": {
-        "type": "enum",
-        "specs": {
-          "0": "关",
-          "1": "开"
+      'identifier': 'powerstate',
+      'dataType': {
+        'type': 'enum',
+        'specs': {
+          '0': '关',
+          '1': '开'
         }
       },
-      "name": "开关",
-      "accessMode": "rw"
+      'name': '开关',
+      'accessMode': 'rw'
     },
     {
-      "identifier": "brightness",
-      "dataType": {
-        "type": "int32",
-        "specs": {
-          "min": "1",
-          "max": "100"
+      'identifier': 'brightness',
+      'dataType': {
+        'type': 'int32',
+        'specs': {
+          'min': '1',
+          'max': '100'
         }
       },
-      "name": "亮度",
-      "accessMode": "rw"
+      'name': '亮度',
+      'accessMode': 'rw'
     }
   ],
-  "services": [
+  'services': [
     {
-      "identifier": "open",
-      "inputData": [
+      'identifier': 'open',
+      'inputData': [
         {
-          "identifier": "bujian",
-          "dataType": {
-            "type": "text",
-            "specs": {}
+          'identifier': 'bujian',
+          'dataType': {
+            'type': 'text',
+            'specs': {}
           },
-          "name": "部件",
-          "required": false
+          'name': '部件',
+          'required': false
         }
       ],
-      "outputData": [
+      'outputData': [
         {
-          "identifier": "result",
-          "dataType": {
-            "type": "bool",
-            "specs": {
-              "0": "成功",
-              "1": "失败"
+          'identifier': 'result',
+          'dataType': {
+            'type': 'bool',
+            'specs': {
+              '0': '成功',
+              '1': '失败'
             }
           },
-          "name": "执行结果",
-          "required": false
+          'name': '执行结果',
+          'required': false
         }
       ],
-      "name": "打开设备"
+      'name': '打开设备'
     },
     {
-      "identifier": "alarm",
-      "inputData": [
+      'identifier': 'alarm',
+      'inputData': [
         {
-          "identifier": "event",
-          "dataType": {
-            "type": "enum",
-            "specs": {
-              "0": "发生水灾",
-              "1": "发生火灾",
-              "2": "发生水火灾"
+          'identifier': 'event',
+          'dataType': {
+            'type': 'enum',
+            'specs': {
+              '0': '发生水灾',
+              '1': '发生火灾',
+              '2': '发生水火灾'
             }
           },
-          "name": "报警事件",
-          "required": false
+          'name': '报警事件',
+          'required': false
         }
       ],
-      "outputData": [],
-      "name": "报警"
+      'outputData': [],
+      'name': '报警'
     }
   ],
-  "events": []
+  'events': []
 }
 const types = ref([{
   name: '通配',
