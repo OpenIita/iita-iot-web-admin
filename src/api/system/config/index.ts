@@ -23,11 +23,9 @@ export function getConfig(configId: string | number): AxiosPromise<ConfigVO> {
 // 根据参数键名查询参数值
 export function getConfigKey(configKey: string): AxiosPromise<ConfigVO> {
   return request({
-    url: '/system/config/configKey',
+    url: '/system/config/getConfigKey',
     method: 'post',
-    data: {
-      configKey,
-    },
+    data: configKey,
   })
 }
 
