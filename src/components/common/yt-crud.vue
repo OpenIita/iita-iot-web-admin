@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yt-table-search v-bind="bind.searchBind" :data="data" :column="column" @handle-search="search">
+    <yt-table-search v-bind="bind.searchBind" :data="data" :column="column" v-model="query" @handle-search="search">
       <template v-for="(item, index) in searchSlots" :key="index" #[item]="scope">
         <slot
           :name="item"
@@ -15,6 +15,8 @@
         v-bind="bind.tableBind"
         :data="data"
         :column="column"
+        :total="total"
+        v-model:page="pageParams"
         ref="ytTableRef"
         @handle-update="handleUpdate"
         @handle-delete="handleDel"
@@ -62,25 +64,13 @@
 </template>
 <script lang="ts" setup>
 import { crudProps } from './props/crudProps'
-import { PropType } from 'vue'
 
 import YtTableSearch from '@/components/common/yt-table-search'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
 import YtTableForm from '@/components/common/yt-table-form'
-import { IColumn } from './types/tableCommon'
 
 const props = defineProps({
-  queryParams: {
-    type: Object,
-    default: () => ({
-      searchParams: {},
-      pageParams: {
-        pageNum: 1,
-        pageSize: 10
-      },
-    }),
-  },
   ...crudProps,
 })
 let tableSlots = ref<string[]>([])
@@ -89,7 +79,7 @@ let formItemSlots = ref<string[]>([])
 
 let searchSlots = ref<string[]>([])
 
-const emits = defineEmits(['change', 'update:queryParams', 'saveFun', 'rowClick', 'delFun'])
+const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'update:page'])
 const ytTableRef = ref()
 const getTableRef = () => {
   return ytTableRef.value
@@ -98,6 +88,7 @@ const tableFormRef = ref()
 const handleAdd = () => {
   tableFormRef.value?.openDialog('add')
 }
+console.log(props)
 const handleDel = (row: any) => {
   emits('delFun', row)
 }
@@ -116,29 +107,25 @@ const onSuccess = (obj: any) => {
 }
 
 // 传给列表需要的参数
-const queryParams = reactive({
-  searchParams: {},
-  pageParams: {
-    pageNum: 1,
-    pageSize: 10
-  },
-})
+const queryParams = ref(props.query)
 const search = (params: any) => {
-  queryParams.searchParams = params
-  emits('update:queryParams', queryParams)
-  emits('change', queryParams)
+  emits('update:query', params || {})
+  queryParams.value = params
+  onLoad()
 }
 
-const changePage = (data: {
-  page: number,
-  limit: number
-}) => {
-  queryParams.pageParams = {
-    pageNum: data.page,
-    pageSize: data.limit,
-  }
-  emits('change', queryParams)
+// 分页
+const pageParams = ref(props.page)
+const changePage = (data: any) => {
+  pageParams.value = toRaw(data)
+  emits('update:page', pageParams.value)
+  onLoad()
 }
+// 加载数据
+const onLoad = () => {
+  emits('onLoad', queryParams.value, pageParams.value)
+}
+onLoad()
 const objBind = {}
 const bind = reactive({
   searchBind: objBind,
@@ -146,14 +133,7 @@ const bind = reactive({
   funBind: {},
   formBind: objBind,
 })
-watch(() => [props.data, props.column], (newV) => {
-  bind.searchBind = objBind
-  bind.tableBind = objBind
-  bind.formBind = objBind
-}, {
-  immediate: true,
-  deep: true,
-})
+
 // 搜索组件绑定值
 if (props.searchProps) bind.searchBind = {
   ...bind.searchBind,

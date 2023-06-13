@@ -14,10 +14,10 @@ export default defineComponent({
     },
     ...searchProps,
   },
-  emits: ['handleSearch'],
+  emits: ['handleSearch', 'update:query'],
   setup(props, { slots, emit }) {
     // 表单数据
-    const formModel = ref<Recordable>({})
+    const formModel = ref<Recordable>(props.query)
     const getAttr = (option: IColumn) => {
       return {
         clearable: props.clearable,
@@ -29,6 +29,16 @@ export default defineComponent({
     const handleQuery = () => {
       emit('handleSearch', formModel.value)
     }
+    watch(
+      () => formModel,
+      (newV) => {
+        emit('update:query', newV.value || {})
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
     const resetQuery = () => {
       queryFormRef.value.resetFields()
       handleQuery()

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
@@ -25,11 +26,18 @@ export default defineComponent({
       type: Array as PropType<Record<string, any>[]>,
       default: () => [],
     },
+    // 分页参数
+    page: propTypes.object.def({
+      pageNum: 1,
+      pageSize: 10,
+    }),
+    total: propTypes.number.def(0),
     ...tableProps,
   },
-  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick'],
+  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page'],
   setup(props, { emit, slots, expose }) {
     const tableRef = ref()
+    console.log('props', props)
     // 渲染菜单
     const renderMenus = (scope: { row: any }) => {
       return (
@@ -81,6 +89,7 @@ export default defineComponent({
               }}
             </ElPopconfirm>
           )}
+          {props.menuSlot}
           {props.menuSlot && slots.menuSlot?.(scope)}
         </div>
       )
@@ -101,7 +110,6 @@ export default defineComponent({
               const labelName = labelAlias || 'label'
               const valueName = valueAlias || 'value'
               const obj = toRaw(options)?.find((f: any) => {
-                // console.log(f[valueName] == toRaw(row[column.key]))
                 return f[valueName] == toRaw(row[column.key])
               })
               return obj ? obj[labelName] : row[column.key]
@@ -121,23 +129,22 @@ export default defineComponent({
         </ElTableColumn>
       )
     }
-    const pageObj = reactive({
-      total: 0,
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-      },
-    })
+    const pageObj = reactive(props.page)
+    // 切换分页
+    const changePage = (e: any) => {
+      emit('changePage', pageObj)
+      emit('update:page', pageObj)
+    }
     // 单选
     const rowClick = (row: any) => {
       emit('rowClick', row)
     }
-    const onLoad = (params: any) => {
-      const listParams = {
-        ...params,
-        ...pageObj,
-      }
-    }
+    // const onLoad = (params: any) => {
+    //   const listParams = {
+    //     ...params,
+    //     ...pageObj,
+    //   }
+    // }
     expose({
       tableRef,
     })
@@ -162,13 +169,8 @@ export default defineComponent({
             </ElTableColumn>
           )}
         </ElTable>
-        {pageObj.total > 0 && !props.pageHide && (
-          <Pagination
-            total={pageObj.total}
-            v-model:page={pageObj.queryParams.pageNum}
-            v-model:limit={pageObj.queryParams.pageSize}
-            onPagination={(e) => emit('changePage', e)}
-          ></Pagination>
+        {!props.pageHide && (
+          <Pagination total={props.total} v-model:page={pageObj.pageNum} v-model:limit={pageObj.pageSize} onPagination={changePage}></Pagination>
         )}
       </div>
     )
