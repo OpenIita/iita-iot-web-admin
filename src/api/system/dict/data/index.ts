@@ -22,18 +22,16 @@ export function listData(query: DictDataQuery): AxiosPromise<DictDataVO[]> {
 // 查询字典数据详细
 export function getData(dictCode: string | number): AxiosPromise<DictDataVO> {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict/data/getDetail',
     method: 'post',
-    data: {
-      dictCode,
-    },
+    data: dictCode,
   })
 }
 
 // 新增字典数据
 export function addData(data: DictDataForm) {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict/data/add',
     method: 'post',
     data,
   })
@@ -42,19 +40,17 @@ export function addData(data: DictDataForm) {
 // 修改字典数据
 export function updateData(data: DictDataForm) {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict/data/edit',
     method: 'post',
     data,
   })
 }
 
 // 删除字典数据
-export function delData(dictCode: string | number | Array<string | number>) {
+export function delData(dictCode: Array<string | number>) {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict/data/delete',
     method: 'post',
-    data: {
-      dictCode,
-    },
+    data: dictCode,
   })
 }

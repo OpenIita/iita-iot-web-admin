@@ -48,7 +48,7 @@ export const useUserStore = defineStore('user', () => {
       name.value = user.userName
       nickname.value = user.nickName
       avatar.value = profile
-      userId.value = user.userId
+      userId.value = user.id
       return Promise.resolve()
     }
     return Promise.reject(err)

@@ -5,7 +5,7 @@
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
           <el-form-item label="字典名称" prop="dictType">
             <el-select v-model="queryParams.dictType" style="width: 200px">
-              <el-option v-for="item in typeOptions" :key="item.dictId" :label="item.dictName" :value="item.dictType" />
+              <el-option v-for="item in typeOptions" :key="item.id" :label="item.dictName" :value="item.dictType" />
             </el-select>
           </el-form-item>
           <el-form-item label="字典标签" prop="dictLabel">
@@ -219,8 +219,8 @@ const getTypeList = async () => {
 const getList = async () => {
   loading.value = true
   const res = await listData(queryParams.value)
-  dataList.value = res.rows
-  total.value = res.total
+  dataList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 取消按钮 */
@@ -266,11 +266,11 @@ const handleSelectionChange = (selection: DictDataVO[]) => {
 }
 /** 修改按钮操作 */
 const handleUpdate = (row?: DictDataVO) => {
-  const dictCode = row?.dictCode || ids.value[0]
+  const dictId = row?.id || ids.value[0]
   dialog.visible = true
   dialog.title = "修改字典数据"
   nextTick(async () => {
-    const res =  await getData(dictCode)
+    const res =  await getData(dictId)
     reset()
     form.value = res.data
   })
@@ -290,7 +290,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: DictDataVO) => {
-  const dictCodes = row?.dictCode || ids.value
+  const dictCodes = row?.id ? [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除字典编码为"' + dictCodes + '"的数据项？')
   await delData(dictCodes)
   getList()
