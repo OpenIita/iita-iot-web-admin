@@ -115,7 +115,15 @@ export default defineComponent({
       }
     })
     return () => (
-      <ElDialog ref={diglogRef} title={dialogObj.title} v-model={dialogObj.visible} width={props.width} append-to-body beforeClose={beforeClose}>
+      <ElDialog
+        ref={diglogRef}
+        title={dialogObj.title}
+        v-model={dialogObj.visible}
+        width={props.width}
+        append-to-body
+        beforeClose={beforeClose}
+        destroy-on-close
+      >
         {{
           default: () => (
             <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>

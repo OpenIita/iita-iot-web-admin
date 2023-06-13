@@ -17,19 +17,44 @@
             <div class="main">
               <div class="title">条件筛选</div>
               <div class="main-box">
-                <div class="item">
-                  <div>
-                    <el-select v-model="data.identifier" @change="typeChanged">
-                      <el-option-group v-for="group in types" :key="group.name" :label="group.name">
-                        <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
-                      </el-option-group>
-                    </el-select>
-                  </div>
-                  <el-button type="danger" size="small" icon="Delete" style="margin-left: 10px;"></el-button>
+                <div class="item" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
+                  <el-row style="width: 100%;">
+                    <el-col :span="8">
+                      <el-select v-model="cond.identifier" @change="typeChanged">
+                        <el-option-group v-for="group in types" :key="group.name" :label="group.name">
+                          <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
+                        </el-option-group>
+                      </el-select>
+                    </el-col>
+                    <el-col :span="16" v-if="!cond?.identifier?.endsWith(':*')">
+                      <el-row v-for="param in data.parameters" :key="param.identifier">
+                        <el-col :span="11">
+                          <el-select size="mini" v-if="cond.type == 'property' && cond.identifier == 'report'" v-model="param.identifier">
+                            <el-option v-for="p in data.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
+                          </el-select>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-select size="mini" v-model="param.comparator">
+                            <el-option v-for="cp in data.comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
+                          </el-select>
+                        </el-col>
+                        <el-col :span="4">
+                          <el-input size="mini" v-model="param.value" auto-complete="off"></el-input>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    icon="Delete"
+                    style="margin-left: 10px;"
+                    @click="handleRemoveCondition(item, condIndex)"
+                  ></el-button>
                 </div>
               </div>
             </div>
-            <el-button type="primary" size="small" style="margin-top: 12px;" @click="handleAdd">新增条件</el-button>
+            <el-button type="primary" size="small" style="margin-top: 12px;" @click="handleAddCondition(item)">新增条件</el-button>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -46,15 +71,29 @@ import SelectDevice from '@/components/YtSelect/select-device.vue'
 const props = defineProps({
   row: propTypes.object.def({}),
 })
-
-const activeName = ref<number[]>([])
+const arr = []
+for (let i = 0; i < 100; i++) {
+  arr.push(i)
+}
+const activeName = ref<number[]>(arr)
 const list = ref<any[]>([])
 
 // 新增
 const handleAdd = () => {
-  list.value.push({})
+  list.value.push({
+    conditions: [{}],
+  })
 }
 
+// 新增条件
+const handleAddCondition = (item: any) => {
+  if (!item.conditions) item.conditions = []
+  item.conditions.push({})
+}
+// 删除条件
+const handleRemoveCondition = (item: any, index: number) => {
+  item.conditions.splice(index, 1)
+}
 const data = ref(toRaw(props.row))
 data.value.model = {
   "properties": [
@@ -184,7 +223,10 @@ const typeChanged = () => {
     })
   })
 }
-console.log('data.value', data.value)
+onUnmounted(() => {
+  console.log('onUnmounted')
+  list.value = []
+})
 </script>
 
 <style lang="scss" scoped>
