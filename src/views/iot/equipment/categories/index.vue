@@ -1,13 +1,17 @@
 <template>
   <div>
+    <!--  -->
     <yt-crud
       ref="crudRef"
       :data="data"
       :column="column"
       :loading="loading"
+      v-model:page="page"
+      v-model:query="query"
       :tableProps="{
-        pageHide: false,
+        pageHide: true,
       }"
+      @onLoad="getData"
       @delFun="onDelete"
       @saveFun="onSave"
     ></yt-crud>
@@ -23,6 +27,7 @@ import { ICategoriesVO } from '../api/categories.api'
 const column: IColumn[] = [{
   label: 'id',
   key: 'id',
+  editDisabled: true,
   rules: [{ required: true, message: 'id不能为空' }],
 }, {
   label: '名称',
@@ -37,6 +42,11 @@ const column: IColumn[] = [{
 
 const data = ref<ICategoriesVO[]>([])
 const loading = ref(false)
+const page = ref({
+  pageNum: 1,
+  pageSize: 1,
+})
+const query = ref({})
 // 保存数据
 const onSave = async ({type, data, cancel}: any) => {
   loading.value = true
@@ -60,7 +70,7 @@ const getData = async () => {
   data.value = res?.data?.rows || []
   loading.value = false
 }
-getData()
+// getData()
 </script>
 
 <!-- <style lang="scss" scoped>

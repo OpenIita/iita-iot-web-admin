@@ -22,7 +22,7 @@ export default {
 
 <script setup lang="ts">
 import { scrollTo } from '@/utils/scroll-to'
-import { PropType } from "vue"
+import { PropType } from 'vue'
 
 const props = defineProps({
   total: {
@@ -40,7 +40,7 @@ const props = defineProps({
   pageSizes: {
     type: Array as PropType<number[]>,
     default() {
-      return [10, 20, 30, 50]
+      return [5, 10, 20, 30, 50, 100]
     }
   },
   // 移动端页码按钮的数量端默认值5

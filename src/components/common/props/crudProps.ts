@@ -9,6 +9,7 @@ export const searchProps = {
   loading: propTypes.bool.def(false), // 搜索loading
   labelWidth: propTypes.number.def(80), // 搜索label宽度
   clearable: propTypes.bool.def(true), // 搜索是否有控件取消
+  query: propTypes.object.def({}), // 搜索参数
 }
 
 // 功能区组件参数
@@ -47,7 +48,7 @@ export const tableProps = {
   width: propTypes.number || propTypes.string,
   size: propTypes.string.def('default '),
   columnKey: propTypes.string.def('id'),
-  menuWidth: propTypes.number.def(200) || propTypes.string,
+  menuWidth: propTypes.number.def(220) || propTypes.string,
   // 序号
   index: propTypes.bool.def(true),
   loading: propTypes.bool.def(false),
@@ -95,6 +96,15 @@ export const crudProps = {
   column: {
     type: Array as PropType<IColumn[]>,
     default: () => [],
+  },
+  page: propTypes.object.def({
+    pageNum: 1,
+    pageSize: 10,
+  }),
+  total: propTypes.number.def(0),
+  query: {
+    type: Object,
+    default: () => {},
   },
   loading: propTypes.bool.def(false),
   searchProps: Object,

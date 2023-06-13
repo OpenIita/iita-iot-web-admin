@@ -20,12 +20,12 @@ export default defineComponent({
   },
   emtis: ['openDialog', 'onSuccess'],
   setup(props, { emit, slots, expose }) {
+    console.log('slots', slots.customFormItem)
     const columns = ref<IColumn[]>([])
     watch(
       () => props.column,
       (newV) => {
         columns.value = toRaw(newV)
-        console.log('columns', columns)
       },
       {
         immediate: true,
@@ -71,11 +71,21 @@ export default defineComponent({
       reset()
       done()
     }
+    // 获取是否禁用
+    const getDisabled = (option: IColumn) => {
+      let disabled = false
+      if (dialogObj.type === 'update') disabled = !!option?.editDisabled
+      if (dialogObj.type === 'add') disabled = !!option?.addDisabled
+      if (option.componentProps?.disabled) disabled = !!option?.componentProps.disabled
+      if (disabled) return { disabled: true }
+      return {}
+    }
     const getAttr = (option: IColumn) => {
       return {
         clearable: props.clearable,
         placeholder: `${option.type === 'string' || !option.type ? '请输入' : '请选择'}${option.label}`,
         ...option.componentProps,
+        ...getDisabled(option),
       }
     }
     // 打开弹窗
@@ -115,6 +125,7 @@ export default defineComponent({
         rules[item.key] = item.rules
       }
     })
+
     return () => (
       <ElDialog
         ref={diglogRef}
@@ -129,19 +140,15 @@ export default defineComponent({
           default: () => (
             <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>
               <ElRow gutter={props.gutter}>
-                {console.log('item', columns)}
                 {columns.value.map((m: IColumn) => {
                   const type = m?.type || 'string'
                   const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
-                  if (m.key === 'converter') {
-                    console.log(m.formHide)
-                  }
                   if (!m.formHide) {
                     if (m.formWatch) {
                       watch(
                         () => formObj.data[m.key],
                         (newV) => {
-                          ;(m as any).formWatch({
+                          m.formWatch({
                             col: m,
                             column: columns.value,
                             data: formObj.data,
@@ -193,7 +200,6 @@ export default defineComponent({
             </div>
           ),
         }}
-        {/* */}
       </ElDialog>
     )
   },

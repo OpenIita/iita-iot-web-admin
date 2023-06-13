@@ -34,6 +34,8 @@ export interface IColumn {
   hide?: boolean // 表格隐藏项
   formHide?: boolean // 表单隐藏项
   tableWidth?: number | string // 表格宽度
+  editDisabled?: boolean // 编辑禁用
+  addDisabled?: boolean // 添加禁用
   searchSlot?: boolean // 搜索插槽
   formSlot?: boolean // form插槽
   formItemSlot?: boolean // formItem替换插槽

@@ -1,6 +1,23 @@
 <template>
   <div>
-    <yt-crud v-bind="options" ref="crudRef" :data="data" :column="column">
+    <yt-crud
+      ref="crudRef"
+      :data="data"
+      :column="column"
+      v-model:page="state.page"
+      v-model:query="state.query"
+      :total="state.total"
+      :loading="state.loading"
+      :tableProps=" {
+        selection: false,
+        viewBtn: false,
+        menuSlot: true,
+        menuWidth: 300,
+      }"
+      @onLoad="getData"
+      @delFun="onDelete"
+      @saveFun="onSave"
+    >
       <template #menuSlot="scope">
         <el-button link type="primary" icon="Switch" @click="handleConversionScript(scope.row)">编辑转换脚本</el-button>
       </template>
@@ -13,9 +30,11 @@ import { IColumn } from '@/components/common/types/tableCommon'
 
 import ConversionScript from '../modules/conversionScript.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
+import { getConvertorsList, IConvertorsVO, saveConvertors, deleteConvertors } from '../api/convertors.api'
 
 // 转换脚本
 const conversionScriptRef = ref()
+// TODO: 这里的接口还没调
 const handleConversionScript = (row: any) => {
   conversionScriptRef.value.openDialog(row)
 }
@@ -23,6 +42,7 @@ const handleConversionScript = (row: any) => {
 const column: IColumn[] = [{
   label: '名称',
   key: 'name',
+  search: true,
   rules: [{ required: true, message: '名称不能为空' }],
 }, {
   label: '说明',
@@ -38,39 +58,50 @@ const column: IColumn[] = [{
   formHide: true,
 }]
 
-const data = ref([
-  {
-    "id": "62995ba4dbf51a5ec41d5f7b",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "自定义表计协议",
-    "desc": "用于燃气表的协议",
-    "createAt": 1654217636597
+const data = ref<IConvertorsVO[]>([])
+const state = reactive({
+  total: 0,
+  page: {
+    pageSize: 10,
+    pageNum: 1,
   },
-  {
-    "id": "628ceb14addfdb2a3b4b5727",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "奇特HTTP标准协议",
-    "desc": "奇特HTTP标准协议转换器",
-    "createAt": 1653402388275
-  },
-  {
-    "id": "6260396d67aced2696184053",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "奇特MQTT标准协议",
-    "desc": "奇特MQTT标准协议转换器",
-    "createAt": 1650473325173
-  }
-])
-
-const options = reactive({
-  tableProps: {
-    selection: false,
-    viewBtn: false,
-    menuSlot: true,
-    menuWidth: 300,
-  },
-  searchProps: {},
+  query: {},
+  loading: false
 })
+const getData = () => {
+  state.loading = true
+  getConvertorsList({
+    ...state.page,
+    ...state.query,
+  }).then(res => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
+  })
+}
+// 保存数据
+const onSave = ({type, data, cancel}: any) => {
+  state.loading = true
+  saveConvertors(toRaw(data)).then(res => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+
+}
+// 删除
+const onDelete = async (row: any) => {
+  state.loading = true
+  deleteConvertors(row.id).then(res => {
+    ElMessage.success('删除成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+}
 </script>
 
 <!-- <style lang="scss" scoped>
