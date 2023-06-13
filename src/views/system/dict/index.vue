@@ -122,13 +122,13 @@
 
 <script setup name="Dict" lang="ts">
 import useDictStore from '@/store/modules/dict'
-import { listType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/type"
-import { ComponentInternalInstance } from "vue"
-import { DictTypeForm, DictTypeQuery, DictTypeVO } from "@/api/system/dict/type/types"
+import { listType, getType, delType, addType, updateType, refreshCache } from '@/api/system/dict/type'
+import { ComponentInternalInstance } from 'vue'
+import { DictTypeForm, DictTypeQuery, DictTypeVO } from '@/api/system/dict/type/types'
 import { DateModelType } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_normal_disable } = toRefs<any>(proxy?.useDict("sys_normal_disable"))
+const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
 
 const typeList = ref<DictTypeVO[]>([])
 const loading = ref(true)
@@ -142,31 +142,30 @@ const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 const dictFormRef = ref(ElForm)
 const queryFormRef = ref(ElForm)
 
-
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 const initFormData: DictTypeForm = {
   id: undefined,
   dictName: '',
   dictType: '',
-  status: "0",
-  remark: ''
+  status: '0',
+  remark: '',
 }
 const data = reactive<PageData<DictTypeForm, DictTypeQuery>>({
-  form: {...initFormData},
+  form: { ...initFormData },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
     dictName: '',
     dictType: '',
-    status: ''
+    status: '',
   },
   rules: {
-    dictName: [{ required: true, message: "字典名称不能为空", trigger: "blur" }],
-    dictType: [{ required: true, message: "字典类型不能为空", trigger: "blur" }]
+    dictName: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
+    dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
   },
 })
 
@@ -175,7 +174,7 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询字典类型列表 */
 const getList = () => {
   loading.value = true
-  listType(proxy?.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  listType(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res) => {
     typeList.value = res.data.rows
     total.value = res.data.total
     loading.value = false
@@ -188,7 +187,7 @@ const cancel = () => {
 }
 /** 表单重置 */
 const reset = () => {
-  form.value = {...initFormData}
+  form.value = { ...initFormData }
   dictFormRef.value.resetFields()
 }
 /** 搜索按钮操作 */
@@ -205,35 +204,34 @@ const resetQuery = () => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加字典类型"
+  dialog.title = '添加字典类型'
   nextTick(() => {
     reset()
   })
 }
 /** 多选框选中数据 */
-const handleSelectionChange = (selection: DictTypeVO[]) =>  {
-  ids.value = selection.map(item => item.id)
+const handleSelectionChange = (selection: DictTypeVO[]) => {
+  ids.value = selection.map((item) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
 /** 修改按钮操作 */
 const handleUpdate = (row?: DictTypeVO) => {
   dialog.visible = true
-  dialog.title = "修改字典类型"
+  dialog.title = '修改字典类型'
   const dictId = row?.id || ids.value[0]
   nextTick(async () => {
     reset()
     const res = await getType(dictId)
     form.value = res.data
   })
-
 }
 /** 提交按钮 */
 const submitForm = () => {
   dictFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateType(form.value) : await addType(form.value)
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -241,26 +239,30 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: DictTypeVO) => {
-  const dictIds = row?.id || ids.value
+  const dictIds = row ? row.id : ids.value
   await proxy?.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？')
   await delType(dictIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/dict/type/export", {
-    ...queryParams.value
-  }, `dict_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/dict/type/export',
+    {
+      ...queryParams.value,
+    },
+    `dict_${new Date().getTime()}.xlsx`
+  )
 }
 /** 刷新缓存按钮操作 */
 const handleRefreshCache = async () => {
   await refreshCache()
-  proxy?.$modal.msgSuccess("刷新成功")
+  proxy?.$modal.msgSuccess('刷新成功')
   useDictStore().cleanDict()
 }
 
-onMounted(()=>{
+onMounted(() => {
   getList()
 })
 </script>

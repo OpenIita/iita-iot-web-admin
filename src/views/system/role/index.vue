@@ -298,7 +298,7 @@ const resetQuery = () => {
 }
 /**删除按钮操作 */
 const handleDelete = async (row?: RoleVO) => {
-  const roleids = row?.id || ids.value
+  const roleids = row ? [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除角色编号为' + roleids + '数据项目')
   await delRole(roleids)
   getList()

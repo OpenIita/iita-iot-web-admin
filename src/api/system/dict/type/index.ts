@@ -41,13 +41,11 @@ export function updateType(data: DictTypeForm) {
 }
 
 // 删除字典类型
-export function delType(dictId: string | number | Array<string | number>) {
+export function delType(id: string | number | Array<string | number>) {
   return request({
-    url: '/system/dict/type',
+    url: '/system/dict/type/delete',
     method: 'post',
-    data: {
-      dictId,
-    },
+    data: id,
   })
 }
 

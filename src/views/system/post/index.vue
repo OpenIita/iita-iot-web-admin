@@ -221,7 +221,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: PostVO) => {
-  const postIds = row?.id || ids.value
+  const postIds = row ? [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
   await delPost(postIds)
   getList()
