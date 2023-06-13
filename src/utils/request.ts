@@ -55,7 +55,7 @@ service.interceptors.request.use(
     } else {
       config.data = {
         requestId: reqeuestId,
-        data: typeof(config.data) == 'undefined' ? {} : config.data,
+        data: typeof config.data == 'undefined' ? {} : config.data,
       }
     }
 

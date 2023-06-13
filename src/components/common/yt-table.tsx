@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
@@ -123,7 +122,7 @@ export default defineComponent({
       )
     }
     const pageObj = reactive({
-      total: 10 || 0,
+      total: 0,
       queryParams: {
         pageNum: 1,
         pageSize: 10,

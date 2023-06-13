@@ -1,12 +1,24 @@
 <template>
   <div>
-    <yt-crud ref="crudRef" :data="data" :column="column"></yt-crud>
+    <yt-crud
+      ref="crudRef"
+      :data="data"
+      :column="column"
+      :loading="loading"
+      :tableProps="{
+        pageHide: false,
+      }"
+      @delFun="onDelete"
+      @saveFun="onSave"
+    ></yt-crud>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
+import { deleteCategories, getCategoriesList, saveCategories } from '../api/categories.api'
+import { ICategoriesVO } from '../api/categories.api'
 
 const column: IColumn[] = [{
   label: 'id',
@@ -23,53 +35,32 @@ const column: IColumn[] = [{
   formHide: true,
 }]
 
-const data = ref([
-  {
-    id: 'switch',
-    name: '开关',
-    createAt: 1647599367057
-  },
-  {
-    id: 'sensor',
-    name: '传感器',
-    createAt: 1649743382683
-  },
-  {
-    id: 'meter',
-    name: '表计',
-    createAt: 1654237582120
-  },
-  {
-    id: 'light',
-    name: '灯',
-    createAt: 1650174762755
-  },
-  {
-    id: 'gateway',
-    name: '网关',
-    createAt: 1646637047902
-  },
-  {
-    id: 'fan',
-    name: '风扇',
-    createAt: 1646630215889
-  },
-  {
-    id: 'door',
-    name: '门磁',
-    createAt: 1650173898298
-  },
-  {
-    id: 'SmartPlug',
-    name: '智能插座',
-    createAt: 1645409421118
-  },
-  {
-    id: 'T100',
-    name: 'T100',
-    createAt: 1681807566413
-  }
-])
+const data = ref<ICategoriesVO[]>([])
+const loading = ref(false)
+// 保存数据
+const onSave = async ({type, data, cancel}: any) => {
+  loading.value = true
+  await saveCategories(toRaw(data))
+  loading.value = false
+  cancel()
+  getData()
+}
+// 删除
+const onDelete = async (row: any) => {
+  loading.value = true
+  await deleteCategories(row.id)
+  ElMessage.success('删除成功!')
+  loading.value = false
+  getData()
+}
+// 获取数据
+const getData = async () => {
+  loading.value = true
+  const res = await getCategoriesList()
+  data.value = res?.data?.rows || []
+  loading.value = false
+}
+getData()
 </script>
 
 <!-- <style lang="scss" scoped>

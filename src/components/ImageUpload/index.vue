@@ -40,11 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import { getToken } from "@/utils/auth"
-import { listByIds, delOss } from "@/api/system/oss"
-import { ComponentInternalInstance, PropType } from "vue"
-import { OssVO } from "@/api/system/oss/types"
-import { ElUpload, UploadFile } from "element-plus"
+import { getToken } from '@/utils/auth'
+import { listByIds, delOss } from '@/api/system/oss'
+import { ComponentInternalInstance, PropType } from 'vue'
+import { OssVO } from '@/api/system/oss/types'
+import { ElUpload, UploadFile } from 'element-plus'
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -61,7 +61,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array as PropType<string[]>,
-    default: () => ["png", "jpg", "jpeg"],
+    default: () => ['png', 'jpg', 'jpeg'],
   },
   // 是否显示提示
   isShowTip: {
@@ -74,12 +74,12 @@ const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const emit = defineEmits(['update:modelValue'])
 const number = ref(0)
 const uploadList = ref<any[]>([])
-const dialogImageUrl = ref("")
+const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadImgUrl = ref(baseUrl + "/resource/oss/upload") // 上传的图片服务器地址
-const headers = ref({ Authorization: "Bearer " + getToken() })
+const uploadImgUrl = ref(baseUrl + '/resource/oss/upload') // 上传的图片服务器地址
+const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
 const showTip = computed(
@@ -102,7 +102,7 @@ watch(() => props.modelValue, async val => {
     fileList.value = list.map(item => {
       // 字符串回显处理 如果此处存的是url可直接回显 如果存的是id需要调用接口查出来
       let itemData
-      if (typeof item === "string") {
+      if (typeof item === 'string') {
         itemData = { name: item, url: item }
       } else {
         // 此处name使用ossId 防止删除出现重名
@@ -120,9 +120,9 @@ watch(() => props.modelValue, async val => {
 const handleBeforeUpload = (file: any) => {
   let isImg = false
   if (props.fileType.length) {
-    let fileExtension = ""
-    if (file.name.lastIndexOf(".") > -1) {
-      fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1)
+    let fileExtension = ''
+    if (file.name.lastIndexOf('.') > -1) {
+      fileExtension = file.name.slice(file.name.lastIndexOf('.') + 1)
     }
     isImg = props.fileType.some((type) => {
       if (file.type.indexOf(type) > -1) return true
@@ -130,11 +130,11 @@ const handleBeforeUpload = (file: any) => {
       return false
     })
   } else {
-    isImg = file.type.indexOf("image") > -1
+    isImg = file.type.indexOf('image') > -1
   }
   if (!isImg) {
     proxy?.$modal.msgError(
-      `文件格式不正确, 请上传${props.fileType.join("/")}图片格式文件!`
+      `文件格式不正确, 请上传${props.fileType.join('/')}图片格式文件!`
     )
     return false
   }
@@ -145,7 +145,7 @@ const handleBeforeUpload = (file: any) => {
       return false
     }
   }
-  proxy?.$modal.loading("正在上传图片，请稍候...")
+  proxy?.$modal.loading('正在上传图片，请稍候...')
   number.value++
 }
 
@@ -175,7 +175,7 @@ const handleDelete = (file: UploadFile): boolean => {
     let ossId = fileList.value[findex].ossId
     delOss(ossId)
     fileList.value.splice(findex, 1)
-    emit("update:modelValue", listToString(fileList.value))
+    emit('update:modelValue', listToString(fileList.value))
     return false
   }
   return true
@@ -187,14 +187,14 @@ const uploadedSuccessfully = () => {
     fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
     uploadList.value = []
     number.value = 0
-    emit("update:modelValue", listToString(fileList.value))
+    emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }
 }
 
 // 上传失败
 const handleUploadError = () => {
-  proxy?.$modal.msgError("上传图片失败")
+  proxy?.$modal.msgError('上传图片失败')
   proxy?.$modal.closeLoading()
 }
 
@@ -206,14 +206,14 @@ const handlePictureCardPreview = (file: any) => {
 
 // 对象转成指定字符串分隔
 const listToString = (list: any[], separator?: string) => {
-  let strs = ""
-  separator = separator || ","
+  let strs = ''
+  separator = separator || ','
   for (let i in list) {
-    if (undefined !== list[i].ossId && list[i].url.indexOf("blob:") !== 0) {
+    if (undefined !== list[i].ossId && list[i].url.indexOf('blob:') !== 0) {
       strs += list[i].ossId + separator
     }
   }
-  return strs != "" ? strs.substring(0, strs.length - 1) : ""
+  return strs != '' ? strs.substring(0, strs.length - 1) : ''
 }
 </script>
 
