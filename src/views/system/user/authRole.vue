@@ -58,7 +58,7 @@
 import { RoleVO } from '@/api/system/role/types'
 import { getAuthRole, updateAuthRole } from '@/api/system/user'
 import { UserForm } from '@/api/system/user/types'
-import { ElTable } from "element-plus"
+import { ElTable } from 'element-plus'
 import { ComponentInternalInstance } from 'vue'
 const route = useRoute()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -72,7 +72,7 @@ const roles = ref<RoleVO[]>([])
 const form = ref<Partial<UserForm>>({
   nickName: undefined,
   userName: '',
-  userId: undefined
+  userId: undefined,
 })
 
 const tableRef = ref(ElTable)
@@ -83,7 +83,7 @@ const clickRow = (row: RoleVO) => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: RoleVO[]) => {
-  roleIds.value = selection.map(item => item.id)
+  roleIds.value = selection.map((item) => item.id)
 }
 /** 保存选中的数据编号 */
 const getRowKey = (row: RoleVO): string => {
@@ -91,19 +91,19 @@ const getRowKey = (row: RoleVO): string => {
 }
 /** 关闭按钮 */
 const close = () => {
-  const obj = { path: "/system/user" }
+  const obj = { path: '/system/user' }
   proxy?.$tab.closeOpenPage(obj)
 }
 /** 提交按钮 */
 const submitForm = async () => {
-  const userId = form.value.userId
+  const userId = form.value.id
   const rIds = roleIds.value
   await updateAuthRole({ userId: userId as string, roleIds: rIds })
-  proxy?.$modal.msgSuccess("授权成功")
+  proxy?.$modal.msgSuccess('授权成功')
   close()
 }
 
-const getList = async() => {
+const getList = async () => {
   const userId = route.params && route.params.userId
   if (userId) {
     loading.value = true
@@ -112,7 +112,7 @@ const getList = async() => {
     Object.assign(roles.value, res.data.roles)
     total.value = roles.value.length
     await nextTick(() => {
-      roles.value.forEach(row => {
+      roles.value.forEach((row) => {
         if (row?.flag) {
           tableRef.value.toggleRowSelection(row)
         }

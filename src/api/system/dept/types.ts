@@ -33,7 +33,7 @@ export interface DeptForm {
   parentName?: string
   parentId?: number | string
   children?: DeptForm[]
-  deptId?: number | string
+  id?: number | string
   deptName?: string
   orderNum?: number
   leader?: string

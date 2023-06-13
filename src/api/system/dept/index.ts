@@ -49,7 +49,7 @@ export const addDept = (data: DeptForm) => {
 // 修改部门
 export const updateDept = (data: DeptForm) => {
   return request({
-    url: '/system/dept',
+    url: '/system/dept/edit',
     method: 'post',
     data,
   })

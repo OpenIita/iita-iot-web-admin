@@ -35,7 +35,7 @@
       <el-table
         v-loading="loading"
         :data="deptList"
-        row-key="deptId"
+        row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         ref="deptTableRef"
         :default-expand-all="isExpandAll"
@@ -76,8 +76,8 @@
               <el-tree-select
                 v-model="form.parentId"
                 :data="deptOptions"
-                :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
-                value-key="deptId"
+                :props="{ value: 'id', label: 'deptName', children: 'children' }"
+                value-key="id"
                 placeholder="选择上级部门"
                 check-strictly
               />
@@ -134,7 +134,7 @@ import { ComponentInternalInstance } from 'vue'
 import { DeptForm, DeptQuery, DeptVO } from '@/api/system/dept/types'
 
 interface DeptOptionsType {
-  deptId: number | string
+  id: number | string
   deptName: string
   children: DeptOptionsType[]
 }
@@ -158,7 +158,7 @@ const queryFormRef = ref(ElForm)
 const deptFormRef = ref(ElForm)
 
 const initFormData: DeptForm = {
-  deptId: undefined,
+  id: undefined,
   parentId: undefined,
   deptName: undefined,
   orderNum: 0,
@@ -190,7 +190,7 @@ const { queryParams, form, rules } = toRefs<PageData<DeptForm, DeptQuery>>(data)
 const getList = async () => {
   loading.value = true
   const res = await listDept(queryParams.value)
-  const data = proxy?.handleTree<DeptVO>(res.data, 'deptId')
+  const data = proxy?.handleTree<DeptVO>(res.data, 'id')
   if (data) {
     deptList.value = data
   }
@@ -219,7 +219,7 @@ const resetQuery = () => {
 /** 新增按钮操作 */
 const handleAdd = (row?: DeptVO) => {
   listDept().then((res) => {
-    const data = proxy?.handleTree<DeptOptionsType>(res.data, 'deptId')
+    const data = proxy?.handleTree<DeptOptionsType>(res.data, 'id')
     if (data) {
       deptOptions.value = data
       dialog.visible = true
@@ -255,11 +255,11 @@ const handleUpdate = async (row: DeptVO) => {
     reset()
     form.value = res.data
     const response = await listDeptExcludeChild(row.id)
-    const data = proxy?.handleTree<DeptOptionsType>(response.data, 'deptId')
+    const data = proxy?.handleTree<DeptOptionsType>(response.data, 'id')
     if (data) {
       deptOptions.value = data
       if (data.length === 0) {
-        const noResultsOptions: DeptOptionsType = { deptId: res.data.parentId, deptName: res.data.parentName, children: [] }
+        const noResultsOptions: DeptOptionsType = { id: res.data.parentId, deptName: res.data.parentName, children: [] }
         deptOptions.value.push(noResultsOptions)
       }
     }
@@ -269,7 +269,7 @@ const handleUpdate = async (row: DeptVO) => {
 const submitForm = () => {
   deptFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.deptId ? await updateDept(form.value) : await addDept(form.value)
+      form.value.id ? await updateDept(form.value) : await addDept(form.value)
       proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
