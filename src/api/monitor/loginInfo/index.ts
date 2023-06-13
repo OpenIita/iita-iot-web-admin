@@ -13,11 +13,9 @@ export function list(query: LoginInfoQuery): AxiosPromise<LoginInfoVO[]> {
 // 删除登录日志
 export function delLoginInfo(infoId: string | number | Array<string | number>) {
   return request({
-    url: '/monitor/logininfor',
+    url: '/monitor/logininfor/delete',
     method: 'post',
-    data: {
-      infoId,
-    },
+    data: infoId,
   })
 }
 
