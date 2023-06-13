@@ -20,6 +20,7 @@ export default defineComponent({
   },
   emtis: ['openDialog', 'onSuccess'],
   setup(props, { emit, slots, expose }) {
+    console.log('slots', slots.customFormItem)
     const columns = ref<IColumn[]>([])
     watch(
       () => props.column,
@@ -124,6 +125,7 @@ export default defineComponent({
         rules[item.key] = item.rules
       }
     })
+
     return () => (
       <ElDialog
         ref={diglogRef}
@@ -146,7 +148,7 @@ export default defineComponent({
                       watch(
                         () => formObj.data[m.key],
                         (newV) => {
-                          ;(m as any).formWatch({
+                          m.formWatch({
                             col: m,
                             column: columns.value,
                             data: formObj.data,
@@ -198,7 +200,6 @@ export default defineComponent({
             </div>
           ),
         }}
-        {/* */}
       </ElDialog>
     )
   },

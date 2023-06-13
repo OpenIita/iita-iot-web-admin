@@ -78,7 +78,17 @@ let formSlots = ref<string[]>([])
 let formItemSlots = ref<string[]>([])
 
 let searchSlots = ref<string[]>([])
-
+watch(() => props.column, (newV) => {
+  if (newV?.length > 0) {
+    tableSlots.value = newV.filter(f => f.slot).map(m => m.key)
+    formSlots.value = newV.filter(f => f.formSlot).map(m => m.key + 'Form')
+    formItemSlots.value = newV.filter(f => f.formItemSlot).map(m => m.key + 'FormItem')
+    searchSlots.value = newV.filter(f => f.searchSlot).map(m => m.key + 'Search')
+  }
+}, {
+  immediate: true,
+  deep: true,
+})
 const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'update:page'])
 const ytTableRef = ref()
 const getTableRef = () => {
