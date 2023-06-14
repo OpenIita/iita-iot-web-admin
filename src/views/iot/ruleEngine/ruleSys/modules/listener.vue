@@ -23,7 +23,7 @@
           </template>
           <div class="condition-box" v-if="data.id">
             <div class="main">
-              <div class="title">条件筛选</div>
+              <div class="title">条件</div>
               <div class="main-box">
                 <div class="box" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
                   <div class="item">
@@ -38,17 +38,17 @@
                       <el-col :span="15" v-if="!cond?.identifier?.endsWith(':*')">
                         <el-row class="param-item" v-for="(param, paramIndex) in cond.parameters" :key="param.identifier">
                           <el-col :span="10" v-if="cond.identifier == 'report'">
-                            <el-select size="mini" v-model="param.identifier" style="width: 100%;">
+                            <el-select v-model="param.identifier" style="width: 100%;">
                               <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
                             </el-select>
                           </el-col>
                           <el-col :span="6">
-                            <el-select size="mini" v-model="param.comparator">
+                            <el-select v-model="param.comparator">
                               <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
                             </el-select>
                           </el-col>
                           <el-col :span="5">
-                            <el-input size="mini" v-model="param.value" auto-complete="off"></el-input>
+                            <el-input v-model="param.value" auto-complete="off"></el-input>
                           </el-col>
                           <el-col :span="1">
                             <el-button
@@ -92,9 +92,9 @@ import SelectProduct from '@/components/YtSelect/select-product.vue'
 import SelectDevice from '@/components/YtSelect/select-device.vue'
 
 const props = defineProps({
-  row: propTypes.object.def({}),
+  listeners: propTypes.object.def({}),
 })
-const arr = []
+const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
@@ -170,7 +170,7 @@ const addParmeter = (cond: any) => {
 const removeParmeter = (index: number, cond: any) => {
   cond.parameters.splice(index, 1)
 }
-const data = ref(toRaw(props.row))
+const data = ref(toRaw(props.listeners))
 data.value.model = {
   properties: [
     {

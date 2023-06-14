@@ -46,14 +46,14 @@ const column = ref<IColumn[]>([
 ])
 const data = ref([
   {
-    "id": "M1",
-    "model": null,
-    "name": "型号1",
-    "productKey": "AWcJnf7ymGSkaz5M",
-    "type": "LuaScript",
-    "script": "\nfunction decode(msg)\n   return {\n        ['identifier'] = 'report',\n        ['mid'] = '1',\n        ['type'] = 'property',\n        ['data'] ={\n            ['power']=string.sub(msg.data,3,3)\n        }\n    }\nend\n\nfunction encode(service)\n    return {\n\t['mid'] = 1,\n\t['model'] = 'M1',\n\t['mac'] = service.deviceName,\n\t['data'] = 'BB2'\n  }\nend\n",
-    "state": "publish",
-    "modifyAt": 1659872084000
+    'id': 'M1',
+    'model': null,
+    'name': '型号1',
+    'productKey': 'AWcJnf7ymGSkaz5M',
+    'type': 'LuaScript',
+    'script': "\nfunction decode(msg)\n   return {\n        ['identifier'] = 'report',\n        ['mid'] = '1',\n        ['type'] = 'property',\n        ['data'] ={\n            ['power']=string.sub(msg.data,3,3)\n        }\n    }\nend\n\nfunction encode(service)\n    return {\n\t['mid'] = 1,\n\t['model'] = 'M1',\n\t['mac'] = service.deviceName,\n\t['data'] = 'BB2'\n  }\nend\n",
+    'state': 'publish',
+    'modifyAt': 1659872084000
   }
 ].map((m: any) => ({
   ...m,

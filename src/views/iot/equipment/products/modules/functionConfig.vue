@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ 'id' + id }}
     <yt-table-fun @handle-add="handleAdd">
       <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" @handle-update="handleUpdate">
         <template #type="{ row }">
@@ -10,15 +11,21 @@
         </template>
       </yt-table>
     </yt-table-fun>
-    <function-detail ref="functionDetailRef"></function-detail>
+    <function-detail ref="functionDetailRef" :id="id" :model="model"></function-detail>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
+import { propTypes } from '@/utils/propTypes'
 
 import FunctionDetail from './modeuls/functionDetail.vue'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
+
+const props = defineProps({
+  id: propTypes.string.def(''),
+  model: propTypes.object.def({}),
+})
 
 // 获取数据
 const getInfo = (id: string) => {
@@ -42,7 +49,7 @@ const handleUpdate = (row: any) => {
     : []
   let prop = tmpModel.raw
   const props: any = {}
-  if (prop.dataType.type == "enum") {
+  if (prop.dataType.type == 'enum') {
     let enumSpecs = []
     for (var p in prop.dataType.specs) {
       enumSpecs.push({
@@ -51,10 +58,10 @@ const handleUpdate = (row: any) => {
       })
     }
     props.enumItems = enumSpecs
-  } else if (prop.dataType.type == "bool") {
+  } else if (prop.dataType.type == 'bool') {
     props.boolItem = {
-      _true: prop.dataType.specs["0"],
-      _false: prop.dataType.specs["1"],
+      _true: prop.dataType.specs['0'],
+      _false: prop.dataType.specs['1'],
     }
   }
   functionDetailRef.value.openDialog(toRaw(row), props)
@@ -83,49 +90,9 @@ const column = ref<IColumn[]>([
     slot: true,
   }
 ])
-const data = ref(([
-  {
-    "identifier": "powerstate",
-    "type": 'property',
-    "dataType": {
-      "type": "enum",
-      "specs": {
-        "0": "关",
-        "1": "开"
-      }
-    },
-    "name": "开关",
-    "accessMode": "rw"
-  },
-  {
-    "identifier": "brightness",
-    "type": 'property',
-    "dataType": {
-      "type": "int32",
-      "specs": {
-        "min": "1",
-        "max": "100"
-      }
-    },
-    "name": "亮度",
-    "accessMode": "rw"
-  }
-] as any).map((m: any) => ({
-  ...m,
-  raw: m,
-  model: m.model || {
-    properties: [],
-    events: [],
-    services: [],
-  }
-})))
-const options = reactive({
-  ref: 'crudRef',
-  data,
-  column,
-  tableProps: {
-    selection: false,
-  }
+const data = ref(props.services)
+watch(() => props.services, (newV) => {
+  data.value = newV || []
 })
 
 defineExpose({

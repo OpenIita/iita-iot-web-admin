@@ -34,7 +34,6 @@ import { getConvertorsList, IConvertorsVO, saveConvertors, deleteConvertors } fr
 
 // 转换脚本
 const conversionScriptRef = ref()
-// TODO: 这里的接口还没调
 const handleConversionScript = (row: any) => {
   conversionScriptRef.value.openDialog(row)
 }
@@ -74,7 +73,7 @@ const getData = () => {
     ...state.page,
     ...state.query,
   }).then(res => {
-    data.value = res.data.rows
+    data.value = res.data.rows || []
     state.total = res.data.total
   }).finally(() => {
     state.loading = false

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogShow" width="950px" :title="state.modelForm.id ? '编辑' : '新增' + '功能'">
+  <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="state.modelForm.id ? '编辑' : '新增' + '功能'">
     <el-form class="model-form" label-width="120px" :model="state.modelForm" ref="state.modelForm">
       <el-form-item label="功能类型">
         <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="mini">
@@ -56,10 +56,15 @@
 </template>
 <script lang="ts" setup>
 import { ParseProperty } from '@/views/iot/equipment/products/util'
+import { saveObjectModel } from '../../../api/products.api'
+import { propTypes } from '@/utils/propTypes'
 
 import PropertyModel from '../components/PropertyModel.vue'
 import ModelParams from '../components/ModelParams.vue'
-
+const props = defineProps({
+  id: propTypes.string.def(''),
+  model: propTypes.object.def({}),
+})
 const state = reactive({
   isAdd: true,
   data: {} as any,
@@ -78,6 +83,11 @@ const state = reactive({
     ],
   }
 })
+
+watch(() => props.model, (newV) => {
+  state.model = newV
+})
+
 const openDialog = (row?: any, props?: any) => {
   if (row) {
     state.modelForm = row
@@ -114,25 +124,24 @@ const cancelEdit = () => {
   state.dialogShow = false
 }
 const isSelectType = (type: string | number) => {
-  console.log(state.modelForm)
   return type == state.modelForm.type
 }
 const newProperty = () => {
-  return ParseProperty(state.modelForm.raw, state.enumItems, this.boolItem);
+  return ParseProperty(state.modelForm.raw, state.enumItems, state.boolItem)
 }
+const emits =
 const submitThingModelChange = () => {
-  cancelEdit()
-  // ThingModelSave({
-  //   productKey: product.id,
-  //   model: JSON.stringify(state.model),
-  // }).then(() => {
-  //   this.getThingModel()
-  //   this.formVisible = false
-  // })
+  saveObjectModel({
+    productKey: props.id,
+    model: JSON.stringify(state.model),
+  }).then(() => {
+    state.dialogShow = false
+    cancelEdit()
+  })
 }
 const saveThingModel = () => {
   if (state.isAdd) {
-    if (state.modelForm.type == "property") {
+    if (state.modelForm.type == 'property') {
       //删除旧的
       const idx = state.model.properties.findIndex(
         (p: any) => p.identifier == state.modelForm.raw.identifier
@@ -142,7 +151,7 @@ const saveThingModel = () => {
       }
 
       state.model.properties.push(newProperty())
-    } else if (state.modelForm.type == "service") {
+    } else if (state.modelForm.type == 'service') {
       //删除旧的
       const idx = state.model.services.findIndex(
         (p: any) => p.identifier == state.modelForm.raw.identifier
@@ -157,7 +166,7 @@ const saveThingModel = () => {
         inputData: state.modelForm.raw.inputData,
         outputData: state.modelForm.raw.outputData,
       })
-    } else if (state.modelForm.type == "event") {
+    } else if (state.modelForm.type == 'event') {
       //删除旧的
       const idx = state.model.events.findIndex(
         (p: any) => p.identifier == state.modelForm.raw.identifier
@@ -199,7 +208,6 @@ const saveThingModel = () => {
       })
     }
   }
-
   submitThingModelChange()
 }
 

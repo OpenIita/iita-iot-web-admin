@@ -3,36 +3,42 @@
   <vue-json-editor v-model:json="model" :showBtns="false" :mode="'code'" lang="zh" height="400" />
 </template>
 <script lang="ts" setup>
+import { propTypes } from '@/utils/propTypes'
 import vueJsonEditor from 'vue3-ts-jsoneditor'
 
-const model = ref({
-  "properties": [
+const props = defineProps({
+  model: propTypes.object.def({}),
+})
+
+const data = {
+  'properties': [
     {
-      "identifier": "powerstate",
-      "dataType": {
-        "type": "enum",
-        "specs": {
-          "0": "关",
-          "1": "开"
+      'identifier': 'powerstate',
+      'dataType': {
+        'type': 'enum',
+        'specs': {
+          '0': '关',
+          '1': '开'
         }
       },
-      "name": "开关",
-      "accessMode": "rw"
+      'name': '开关',
+      'accessMode': 'rw'
     },
     {
-      "identifier": "brightness",
-      "dataType": {
-        "type": "int32",
-        "specs": {
-          "min": "1",
-          "max": "100"
+      'identifier': 'brightness',
+      'dataType': {
+        'type': 'int32',
+        'specs': {
+          'min': '1',
+          'max': '100'
         }
       },
-      "name": "亮度",
-      "accessMode": "rw"
+      'name': '亮度',
+      'accessMode': 'rw'
     }
   ],
-  "services": [],
-  "events": []
-})
+  'services': [],
+  'events': []
+}
+const model = ref(props.model)
 </script>

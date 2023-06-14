@@ -5,7 +5,7 @@ enum Api {
   list = '/product/category/list',
   del = '/product/category/delete',
   save = '/product/category/edit',
-  all = '/product/category/getAll',
+  all = '/product/category/getList',
 }
 export interface ICategoriesVO {
   createAt: number
@@ -30,7 +30,7 @@ export const getCategoriesList = (data?: ICategoriesVO): AxiosPromise<any> => {
 export const getCategoriesAll = (): AxiosPromise<ICategoriesVO[]> => {
   return request({
     url: Api.all,
-    method: 'post'
+    method: 'post',
   })
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <yt-crud 
-    ref="crudRef"
+    <yt-crud
+      ref="crudRef"
       :data="data"
       :column="column"
       v-model:page="state.page"
@@ -16,14 +16,13 @@
         menuWidth: 300,
       }"
       @onLoad="getData"
-      @saveFun="onSave">
+      @saveFun="onSave"
+    >
       <template #menuSlot="scope">
         <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)">物模型</el-button>
       </template>
     </yt-crud>
-    <el-dialog title="产品物模型" width="70%" v-model="objectModel.visible" append-to-body destroy-on-close top="20px">
-      <object-model ref="objectModelRef"></object-model>
-    </el-dialog>
+    <object-model ref="objectModelRef"></object-model>
   </div>
 </template>
 <script lang="ts" setup>
@@ -31,12 +30,12 @@ import { IColumn } from '@/components/common/types/tableCommon'
 
 import ObjectModel from './modules/objectModel.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
-import { getProductsList, saveProducts,IProductsVO } from '../api/products.api'
-import { getCategoriesAll,ICategoriesVO } from '../api/categories.api'
+import { getProductsList, saveProducts, IProductsVO } from '../api/products.api'
+import { getCategoriesAll, ICategoriesVO } from '../api/categories.api'
 
 
 const cateOptions = ref<ICategoriesVO[]>([])
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: '产品Key',
   key: 'id',
   search: true,
@@ -102,7 +101,7 @@ const column: IColumn[] = [{
   key: 'createAt',
   type: 'date',
   formHide: true,
-}]
+}])
 const data = ref<IProductsVO[]>([])
 const state = reactive({
   total: 0,
@@ -119,12 +118,24 @@ const getData = () => {
     ...state.page,
     ...state.query,
   }).then(res => {
-    data.value = res.data.rows
+    data.value = res.data.rows || []
     state.total = res.data.total
   }).finally(() => {
     state.loading = false
   })
 }
+// 获取字典
+const getDict = () => {
+  getCategoriesAll().then(res => {
+    cateOptions.value = res.data || []
+    column.value.forEach(item => {
+      if (item.key === 'category') {
+        item.componentProps.options = cateOptions.value
+      }
+    })
+  })
+}
+getDict()
 // 保存数据
 const onSave = ({type, data, cancel}: any) => {
   state.loading = true
@@ -138,17 +149,10 @@ const onSave = ({type, data, cancel}: any) => {
 
 }
 
-const objectModel = reactive({
-  visible: false,
-})
 const objectModelRef = ref()
 const openObjectModel = (row: any) => {
-  objectModel.visible = true
-  nextTick(() => {
-    objectModelRef.value.getInfo(row.id)
-  })
+  objectModelRef.value.getInfo(row.id)
 }
-
 </script>
 
 <!-- <style lang="scss" scoped>

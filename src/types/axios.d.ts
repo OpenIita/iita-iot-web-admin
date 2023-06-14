@@ -4,7 +4,8 @@ declare module 'axios' {
   export interface AxiosResponse<T = any> {
     code: number
     msg: string
-    rows: T
+    rows?: T
+    data?: T
     total: number
   }
 }

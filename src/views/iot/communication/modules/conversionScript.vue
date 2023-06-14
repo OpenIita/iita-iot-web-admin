@@ -28,7 +28,7 @@
       脚本语言:
       <el-radio v-model="editScript.typ" label="js"></el-radio>
     </el-row> -->
-    <el-row justify="space-between" class="row-box">
+    <el-row justify="space-between" class="row-box" v-loading="loading">
       <el-col :span="16">
         {{ title }}：
         <div v-if="editScript.typ == 'js'">new (function () {</div>
@@ -58,17 +58,18 @@
       </el-col>
     </el-row>
     <template #footer>
-      <el-button @click="dialogModel = false">关闭</el-button>
-      <el-button @click="dialogModel = false" type="primary">保存</el-button>
+      <el-button :loading="loading" @click="dialogModel = false">关闭</el-button>
+      <el-button :loading="loading" @click="handleSave" type="primary">保存</el-button>
     </template>
   </el-dialog>
 </template>
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
-import codeStr from './code'
+import { getConverterScript, editConverterScript } from '../api/convertors.api'
+import { getComponentDetail, saveComponentScript } from '../api/component.api'
 
 import CodeEditor from '@/components/CodeEditor/index.vue'
-import { id } from 'element-plus/es/locale'
+
 
 const dialogModel = ref(false)
 const props = defineProps({
@@ -81,6 +82,8 @@ const editScript = reactive<any>({
   typ: 'js',
   script: '',
 })
+const data = ref()
+const loading = ref(false)
 const testDataScript = reactive({
   script: '{}',
   testResult: ''
@@ -110,10 +113,20 @@ const execTest = (type?: 'decode' | 'encode') => {
   }
 }
 
-// 打开痰喘
+// 打开弹窗
 const openDialog = (row: any) => {
   dialogModel.value = true
   editScript.id = row.id
+  loading.value = true
+  const getDetailFun = props.type === 'communication' ? getComponentDetail : getConverterScript
+  getDetailFun(row.id).then(res => {
+    if (res.code === 200 && res.data.script) {
+      editScript.script = res.data.script
+      data.value = res.data
+    }
+  }).finally(() => {
+    loading.value = false
+  })
   editScript.script = '' ||
   `this.decode = function (msg) {
     return null
@@ -123,9 +136,23 @@ this.encode = function (service,device) {
 }
   `
   testDataScript.script =
-          localStorage.getItem("testDataScript2_" + row.id) || "{}"
+          localStorage.getItem('testDataScript2_' + row.id) || '{}'
 }
-
+// 保存
+const handleSave = () => {
+  if (!editScript.script) return ElMessage.error('请输入转换脚本!')
+  loading.value = true
+  const editFun = props.type === 'communication' ? saveComponentScript : editConverterScript
+  editFun({
+    ...data.value,
+    ...toRaw(editScript)
+  }).then(() => {
+    ElMessage.success('保存成功')
+    dialogModel.value = false
+  }).finally(() => {
+    loading.value = false
+  })
+}
 defineExpose({
   openDialog,
 })

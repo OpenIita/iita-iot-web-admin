@@ -1,4 +1,4 @@
-// 设备Api
+// 设备消息转换器Api
 import request from '@/utils/request'
 import { AxiosPromise, AxiosResponse } from 'axios'
 
@@ -7,6 +7,8 @@ enum Api {
   del = '/protocol/converter/delete',
   add = '/protocol/converter/add',
   edit = '/protocol/converter/edit',
+  converterScript = '/protocol/getConverterScript',
+  editConverterScript = '/protocol/converterScript/edit',
 }
 export interface IConvertorsVO {
   createAt: number
@@ -31,6 +33,18 @@ interface IPage {
   pageNum?: number
   pageSize?: number
 }
+
+// 脚本详情
+export interface IConverterScript {
+  createAt: number
+  desc: string
+  id: string
+  name: string
+  script: string
+  typ: string
+  uid: string
+}
+
 // 获取列表
 export const getConvertorsList = (data?: IPage): AxiosPromise<AxiosResponse<IConvertorsVO[]>> => {
   return request({
@@ -53,6 +67,24 @@ export const deleteConvertors = (data: (string | number)[]) => {
 export const saveConvertors = (data: IConvertorsVO) => {
   return request({
     url: !data.id ? Api.add : Api.edit,
+    method: 'post',
+    data,
+  })
+}
+
+// 获取转换脚本详情
+export const getConverterScript = (data: string | number): AxiosPromise<IConverterScript> => {
+  return request({
+    url: Api.converterScript,
+    method: 'post',
+    data,
+  })
+}
+
+// 编辑转换脚本
+export const editConverterScript = (data: IConverterScript) => {
+  return request({
+    url: Api.editConverterScript,
     method: 'post',
     data,
   })

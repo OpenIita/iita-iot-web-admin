@@ -16,7 +16,7 @@
                   </el-radio-group>
                 </div>
                 <div class="item" v-if="item.deviceRadio === '指定设备'">
-                  <select-device placeholder="选择设备"></select-device>
+                  <select-device v-model:id="data.id" placeholder="选择设备"></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -24,49 +24,43 @@
               </div>
             </div>
           </template>
-          <div class="condition-box" v-if="data.id">
+          <div class="condition-box" v-if="data.id || item.deviceRadio === '使用当前设备'">
             <div class="main">
-              <div class="title">条件筛选</div>
+              <div class="title">条件</div>
               <div class="main-box">
                 <div class="box" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
                   <div class="item">
                     <el-row style="width: 100%;">
                       <el-col :span="7">
-                        <el-select v-model="cond.identifier" @change="typeChanged">
+                        <el-select v-if="item.deviceRadio !== '使用当前设备'" v-model="cond.identifier" @change="typeChanged">
                           <el-option-group v-for="group in types" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
                         </el-select>
+                        <el-select v-else v-model="cond.type">
+                          <el-option label="设备属性" value="property" key="property"></el-option>
+                          <el-option label="设备标签" value="tag" key="tag"></el-option>
+                        </el-select>
                       </el-col>
-                      <el-col :span="15" v-if="!cond?.identifier?.endsWith(':*')">
-                        <el-row class="param-item" v-for="(param, paramIndex) in cond.parameters" :key="param.identifier">
+                      <el-col :span="5" v-if="item.deviceRadio === '使用当前设备'">
+                        <el-input v-model="cond.identifier" auto-complete="off"></el-input>
+                      </el-col>
+                      <el-col :span="10">
+                        <el-row class="param-item">
                           <el-col :span="10" v-if="cond.identifier == 'report'">
-                            <el-select size="mini" v-model="param.identifier" style="width: 100%;">
+                            <el-select v-model="cond.identifier" style="width: 100%;">
                               <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
                             </el-select>
                           </el-col>
-                          <el-col :span="6">
-                            <el-select size="mini" v-model="param.comparator">
+                          <el-col :span="8">
+                            <el-select v-model="cond.comparator">
                               <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
                             </el-select>
                           </el-col>
-                          <el-col :span="5">
-                            <el-input size="mini" v-model="param.value" auto-complete="off"></el-input>
-                          </el-col>
-                          <el-col :span="1">
-                            <el-button
-                              style="margin-left: 6px;"
-                              type="danger"
-                              icon="Delete"
-                              size="small"
-                              circle
-                              @click="removeParmeter(paramIndex, cond)"
-                            />
+                          <el-col :span="10">
+                            <el-input v-model="cond.value" auto-complete="off"></el-input>
                           </el-col>
                         </el-row>
-                      </el-col>
-                      <el-col :span="2" v-if="!cond?.identifier?.endsWith(':*') && cond.identifier">
-                        <el-button type="danger" size="small" icon="Plus" circle @click="addParmeter(cond)" />
                       </el-col>
                     </el-row>
                   </div>
@@ -97,7 +91,7 @@ import SelectDevice from '@/components/YtSelect/select-device.vue'
 const props = defineProps({
   row: propTypes.object.def({}),
 })
-const arr = []
+const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
@@ -255,41 +249,22 @@ data.value.model = {
   'events': []
 }
 const types = ref([{
-  name: '通配',
+  name: '属性',
+  items: [
+    ...(data.value?.model?.properties || []).map((m: any) => ({
+      type: 'property',
+      identifier: m.identifier,
+      name: m.name,
+    })),
+  ],
+}, {
+  name: '状态',
   items: [
     {
       type: 'state',
-      identifier: 'state:*',
-      name: '设备上下线',
+      identifier: 'online',
+      name: '是否在线',
     },
-    {
-      type: 'event',
-      identifier: 'event:*',
-      name: '任意事件上报',
-    },
-    {
-      type: 'service_reply',
-      identifier: 'service_reply:*',
-      name: '任意服务回复',
-    },
-  ],
-}, {
-  name: '精确匹配',
-  items: [{
-    type: 'property',
-    identifier: 'report',
-    name: '属性上报',
-  },
-  ...(data.value?.model?.events || []).map((m: any) => ({
-    type: 'event',
-    identifier: m.identifier,
-    name: m.name,
-  })),
-  ...(data.value?.model?.services || []).map((m: any) => ({
-    type: 'service',
-    identifier: m.identifier,
-    name: m.name,
-  }))
   ],
 }])
 const typeChanged = () => {
@@ -344,12 +319,10 @@ onUnmounted(() => {
         display: flex;
         align-items: center;
         .item {
-          border: 2px dashed rgb(217, 217, 217);
-          padding: 6px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 10px;
+          margin-top: 0px;
           flex: 1;
           .param-item {
             margin-bottom: 8px;

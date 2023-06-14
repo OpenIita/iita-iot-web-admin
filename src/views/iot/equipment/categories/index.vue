@@ -13,6 +13,7 @@
         viewBtn: false,
         menuSlot: true,
         menuWidth: 300,
+
       }"
       @onLoad="getData"
       @delFun="onDelete"
@@ -72,12 +73,12 @@ const onDelete = async (row: any) => {
 }
 // 获取数据
 const getData = async () => {
-   state.loading = true
+  state.loading = true
   getCategoriesList().then(res => {
     data.value = res.data.rows
     state.total = res.data.total
   }).finally(() => {
-     state.loading = false
+    state.loading = false
   })
 }
 // getData()

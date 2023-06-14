@@ -37,7 +37,6 @@ export default defineComponent({
   emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page'],
   setup(props, { emit, slots, expose }) {
     const tableRef = ref()
-    console.log('props', props)
     // 渲染菜单
     const renderMenus = (scope: { row: any }) => {
       return (

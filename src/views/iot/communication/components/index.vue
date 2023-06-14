@@ -3,7 +3,7 @@
     <yt-table-fun @handle-add="handleAdd()">
       <el-row :gutter="40">
         <el-col :span="6" :sm="6" :xs="24" v-for="com in data" :key="com.id" style="margin: 10px 0">
-          <el-card>
+          <el-card v-loading="loading">
             <template #header>
               <div class="clearfix">
                 <b>{{ com.name }}</b>
@@ -27,7 +27,15 @@
               }}</el-descriptions-item>
               <el-descriptions-item label="jar包" :labelStyle="{ fontWeight: 'bold', width: '50px' }">{{ com.jarFile }}</el-descriptions-item>
               <el-descriptions-item label="状态">
-                <el-switch v-model="com.flag" active-text="运行中" inactive-text="已停止" @change="stateChange(com)"> </el-switch>
+                <el-switch
+                  v-model="com.state"
+                  active-text="运行中"
+                  inactive-text="已停止"
+                  active-value="running"
+                  inactive-value="stopped"
+                  @change="stateChange(com)"
+                >
+                </el-switch>
               </el-descriptions-item>
               <el-descriptions-item label="操作">
                 <el-button @click="handleEdit(com)" size="mini" icon="Edit" plain></el-button>
@@ -38,7 +46,7 @@
         </el-col>
       </el-row>
     </yt-table-fun>
-    <yt-table-form ref="tableFormRef" :column="column">
+    <yt-table-form ref="tableFormRef" :column="column" @onSuccess="handleSave">
       <template #configForm="scope">
         <el-form
           v-if="scope.row.protocol == 'http'"
@@ -199,13 +207,31 @@
             </div>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="认证端口" prop="authPort">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.authPort" auto-complete="off" placeholder="请输入认证端口"></el-input>
+            <el-input
+              style="width: 250px"
+              size="small"
+              v-model="scope.row.config.authPort"
+              auto-complete="off"
+              placeholder="请输入认证端口"
+            ></el-input>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="地址" prop="broker">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.broker" auto-complete="off" placeholder="请输入broker地址"></el-input>
+            <el-input
+              style="width: 250px"
+              size="small"
+              v-model="scope.row.config.broker"
+              auto-complete="off"
+              placeholder="请输入broker地址"
+            ></el-input>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="clientId" prop="clientId">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.clientId" auto-complete="off" placeholder="请输入clientId"></el-input>
+            <el-input
+              style="width: 250px"
+              size="small"
+              v-model="scope.row.config.clientId"
+              auto-complete="off"
+              placeholder="请输入clientId"
+            ></el-input>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="用户名" prop="username">
             <el-input style="width: 250px" size="small" v-model="scope.row.config.username" auto-complete="off" placeholder="请输入用户名"></el-input>
@@ -222,6 +248,9 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { generateUUID } from '@/utils'
+import { getComponentList, deleteComponent, saveComponent, changeState } from '../api/component.api'
+import type { IComponentVO } from '../api/component.api'
+import { getConvertorsList, IConvertorsVO } from '../api/convertors.api'
 
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTableForm from '@/components/common/yt-table-form'
@@ -245,44 +274,34 @@ const handleDelete = (row: any) => {
 
 // 编辑
 const handleEdit = (row: any) => {
-  tableFormRef.value?.openDialog('update', row)
+  tableFormRef.value?.openDialog('update', {
+    ...toRaw(row),
+    config: JSON.parse(row.config) || {}
+  })
 }
-const stateChange = (status: any) => {
-  console.log(status)
+// 状态更改
+const stateChange = (row: any) => {
+  loading.value = true
+  changeState({
+    id: row.id,
+    state: row.state,
+  }).then(() => {
+    getData()
+  }).finally(() => {
+    loading.value = false
+  })
 }
-const type = [
-  {
-    "id": "62995ba4dbf51a5ec41d5f7b",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "自定义表计协议",
-    "desc": "用于燃气表的协议",
-    "createAt": 1654217636597
-  },
-  {
-    "id": "628ceb14addfdb2a3b4b5727",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "奇特HTTP标准协议",
-    "desc": "奇特HTTP标准协议转换器",
-    "createAt": 1653402388275
-  },
-  {
-    "id": "6260396d67aced2696184053",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "奇特MQTT标准协议",
-    "desc": "奇特MQTT标准协议转换器",
-    "createAt": 1650473325173
-  }
-]
+const type = ref<any[]>([])
 const getTypeName = (id: string) => {
-  return type.find(f => f.id === id)?.name || ''
+  return type.value.find(f => f.id === id)?.name || ''
 }
 // 添加令牌
 const addToken = (config: any) => {
   const randomString = (len: number) => {
     len = len || 32
-    var $chars = "ABCDEFGHJKMNPQRSTWXYZabcdefghijklmnopqrstwxyz1234567890"
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefghijklmnopqrstwxyz1234567890'
     var maxPos = $chars.length
-    var randomStr = ""
+    var randomStr = ''
     for (var i = 0; i < len; i++) {
        randomStr += $chars.charAt(Math.floor(Math.random() * maxPos))
     }
@@ -324,11 +343,16 @@ const column = ref<IColumn[]>([{
       }
     })
     column.value = scope.column
-    console.log(column.value)
   }
 }, {
   label: '转换器',
   key: 'converter',
+  type: 'select',
+  componentProps: {
+    labelAlias: 'name',
+    valueAlias: 'id',
+    options: type.value,
+  },
   formHide: true,
   rules: [
     { required: true, message: '请选择转换器', trigger: 'blur' },
@@ -381,7 +405,7 @@ const column = ref<IColumn[]>([{
       tcp: tcpConfig,
       websocket: websocketConfig,
     }
-    scope.data.config = obj[scope.value] || {}
+    if (!scope.data.config) scope.data.config = obj[scope.value] || {}
   },
   componentProps: {
     defaultValue: 'mqtt',
@@ -413,88 +437,65 @@ const column = ref<IColumn[]>([{
     limit: 1,
   }
 }])
-const data = ref([
-  {
-    "id": "fee0e826-963f-4e53-a2cf-11e3e5f784ea",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "移动Onenet Studio接入",
-    "type": "biz",
-    "protocol": "http",
-    "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
-    "config": "{\"port\":\"8086\"}",
-    "converter": "6260396d67aced2696184053",
-    "state": "stopped",
-    "createAt": 1652238780184
-  },
-  {
-    "id": "eabb131d-8fd1-43a8-88d9-a198abfd3d42",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "MQTT标准协议组件",
-    "type": "device",
-    "protocol": "mqtt",
-    "jarFile": "iot-mqtt-component-0.4.2-SNAPSHOT.jar",
-    "config": "{\"port\":1883,\"ssl\":false,\"type\":\"server\"}",
-    "converter": "6260396d67aced2696184053",
-    "state": "running",
-    "createAt": 1650473458084
-  },
-  {
-    "id": "cd8253c1-b489-434c-845d-d18c7b70dcea",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "电信NB协议接入组件",
-    "type": "device",
-    "protocol": "http",
-    "jarFile": "ctwing-component-0.2.1-SNAPSHOT.jar",
-    "config": "{\"port\":\"8087\"}",
-    "converter": "62995ba4dbf51a5ec41d5f7b",
-    "state": "stopped",
-    "createAt": 1654235056032
-  },
-  {
-    "id": "6c095554-35e7-4e9d-a8d2-bb919e9479f4",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "EMQX标准协议组件",
-    "type": "device",
-    "protocol": "mqtt",
-    "jarFile": "emqx-component-0.2.1-SNAPSHOT.jar",
-    "config": "{\"port\":\"1884\",\"ssl\":false,\"type\":\"client\",\"subscribeTopics\":[\"/sys/+/+/s/#\",\"/sys/client/connected\",\"/sys/client/disconnected\",\"/sys/session/subscribed\",\"/sys/session/unsubscribed\"],\"authPort\":\"8088\",\"broker\":\"127.0.0.1\",\"clientId\":\"test\",\"username\":\"test\",\"password\":\"123\"}",
-    "converter": "6260396d67aced2696184053",
-    "state": "stopped",
-    "createAt": 1653180468724
-  },
-  {
-    "id": "3ababc5e-15e9-45a7-8f38-2a6afd45c780",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "小度音箱接入组件",
-    "type": "biz",
-    "protocol": "http",
-    "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
-    "config": "{\"port\":\"8084\"}",
-    "converter": "",
-    "state": "stopped",
-    "createAt": 1650685502665
-  }
-].map(m => ({
-  ...m,
-  flag: m.state == 'running',
-})))
+const data = ref<IComponentVO[]>([])
 const configRule = reactive({
   httpConfigRule: {
-    port: [{ required: true, message: "请输入端口号", trigger: "blur" }],
+    port: [{ required: true, message: '请输入端口号', trigger: 'blur' }],
   },
   mqttConfigRule: {
-    port: [{ required: true, message: "请输入端口号", trigger: "blur" }],
+    port: [{ required: true, message: '请输入端口号', trigger: 'blur' }],
   },
   tcpConfigRule: {
-    port: [{ required: true, message: "请输入端口号", trigger: "blur" }],
-    host: [{ required: true, message: "请输入端IP", trigger: "blur" }],
+    port: [{ required: true, message: '请输入端口号', trigger: 'blur' }],
+    host: [{ required: true, message: '请输入端IP', trigger: 'blur' }],
   },
   wsConfigRule: {
-    port: [{ required: true, message: "请输入端口号", trigger: "blur" }],
-    ip: [{ required: true, message: "请输入IP", trigger: "blur" }],
-    url: [{ required: true, message: "请输入URL", trigger: "blur" }]
+    port: [{ required: true, message: '请输入端口号', trigger: 'blur' }],
+    ip: [{ required: true, message: '请输入IP', trigger: 'blur' }],
+    url: [{ required: true, message: '请输入URL', trigger: 'blur' }]
   },
 })
+// 保存
+const handleSave = ({type, data, cancel}) => {
+  loading.value = true
+  saveComponent({
+    ...toRaw(data),
+    config: JSON.stringify(data.config),
+  }).then(() => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
+    loading.value = false
+  })
+}
+// 获取数据
+const loading = ref(false)
+const getData = () => {
+  loading.value = true
+  getComponentList().then(res => {
+    data.value = res.data.rows || []
+    console.log(data.value)
+  }).finally(() => {
+    loading.value = false
+  })
+}
+// 获取字典
+const getDict = () => {
+  getConvertorsList({
+    pageNum: 1,
+    pageSize: 10000000,
+  }).then(res => {
+    type.value = res.data.rows || []
+    column.value.forEach(item => {
+      if (item.key === 'converter') {
+        item.componentProps.options = type.value
+      }
+    })
+  })
+}
+getDict()
+getData()
 </script>
 
 <style lang="scss" scoped>
