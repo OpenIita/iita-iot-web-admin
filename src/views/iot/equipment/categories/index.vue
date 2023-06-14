@@ -1,20 +1,24 @@
 <template>
   <div>
-    <!--  -->
     <yt-crud
       ref="crudRef"
       :data="data"
       :column="column"
-      :loading="loading"
-      v-model:page="page"
-      v-model:query="query"
-      :tableProps="{
-        pageHide: true,
+      v-model:page="state.page"
+      v-model:query="state.query"
+      :total="state.total"
+      :loading="state.loading"
+      :tableProps=" {
+        selection: false,
+        viewBtn: false,
+        menuSlot: true,
+        menuWidth: 300,
       }"
       @onLoad="getData"
       @delFun="onDelete"
       @saveFun="onSave"
-    ></yt-crud>
+    >
+    </yt-crud>
   </div>
 </template>
 <script lang="ts" setup>
@@ -41,34 +45,40 @@ const column: IColumn[] = [{
 }]
 
 const data = ref<ICategoriesVO[]>([])
-const loading = ref(false)
-const page = ref({
-  pageNum: 1,
-  pageSize: 1,
+const state = reactive({
+  total: 0,
+  page: {
+    pageSize: 10,
+    pageNum: 1,
+  },
+  query: {},
+  loading: false
 })
-const query = ref({})
 // 保存数据
 const onSave = async ({type, data, cancel}: any) => {
-  loading.value = true
+  state.loading = true
   await saveCategories(toRaw(data))
-  loading.value = false
+  state.loading = false
   cancel()
   getData()
 }
 // 删除
 const onDelete = async (row: any) => {
-  loading.value = true
+  state.loading = true
   await deleteCategories(row.id)
   ElMessage.success('删除成功!')
-  loading.value = false
+  state.loading = false
   getData()
 }
 // 获取数据
 const getData = async () => {
-  loading.value = true
-  const res = await getCategoriesList()
-  data.value = res?.data?.rows || []
-  loading.value = false
+   state.loading = true
+  getCategoriesList().then(res => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  }).finally(() => {
+     state.loading = false
+  })
 }
 // getData()
 </script>
