@@ -5,7 +5,7 @@ enum Api {
   list = '/product/category/list',
   del = '/product/category/delete',
   save = '/product/category/edit',
-  all = '/product/category/getList',
+  all = '/product/category/getAll',
 }
 export interface ICategoriesVO {
   createAt: number
