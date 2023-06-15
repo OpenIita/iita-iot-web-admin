@@ -10,7 +10,8 @@ enum Api {
   saveObjectModel = '/product/thingModel/save',
 }
 export interface IProductsVO {
-  id?: string
+  id?: number
+  productKey: string
   category: string
   createAt: number
   img: string

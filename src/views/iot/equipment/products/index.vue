@@ -37,7 +37,7 @@ import { getCategoriesAll, ICategoriesVO } from '../api/categories.api'
 const cateOptions = ref<ICategoriesVO[]>([])
 const column = ref<IColumn[]>([{
   label: '产品Key',
-  key: 'id',
+  key: 'productKey',
   search: true,
   editDisabled: true,
   rules: [{ required: true, message: '产品Key不能为空' }],

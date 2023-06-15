@@ -129,7 +129,7 @@ const isSelectType = (type: string | number) => {
 const newProperty = () => {
   return ParseProperty(state.modelForm.raw, state.enumItems, state.boolItem)
 }
-const emits =
+// const emits =
 const submitThingModelChange = () => {
   saveObjectModel({
     productKey: props.id,
