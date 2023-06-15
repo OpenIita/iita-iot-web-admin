@@ -85,7 +85,6 @@
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 
-import SelectProduct from '@/components/YtSelect/select-product.vue'
 import SelectDevice from '@/components/YtSelect/select-device.vue'
 
 const props = defineProps({

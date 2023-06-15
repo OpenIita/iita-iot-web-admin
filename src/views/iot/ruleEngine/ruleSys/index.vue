@@ -15,12 +15,14 @@
       <template #customFormItem="{row}">
         <el-tabs v-model="activeName" type="border-card">
           <el-tab-pane label="监听器" :name="1">
-            <listener :row="row.listeners"></listener>
+            <listener :row="row"></listener>
           </el-tab-pane>
           <el-tab-pane label="过滤器" :name="2">
-            <filtera :row="row.filters"></filtera>
+            <filtera :row="row"></filtera>
           </el-tab-pane>
-          <el-tab-pane label="输出" :name="3">输出</el-tab-pane>
+          <el-tab-pane label="输出" :name="3">
+            <Output :row="row" actions="device,http,mqtt,kafka,tcp"></Output>
+          </el-tab-pane>
         </el-tabs>
       </template>
     </yt-crud>
@@ -32,6 +34,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 
 import Listener from './modules/listener.vue'
 import Filtera from './modules/filtera.vue'
+import Output from './modules/output.vue'
 import LogDialog from '../modules/logDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 

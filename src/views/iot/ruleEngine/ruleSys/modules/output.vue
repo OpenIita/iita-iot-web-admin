@@ -6,14 +6,17 @@
           <template #title>
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
-                <el-radio-group style="margin-right: 20px;" model-value="1" class="ml-4">
-                  <el-radio label="1" size="large">设备监听</el-radio>
+                <el-radio-group v-model="item.type" @change="actionTypeChange(item)">
+                  <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio>
+                  <el-radio v-if="actions.indexOf('alarm') >= 0" :label="'alarm'">告警消息 </el-radio>
+                  <el-radio v-if="actions.indexOf('scene') >= 0" :label="'scene'">场景控制 </el-radio>
+                  <el-radio v-if="actions.indexOf('http') >= 0" :label="'http'">http推送 </el-radio>
+                  <el-radio v-if="actions.indexOf('mqtt') >= 0" :label="'mqtt'">mqtt推送 </el-radio>
+                  <el-radio v-if="actions.indexOf('kafka') >= 0" :label="'kafka'">kafka推送 </el-radio>
+                  <el-radio v-if="actions.indexOf('tcp') >= 0" :label="'tcp'">tcp推送 </el-radio>
                 </el-radio-group>
-                <div class="item">
-                  <select-product v-model:id="data.id"></select-product>
-                </div>
-                <div class="item">
-                  <select-device placeholder="默认全部设备" product-id="11111"></select-device>
+                <div class="item" style="width: 240px;margin-left: 15px;">
+                  <select-device v-if="item.type === 'device'" placeholder="选择设备"></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -21,87 +24,49 @@
               </div>
             </div>
           </template>
-          <div class="condition-box" v-if="data.id">
-            <div class="main">
-              <div class="title">条件</div>
-              <div class="main-box">
-                <div class="box" v-for="(cond, condIndex) in item.conditions" :key="condIndex">
-                  <div class="item">
-                    <el-row style="width: 100%;">
-                      <el-col :span="7">
-                        <el-select v-model="cond.identifier" @change="typeChanged">
-                          <el-option-group v-for="group in types" :key="group.name" :label="group.name">
-                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
-                          </el-option-group>
-                        </el-select>
-                      </el-col>
-                      <el-col :span="15" v-if="!cond?.identifier?.endsWith(':*')">
-                        <el-row class="param-item" v-for="(param, paramIndex) in cond.parameters" :key="param.identifier">
-                          <el-col :span="10" v-if="cond.identifier == 'report'">
-                            <el-select v-model="param.identifier" style="width: 100%;">
-                              <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
-                            </el-select>
-                          </el-col>
-                          <el-col :span="6">
-                            <el-select v-model="param.comparator">
-                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
-                            </el-select>
-                          </el-col>
-                          <el-col :span="5">
-                            <el-input v-model="param.value" auto-complete="off"></el-input>
-                          </el-col>
-                          <el-col :span="1">
-                            <el-button
-                              style="margin-left: 6px;"
-                              type="danger"
-                              icon="Delete"
-                              size="small"
-                              circle
-                              @click="removeParmeter(paramIndex, cond)"
-                            />
-                          </el-col>
-                        </el-row>
-                      </el-col>
-                      <el-col :span="2" v-if="!cond?.identifier?.endsWith(':*') && cond.identifier">
-                        <el-button type="danger" size="small" icon="Plus" circle @click="addParmeter(cond)" />
-                      </el-col>
-                    </el-row>
-                  </div>
-                  <el-button
-                    type="danger"
-                    size="small"
-                    icon="Delete"
-                    style="margin-left: 10px;"
-                    @click="handleRemoveCondition(item, condIndex)"
-                  ></el-button>
-                </div>
-              </div>
-            </div>
-            <el-button type="primary" size="small" style="margin-top: 12px;" @click="handleAddCondition(item)">新增条件</el-button>
+          <div class="condition-box" v-if="item.type === 'device'">
+            <DeviceAction :config="item"></DeviceAction>
+          </div>
+          <div class="condition-box" v-if="item.type === 'http'">
+            <HttpAction :config="item"></HttpAction>
+          </div>
+          <div class="condition-box" v-if="item.type === 'mqtt'">
+            <MqttAction :config="item"></MqttAction>
+          </div>
+          <div class="condition-box" v-if="item.type === 'kafka'">
+            <KafkaAction :config="item"></KafkaAction>
+          </div>
+          <div class="condition-box" v-if="item.type === 'tcp'">
+            <TcpAction :config="item"></TcpAction>
           </div>
         </el-collapse-item>
       </el-collapse>
     </div>
-    <el-button style="margin-top: 10px;" @click="handleAdd">新增监听器</el-button>
+    <el-button style="margin-top: 10px;" @click="handleAdd">新增输出</el-button>
   </div>
 </template>
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 
-import SelectProduct from '@/components/YtSelect/select-product.vue'
 import SelectDevice from '@/components/YtSelect/select-device.vue'
+import DeviceAction from '../components/DeviceAction.vue'
+import HttpAction from '../components/HttpAction.vue'
+import MqttAction from '../components/MqttAction.vue'
+import KafkaAction from '../components/KafkaAction.vue'
+import TcpAction from '../components/TcpAction.vue'
 
 const props = defineProps({
   row: propTypes.object.def({}),
+  actions: propTypes.string.def(''),
 })
 const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
-const list = ref<any[]>(props.row.listeners || [])
+const list = ref<any[]>([])
 
-// 新增监听器
+// 新增输出
 const handleAdd = () => {
   list.value.push({
     conditions: [{
@@ -110,67 +75,54 @@ const handleAdd = () => {
   })
 }
 
-// 删除监听器
+// 删除输出
 const removeListener = (index: number) => {
   list.value.splice(index, 1)
 }
-// 条件
-const comparators = ref([
-  {
-    name: '大于',
-    value: '>',
-  },
-  {
-    name: '等于',
-    value: '==',
-  },
-  {
-    name: '小于',
-    value: '<',
-  },
-  {
-    name: '不等于',
-    value: '!=',
-  },
-  {
-    name: '包含',
-    value: 'in',
-  },
-  {
-    name: '不包含',
-    value: 'notin',
-  },
-  {
-    name: '相似',
-    value: 'like',
-  },
-  {
-    name: '任意',
-    value: '*',
-  },
-])
 
-
-// 新增条件
-const handleAddCondition = (item: any) => {
-  if (!item.conditions) item.conditions = []
-  item.conditions.push({})
-}
-// 删除条件
-const handleRemoveCondition = (item: any, index: number) => {
-  item.conditions.splice(index, 1)
-}
-
-// 新增参数
-const addParmeter = (cond: any) => {
-  if (!cond.parameters) cond.parameters = []
-  cond.parameters.push({})
-}
-// 删除参数
-const removeParmeter = (index: number, cond: any) => {
-  cond.parameters.splice(index, 1)
-}
 const data = ref(toRaw(props.row))
+
+const actionTypeChange = (item) => {
+  if (item.type == 'http') {
+    item.services = [
+      {
+        url: '',
+        script: `this.translate=function(msg){
+        }`,
+      },
+    ]
+  } else if (item.type == 'mqtt') {
+    item.services = [
+      {
+        host: '',
+        port: 1883,
+        username: '',
+        password: '',
+        script: `this.translate=function(msg){
+        }`,
+      },
+    ]
+  } else if (item.type == 'kafka') {
+    item.services = [
+      {
+        services: '',
+        ack: '',
+        script: `this.translate=function(msg){
+        }`,
+      },
+    ]
+  } else if (item.type === 'tcp') {
+    item.services = [
+      {
+        host: '',
+        port: 1883,
+        script: `this.translate=function(msg){
+        }`
+      },
+    ]
+  }
+}
+
 data.value.model = {
   properties: [
     {

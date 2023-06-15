@@ -45,84 +45,84 @@ const getStateName = (state: string) => {
 
 const data = ref([
   {
-    "id": "74999c3d-4dfa-400b-a4e7-48c3de07804b",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652147
+    'id': '74999c3d-4dfa-400b-a4e7-48c3de07804b',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652147
   },
   {
-    "id": "7247e6ef-267a-40d1-bb8c-7d42b921c5f4",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652248
+    'id': '7247e6ef-267a-40d1-bb8c-7d42b921c5f4',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652248
   },
   {
-    "id": "d8b625f5-79a5-44e0-b3d8-0e8b1b7909b3",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652586
+    'id': 'd8b625f5-79a5-44e0-b3d8-0e8b1b7909b3',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652586
   },
   {
-    "id": "9c712cec-5ea6-4835-bed6-0190edbb669c",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652552
+    'id': '9c712cec-5ea6-4835-bed6-0190edbb669c',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652552
   },
   {
-    "id": "bc6628b9-a524-4ca2-a517-6527a3c670bf",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652623
+    'id': 'bc6628b9-a524-4ca2-a517-6527a3c670bf',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652623
   },
   {
-    "id": "3385fcbe-9d8c-4030-b2a9-aabd5c7115d6",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652657
+    'id': '3385fcbe-9d8c-4030-b2a9-aabd5c7115d6',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652657
   },
   {
-    "id": "5ede6b6a-0627-4d98-96fd-75763ae45f14",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652596
+    'id': '5ede6b6a-0627-4d98-96fd-75763ae45f14',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652596
   },
   {
-    "id": "ebe49358-f788-4481-8792-e713d153be78",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102652631
+    'id': 'ebe49358-f788-4481-8792-e713d153be78',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102652631
   },
   {
-    "id": "492f3422-46e3-4516-9d35-cbc3fdd841f2",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102662687
+    'id': '492f3422-46e3-4516-9d35-cbc3fdd841f2',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102662687
   },
   {
-    "id": "659fc74a-bd79-4ee4-a676-e675d7ef3606",
-    "ruleId": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "state": "unmatched_filter",
-    "content": null,
-    "success": null,
-    "logAt": 1678102662752
+    'id': '659fc74a-bd79-4ee4-a676-e675d7ef3606',
+    'ruleId': '6b253651-f4f9-44b9-a802-115b668b68e1',
+    'state': 'unmatched_filter',
+    'content': null,
+    'success': null,
+    'logAt': 1678102662752
   }
 ])
 const column = ref<IColumn[]>([{
