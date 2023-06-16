@@ -1,4 +1,4 @@
-// 产品Api
+// 通道配置Api
 import request from '@/utils/request'
 import { AxiosPromise, AxiosResponse } from 'axios'
 
@@ -37,10 +37,11 @@ export const getChannelsList = (): AxiosPromise<AxiosResponse<IChannelsVO[]>> =>
 }
 
 // 获取通道配置列表
-export const getConfigList = (): AxiosPromise<AxiosResponse<IChannelConfigsVO[]>> => {
+export const getConfigList = (data?: IPage): AxiosPromise<AxiosResponse<IChannelConfigsVO[]>> => {
   return request({
     url: Api.getConfigList,
     method: 'post',
+    data,
   })
 }
 

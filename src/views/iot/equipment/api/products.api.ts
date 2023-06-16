@@ -17,7 +17,7 @@ export interface IProductsVO {
   img: string
   name: string
   nodeType: number
-  transparent: boolean
+  transparent: string
   uid: string
 }
 interface IPage {

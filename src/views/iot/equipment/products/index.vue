@@ -31,10 +31,9 @@ import { IColumn } from '@/components/common/types/tableCommon'
 import ObjectModel from './modules/objectModel.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 import { getProductsList, saveProducts, IProductsVO } from '../api/products.api'
-import { getCategoriesAll, ICategoriesVO } from '../api/categories.api'
+import { getCategoriesAll } from '../api/categories.api'
 
 
-const cateOptions = ref<ICategoriesVO[]>([])
 const column = ref<IColumn[]>([{
   label: '产品Key',
   key: 'productKey',
@@ -53,7 +52,6 @@ const column = ref<IColumn[]>([{
   componentProps: {
     labelAlias: 'name',
     valueAlias: 'id',
-    options: cateOptions.value,
   },
   rules: [{ required: true, message: '品类不能为空' }],
 }, {
@@ -84,10 +82,10 @@ const column = ref<IColumn[]>([{
     defaultValue: true,
     options: [
       {
-        value: true,
+        value: 'true',
         label: '是',
       }, {
-        value: false,
+        value: 'false',
         label: '否',
       }
     ]
@@ -127,10 +125,10 @@ const getData = () => {
 // 获取字典
 const getDict = () => {
   getCategoriesAll().then(res => {
-    cateOptions.value = res.data || []
+    const cateOptions = res.data || []
     column.value.forEach(item => {
       if (item.key === 'category') {
-        item.componentProps.options = cateOptions.value
+        item.componentProps.options = cateOptions
       }
     })
   })
