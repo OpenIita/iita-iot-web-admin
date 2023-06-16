@@ -108,7 +108,7 @@ const column = ref<IColumn[]>([{
   }
 }, {
   label: '通道参数',
-  key: 'paramStr',
+  key: 'param',
   formHide: true,
 }, {
   label: '参数配置',
@@ -135,7 +135,7 @@ const getData = () => {
 
 const getChannelCode = (id: number) => {
   const obj = channelOptions.value.find(f => f.id === id)
-  console.log(obj?.code)
+  console.log('code:',obj?.code)
   return obj?.code || ''
 }
 
