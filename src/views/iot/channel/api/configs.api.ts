@@ -5,23 +5,23 @@ import { AxiosPromise, AxiosResponse } from 'axios'
 enum Api {
   list = '/notify/channel/getList',
   getConfigList = '/notify/channel/config/getList',
+  getConfigAll = '/notify/channel/config/getAll',
   addConfig = '/notify/channel/config/add',
   getConfigById = '/notify/channel/config/getById',
-  updateConfigById = '/notify/channel/config/updateById',
   delConfigById = '/notify/channel/config/delById',
 }
 export interface IChannelConfigsVO {
   id?: number
-  channelId: string
+  channelId: number
   title: string
-  param: number
+  param: string
   createAt: number
 }
 export interface IChannelsVO {
   id?: number
   code: string
   title: string
-  icon: number
+  icon: string
   createAt: number
 }
 interface IPage {
@@ -29,14 +29,14 @@ interface IPage {
   pageSize?: number
 }
 // 获取通道列表
-export const getChannelsList = (): AxiosPromise<AxiosResponse<IChannelsVO[]>> => {
+export const getChannelsList = (): AxiosPromise<IChannelsVO[]> => {
   return request({
     url: Api.list,
     method: 'post',
   })
 }
 
-// 获取通道配置列表
+// 获取通道配置分页列表
 export const getConfigList = (data?: IPage): AxiosPromise<AxiosResponse<IChannelConfigsVO[]>> => {
   return request({
     url: Api.getConfigList,
@@ -45,8 +45,16 @@ export const getConfigList = (data?: IPage): AxiosPromise<AxiosResponse<IChannel
   })
 }
 
+// 获取通道配置列表
+export const getConfigAll = (): AxiosPromise<AxiosResponse<IChannelConfigsVO[]>> => {
+  return request({
+    url: Api.getConfigAll,
+    method: 'post'
+  })
+}
 
-// 新增通道配置
+
+// 保存修改通道配置
 export const addConfig = (data: IChannelConfigsVO) => {
   return request({
     url: Api.addConfig,
@@ -64,14 +72,6 @@ export const getConfigById = (data: string | number): AxiosPromise<AxiosResponse
   })
 }
 
-// 修改通道配置
-export const updateConfigById = (data: IChannelConfigsVO) => {
-  return request({
-    url: Api.updateConfigById,
-    method: 'post',
-    data:data,
-  })
-}
 
 // 删除通道配置
 export const delConfigById = (data: string | number) => {

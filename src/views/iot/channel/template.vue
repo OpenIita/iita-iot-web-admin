@@ -1,14 +1,27 @@
 <template>
   <div>
-    <yt-crud ref="crudRef" :data="data" :column="column"></yt-crud>
+    <yt-crud 
+    ref="crudRef" 
+    :data="data" 
+    :column="column"
+    v-model:page="state.page"
+    v-model:query="state.query"
+    :total="state.total"
+    :loading="state.loading"
+    @onLoad="getData"
+    @saveFun="onSave"
+    @delFun="onDelete"></yt-crud>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
+import { getTemplatesList,saveTemplate,deleteTemplate, IChannelTemplateVo } from './api/templates.api'
+import { getConfigAll } from './api/configs.api'
 
-const column: IColumn[] = [{
+const data = ref<IChannelTemplateVo[]>([])
+  const column = ref<IColumn[]>([{
   label: '模板名称',
   key: 'title',
   tableWidth: 200,
@@ -20,36 +33,9 @@ const column: IColumn[] = [{
   type: 'select',
   componentProps: {
     labelAlias: 'title',
-    valueAlias: 'id',
-    options: [
-      {
-        "id": "947d22b7-305b-d959-874a-06e277143d44",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-        "title": "告警邮件配置",
-        "param": {},
-        "createAt": 1684824055050
-      },
-      {
-        "id": "75f37720-22bb-4f0b-f127-78f2091507a0",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-        "title": "告警钉钉配置",
-        "param": {
-          "dingTalkWebhook": "xxxxxxxxxxxxxxxx",
-          "dingTalkSecret": "xxxx"
-        },
-        "createAt": 1684824055053
-      },
-      {
-        "id": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
-        "title": "告警企业微信配置",
-        "param": {
-          "qyWechatWebhook": "xxxxxxxxxxxxxxxx"
-        },
-        "createAt": 1684824055053
-      }
-    ]
-  }
+    valueAlias: 'id'
+  },
+  rules: [{ required: true, message: '通道配置不能为空' }]
 }, {
   label: '模板内容',
   key: 'content',
@@ -57,34 +43,60 @@ const column: IColumn[] = [{
     type: 'textarea',
     rows: 4,
   }
-}]
+}])
 
-const data = ref([
-  {
-    "id": "0640bbe2-788e-ca94-5fb4-c5e7f91e546d",
-    "channelConfigId": "947d22b7-305b-d959-874a-06e277143d44",
-    "channelCode": "Email",
-    "title": "告警邮件模板",
-    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
-    "createAt": 1684824055055
+const state = reactive({
+  total: 0,
+  page: {
+    pageSize: 10,
+    pageNum: 1,
   },
-  {
-    "id": "7fd90ab1-63c8-cd92-2a58-b7bd04f557f1",
-    "channelConfigId": "75f37720-22bb-4f0b-f127-78f2091507a0",
-    "channelCode": "DingTalk",
-    "title": "告警钉钉模板",
-    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
-    "createAt": 1684824055057
-  },
-  {
-    "id": "74ece781-1d84-220b-cbb2-3270e245bb3b",
-    "channelConfigId": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
-    "channelCode": "QyWechat",
-    "title": "告警企业微信模板",
-    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
-    "createAt": 1684824055057
-  }
-])
+  query: {},
+  loading: false
+})
+const getData = () => {
+  state.loading = true
+  getTemplatesList({
+    ...state.page,
+    ...state.query,
+  }).then(res => {
+    data.value = res.data.rows || []
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
+  })
+}
+// 保存数据
+const onSave = ({type, data, cancel}: any) => {
+  state.loading = true
+  saveTemplate(toRaw(data)).then(res => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+}
+// 获取通道配置
+const getConfig = () => {
+  getConfigAll().then(res => {
+    const configOptions = res.data || []
+    column.value.forEach(item => {
+      if (item.key === 'channelConfigId') {
+        item.componentProps.options = configOptions
+      }
+    })
+  })
+}
+getConfig()
+// 删除
+const onDelete = async (row: any) => {
+  state.loading = true
+  await deleteTemplate(row.id)
+  ElMessage.success('删除成功!')
+  state.loading = false
+  getData()
+}
 </script>
 
 <!-- <style lang="scss" scoped>

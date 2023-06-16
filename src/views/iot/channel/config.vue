@@ -8,7 +8,9 @@
       v-model:query="state.query"
       :total="state.total"
       :loading="state.loading"
-      @onLoad="getData">
+      @onLoad="getData"
+      @saveFun="onSave"
+      @delFun="onDelete">
       <template #paramFormItem="{ row }">
         <el-card v-if="row.channelId" class="box-card" shadow="never">
           <template #header>
@@ -33,9 +35,10 @@
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
-import { getConfigList, IChannelConfigsVO } from './api/configs.api'
+import { getConfigList,getChannelsList, IChannelsVO,addConfig,delConfigById,IChannelConfigsVO } from './api/configs.api'
 
 const data = ref<IChannelConfigsVO[]>([])
+const channelOptions = ref<IChannelsVO[]>([])
 const state = reactive({
   total: 0,
   page: {
@@ -87,31 +90,8 @@ const state = reactive({
     }
   ],
   channelCode: '',
-  channelOptions: [
-    {
-      "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-      "code": "DingTalk",
-      "title": "钉钉",
-      "icon": "http://www.baidu.com",
-      "createAt": 1684824055044
-    },
-    {
-      "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-      "code": "QyWechat",
-      "title": "企业微信",
-      "icon": "http://www.baidu.com",
-      "createAt": 1684824055047
-    },
-    {
-      "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
-      "code": "Email",
-      "title": "邮箱",
-      "icon": "http://www.baidu.com",
-      "createAt": 1684824055048
-    }
-  ]
 })
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: '通道配置名称',
   key: 'title',
   tableWidth: 200,
@@ -124,8 +104,7 @@ const column: IColumn[] = [{
   rules: [{ required: true, message: '请选择类型' }],
   componentProps: {
     labelAlias: 'title',
-    valueAlias: 'id',
-    options: state.channelOptions,
+    valueAlias: 'id'
   }
 }, {
   label: '通道参数',
@@ -139,7 +118,7 @@ const column: IColumn[] = [{
   componentProps: {
     defaultValue: {},
   }
-}]
+}])
 
 const getData = () => {
   state.loading = true
@@ -154,43 +133,47 @@ const getData = () => {
   })
 }
 
-const getChannelCode = (id: string) => {
-  const obj = state.channelOptions.find(f => f.id === id)
+const getChannelCode = (id: number) => {
+  const obj = channelOptions.value.find(f => f.id === id)
   console.log(obj?.code)
   return obj?.code || ''
 }
 
-// const data = ref([
-//   {
-//     "id": "947d22b7-305b-d959-874a-06e277143d44",
-//     "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-//     "title": "告警邮件配置",
-//     "param": {},
-//     "createAt": 1684824055050
-//   },
-//   {
-//     "id": "75f37720-22bb-4f0b-f127-78f2091507a0",
-//     "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-//     "title": "告警钉钉配置",
-//     "param": {
-//       "dingTalkWebhook": "xxxxxxxxxxxxxxxx",
-//       "dingTalkSecret": "xxxx"
-//     },
-//     "createAt": 1684824055053
-//   },
-//   {
-//     "id": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
-//     "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
-//     "title": "告警企业微信配置",
-//     "param": {
-//       "qyWechatWebhook": "xxxxxxxxxxxxxxxx"
-//     },
-//     "createAt": 1684824055053
-//   }
-// ].map(m => ({
-//   ...m,
-//   paramStr: m.param ? JSON.stringify(m.param) : m.param
-// })))
+// 获取通道类型
+const getChannel = () => {
+  getChannelsList().then(res => {
+    channelOptions.value = res.data || []
+    column.value.forEach(item => {
+      if (item.key === 'channelId') {
+        item.componentProps.options = channelOptions
+      }
+    })
+  })
+}
+getChannel()
+
+// 保存数据
+const onSave = ({type, data, cancel}: any) => {
+  state.loading = true
+  addConfig(toRaw(data)).then(res => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+
+}
+
+// 删除
+const onDelete = async (row: any) => {
+  state.loading = true
+  await delConfigById(row.id)
+  ElMessage.success('删除成功!')
+  state.loading = false
+  getData()
+}
+
 </script>
 
 <!-- <style lang="scss" scoped>
