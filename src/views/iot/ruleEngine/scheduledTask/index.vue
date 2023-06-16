@@ -9,6 +9,9 @@
         menuWidth: 270,
         selection: false,
       }"
+      :form-props="{
+        width: 800,
+      }"
       :loading="state.loading"
       :total="state.total"
       v-model:page="state.page"
@@ -54,7 +57,7 @@
         </el-form-item>
       </template>
       <template #actionForm="{ row }">
-        <optput :row="row.actions || []" actions="device"></optput>
+        <optput style="width: 100%;" :row="row.actions || []" actions="device"></optput>
       </template>
     </yt-crud>
     <log-dialog ref="logDialogRef" title="任务执行日志"></log-dialog>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <yt-crud 
-      ref="crudRef" 
-      :data="data" 
+    <yt-crud
+      ref="crudRef"
+      :data="data"
       :column="column"
       v-model:page="state.page"
       v-model:query="state.query"
@@ -10,7 +10,8 @@
       :loading="state.loading"
       @onLoad="getData"
       @saveFun="onSave"
-      @delFun="onDelete">
+      @delFun="onDelete"
+    >
       <template #paramFormItem="{ row }">
         <el-card v-if="row.channelId" class="box-card" shadow="never">
           <template #header>
@@ -52,7 +53,7 @@ const state = reactive({
       code: 'Email',
       list: [{
         label: '邮件发送人',
-        value: 'form',
+        value: 'from',
       }, {
         label: '邮件主机',
         value: 'host',
@@ -108,7 +109,7 @@ const column = ref<IColumn[]>([{
   }
 }, {
   label: '通道参数',
-  key: 'param',
+  key: 'paramStr',
   formHide: true,
 }, {
   label: '参数配置',
@@ -126,7 +127,11 @@ const getData = () => {
     ...state.page,
     ...state.query,
   }).then(res => {
-    data.value = res.data.rows || []
+    data.value = res.data.rows?.map(m => ({
+      ...m,
+      paramStr: m.param,
+      param: JSON.parse(m.param),
+    })) || []
     state.total = res.data.total
   }).finally(() => {
     state.loading = false
@@ -134,18 +139,21 @@ const getData = () => {
 }
 
 const getChannelCode = (id: number) => {
-  const obj = channelOptions.value.find(f => f.id === id)
-  console.log('code:',obj?.code)
+  const obj = channelOptions.value.find(f => f.id == id)
   return obj?.code || ''
 }
 
 // 获取通道类型
 const getChannel = () => {
   getChannelsList().then(res => {
+    console.log(res.data)
     channelOptions.value = res.data || []
     column.value.forEach(item => {
       if (item.key === 'channelId') {
-        item.componentProps.options = channelOptions
+        item.componentProps.options = channelOptions.value.map(m => ({
+          ...m,
+          id: (m.id || '').toString(),
+        }))
       }
     })
   })
@@ -173,7 +181,6 @@ const onDelete = async (row: any) => {
   state.loading = false
   getData()
 }
-
 </script>
 
 <!-- <style lang="scss" scoped>

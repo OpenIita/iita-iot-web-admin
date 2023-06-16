@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite serve --mode development",
+    "serve": "vite serve --mode development",
+    "start": "vite serve --mode development",
     "build:prod": "vite build --mode production &&vue-tsc --noEmit",
     "preview": "vite preview",
     "lint": "eslint src/**/*.{ts,js,vue} --fix",

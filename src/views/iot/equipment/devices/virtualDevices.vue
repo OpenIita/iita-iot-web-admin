@@ -1,6 +1,15 @@
 <template>
   <div>
-    <yt-crud v-bind="options">
+    <yt-crud
+      v-bind="options"
+      :loading="state.loading"
+      :total="state.total"
+      v-model:page="state.page"
+      v-model:query="state.query"
+      @on-load="getData"
+      @delFun="onDelete"
+      @saveFun="onSave"
+    >
       <template #menuSlot="scope">
         <el-button link type="primary" icon="Setting" @click="handleConfig(scope.row.id)">配置</el-button>
       </template>
@@ -27,6 +36,7 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
+import { deleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices } from '../api/virtualDevices.api'
 
 import CrontabBox from '@/components/Crontab/index.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
@@ -41,174 +51,174 @@ const handleConfig = (id: string) => {
 // 产品字典
 const productOptions = [
   {
-    "id": "xpsYHExTKPFaQMS7",
-    "name": "调光灯",
-    "category": "light",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "null",
-    "transparent": false,
-    "createAt": 1681962512815
+    'id': 'xpsYHExTKPFaQMS7',
+    'name': '调光灯',
+    'category': 'light',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'null',
+    'transparent': false,
+    'createAt': 1681962512815
   },
   {
-    "id": "hdX3PCMcFrCYpesJ",
-    "name": "智能风扇",
-    "category": "fan",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": null,
-    "transparent": null,
-    "createAt": 1659872083983
+    'id': 'hdX3PCMcFrCYpesJ',
+    'name': '智能风扇',
+    'category': 'fan',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': null,
+    'transparent': null,
+    'createAt': 1659872083983
   },
   {
-    "id": "hbtgIA0SuVw9lxjB",
-    "name": "GW01网关",
-    "category": "gateway",
-    "nodeType": 0,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/hbtgIA0SuVw9lxjB/cover.jpg?Expires=1967598154&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=2gh2jad14mVHGvWThwOd%2FykiB5g%3D",
-    "transparent": false,
-    "createAt": 1659872083984
+    'id': 'hbtgIA0SuVw9lxjB',
+    'name': 'GW01网关',
+    'category': 'gateway',
+    'nodeType': 0,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/hbtgIA0SuVw9lxjB/cover.jpg?Expires=1967598154&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=2gh2jad14mVHGvWThwOd%2FykiB5g%3D',
+    'transparent': false,
+    'createAt': 1659872083984
   },
   {
-    "id": "eDhXKwEzwFybM5R7",
-    "name": "三路开关",
-    "category": "switch",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/eDhXKwEzwFybM5R7/cover.jpeg?Expires=1967598172&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ZrFgANkomVEDQRV5JdmONL0S2sY%3D",
-    "transparent": false,
-    "createAt": 1659872083985
+    'id': 'eDhXKwEzwFybM5R7',
+    'name': '三路开关',
+    'category': 'switch',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/eDhXKwEzwFybM5R7/cover.jpeg?Expires=1967598172&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ZrFgANkomVEDQRV5JdmONL0S2sY%3D',
+    'transparent': false,
+    'createAt': 1659872083985
   },
   {
-    "id": "cGCrkK7Ex4FESAwe",
-    "name": "插座",
-    "category": "SmartPlug",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/cGCrkK7Ex4FESAwe/cover.jpeg?Expires=1967598137&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=vOjqav0pRZqQFgx8xBo99WhgWXk%3D",
-    "transparent": false,
-    "createAt": 1659872083986
+    'id': 'cGCrkK7Ex4FESAwe',
+    'name': '插座',
+    'category': 'SmartPlug',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/cGCrkK7Ex4FESAwe/cover.jpeg?Expires=1967598137&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=vOjqav0pRZqQFgx8xBo99WhgWXk%3D',
+    'transparent': false,
+    'createAt': 1659872083986
   },
   {
-    "id": "Rf4QSjbm65X45753",
-    "name": "一路开关",
-    "category": "switch",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/Rf4QSjbm65X45753/cover.jpeg?Expires=1967598145&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ksQhmEm5Rn7C7FFqY09o9l%2BZ%2BIQ%3D",
-    "transparent": false,
-    "createAt": 1659872083987
+    'id': 'Rf4QSjbm65X45753',
+    'name': '一路开关',
+    'category': 'switch',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/Rf4QSjbm65X45753/cover.jpeg?Expires=1967598145&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ksQhmEm5Rn7C7FFqY09o9l%2BZ%2BIQ%3D',
+    'transparent': false,
+    'createAt': 1659872083987
   },
   {
-    "id": "PN3EDmkBZDD8whDd",
-    "name": "门磁",
-    "category": "door",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "null",
-    "transparent": null,
-    "createAt": 1659872083988
+    'id': 'PN3EDmkBZDD8whDd',
+    'name': '门磁',
+    'category': 'door',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'null',
+    'transparent': null,
+    'createAt': 1659872083988
   },
   {
-    "id": "N523nWsCiG3CAn6X",
-    "name": "ZGW01",
-    "category": "gateway",
-    "nodeType": 0,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/N523nWsCiG3CAn6X/cover.jpg?Expires=1967597641&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=%2BaGcHBT%2FHA3s%2BrZ687U50b4YE0A%3D",
-    "transparent": false,
-    "createAt": 1659872083988
+    'id': 'N523nWsCiG3CAn6X',
+    'name': 'ZGW01',
+    'category': 'gateway',
+    'nodeType': 0,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/N523nWsCiG3CAn6X/cover.jpg?Expires=1967597641&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=%2BaGcHBT%2FHA3s%2BrZ687U50b4YE0A%3D',
+    'transparent': false,
+    'createAt': 1659872083988
   },
   {
-    "id": "KdJYpTp5ywNhmrmC",
-    "name": "第三方接入",
-    "category": "",
-    "nodeType": 0,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D",
-    "transparent": false,
-    "createAt": 1659872083990
+    'id': 'KdJYpTp5ywNhmrmC',
+    'name': '第三方接入',
+    'category': '',
+    'nodeType': 0,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D',
+    'transparent': false,
+    'createAt': 1659872083990
   },
   {
-    "id": "Eit3kmGJtxSHfCKT",
-    "name": "燃气表",
-    "category": "meter",
-    "nodeType": 2,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": null,
-    "transparent": false,
-    "createAt": 1659872083990
+    'id': 'Eit3kmGJtxSHfCKT',
+    'name': '燃气表',
+    'category': 'meter',
+    'nodeType': 2,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': null,
+    'transparent': false,
+    'createAt': 1659872083990
   },
   {
-    "id": "DSGxxKk6E8mmDk6C",
-    "name": "通断器",
-    "category": "switch",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/DSGxxKk6E8mmDk6C/cover.jpeg?Expires=1967598201&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=k2PqHc%2BI14DfCwD8kQIflwoBAog%3D",
-    "transparent": false,
-    "createAt": 1659872083991
+    'id': 'DSGxxKk6E8mmDk6C',
+    'name': '通断器',
+    'category': 'switch',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/DSGxxKk6E8mmDk6C/cover.jpeg?Expires=1967598201&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=k2PqHc%2BI14DfCwD8kQIflwoBAog%3D',
+    'transparent': false,
+    'createAt': 1659872083991
   },
   {
-    "id": "D8c5pXFmt2KJDxNm",
-    "name": "四路场景面板",
-    "category": "switch",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": null,
-    "transparent": null,
-    "createAt": 1659872083992
+    'id': 'D8c5pXFmt2KJDxNm',
+    'name': '四路场景面板',
+    'category': 'switch',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': null,
+    'transparent': null,
+    'createAt': 1659872083992
   },
   {
-    "id": "AWcJnf7ymGSkaz5M",
-    "name": "smart pulg",
-    "category": "SmartPlug",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/AWcJnf7ymGSkaz5M/cover.jpeg?Expires=1967598035&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=tXzWH5%2B4JNcnuTFrJbvGwsbx97c%3D",
-    "transparent": true,
-    "createAt": 1659872083993
+    'id': 'AWcJnf7ymGSkaz5M',
+    'name': 'smart pulg',
+    'category': 'SmartPlug',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/AWcJnf7ymGSkaz5M/cover.jpeg?Expires=1967598035&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=tXzWH5%2B4JNcnuTFrJbvGwsbx97c%3D',
+    'transparent': true,
+    'createAt': 1659872083993
   },
   {
-    "id": "6kYp6jszrDns2yh4",
-    "name": "温湿度传感器",
-    "category": "sensor",
-    "nodeType": 1,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": null,
-    "transparent": null,
-    "createAt": 1659872083994
+    'id': '6kYp6jszrDns2yh4',
+    'name': '温湿度传感器',
+    'category': 'sensor',
+    'nodeType': 1,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': null,
+    'transparent': null,
+    'createAt': 1659872083994
   },
   {
-    "id": "nFSJHYW744dzDYfW",
-    "name": "测试",
-    "category": "switch",
-    "nodeType": 2,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": null,
-    "transparent": false,
-    "createAt": 1659914779161
+    'id': 'nFSJHYW744dzDYfW',
+    'name': '测试',
+    'category': 'switch',
+    'nodeType': 2,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': null,
+    'transparent': false,
+    'createAt': 1659914779161
   },
   {
-    "id": "64WyYNJfWNJrJBsB",
-    "name": "T100S400L",
-    "category": "T100",
-    "nodeType": 2,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "null",
-    "transparent": false,
-    "createAt": 1681869020035
+    'id': '64WyYNJfWNJrJBsB',
+    'name': 'T100S400L',
+    'category': 'T100',
+    'nodeType': 2,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'null',
+    'transparent': false,
+    'createAt': 1681869020035
   },
   {
-    "id": "hdJZjrZjrB2SG4Hm",
-    "name": "T100",
-    "category": "T100",
-    "nodeType": 2,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "null",
-    "transparent": false,
-    "createAt": 1681864702527
+    'id': 'hdJZjrZjrB2SG4Hm',
+    'name': 'T100',
+    'category': 'T100',
+    'nodeType': 2,
+    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    'img': 'null',
+    'transparent': false,
+    'createAt': 1681864702527
   }
 ]
 const column: IColumn[] = [{
@@ -288,101 +298,45 @@ const column: IColumn[] = [{
   type: 'date',
   formHide: true,
 }]
-
-const data = ref([
-  {
-    "id": "6293953092084e2df303ba3e",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "三路开关",
-    "productKey": "eDhXKwEzwFybM5R7",
-    "devices": null,
-    "type": "protocol",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n\t  \"rssi\":127-parseInt(Math.random()*127),\n\t  \"powerstate_1\":Math.random()>0.5?1:0,\n\t  \"powerstate_2\":Math.random()>0.5?1:0,\n\t  \"powerstate_3\":Math.random()>0.5?1:0\n    }\n  }\n}",
-    "trigger": "random",
-    "triggerExpression": "hour",
-    "state": "stopped",
-    "createAt": 1653839152090
+const state = reactive({
+  page: {
+    pageSize: 10,
+    pageNum: 1,
   },
-  {
-    "id": "629391ae92084e2df303ba3d",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "温湿度传感器",
-    "productKey": "6kYp6jszrDns2yh4",
-    "devices": null,
-    "type": "thingModel",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n      \"humidity\":parseInt(Math.random()*100),\n\t  \"temperature\":parseInt(Math.random()*500)-38\n    }\n  }\n}",
-    "trigger": "none",
-    "triggerExpression": "second",
-    "state": "stopped",
-    "createAt": 1653838254989
-  },
-  {
-    "id": "629390f492084e2df303ba3c",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "调光灯",
-    "productKey": "xpsYHExTKPFaQMS7",
-    "devices": null,
-    "type": "protocol",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n      \"brightness\":parseInt(Math.random()*100),\n\t  \"powerstate\":Math.random()>0.5?1:0\n    }\n  }\n}",
-    "trigger": "random",
-    "triggerExpression": "second",
-    "state": "running",
-    "createAt": 1653838068860
-  },
-  {
-    "id": "62925cb72002b44c15caeb1c",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "虚拟门磁1",
-    "productKey": "PN3EDmkBZDD8whDd",
-    "devices": null,
-    "type": "thingModel",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n      \"rssi\":127-parseInt(Math.random()*127),\n      \"power\":parseInt(Math.random()*100),\n\t  \"doorStatus\":Math.random()>0.5?1:0\n    }\n  }\n}",
-    "trigger": "none",
-    "triggerExpression": "minute",
-    "state": "stopped",
-    "createAt": 1653759159567
-  },
-  {
-    "id": "628fd800fba69e633a972e12",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "开关1",
-    "productKey": "Rf4QSjbm65X45753",
-    "devices": null,
-    "type": "thingModel",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [{\n    \"productKey\":service.productKey,\n    \"deviceName\":service.deviceName,\n    \"mid\":service.mid,\n    \"type\":\"service\",\n    \"identifier\":\"reboot_reply\",\n    \"data\":{},\n    \"code\":0\n  },{\n    \"mid\":getRequestId(),\n    \"productKey\":service.productKey,  \n    \"deviceName\":service.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\n    \"time\":new Date().getTime(),\n    \"data\":{\n      \"volt\":parseInt(Math.random()*100),\n\t  \"powerstate\":Math.random()>0.5?1:0\n    }\n  }]\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n      \"volt\":parseInt(Math.random()*100)\n    }\n  }\n}",
-    "trigger": "cron",
-    "triggerExpression": "0 * * * * ? ",
-    "state": "running",
-    "createAt": 1653594112764
-  },
-  {
-    "id": "628fa6bc1b735b73cb260042",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "虚拟插座12",
-    "productKey": "cGCrkK7Ex4FESAwe",
-    "devices": null,
-    "type": "thingModel",
-    "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  var identifier=service.identifier;\n  var result= [{\n    \"productKey\":service.productKey,\n    \"deviceName\":service.deviceName,\n    \"mid\":service.mid,\n    \"type\":\"service\",\n    \"identifier\":identifier+\"_reply\",\n    \"data\":{},\n    \"code\":0\n  }]\n  \n  if(service.type==\"property\" && (identifier==\"get\" || identifier==\"set\")){\n\tresult.push({\n\t  \"mid\":getRequestId(),\n\t  \"productKey\":device.productKey,  \n\t  \"deviceName\":device.deviceName,\n\t  \"type\":\"property\",\n\t  \"identifier\":\"report\",\n\t  \"occurred\":new Date().getTime(),\n\t  \"time\":new Date().getTime(),\n\t  \"data\":service.params\n\t});\n  }\n  \n  return result;\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n      \"rssi\":127-parseInt(Math.random()*127),\n\t  \"powerstate\":Math.random()>0.5?1:0\n    }\n  }\n}",
-    "trigger": "random",
-    "triggerExpression": "minute",
-    "state": "running",
-    "createAt": 1653581500076
-  },
-  {
-    "id": "2758f090-e791-4da5-aab9-3eee1fcf8bf4",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "name": "dddddd",
-    "productKey": "xpsYHExTKPFaQMS7",
-    "devices": null,
-    "type": "thingModel",
-    "script": null,
-    "trigger": "cron",
-    "triggerExpression": "1-1 * * * * ?",
-    "state": "stopped",
-    "createAt": 1669886467692
-  }
-])
-
+  total: 0,
+  loading: false,
+  query: {},
+})
+const data = ref()
+const getData = () => {
+  state.loading = true
+  getVirtualDevicesList({
+    ...state.page,
+  }).then((res) => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  })
+  state.loading = false
+}
+// 保存数据
+const onSave = ({type, data, cancel}: any) => {
+  state.loading = true
+  saveVirtualDevices(toRaw(data)).then(res => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+}
+// 删除
+const onDelete = async (row: any) => {
+  state.loading = true
+  await deleteVirtualDevices(row.id)
+  ElMessage.success('删除成功!')
+  state.loading = false
+  getData()
+}
 const options = reactive({
   ref: 'crudRef',
   tableProps: {

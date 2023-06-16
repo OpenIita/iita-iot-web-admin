@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="productKey">
     <el-row v-for="service in config.services" :key="service.identifier">
       <el-col :span="22">
         <el-row class="service-box">
@@ -56,10 +56,14 @@
 </template>
 
 <script>
+import { propTypes } from '@/utils/propTypes'
+import { getObjectModel } from '@/views/iot/equipment/api/products.api'
+
 // import { GetThingModel } from '../../api/productApi'
-export default {
+export default defineComponent ({
   name: 'DeviceAction',
   props: {
+    productKey: propTypes.string.def(''),
     config: {
       type: Object,
       default: () => {
@@ -121,14 +125,14 @@ export default {
       this.getThingModel(device.productKey)
     },
     getThingModel(pk) {
-      // GetThingModel(pk).then((res) => {
-      //   this.initThingModel(res)
-      // })
+      getObjectModel(pk).then((res) => {
+        console.log('res', res)
+        this.initThingModel(res)
+      })
     },
     initThingModel(res) {
       this.properties = []
       this.services = []
-
       res.model.properties.forEach((p) => {
         this.properties.push(p)
       })
@@ -144,7 +148,7 @@ export default {
         inputData: [],
       })
     },
-    serviceSelected(service) {
+    serviceSelected (service) {
       this.services.forEach((s) => {
         if (service.identifier == s.identifier) {
           service.inputData = s.inputData
@@ -159,6 +163,8 @@ export default {
     },
     findService(identifier) {
       let service = {}
+      console.log('this.services', this.services.length)
+      if (this.services.length === 0) return ''
       this.services.forEach((s) => {
         if (s.identifier == identifier) {
           service = s
@@ -181,7 +187,7 @@ export default {
       inputData.splice(idx, 1)
     },
   },
-}
+})
 </script>
 
 <style scoped>

@@ -21,7 +21,7 @@
             <filtera :row="row"></filtera>
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output :row="row" actions="device,http,mqtt,kafka,tcp"></Output>
+            <Output :list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output>
           </el-tab-pane>
         </el-tabs>
       </template>

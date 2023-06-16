@@ -2,7 +2,7 @@
   <div>
     <div class="list-box">
       <el-collapse v-model="activeName">
-        <el-collapse-item :name="index" v-for="(item, index) in list" :key="index">
+        <el-collapse-item :name="index" v-for="(item, index) in dataList" :key="index">
           <template #title>
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
@@ -15,8 +15,8 @@
                   <el-radio v-if="actions.indexOf('kafka') >= 0" :label="'kafka'">kafka推送 </el-radio>
                   <el-radio v-if="actions.indexOf('tcp') >= 0" :label="'tcp'">tcp推送 </el-radio>
                 </el-radio-group>
-                <div class="item" style="width: 240px;margin-left: 15px;">
-                  <select-device v-if="item.type === 'device'" placeholder="选择设备"></select-device>
+                <div class="item" style="width: 240px;margin-left: 15px;display: inherit;">
+                  <select-device v-if="item.type === 'device'" placeholder="选择设备" @onSelect="selectDevices"></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -25,7 +25,7 @@
             </div>
           </template>
           <div class="condition-box" v-if="item.type === 'device'">
-            <DeviceAction :config="item"></DeviceAction>
+            <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction>
           </div>
           <div class="condition-box" v-if="item.type === 'http'">
             <HttpAction :config="item"></HttpAction>
@@ -56,7 +56,7 @@ import KafkaAction from '../components/KafkaAction.vue'
 import TcpAction from '../components/TcpAction.vue'
 
 const props = defineProps({
-  row: propTypes.object.def({}),
+  list: propTypes.array.def([]),
   actions: propTypes.string.def(''),
 })
 const arr: number[] = []
@@ -64,196 +64,74 @@ for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
-const list = ref<any[]>([])
+const dataList = ref<any[]>(props.list)
 
 // 新增输出
 const handleAdd = () => {
-  list.value.push({
-    conditions: [{
-      parameters: [],
-    }],
+  dataList.value.push({
+    services: [{}],
   })
 }
 
 // 删除输出
 const removeListener = (index: number) => {
-  list.value.splice(index, 1)
+  dataList.value.splice(index, 1)
 }
 
-const data = ref(toRaw(props.row))
-
-const actionTypeChange = (item) => {
-  if (item.type == 'http') {
-    item.services = [
-      {
-        url: '',
-        script: `this.translate=function(msg){
-        }`,
-      },
-    ]
-  } else if (item.type == 'mqtt') {
-    item.services = [
-      {
-        host: '',
-        port: 1883,
-        username: '',
-        password: '',
-        script: `this.translate=function(msg){
-        }`,
-      },
-    ]
-  } else if (item.type == 'kafka') {
-    item.services = [
-      {
-        services: '',
-        ack: '',
-        script: `this.translate=function(msg){
-        }`,
-      },
-    ]
-  } else if (item.type === 'tcp') {
-    item.services = [
-      {
-        host: '',
-        port: 1883,
-        script: `this.translate=function(msg){
-        }`
-      },
-    ]
-  }
-}
-
-data.value.model = {
-  properties: [
-    {
-      'identifier': 'powerstate',
-      'dataType': {
-        'type': 'enum',
-        'specs': {
-          '0': '关',
-          '1': '开'
-        }
-      },
-      'name': '开关',
-      'accessMode': 'rw'
-    },
-    {
-      'identifier': 'brightness',
-      'dataType': {
-        'type': 'int32',
-        'specs': {
-          'min': '1',
-          'max': '100'
-        }
-      },
-      'name': '亮度',
-      'accessMode': 'rw'
-    }
-  ],
-  'services': [
-    {
-      'identifier': 'open',
-      'inputData': [
-        {
-          'identifier': 'bujian',
-          'dataType': {
-            'type': 'text',
-            'specs': {}
-          },
-          'name': '部件',
-          'required': false
-        }
-      ],
-      'outputData': [
-        {
-          'identifier': 'result',
-          'dataType': {
-            'type': 'bool',
-            'specs': {
-              '0': '成功',
-              '1': '失败'
-            }
-          },
-          'name': '执行结果',
-          'required': false
-        }
-      ],
-      'name': '打开设备'
-    },
-    {
-      'identifier': 'alarm',
-      'inputData': [
-        {
-          'identifier': 'event',
-          'dataType': {
-            'type': 'enum',
-            'specs': {
-              '0': '发生水灾',
-              '1': '发生火灾',
-              '2': '发生水火灾'
-            }
-          },
-          'name': '报警事件',
-          'required': false
-        }
-      ],
-      'outputData': [],
-      'name': '报警'
-    }
-  ],
-  'events': []
-}
-const types = ref([{
-  name: '通配',
-  items: [
-    {
-      type: 'state',
-      identifier: 'state:*',
-      name: '设备上下线',
-    },
-    {
-      type: 'event',
-      identifier: 'event:*',
-      name: '任意事件上报',
-    },
-    {
-      type: 'service_reply',
-      identifier: 'service_reply:*',
-      name: '任意服务回复',
-    },
-  ],
-}, {
-  name: '精确匹配',
-  items: [{
-    type: 'property',
-    identifier: 'report',
-    name: '属性上报',
-  },
-  ...(data.value?.model?.events || []).map((m: any) => ({
-    type: 'event',
-    identifier: m.identifier,
-    name: m.name,
-  })),
-  ...(data.value?.model?.services || []).map((m: any) => ({
-    type: 'service',
-    identifier: m.identifier,
-    name: m.name,
-  }))
-  ],
-}])
-const typeChanged = () => {
-  types.value.forEach((t) => {
-    t.items.forEach((item) => {
-      if (item.identifier == data.value.identifier) {
-        data.value.type = item.type
-        return
-      }
-    })
+const deviceActionRef = ref()
+const productKey = ref('')
+const selectDevices = (e) => {
+  nextTick(() => {
+    console.log(deviceActionRef.value[0])
+    productKey.value = e.productKey
+    deviceActionRef.value[0].onDeviceSelected(e)
   })
+}
+const actionTypeChange = (item) => {
+  if (item.services.length == 0) {
+    if (item.type == 'http') {
+      item.services = [
+        {
+          url: '',
+          script: `this.translate=function(msg){
+        }`,
+        },
+      ]
+    } else if (item.type == 'mqtt') {
+      item.services = [
+        {
+          host: '',
+          port: 1883,
+          username: '',
+          password: '',
+          script: `this.translate=function(msg){
+        }`,
+        },
+      ]
+    } else if (item.type == 'kafka') {
+      item.services = [
+        {
+          services: '',
+          ack: '',
+          script: `this.translate=function(msg){
+        }`,
+        },
+      ]
+    } else if (item.type === 'tcp') {
+      item.services = [
+        {
+          host: '',
+          port: 1883,
+          script: `this.translate=function(msg){
+        }`
+        },
+      ]
+    }
+  }
 }
 onUnmounted(() => {
   console.log('onUnmounted')
-  list.value = []
+  dataList.value = []
 })
 </script>
 
