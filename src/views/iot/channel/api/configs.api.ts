@@ -9,6 +9,7 @@ enum Api {
   addConfig = '/notify/channel/config/add',
   getConfigById = '/notify/channel/config/getById',
   delConfigById = '/notify/channel/config/delById',
+  getMsgList = '/notify/message/getList',
 }
 export interface IChannelConfigsVO {
   id?: number
@@ -24,10 +25,20 @@ export interface IChannelsVO {
   icon: string
   createAt: number
 }
+export interface INotifyMessagesVO {
+  id?: number
+  content: string
+  messageType: string
+  status: boolean
+  createAt: number
+  updateAt: number
+}
+
 interface IPage {
   pageNum?: number
   pageSize?: number
 }
+
 // 获取通道列表
 export const getChannelsList = (): AxiosPromise<IChannelsVO[]> => {
   return request({
@@ -77,6 +88,15 @@ export const getConfigById = (data: string | number): AxiosPromise<AxiosResponse
 export const delConfigById = (data: string | number) => {
   return request({
     url: Api.delConfigById,
+    method: 'post',
+    data:data,
+  })
+}
+
+// 获取消息分页列表
+export const getMsgs = (data?: IPage): AxiosPromise<AxiosResponse<INotifyMessagesVO[]>> => {
+  return request({
+    url: Api.getMsgList,
     method: 'post',
     data:data,
   })

@@ -4,6 +4,11 @@
       ref="crudRef"
       :data="data"
       :column="column"
+      v-model:page="state.page"
+      v-model:query="state.query"
+      :total="state.total"
+      :loading="state.loading"
+      @onLoad="getData"
       :fun-props="{
         addBtn: false,
       }"
@@ -22,7 +27,9 @@
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
+import { getMsgs,INotifyMessagesVO } from '../channel/api/configs.api'
 
+const data = ref<INotifyMessagesVO[]>([])
 const column: IColumn[] = [{
   label: '消息类型',
   key: 'messageType',
@@ -44,89 +51,27 @@ const column: IColumn[] = [{
   key: 'createAt',
   type: 'date',
 }]
-
-const data = ref([
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055058,
-    "updateAt": 1684824055058
+const state = reactive({
+  total: 0,
+  page: {
+    pageSize: 10,
+    pageNum: 1,
   },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055061,
-    "updateAt": 1684824055061
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": false,
-    "createAt": 1684824055061,
-    "updateAt": 1684824055061
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb834",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055061,
-    "updateAt": 1684824055061
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb835",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": false,
-    "createAt": 1684824055062,
-    "updateAt": 1684824055062
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb836",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055062,
-    "updateAt": 1684824055062
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb837",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055062,
-    "updateAt": 1684824055062
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb838",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055062,
-    "updateAt": 1684824055062
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb839",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": false,
-    "createAt": 1684824055063,
-    "updateAt": 1684824055063
-  },
-  {
-    "id": "fa1c5eaa-de6e-48b6-805e-8f091c7bb840",
-    "content": "你的设备【热水器】温度过高",
-    "messageType": "alert",
-    "status": true,
-    "createAt": 1684824055063,
-    "updateAt": 1684824055063
-  }
-])
+  query: {},
+  loading: false
+})
+const getData = () => {
+  state.loading = true
+  getMsgs({
+    ...state.page,
+    ...state.query,
+  }).then(res => {
+    data.value = res.data.rows || []
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
+  })
+}
 </script>
 
 <!-- <style lang="scss" scoped>
