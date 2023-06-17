@@ -9,13 +9,14 @@
           <tsl :id="state.id" :model="state.model"></tsl>
         </el-tab-pane>
         <el-tab-pane label="型号配置">
-          <model-number-config></model-number-config>
+          <model-number-config :id="state.id"></model-number-config>
         </el-tab-pane>
       </el-tabs>
     </div>
   </el-dialog>
 </template>
 <script lang="ts" setup>
+import { useEmitt } from '@/hooks/web/useEmitt'
 import { getObjectModel } from '../../api/products.api'
 
 import FunctionConfig from './functionConfig.vue'
@@ -36,7 +37,14 @@ const getInfo = (key: string) => {
   state.visible = true
   state.loading = true
   state.id = key
-  getObjectModel(key).then(res => {
+  getData()
+}
+const { emitter } = useEmitt({
+  name: 'updateObjectModel',
+  callback: () => getData()
+})
+const getData = () => {
+  getObjectModel(state.id).then(res => {
     state.model = res.data.model || {
       services: [],
       properties: [],
@@ -46,7 +54,6 @@ const getInfo = (key: string) => {
     state.loading = false
   })
 }
-
 defineExpose({
   getInfo,
 })

@@ -262,7 +262,6 @@ const column: IColumn[] = [{
   label: '设备ID',
   key: 'deviceId',
   formHide: true,
-  tableWidth: 250,
   rules: [{ required: true, message: 'ProductKey不能为空' }],
 }, {
   label: '产品',
@@ -285,17 +284,18 @@ const column: IColumn[] = [{
     placeholder: '一般为设备mac'
   },
   rules: [{ required: true, message: '设备DN不能为空' }],
-}, {
-  label: '分组',
-  key: 'group',
-  type: 'select',
-  search: true,
-  componentProps: {
-    labelAlias: 'name',
-    valueAlias: 'id',
-    options: groupOptions,
-  },
-}, {
+  }
+// , {
+//     label: '分组',
+//     key: 'group',
+//     type: 'select',
+//     componentProps: {
+//       labelAlias: 'name',
+//       valueAlias: 'id',
+//       options: groupOptions,
+//     },
+//   }
+  , {
   label: '状态',
   key: 'state',
   search: true,
@@ -316,7 +316,7 @@ const column: IColumn[] = [{
   formHide: true,
 }]
 
-const data = ref()
+const data = ref([])
 const getData =  () => {
   state.loading = true
   getDevicesList({
@@ -356,7 +356,6 @@ const options = reactive({
     menuSlot: true,
     menuWidth: 300,
   },
-  searchProps: {},
   data,
   column,
 })

@@ -11,11 +11,13 @@ enum Api {
   devicesTagAdd = '/device/tag/add',
   deviceConfigSave = '/device/config/save',
   deviceSimulateSend = '/device/simulateSend',
+  deviceLogsNoFresh = '/device/deviceProperty/log/list',
   deviceConfigGet = '/device/config/get',
   deviceConfigSend = '/device/config/send',
-  propertySet = '/device/{deviceId}/service/property/set',
+  propertySet = '/device/service/property/set',
+  propertyGet = '/device/service/property/get',
   deviceLogs = '/device/deviceLogs/list',
-  serviceInvoke = '/device/{deviceId}/service/{service}/invoke',
+  serviceInvoke = '/device/service/invoke',
   childrenDeviceList = '/device/children/list',
   childrenDevice = '',
 }
@@ -102,6 +104,15 @@ export const propertySet = (data) => {
     data,
   })
 }
+
+export const propertyGet = (data) => {
+  return request({
+    url: Api.propertyGet,
+    method: 'post',
+    data,
+  })
+}
+
 // 设备日志查询
 export const deviceLogs = (data) => {
   return request({
@@ -146,6 +157,15 @@ export const getDeviceConfig = (data) => {
 export const sendDeviceConfig = (data) => {
   return request({
     url: Api.deviceConfigSend,
+    method: 'post',
+    data,
+  })
+}
+
+// 获取属性日志
+export const deviceLogsNoFresh = (data) => {
+  return request({
+    url: Api.deviceLogsNoFresh,
     method: 'post',
     data,
   })

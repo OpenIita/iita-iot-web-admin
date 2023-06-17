@@ -8,6 +8,8 @@ enum Api {
   edit = '/product/edit',
   objectModelList = '/product/getThingModelByProductKey',
   saveObjectModel = '/product/thingModel/save',
+  productModelList = '/product/getModelsByProductKey',
+  productModelSave = '/product/productModel/edit',
 }
 export interface IProductsVO {
   id?: number
@@ -55,6 +57,23 @@ export const getObjectModel = (data: string | number) => {
 export const saveObjectModel = (data) => {
   return request({
     url: Api.saveObjectModel,
+    method: 'post',
+    data,
+  })
+}
+
+// 获取型号
+export const getProductModelList = () => {
+  return request({
+    url: Api.productModelList,
+    method: 'post',
+    data,
+  })
+}
+// 保存型号
+export const saveProductModel = () => {
+  return request({
+    url: Api.productModelSave,
     method: 'post',
     data,
   })

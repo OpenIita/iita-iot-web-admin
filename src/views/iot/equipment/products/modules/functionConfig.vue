@@ -1,12 +1,20 @@
 <template>
   <div>
     <yt-table-fun @handle-add="handleAdd">
-      <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" @handle-update="handleUpdate">
-        <template #type="{ row }">
-          <div>{{ JSON.stringify(row.dataType.type) || '-' }}</div>
-        </template>
-        <template #specs="{ row }">
-          <div>{{ JSON.stringify(row.dataType.specs) || '-' }}</div>
+      <yt-table
+        :selection="false"
+        :page-hide="true"
+        :column="column"
+        :data="data"
+        :view-btn="false"
+        v-model:page="state.page"
+        v-model:query="state.query"
+        :total="state.total"
+        :loading="state.loading"
+        @handle-update="handleUpdate"
+      >
+        <template #dataType="{ row }">
+          {{ row.raw.dataType.type || '' }}
         </template>
       </yt-table>
     </yt-table-fun>
@@ -25,11 +33,16 @@ const props = defineProps({
   id: propTypes.string.def(''),
   model: propTypes.object.def({}),
 })
+const state = reactive({
+  total: 0,
+  page: {
+    pageSize: 10,
+    pageNum: 1,
+  },
+  query: {},
+  loading: false
+})
 
-// 获取数据
-const getInfo = (id: string) => {
-  console.log(id)
-}
 const functionDetailRef = ref()
 const handleAdd = () => {
   functionDetailRef.value.openDialog()
@@ -80,22 +93,80 @@ const column = ref<IColumn[]>([
   },
   {
     label: '数据类型',
-    key: 'type',
+    key: 'dataType',
     slot: true,
   },
   {
     label: '数据定义',
-    key: 'specs',
+    key: 'params',
     slot: true,
   }
 ])
-const data = ref(props.model.services)
-watch(() => props.model.services, (newV) => {
-  data.value = newV || []
-})
+const data = ref<any[]>([])
+// 获取数据
+const getInfo = (model) => {
+  const modelObj = model || {
+    properties: [],
+    events: [],
+    services: [],
+  }
+  let modelFuncs: any[] = []
+  modelObj.properties.forEach((p) => {
+    let params = JSON.stringify(p.dataType.specs || '{}')
+    modelFuncs.push({
+      raw: p,
+      type: 'property',
+      name: p.name,
+      identifier: p.identifier,
+      dataTypeName: p.dataType.type,
+      params: params == '{}' ? '' : params,
+    })
+  })
+  modelObj.events.forEach((e) => {
+    let output = {}
+    e.outputData.forEach((p) => {
+      output[p.identifier] = p.name
+    })
+    modelFuncs.push({
+      raw: e,
+      type: 'event',
+      name: e.name,
+      identifier: e.identifier,
+      dataTypeName: '-',
+      params: JSON.stringify(output),
+    })
+  })
+  modelObj.services.forEach((s) => {
+    let input = {};
+    (s.inputData || []).forEach((p) => {
+      input[p.identifier] = p.name
+    })
+    let output = {};
+    (s.outputData || []).forEach((p) => {
+      output[p.identifier] = p.name
+    })
+    modelFuncs.push({
+      raw: s,
+      type: 'service',
+      name: s.name,
+      identifier: s.identifier,
+      dataTypeName: '-',
+      params:
+        '输入:' +
+        JSON.stringify(input) +
+        ',输出:' +
+        JSON.stringify(output),
+    })
+  })
 
-defineExpose({
-  getInfo,
+  console.log('modelFuncs', modelFuncs)
+  data.value = modelFuncs
+}
+watch(() => props.model, (newV) => {
+  if (newV) getInfo(newV)
+}, {
+  deep: true,
+  immediate: true,
 })
 </script>
 

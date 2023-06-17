@@ -19,7 +19,7 @@
         </el-select>
       </el-form-item>
       <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('position')">
-        <el-row :gutter="40">
+        <el-row :gutter="40" style="width: 100%;">
           <el-col :span="3">定位方式</el-col>
           <el-col :span="6">
             <el-select v-model="propertyRef.dataType.specs.locateType" placeholder="请选择定位方式">

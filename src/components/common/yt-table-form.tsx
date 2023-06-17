@@ -164,7 +164,7 @@ export default defineComponent({
                     return (
                       <ElCol span={props.col}>
                         {!m.formItemSlot ? (
-                          <ElFormItem label={m.label + ':'} prop={m.key} key={m.key}>
+                          <ElFormItem label={m.label + ':'} prop={typeof m.key === 'string' ? m.key : ''} key={m.key}>
                             {!m.formSlot ? (
                               <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
                                 {renderOptions(m)}

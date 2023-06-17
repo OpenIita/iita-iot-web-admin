@@ -61,6 +61,7 @@ import { propTypes } from '@/utils/propTypes'
 
 import PropertyModel from '../components/PropertyModel.vue'
 import ModelParams from '../components/ModelParams.vue'
+import { useEmitt } from '@/hooks/web/useEmitt'
 const props = defineProps({
   id: propTypes.string.def(''),
   model: propTypes.object.def({}),
@@ -92,7 +93,7 @@ const openDialog = (row?: any, props?: any) => {
   if (row) {
     state.modelForm = row
     state.isAdd = false
-    state.modelType = (row.model.endsWith && row.model.endsWith('_default')) ? '1' : '2'
+    state.modelType = (row.model?.endsWith && row.model.endsWith('_default')) ? '1' : '2'
     if (props.enumItems) state.enumItems = props.enumItems
     if (props.boolItem) state.boolItem = props.boolItem
   } else {
@@ -129,13 +130,14 @@ const isSelectType = (type: string | number) => {
 const newProperty = () => {
   return ParseProperty(state.modelForm.raw, state.enumItems, state.boolItem)
 }
-// const emits =
+const { emitter } = useEmitt()
 const submitThingModelChange = () => {
   saveObjectModel({
     productKey: props.id,
     model: JSON.stringify(state.model),
   }).then(() => {
     state.dialogShow = false
+    emitter.emit('updateObjectModel')
     cancelEdit()
   })
 }

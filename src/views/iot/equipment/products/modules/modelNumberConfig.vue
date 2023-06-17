@@ -1,6 +1,9 @@
 <template>
   <yt-table-fun @handle-add="handleAdd">
     <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" @handle-update="handleUpdate">
+      <template #model="{ row }">
+        <div>{{ row.model.endsWith("_default") ? "默认" : row.model }}</div>
+      </template>
       <template #type="{ row }">
         <div>{{ JSON.stringify(row.dataType.type) || '-' }}</div>
       </template>
@@ -13,11 +16,15 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
+import { propTypes } from '@/utils/propTypes'
 
 import ModelNumberDetail from './modeuls/modelNumberDetail.vue'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
 
+const props = defineProps({
+  id: propTypes.string(''),
+})
 const modelNumberDetailRef = ref()
 const handleAdd = () => {
   modelNumberDetailRef.value.openDialog()
@@ -65,13 +72,9 @@ const data = ref([
   }
 })))
 console.log(data.value)
-// 获取数据
-const getInfo = (id: string) => {
-  console.log(id)
-}
-defineExpose({
-  getInfo,
-})
+// watch(() => props.id, (newV) => {
+//   if (newV)
+// })
 </script>
 
 <!-- <style lang="scss" scoped>

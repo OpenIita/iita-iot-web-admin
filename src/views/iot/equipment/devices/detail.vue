@@ -178,7 +178,7 @@
         <DeviceConfig :deviceId="state.deviceId" />
       </el-tab-pane>
       <el-tab-pane label="模拟设备">
-        <!-- <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="deviceDetail"></DeviceSimulator> -->
+        <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail"></DeviceSimulator>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :title="state.title" v-model:visible="state.propertyWriteFormVisible" width="40%" @click="closeDialog">
@@ -251,7 +251,8 @@ import {
   serviceInvoke,
 } from '@/views/iot/equipment/api/devices.api'
 
-import DeviceConfig from './modules/DeviceConfig.vue'
+import DeviceConfig from './modules/detail/DeviceConfig.vue'
+import DeviceSimulator from './modules/detail/DeviceSimulator.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -606,7 +607,10 @@ const submitPropertyWriteForm = () => {
   let form = state.propertyWriteForm
   let prop = {}
   prop[form.identifier] = form.value
-  propertySet(state.deviceId, prop).then(() => {
+  propertySet({
+    deviceId: state.deviceId,
+    args: prop,
+  }).then(() => {
     ElMessage({
       type: 'info',
       message: '操作成功',
@@ -635,7 +639,11 @@ const submitServiceForm = () => {
     param[p.identifier] = p.value
   })
 
-  serviceInvoke(state.deviceId, form.identifier, param).then(() => {
+  serviceInvoke({
+    deviceId: state.deviceId,
+    service: form.identifier,
+    args: param,
+  }).then(() => {
     ElMessage({
       type: 'info',
       message: '操作成功',
@@ -662,19 +670,19 @@ const sendDeviceMsg = (fun) => {
     data = JSON.parse(fun.content)
   }
 
-  // deviceSimulateSend(state.deviceId, {
-  //   deviceId: state.deviceId,
-  //   productKey: state.deviceDetail.productKey,
-  //   deviceName: state.deviceDetail.deviceName,
-  //   type: fun.type,
-  //   identifier: fun.type == 'property' ? 'report' : fun.identifier,
-  //   data: data,
-  // }).then(() => {
-  //   ElMessage({
-  //     type: 'info',
-  //     message: '操作成功',
-  //   })
-  // })
+  deviceSimulateSend({
+    deviceId: state.deviceId,
+    productKey: state.deviceDetail.productKey,
+    deviceName: state.deviceDetail.deviceName,
+    type: fun.type,
+    identifier: fun.type == 'property' ? 'report' : fun.identifier,
+    data: data,
+  }).then(() => {
+    ElMessage({
+      type: 'info',
+      message: '操作成功',
+    })
+  })
 }
 const closeDialog = () => {
   state.propertyWriteFormVisible = false
