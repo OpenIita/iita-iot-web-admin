@@ -25,14 +25,14 @@
 import variables from '@/assets/styles/variables.module.scss'
 import logo from '@/assets/logo/logo.png'
 import useSettingsStore from '@/store/modules/settings'
-import { ComponentInternalInstance } from "vue"
+import { ComponentInternalInstance } from 'vue'
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 defineProps({
   collapse: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const title = ref(import.meta.env.VITE_APP_TITLE)
@@ -62,9 +62,10 @@ const sideTheme = computed(() => settingsStore.sideTheme)
   & .sidebar-logo-link {
     height: 100%;
     width: 100%;
+    background: #fff;
 
     & .sidebar-logo {
-      width: 32px;
+      // width: 32px;
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
@@ -73,7 +74,7 @@ const sideTheme = computed(() => settingsStore.sideTheme)
     & .sidebar-title {
       display: inline-block;
       margin: 0;
-      color: #fff;
+      color: #000;
       font-weight: 600;
       line-height: 50px;
       font-size: 14px;
