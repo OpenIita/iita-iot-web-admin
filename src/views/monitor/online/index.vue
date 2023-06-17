@@ -53,9 +53,9 @@
 </template>
 
 <script setup name="Online" lang="ts">
-import { forceLogout, list as initData } from "@/api/monitor/online"
-import { ComponentInternalInstance } from "vue"
-import { OnlineQuery, OnlineVO } from "@/api/monitor/online/types"
+import { forceLogout, list as initData } from '@/api/monitor/online'
+import { ComponentInternalInstance } from 'vue'
+import { OnlineQuery, OnlineVO } from '@/api/monitor/online/types'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
@@ -69,15 +69,15 @@ const queryParams = ref<OnlineQuery>({
   pageNum: 1,
   pageSize: 10,
   ipaddr: '',
-  userName: ''
+  userName: '',
 })
 
 /** 查询登录日志列表 */
 const getList = async () => {
   loading.value = true
   const res = await initData(queryParams.value)
-  onlineList.value = res.rows
-  total.value = res.total
+  onlineList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 搜索按钮操作 */
@@ -95,7 +95,7 @@ const handleForceLogout = async (row: OnlineVO) => {
   await proxy?.$modal.confirm('是否确认强退名称为"' + row.userName + '"的用户?')
   await forceLogout(row.tokenId)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {
