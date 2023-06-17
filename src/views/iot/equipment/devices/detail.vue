@@ -175,7 +175,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="设备配置">
-        <!-- <DeviceConfig :deviceId="state.deviceId" /> -->
+        <DeviceConfig :deviceId="state.deviceId" />
       </el-tab-pane>
       <el-tab-pane label="模拟设备">
         <!-- <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="deviceDetail"></DeviceSimulator> -->
@@ -250,6 +250,8 @@ import {
   deviceLogs,
   serviceInvoke,
 } from '@/views/iot/equipment/api/devices.api'
+
+import DeviceConfig from './modules/DeviceConfig.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -387,19 +389,23 @@ const getdata = () => {
     //取设备物模型信息
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {
-      getObjectModel(data.productKey).then((data: any) => {
-        let model = data.model
-        state.thingModel = model
-        state.services = model.services
-
-        state.fillProperty(prop)
-
+      getObjectModel(data.productKey).then((objRes: any) => {
+        const { data } = objRes
         //取物模型功能列表
         data.model = data.model || {
           properties: [],
           events: [],
           services: [],
         }
+        let model = data.model
+        console.log('model', model)
+
+        state.thingModel = model
+
+        state.services = model.services
+
+        fillProperty(prop)
+
         data.model.properties = data.model.properties || []
         data.model.events = data.model.events || []
         data.model.services = data.model.services || []
@@ -456,7 +462,7 @@ const getdata = () => {
         state.modelFunctions = modelFuncs
       })
     } else {
-      state.fillProperty(prop)
+      fillProperty(prop)
     }
 
     let deviceTag = res.tag
@@ -519,7 +525,7 @@ const getEvents = () => {
         content: de,
       }
       logs.push(row)
-
+      if (!state.thingModel) return
       let modeEvents = state.thingModel.events
       if (modeEvents && modeEvents.length > 0) {
         modeEvents.forEach((e) => {

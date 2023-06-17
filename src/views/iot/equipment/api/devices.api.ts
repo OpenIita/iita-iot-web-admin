@@ -9,7 +9,10 @@ enum Api {
   devicesUpdate = '/device/save',
   devicesDetail = '/device/detail',
   devicesTagAdd = '/device/tag/add',
+  deviceConfigSave = '/device/config/save',
   deviceSimulateSend = '/device/simulateSend',
+  deviceConfigGet = '/device/config/get',
+  deviceConfigSend = '/device/config/send',
   propertySet = '/device/{deviceId}/service/property/set',
   deviceLogs = '/device/deviceLogs/list',
   serviceInvoke = '/device/{deviceId}/service/{service}/invoke',
@@ -119,6 +122,30 @@ export const serviceInvoke = (data) => {
 export const getChildrenDeviceList = (data?: IPage) => {
   return request({
     url: Api.childrenDeviceList,
+    method: 'post',
+    data,
+  })
+}
+// 设备配置保存
+export const saveDeviceConfig = (data) => {
+  return request({
+    url: Api.deviceConfigSave,
+    method: 'post',
+    data,
+  })
+}
+// 获取设备配置
+export const getDeviceConfig = (data) => {
+  return request({
+    url: Api.deviceConfigGet,
+    method: 'post',
+    data,
+  })
+}
+// 设备配置下发
+export const sendDeviceConfig = (data) => {
+  return request({
+    url: Api.deviceConfigSend,
     method: 'post',
     data,
   })
