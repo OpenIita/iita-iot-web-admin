@@ -92,6 +92,9 @@ dependencies:
   vue-cropper:
     specifier: 1.0.3
     version: 1.0.3
+  vue-echarts:
+    specifier: ^6.6.0
+    version: 6.6.0(echarts@5.4.0)(vue@3.2.45)
   vue-i18n:
     specifier: 9.2.2
     version: 9.2.2(vue@3.2.45)
@@ -4662,6 +4665,10 @@ packages:
     engines: {node: '>=0.10'}
     dev: true
 
+  /resize-detector@0.3.0:
+    resolution: {integrity: sha512-R/tCuvuOHQ8o2boRP6vgx8hXCCy87H1eY9V5imBYeVNyNVpuL9ciReSccLj2gDcax9+2weXy3bc8Vv+NRXeEvQ==}
+    dev: false
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -5612,6 +5619,21 @@ packages:
     resolution: {integrity: sha512-yDrZkE4H5vOiMA9WQHE+6rmXrZ1S9TMZasEPAZPKg/2I/nySHL4ECD1lNxt7+ofTPKT+9+2sQkCwagPqEqiqJg==}
     dev: false
 
+  /vue-demi@0.13.11(vue@3.2.45):
+    resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.2.45
+    dev: false
+
   /vue-demi@0.14.1(vue@3.2.45):
     resolution: {integrity: sha512-rt+yuCtXvscYot9SQQj3WKZJVSriPNqVkpVBNEHPzSgBv7QIYzsS410VqVgvx8f9AAPgjg+XPKvmV3vOqqkJQQ==}
     engines: {node: '>=12'}
@@ -5625,6 +5647,23 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.45
+
+  /vue-echarts@6.6.0(echarts@5.4.0)(vue@3.2.45):
+    resolution: {integrity: sha512-PpXDe1wKKzOJTLM8RM4GJxpRi+9eiC0YUJR7i44/AAa0oDatvNctJcZlfq/bUV4KV+HDsCeQzaB6JocrXEy9LA==}
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.5
+      echarts: ^5.4.1
+      vue: ^2.6.12 || ^3.1.1
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      echarts: 5.4.0
+      resize-detector: 0.3.0
+      vue: 3.2.45
+      vue-demi: 0.13.11(vue@3.2.45)
+    dev: false
 
   /vue-eslint-parser@9.1.0(eslint@8.36.0):
     resolution: {integrity: sha512-NGn/iQy8/Wb7RrRa4aRkokyCZfOUWk19OP5HP6JEozQFX5AoS/t+Z0ZN7FY4LlmWc4FNI922V7cvX28zctN8dQ==}

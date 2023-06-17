@@ -12,7 +12,7 @@
       </template>
     </yt-table>
   </yt-table-fun>
-  <modelNumber-detail ref="modelNumberDetailRef"></modelNumber-detail>
+  <modelNumber-detail ref="modelNumberDetailRef" @on-success="getData"></modelNumber-detail>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
@@ -28,7 +28,23 @@ const props = defineProps({
 })
 const modelNumberDetailRef = ref()
 const handleAdd = () => {
-  modelNumberDetailRef.value.openDialog()
+  modelNumberDetailRef.value.openDialog({
+    model: '_default',
+    name: '默认',
+    productKey: props.id,
+    type: 'JavaScript',
+    state: 'dev',
+    script: `
+//编码函数
+this.encode(service){
+  return "";
+}
+//解码函数
+this.decode(msg){
+  return {};
+}
+        `,
+  })
 }
 const handleUpdate = (row: any) => {
   modelNumberDetailRef.value.openDialog(toRaw(row))
@@ -54,9 +70,9 @@ const column = ref<IColumn[]>([
 ])
 const data = ref([])
 const loading = ref(false)
-const getData = (key: string) => {
+const getData = () => {
   loading.value = true
-  getProductModelList(key).then((res) => {
+  getProductModelList(props.id).then((res) => {
     if (res.code === 200) {
       data.value = res.data
     }
@@ -66,7 +82,7 @@ const getData = (key: string) => {
   })
 }
 watch(() => props.id, (newV) => {
-  if (newV) getData(newV)
+  if (newV) getData()
 }, {
   immediate: true,
 })

@@ -28,7 +28,7 @@
         </el-tab-pane>
         <!-- TODO:不兼容后面改 -->
         <!-- <el-tab-pane label="mqtt模拟器"> -->
-          <!-- <MqttClient :deviceDetail="this.deviceDetail"></MqttClient> -->
+        <!--   <MqttClient :deviceDetail="this.deviceDetail"></MqttClient> -->
         <!-- </el-tab-pane> -->
       </el-tabs>
       <el-divider direction="vertical" />

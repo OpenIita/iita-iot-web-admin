@@ -14,7 +14,7 @@
         @handle-update="handleUpdate"
       >
         <template #dataType="{ row }">
-          {{ row.raw.dataType.type || '' }}
+          {{ row.raw?.dataType?.type || '-' }}
         </template>
       </yt-table>
     </yt-table-fun>
@@ -137,12 +137,12 @@ const getInfo = (model) => {
     })
   })
   modelObj.services.forEach((s) => {
-    let input = {};
-    (s.inputData || []).forEach((p) => {
+    let input: any = {}
+    s.inputData.forEach((p) => {
       input[p.identifier] = p.name
     })
-    let output = {};
-    (s.outputData || []).forEach((p) => {
+    let output = {}
+    s.outputData.forEach((p) => {
       output[p.identifier] = p.name
     })
     modelFuncs.push({

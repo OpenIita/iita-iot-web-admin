@@ -11,7 +11,7 @@ enum Api {
   devicesTagAdd = '/device/tag/add',
   deviceConfigSave = '/device/config/save',
   deviceSimulateSend = '/device/simulateSend',
-  deviceLogsNoFresh = '/device/deviceProperty/log/list',
+  devicePropertyLogs = '/device/deviceProperty/log/list',
   deviceConfigGet = '/device/config/get',
   deviceConfigSend = '/device/config/send',
   propertySet = '/device/service/property/set',
@@ -163,9 +163,9 @@ export const sendDeviceConfig = (data) => {
 }
 
 // 获取属性日志
-export const deviceLogsNoFresh = (data) => {
+export const devicePropertyLogs = (data) => {
   return request({
-    url: Api.deviceLogsNoFresh,
+    url: Api.devicePropertyLogs,
     method: 'post',
     data,
   })

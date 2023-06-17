@@ -2,7 +2,7 @@
   <div class="box">
     <el-page-header @back="goBack" content="设备详情"></el-page-header>
     <el-divider></el-divider>
-    <el-tabs v-model="state.activeName" @tab-click="handleClick">
+    <el-tabs v-loading="loading" v-model="state.activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="base">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -52,13 +52,13 @@
           <el-table-column prop="value" label="属性值" width="180">
             <template v-slot="scope">
               <span>{{ scope.row.value }} &nbsp;</span>
-              <el-button @click="showPropertyHistory(scope.row)" size="mini">历史</el-button>
+              <el-button @click="showPropertyHistory(scope.row)" size="small">历史</el-button>
             </template>
           </el-table-column>
           <el-table-column label="可读写">
             <template v-slot="scope">
-              <el-tag v-if="!scope.row.write" type="info" size="mini" effect="plain">只读</el-tag>
-              <el-button @click="showWriteProperty(scope.row)" v-if="scope.row.write" size="mini" type="success" plain>可写</el-button>
+              <el-tag v-if="!scope.row.write" type="info" size="small" effect="plain">只读</el-tag>
+              <el-button @click="showWriteProperty(scope.row)" v-if="scope.row.write" size="small" type="success" plain>可写</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -249,8 +249,10 @@ import {
   propertySet,
   deviceLogs,
   serviceInvoke,
+  devicePropertyLogs,
 } from '@/views/iot/equipment/api/devices.api'
 
+import PropertyChart from './modules/PropertyChart.vue'
 import DeviceConfig from './modules/detail/DeviceConfig.vue'
 import DeviceSimulator from './modules/detail/DeviceSimulator.vue'
 
@@ -576,18 +578,22 @@ const showPropertyHistory = (row) => {
   state.currHistoryProperty = row
   refreshPropertyHistory()
 }
+const loading = ref(false)
 const refreshPropertyHistory = () => {
   var end = state.historyTime[1]
   var start = state.historyTime[0]
-  // GetDevicePropertyHistory(
-  //   state.deviceId,
-  //   state.currHistoryProperty.identifier,
-  //   start.getTime(),
-  //   end.getTime()
-  // ).then((res) => {
-  //   state.propertyHistory.name = state.currHistoryProperty.name
-  //   state.propertyHistory.data = res
-  // })
+  loading.value = true
+  devicePropertyLogs({
+    deviceId: state.deviceId,
+    name: state.currHistoryProperty.identifier,
+    start: start.getTime(),
+    end: end.getTime()
+  }).then((res) => {
+    state.propertyHistory.name = state.currHistoryProperty.name
+    state.propertyHistory.data = res.data
+  }).finally(() => {
+    loading.value = false
+  })
 }
 const timeRangeChange = () => {
   refreshPropertyHistory()

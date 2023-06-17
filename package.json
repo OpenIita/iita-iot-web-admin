@@ -48,6 +48,7 @@
     "vue": "3.2.45",
     "vue-codemirror": "^6.1.1",
     "vue-cropper": "1.0.3",
+    "vue-echarts": "^6.6.0",
     "vue-i18n": "9.2.2",
     "vue-router": "4.1.4",
     "vue-types": "^5.0.3",

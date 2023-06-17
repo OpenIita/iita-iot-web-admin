@@ -46,131 +46,133 @@ import {
   deviceLogs
 } from '@/views/iot/equipment/api/devices.api'
 export default {
-    name: 'deviceLog',
-    props: {
-      deviceDetail: {
-        type: Object
+  name: 'deviceLog',
+  props: {
+    deviceDetail: {
+      type: Object
+    },
+    thingModelEvents: {
+      type: Array
+    },thingModelServices: {
+      type: Array
+    },
+  },
+  data() {
+    return {
+      formatDate,
+      refresh: false,
+      logList: [],
+      timer: null,
+      formInline: {
+        type: '',
+        identifier: '',
+        page: 1,
+        size: 10,
+        total: 0,
+      }, typeMap: {
+        lifetime: '生命周期',
+        state: '设备状态',
+        property: '属性',
+        event: '事件',
+        service: '服务',
       },
-      thingModelEvents: {
-        type: Array
-      },thingModelServices: {
-        type: Array
-      },
+    }
+  },
+  computed:{
+    deviceId () {
+      return this.deviceDetail.deviceId
     },
-    data() {
-      return {
-        refresh: false,
-        logList: [],
-        timer: null,
-        formInline: {
-            type: '',
-            identifier: '',
-            page: 1,
-            size: 10,
-            total: 0,
-        }, typeMap: {
-            lifetime: '生命周期',
-            state: '设备状态',
-            property: '属性',
-            event: '事件',
-            service: '服务',
-        },
-      }
+  },
+  watch: {
+    deviceId(newV) {
+      this.logSearch()
     },
-    computed:{
-      deviceId(){
-        return this.deviceDetail.deviceId
-      },
-    },
-    watch:{
-      refresh(newVal, oldVal){
-        if(newVal==true){
-            this.timer= setInterval(()=>{
-                this.getEvents()
-            }, 1000)
-        }else{
-            if(oldVal==true)
-            clearInterval(this.timer)
-            this.timer =null
-        }
-      }
-    },
-
-    created() {
-        this.getEvents()
-    },
-        methods: {
-        logSearch() {
-            this.formInline.page = 1
+    refresh(newVal, oldVal){
+      if(newVal==true){
+        this.timer= setInterval(()=>{
             this.getEvents()
-        },
-          getEvents () {
-            if (!this.deviceId) return
-          deviceLogs({
-              ...this.formInline,
-              deviceId: this.deviceId,
-            }).then((res) => {
-                this.formInline.total = res.total
-                let logs = []
-                res.data.map((de) => {
-                    let row = {
-                        time: de.time,
-                        type: this.typeMap[de.type],
-                        name: '未知事件',
-                        content: de,
-                    }
-                    this.calcLog(de, row)
-                    logs.push(row)
+        }, 1000)
+      }else{
+        if(oldVal==true)
+        clearInterval(this.timer)
+        this.timer =null
+      }
+    }
+  },
 
-                    row.name = row.name + '(' + de.identifier + ')'
-                    return de
-                })
+  created() {
+    this.getEvents()
+  },
+  methods: {
+    logSearch() {
+      this.formInline.page = 1
+      this.getEvents()
+    },
+    getEvents () {
+      if (!this.deviceId) return
+      deviceLogs({
+        ...this.formInline,
+        deviceId: this.deviceId,
+      }).then((res) => {
+          this.formInline.total = res.data.total
+          let logs = []
+          res.data.rows.map((de) => {
+              let row = {
+                time: de.time,
+                type: this.typeMap[de.type],
+                name: '未知事件',
+                content: de,
+              }
+              this.calcLog(de, row)
+              logs.push(row)
 
-                this.logList = logs
-            })
-        },
-
-        calcLog(de, row){
-          let modeEvents = this.thingModelEvents
-          if (modeEvents && modeEvents.length > 0) {
-              modeEvents.forEach((e) => {
-                  if (de.identifier == e.identifier) {
-                      row.name = e.name
-                      return
-                  }
-              })
-          }
-          let modeServices = this.thingModelServices
-          if (de.type == 'property') {
-              if (de.identifier == 'set_reply') {
-                  row.name = '设置回复'
-              } else if (de.identifier == 'report') {
-                  row.name = '上报'
-              } else if (de.identifier == 'set') {
-                  row.name = '设置'
-              }
-          } else if (de.type == 'state') {
-              if (de.identifier == 'online') {
-                  row.name = '上线'
-              } else {
-                  row.name = '下线'
-              }
-          } else if (de.type == 'lifetime') {
-              if (de.identifier == 'register') {
-                  row.name = '注册'
-              }
-          } else if (modeServices && modeServices.length > 0) {
-              var ids = de.identifier.split('_reply')
-              modeServices.forEach((e) => {
-                  if (ids[0] == e.identifier) {
-                      row.name = e.name + (ids.length > 1 ? '回复' : '')
-                      return
-                  }
-              })
-          }
-        }
+              row.name = row.name + '(' + de.identifier + ')'
+              return de
+          })
+          console.log('logs', logs)
+          this.logList = logs
+      })
     },
 
-
+    calcLog(de, row){
+      let modeEvents = this.thingModelEvents
+      if (modeEvents && modeEvents.length > 0) {
+        modeEvents.forEach((e) => {
+          if (de.identifier == e.identifier) {
+            row.name = e.name
+            return
+          }
+        })
+      }
+      let modeServices = this.thingModelServices
+      if (de.type == 'property') {
+          if (de.identifier == 'set_reply') {
+              row.name = '设置回复'
+          } else if (de.identifier == 'report') {
+              row.name = '上报'
+          } else if (de.identifier == 'set') {
+              row.name = '设置'
+          }
+      } else if (de.type == 'state') {
+          if (de.identifier == 'online') {
+              row.name = '上线'
+          } else {
+              row.name = '下线'
+          }
+      } else if (de.type == 'lifetime') {
+          if (de.identifier == 'register') {
+              row.name = '注册'
+          }
+      } else if (modeServices && modeServices.length > 0) {
+          var ids = de.identifier.split('_reply')
+          modeServices.forEach((e) => {
+              if (ids[0] == e.identifier) {
+                  row.name = e.name + (ids.length > 1 ? '回复' : '')
+                  return
+              }
+          })
+      }
+    }
+  },
 }
 </script>

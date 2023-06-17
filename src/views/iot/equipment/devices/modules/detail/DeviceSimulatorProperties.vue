@@ -5,22 +5,24 @@
         <template v-slot="fun">
           <el-form v-model="fun.row" label-width="80px" style="width: 500px">
             <el-row>
-              <el-col :span="20">
+              <el-col :span="18">
                 <el-form-item label="值">
                   <el-input v-model="fun.row.value" size="mini"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2">
+              <el-col :span="4">
                 <el-form-item>
-                  <el-button
-                    type="primary"
-                    size="mini"
-                    v-if="propertiesTyp == '属性上报' || propertiesTyp == '事件上报'"
-                    @click="sendSimpleThingModelMsg(fun.row)"
-                    >发送</el-button
-                  >
-                  <el-button type="primary" size="mini" v-if="propertiesTyp == '属性调试'" @click="sendPropertiesGet(fun.row)">获取</el-button>
-                  <el-button type="primary" size="mini" v-if="propertiesTyp == '属性调试'" @click="sendPropertiesSet(fun.row)">设置</el-button>
+                  <div class="flex" style="align-items: center;">
+                    <el-button
+                      type="primary"
+                      size="mini"
+                      v-if="propertiesTyp == '属性上报' || propertiesTyp == '事件上报'"
+                      @click="sendSimpleThingModelMsg(fun.row)"
+                      >发送</el-button
+                    >
+                    <el-button type="primary" size="small" v-if="propertiesTyp == '属性调试'" @click="sendPropertiesGet(fun.row)">获取</el-button>
+                    <el-button type="primary" size="small" v-if="propertiesTyp == '属性调试'" @click="sendPropertiesSet(fun.row)">设置</el-button>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -33,8 +35,8 @@
       <el-table-column sortable prop="dataTypeName" label="数据类型" width="100"> </el-table-column>
       <el-table-column sortable prop="params" label="数据定义" width="200"> </el-table-column>
     </el-table>
-    <el-button type="primary" size="mini" @click="sendThingModelMsg()" v-if="this.propertiesTyp == '属性上报'">发送</el-button>
-    <el-button type="primary" size="mini" @click="sendAllPropertiesGet()" v-if="this.propertiesTyp == '属性调试'">获取</el-button>
+    <el-button type="primary" @click="sendThingModelMsg()" v-if="this.propertiesTyp == '属性上报'">发送</el-button>
+    <el-button type="primary" @click="sendAllPropertiesGet()" v-if="this.propertiesTyp == '属性调试'">获取</el-button>
   </div>
 </template>
 

@@ -56,11 +56,11 @@ const state = reactive({
     ],
   }
 })
+const emits = defineEmits(['onSuccess'])
 const openDialog = (row?: any) => {
   if (row) {
-    if (!row.script) row.script =
     productModelForm.value = row
-    state.modelType = (row.model.endsWith && row.model.endsWith?.endsWith('_default')) ? '1' : '2'
+    state.modelType = (row.model && row.model?.endsWith('_default')) ? '1' : '2'
   }
   state.dialogShow = true
 }
@@ -71,13 +71,14 @@ const productModelFormRef = ref()
 const handleSaveProductModel = () => {
   if (state.modelType == '1') {
     productModelForm.value.model =
-      productModelForm.value.productKey + ' _default'
+      productModelForm.value.productKey + '_default'
   }
   productModelFormRef.value.validate((valid: any) => {
     if (valid) {
       saveProductModel(productModelForm.value).then(res => {
+        ElMessage.success('保存成功')
         cancelProductModel()
-        console.log(res)
+        emits('onSuccess')
       })
       console.log(valid)
     }
