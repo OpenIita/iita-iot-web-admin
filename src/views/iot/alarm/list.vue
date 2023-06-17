@@ -9,12 +9,20 @@
       }"
       :table-props="{
         Selection: false,
+        delBtn: false,
+        editBtn: false,
       }"
+      @onLoad="getData"
+      :loading="state.loading"
+      :total="state.total"
+      v-model:page="state.page"
+      v-model:query="state.query"
     ></yt-crud>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
+import { getMsgList } from './api/alarm.api'
 
 import YtCrud from '@/components/common/yt-crud.vue'
 
@@ -70,8 +78,25 @@ const column: IColumn[] = [{
 
 
 const data = ref([])
+const state = reactive({
+  page: {
+    pageSize: 10,
+    pageNum: 1,
+  },
+  total: 0,
+  loading: false,
+  query: {},
+})
+const getData =  () => {
+  state.loading = true
+  getMsgList({
+    ...state.page,
+    ...state.query,
+  }).then((res) => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
+  })
+}
 </script>
-
-<!-- <style lang="scss" scoped>
-
-</style> -->

@@ -7,7 +7,6 @@
       :total="state.total"
       v-model:page="state.page"
       v-model:query="state.query"
-      @delFun="onDelete"
       @saveFun="onSave"
     >
       <template #state="scope">
@@ -16,7 +15,7 @@
       </template>
       <template #menuSlot="scope">
         <!-- TODO: 没接口,nodeType无法获取，得改成 ！= 0 -->
-        <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope)">子设备</el-button>
+        <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope.row)">子设备</el-button>
         <el-button link type="primary" icon="View" @click="handleView(scope.row.id)">详情</el-button>
         <el-popconfirm title="是否确认删除该数据" @confirm="handleDelete(scope.row)">
           <template #reference>
@@ -34,9 +33,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 import ChildrenDialog from './modules/childrenDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 import { ElPopconfirm } from 'element-plus'
-import { getDevicesList } from '../api/devices.api'
-import { saveDevices } from '../api/devices.api'
-import { deleteDevices } from '../api/devices.api'
+import { getDevicesList, deleteDevices, saveDevices } from '../api/devices.api'
 
 const state = reactive({
   page: {
@@ -48,9 +45,6 @@ const state = reactive({
   query: {},
 })
 
-const handleDelete = (row: any) => {
-  console.log(row)
-}
 // 查看详情
 const router = useRouter()
 const handleView = (id: string) => {
@@ -276,6 +270,7 @@ const column: IColumn[] = [{
   type: 'select',
   search: true,
   tableWidth: 120,
+  editDisabled: true,
   componentProps: {
     labelAlias: 'name',
     valueAlias: 'id',
@@ -321,216 +316,18 @@ const column: IColumn[] = [{
   formHide: true,
 }]
 
-const data = ref([
-  {
-    'id': '16818017836420test100000000000056',
-    'deviceId': '16818017836420test100000000000056',
-    'productKey': 'hdJZjrZjrB2SG4Hm',
-    'deviceName': 'test1',
-    'model': 'm1',
-    'secret': '7Bxm4JPf2FB5MYbC',
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1681892506997,
-      'offlineTime': 1681892808076
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1681801783642
-  },
-  {
-    'id': '16807860199690wgth100000000000055',
-    'deviceId': '16807860199690wgth100000000000055',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'wgTH1',
-    'model': 'zm01',
-    'secret': null,
-    'parentId': '',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 0,
-      'offlineTime': 1680786604632
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1680786019976
-  },
-  {
-    'id': '1677826031695011ff030300000100149',
-    'deviceId': '1677826031695011ff030300000100149',
-    'productKey': '64WyYNJfWNJrJBsB',
-    'deviceName': '11FF0303000001',
-    'model': 'm1',
-    'secret': 'MYBrcrQwsFbB32WJ',
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1681950613282,
-      'offlineTime': 1681952409968
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1677826031700
-  },
-  {
-    'id': '16683910549100test010000000000063',
-    'deviceId': '16683910549100test010000000000063',
-    'productKey': 'cGCrkK7Ex4FESAwe',
-    'deviceName': 'TEST01',
-    'model': 'm1',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1679628030790,
-      'offlineTime': 1682235909571
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1668391054914
-  },
-  {
-    'id': '16666002437520c411e0218bdf000012a',
-    'deviceId': '16666002437520c411e0218bdf000012a',
-    'productKey': 'N523nWsCiG3CAn6X',
-    'deviceName': 'C411E0218BDF',
-    'model': 'device',
-    'secret': 'NSTCSBxzBWxAfpMe',
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1666855934531,
-      'offlineTime': 1666858939498
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1666600243763
-  },
-  {
-    'id': '16604869627650testgw011321000014d',
-    'deviceId': '16604869627650testgw011321000014d',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'TEST:GW:011321',
-    'model': '22',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1660487562978,
-      'offlineTime': 1680786604612
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1660486962765
-  },
-  {
-    'id': '16604869625930testgw011668000014f',
-    'deviceId': '16604869625930testgw011668000014f',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'TEST:GW:011668',
-    'model': 'GW01',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1660487539218,
-      'offlineTime': 1660487838616
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1660486962593
-  },
-  {
-    'id': '16604869611510testgw0111030000145',
-    'deviceId': '16604869611510testgw0111030000145',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'TEST:GW:011103',
-    'model': 'GW01',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1660487612176,
-      'offlineTime': 1660487823244
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1660486961151
-  },
-  {
-    'id': '16604869608780testgw011223000014e',
-    'deviceId': '16604869608780testgw011223000014e',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'TEST:GW:011223',
-    'model': 'GW01',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1660487599293,
-      'offlineTime': 1660487850003
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1660486960878
-  },
-  {
-    'id': '16604869589520testgw0117390000142',
-    'deviceId': '16604869589520testgw0117390000142',
-    'productKey': 'hbtgIA0SuVw9lxjB',
-    'deviceName': 'TEST:GW:011739',
-    'model': 'GW01',
-    'secret': null,
-    'parentId': null,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': null,
-    'state': {
-      'online': false,
-      'onlineTime': 1660487593508,
-      'offlineTime': 1660487863150
-    },
-    'property': null,
-    'tag': {},
-    'group': 'g2',
-    'createAt': 1660486958952
-  }
-])
-const getData = async () => {
+const data = ref()
+const getData =  () => {
   state.loading = true
-  const res = await getDevicesList({
+  getDevicesList({
     ...state.page,
+    ...state.query,
+  }).then((res) => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
   })
-  data.value = res.data.rows
-  console.log(data)
-  state.loading = false
 }
 // 保存数据
 const onSave = async ({type, data, cancel}: any) => {
@@ -542,7 +339,7 @@ const onSave = async ({type, data, cancel}: any) => {
   getData()
 }
 // 删除
-const onDelete = async (row: any) => {
+const handleDelete = async (row: any) => {
   state.loading = true
   await deleteDevices(row.id)
   ElMessage.success('删除成功!')
@@ -555,9 +352,9 @@ const options = reactive({
     selection: false,
     delBtn: false,
     viewBtn: false,
-    editBtn: false,
+    editBtn: true,
     menuSlot: true,
-    menuWidth: 250,
+    menuWidth: 300,
   },
   searchProps: {},
   data,

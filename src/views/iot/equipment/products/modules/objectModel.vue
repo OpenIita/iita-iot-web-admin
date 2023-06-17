@@ -32,11 +32,11 @@ const state = reactive({
   } as any,
 })
 // 获取数据
-const getInfo = (id: string) => {
+const getInfo = (key: string) => {
   state.visible = true
   state.loading = true
-  state.id = id
-  getObjectModel(id).then(res => {
+  state.id = key
+  getObjectModel(key).then(res => {
     state.model = res.data.model || {
       services: [],
       properties: [],

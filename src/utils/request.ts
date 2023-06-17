@@ -50,7 +50,7 @@ service.interceptors.request.use(
       config.data = {
         ...pageObj,
         requestId: reqeuestId,
-        data: data == null ? {} : data,
+        data: data == null ? {} : data.coverData ? data.coverData : data,
       }
     } else {
       config.data = {

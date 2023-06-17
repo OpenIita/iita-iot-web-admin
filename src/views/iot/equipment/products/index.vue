@@ -149,7 +149,7 @@ const onSave = ({type, data, cancel}: any) => {
 
 const objectModelRef = ref()
 const openObjectModel = (row: any) => {
-  objectModelRef.value.getInfo(row.id)
+  objectModelRef.value.getInfo(row.productKey)
 }
 </script>
 

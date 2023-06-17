@@ -7,14 +7,30 @@
       :table-props="{
         selection: false,
       }"
+      @save-fun="onSave"
+      @del-fun="handleDelete"
+      @onLoad="getData"
+      :loading="state.loading"
+      :total="state.total"
+      v-model:page="state.page"
+      v-model:query="state.query"
     ></yt-crud>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-
+import { getConfigList, saveConfig, deleteConfig } from './api/alarm.api'
 import YtCrud from '@/components/common/yt-crud.vue'
 
+const state = reactive({
+  page: {
+    pageSize: 10,
+    pageNum: 1,
+  },
+  total: 0,
+  loading: false,
+  query: {},
+})
 const column: IColumn[] = [{
   label: '配置名称',
   key: 'name',
@@ -55,30 +71,30 @@ const column: IColumn[] = [{
     valueAlias: 'id',
     options: [
       {
-        "id": "947d22b7-305b-d959-874a-06e277143d44",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-        "title": "告警邮件配置",
-        "param": {},
-        "createAt": 1684824055050
+        'id': '947d22b7-305b-d959-874a-06e277143d44',
+        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb832',
+        'title': '告警邮件配置',
+        'param': {},
+        'createAt': 1684824055050
       },
       {
-        "id": "75f37720-22bb-4f0b-f127-78f2091507a0",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
-        "title": "告警钉钉配置",
-        "param": {
-          "dingTalkWebhook": "xxxxxxxxxxxxxxxx",
-          "dingTalkSecret": "xxxx"
+        'id': '75f37720-22bb-4f0b-f127-78f2091507a0',
+        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb832',
+        'title': '告警钉钉配置',
+        'param': {
+          'dingTalkWebhook': 'xxxxxxxxxxxxxxxx',
+          'dingTalkSecret': 'xxxx'
         },
-        "createAt": 1684824055053
+        'createAt': 1684824055053
       },
       {
-        "id": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
-        "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
-        "title": "告警企业微信配置",
-        "param": {
-          "qyWechatWebhook": "xxxxxxxxxxxxxxxx"
+        'id': '6e5db9b5-a709-723b-665b-bbca5ce6a62c',
+        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb833',
+        'title': '告警企业微信配置',
+        'param': {
+          'qyWechatWebhook': 'xxxxxxxxxxxxxxxx'
         },
-        "createAt": 1684824055053
+        'createAt': 1684824055053
       }
     ]
   }
@@ -92,31 +108,31 @@ const column: IColumn[] = [{
     valueAlias: 'id',
     options: [
       {
-        "id": "2820c218-660e-48ff-a234-c7b6793a5bb8",
-        "name": "测试场景1",
-        "type": "scene",
-        "listeners": [
+        'id': '2820c218-660e-48ff-a234-c7b6793a5bb8',
+        'name': '测试场景1',
+        'type': 'scene',
+        'listeners': [
           {
-            "type": "device",
-            "config": "{\"id\":\"4ff98e8c-e6f6-4e96-8932-de488a0a4bfb\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.8212160690052512,\"type\":\"property\",\"device\":\"Rf4QSjbm65X45753/ABC12400001\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\">\",\"value\":\"0\"}]}]}"
+            'type': 'device',
+            'config': '{"id":"4ff98e8c-e6f6-4e96-8932-de488a0a4bfb","type":"device","topic":"","conditions":[{"id":0.8212160690052512,"type":"property","device":"Rf4QSjbm65X45753/ABC12400001","identifier":"report","parameters":[{"identifier":"powerstate","comparator":">","value":"0"}]}]}'
           }
         ],
-        "filters": [
+        'filters': [
           {
-            "type": "device",
-            "config": "{\"id\":\"24b4b975-d8ac-431d-881d-8c8b40e92861\",\"type\":\"device\",\"conditions\":[{\"id\":0.08981222614734863,\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"powerSwitch\",\"type\":\"property\",\"comparator\":\"==\",\"value\":\"0\"}]}"
+            'type': 'device',
+            'config': '{"id":"24b4b975-d8ac-431d-881d-8c8b40e92861","type":"device","conditions":[{"id":0.08981222614734863,"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"powerSwitch","type":"property","comparator":"==","value":"0"}]}'
           }
         ],
-        "actions": [
+        'actions': [
           {
-            "type": "device",
-            "config": "{\"id\":\"fde024b5-5105-4639-8602-d04300613af9\",\"type\":\"device\",\"services\":[{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"powerSwitch\",\"value\":\"1\"}]},{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"windSpeed\",\"value\":\"20\"}]}]}"
+            'type': 'device',
+            'config': '{"id":"fde024b5-5105-4639-8602-d04300613af9","type":"device","services":[{"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"set","inputData":[{"identifier":"powerSwitch","value":"1"}]},{"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"set","inputData":[{"identifier":"windSpeed","value":"20"}]}]}'
           }
         ],
-        "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-        "state": "stopped",
-        "desc": "test",
-        "createAt": 1649167998895
+        'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+        'state': 'stopped',
+        'desc': 'test',
+        'createAt': 1649167998895
       }
     ]
   }
@@ -135,7 +151,44 @@ const column: IColumn[] = [{
   }
 }]
 
+const getData =  () => {
+  state.loading = true
+  getConfigList({
+    ...state.page,
+    ...state.query,
+  }).then((res) => {
+    data.value = res.data.rows
+    state.total = res.data.total
+  }).finally(() => {
+    state.loading = false
+  })
+}
+// 保存数据
+const onSave = ({type, data, cancel}: any) => {
+  state.loading = true
+  saveConfig(toRaw(data)).then(res => {
+    if (res.code === 200) {
+      cancel()
+      getData()
+    }
+  }).finally(() => {
+    state.loading = false
+  })
 
+
+}
+// 删除
+const handleDelete =  (row: any) => {
+  state.loading = true
+  deleteConfig(row.id).then(res => {
+    if (res.code === 200) {
+      ElMessage.success('删除成功!')
+      getData()
+    }
+  }).finally(() => {
+    state.loading = false
+  })
+}
 const data = ref([])
 </script>
 

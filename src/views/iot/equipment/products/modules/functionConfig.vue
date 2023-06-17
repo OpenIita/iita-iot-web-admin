@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ 'id' + id }}
     <yt-table-fun @handle-add="handleAdd">
       <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" @handle-update="handleUpdate">
         <template #type="{ row }">
@@ -50,7 +49,7 @@ const handleUpdate = (row: any) => {
   let prop = tmpModel.raw
   const props: any = {}
   if (prop.dataType.type == 'enum') {
-    let enumSpecs = []
+    let enumSpecs: any[] = []
     for (var p in prop.dataType.specs) {
       enumSpecs.push({
         name: prop.dataType.specs[p],
@@ -90,8 +89,8 @@ const column = ref<IColumn[]>([
     slot: true,
   }
 ])
-const data = ref(props.services)
-watch(() => props.services, (newV) => {
+const data = ref(props.model.services)
+watch(() => props.model.services, (newV) => {
   data.value = newV || []
 })
 
