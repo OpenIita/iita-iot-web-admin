@@ -63,7 +63,7 @@ export const saveObjectModel = (data) => {
 }
 
 // 获取型号
-export const getProductModelList = () => {
+export const getProductModelList = (data) => {
   return request({
     url: Api.productModelList,
     method: 'post',
@@ -71,7 +71,7 @@ export const getProductModelList = () => {
   })
 }
 // 保存型号
-export const saveProductModel = () => {
+export const saveProductModel = (data) => {
   return request({
     url: Api.productModelSave,
     method: 'post',

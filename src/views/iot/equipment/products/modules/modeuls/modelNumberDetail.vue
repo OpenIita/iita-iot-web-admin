@@ -19,18 +19,20 @@
         <el-radio v-model="productModelForm.type" label="JavaScript">JavaScript</el-radio>
         <el-radio v-model="productModelForm.type" label="LuaScript">LuaScript</el-radio>
         <div style="width: 100%">
-          <code-editor v-if="productModelForm.type === 'JavaScript'" mode="text/javascript" :code="productModelForm.script"></code-editor>
-          <code-editor v-if="productModelForm.type === 'LuaScript'" mode="text/x-lua" :code="productModelForm.script"></code-editor>
+          <code-editor v-if="productModelForm.type === 'JavaScript'" mode="text/javascript" v-model:code="productModelForm.script"></code-editor>
+          <code-editor v-if="productModelForm.type === 'LuaScript'" mode="text/x-lua" v-model:code="productModelForm.script"></code-editor>
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveProductModel()">保存</el-button>
+        <el-button type="primary" @click="handleSaveProductModel()">保存</el-button>
         <el-button @click="cancelProductModel()">取消</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 <script lang="ts" setup>
+import { saveProductModel } from '../../../api/products.api'
+
 import CodeEditor from '@/components/CodeEditor/index.vue'
 
 const productModelForm = ref({
@@ -47,15 +49,16 @@ const state = reactive({
   dialogShow: false,
   scriptRules: {
     model: [
-      { required: true, message: "设备型号不能为空", trigger: "blur" },
+      { required: true, message: '设备型号不能为空', trigger: 'blur' },
     ],
     script: [
-      { required: true, message: "脚本内容不能为空", trigger: "blur" },
+      { required: true, message: '脚本内容不能为空', trigger: 'blur' },
     ],
   }
 })
 const openDialog = (row?: any) => {
   if (row) {
+    if (!row.script) row.script =
     productModelForm.value = row
     state.modelType = (row.model.endsWith && row.model.endsWith?.endsWith('_default')) ? '1' : '2'
   }
@@ -65,14 +68,17 @@ const cancelProductModel = () => {
   state.dialogShow = false
 }
 const productModelFormRef = ref()
-const saveProductModel = () => {
-  productModelForm.value.productKey = productModelForm.value.id
-  if (state.modelType == "1") {
+const handleSaveProductModel = () => {
+  if (state.modelType == '1') {
     productModelForm.value.model =
       productModelForm.value.productKey + ' _default'
   }
   productModelFormRef.value.validate((valid: any) => {
     if (valid) {
+      saveProductModel(productModelForm.value).then(res => {
+        cancelProductModel()
+        console.log(res)
+      })
       console.log(valid)
     }
   })

@@ -13,13 +13,15 @@ const props = defineProps({
   code: propTypes.string.def(''),
   model: propTypes.string.def('text/javascript'),
 })
-
+const emits = defineEmits(['update:code'])
 const codeModel = ref('')
 watch(() => props.code, (newV) => {
   codeModel.value = newV
-  console.log(codeModel.value)
 }, {
   immediate: true,
+})
+watch(codeModel, (newV) => {
+  emits('update:code', newV)
 })
 const extensions = [javascript(), oneDark]
 const view = shallowRef()

@@ -17,13 +17,14 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { propTypes } from '@/utils/propTypes'
+import { getProductModelList, saveProductModel } from '../../api/products.api'
 
 import ModelNumberDetail from './modeuls/modelNumberDetail.vue'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
 
 const props = defineProps({
-  id: propTypes.string(''),
+  id: propTypes.string.def(''),
 })
 const modelNumberDetailRef = ref()
 const handleAdd = () => {
@@ -51,30 +52,24 @@ const column = ref<IColumn[]>([
     type: 'date',
   },
 ])
-const data = ref([
-  {
-    'id': 'M1',
-    'model': null,
-    'name': '型号1',
-    'productKey': 'AWcJnf7ymGSkaz5M',
-    'type': 'LuaScript',
-    'script': "\nfunction decode(msg)\n   return {\n        ['identifier'] = 'report',\n        ['mid'] = '1',\n        ['type'] = 'property',\n        ['data'] ={\n            ['power']=string.sub(msg.data,3,3)\n        }\n    }\nend\n\nfunction encode(service)\n    return {\n\t['mid'] = 1,\n\t['model'] = 'M1',\n\t['mac'] = service.deviceName,\n\t['data'] = 'BB2'\n  }\nend\n",
-    'state': 'publish',
-    'modifyAt': 1659872084000
-  }
-].map((m: any) => ({
-  ...m,
-  raw: m,
-  model: m.model || {
-    properties: [],
-    events: [],
-    services: [],
-  }
-})))
-console.log(data.value)
-// watch(() => props.id, (newV) => {
-//   if (newV)
-// })
+const data = ref([])
+const loading = ref(false)
+const getData = (key: string) => {
+  loading.value = true
+  getProductModelList(key).then((res) => {
+    if (res.code === 200) {
+      data.value = res.data
+    }
+    console.log(res)
+  }).finally(() => {
+    loading.value = false
+  })
+}
+watch(() => props.id, (newV) => {
+  if (newV) getData(newV)
+}, {
+  immediate: true,
+})
 </script>
 
 <!-- <style lang="scss" scoped>
