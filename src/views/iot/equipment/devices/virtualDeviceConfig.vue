@@ -18,7 +18,7 @@
         <el-button v-if="data.state == 'stopped'" type="danger" size="mini" plain @click="setState(data.id, 'running')">已停止</el-button>
       </el-form-item>
       <el-form-item label=" ">
-        <el-button @click="run" size="mini">立即执行</el-button>
+        <el-button @click="run(data.id)" size="mini">立即执行</el-button>
       </el-form-item>
     </el-form>
     <el-tabs v-model="state.activeName">
@@ -39,6 +39,7 @@ import BindDevices from './modules/virtualDevices/bindDevices.vue'
 import Log from './modules/virtualDevices/log.vue'
 import ScriptBox from './modules/virtualDevices/script.vue'
 import { ElNotification } from 'element-plus'
+import { setVirtualDeviceState,runVirtualDevices,IChangeStateVO } from '../api/virtualDevices.api'
 
 const route = useRoute()
 const router = useRouter()
@@ -69,26 +70,19 @@ const state = reactive<any>({
     protocol: "基于设备协议",
   },
 })
-function run() {
-  ElNotification.success({
+function run(id) {
+  runVirtualDevices(id).then(() => {
+    ElNotification.success({
     title: '成功',
     message: '执行成功',
   })
-  // TODO 接口
-  // VirtualDeviceRun(this.id).then(() => {
-  //   this.$notify({
-  //     title: "成功",
-  //     message: "执行成功",
-  //     type: "success",
-  //   })
-  //   this.getLogs()
-  // })
+    // this.getLogs()
+  })
 }
 const setState = (id: string, state: any) => {
-  // TODO 接口
-  // VirtualDeviceSetState({ id: id, state: state }).then(() => {
+  setVirtualDeviceState({ id: id, state: state }).then(() => {
   //   this.getdata();
-  // });
+  })
 }
 </script>
 

@@ -8,6 +8,8 @@ enum Api {
   delete = '/virtual_device/delete',
   detail = '/virtual_device/getDetail',
   update = '/virtual_device/modify',
+  run = '/virtual_device/run',
+  set = '/virtual_device/setState',
 }
 
 export interface IVirtualDevicesVO {
@@ -22,6 +24,10 @@ export interface IVirtualDevicesVO {
   triggerExpression: string
   type: string
   uid: string
+}
+export interface IChangeStateVO {
+  id: string
+  state: string
 }
 interface IPage {
   pageNum?: number
@@ -56,6 +62,24 @@ export const saveVirtualDevices = (data: IVirtualDevicesVO) => {
 export const getVirtualDevicesDetail = (data) => {
   return request({
     url: Api.detail,
+    method: 'post',
+    data,
+  })
+}
+
+// 设置状态
+export const setVirtualDeviceState = (data: IChangeStateVO) => {
+  return request({
+    url: Api.set,
+    method: 'post',
+    data,
+  })
+}
+
+// 手动执行
+export const runVirtualDevices = (data: (string | number)[]) => {
+  return request({
+    url: Api.run,
     method: 'post',
     data,
   })
