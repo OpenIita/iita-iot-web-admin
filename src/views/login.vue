@@ -59,8 +59,8 @@ const router = useRouter()
 const title = import.meta.env.VITE_APP_TITLE
 const loginForm = ref<LoginData>({
   tenantId: "000000",
-  username: 'admin',
-  password: 'admin123',
+  username: 'openiita',
+  password: '123456',
   rememberMe: false,
   code: '',
   uuid: ''
