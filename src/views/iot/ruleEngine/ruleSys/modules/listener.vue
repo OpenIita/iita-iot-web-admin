@@ -244,7 +244,7 @@ watch(list, (newV) => {
   emits('update:listeners', arr)
 }, {
   immediate: true,
-  deep: true,
+  // deep: true,
 })
 // 新增监听器
 const handleAdd = () => {

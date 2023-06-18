@@ -163,7 +163,7 @@ watch(list, (newV) => {
   emits('update:filters', arr)
 }, {
   immediate: true,
-  deep: true,
+  // deep: true,
 })
 // 新增监听器
 const handleAdd = () => {

@@ -125,7 +125,6 @@ export default defineComponent({
         rules[item.key] = item.rules
       }
     })
-
     return () => (
       <ElDialog
         ref={diglogRef}
@@ -139,61 +138,65 @@ export default defineComponent({
         {{
           default: () => (
             <ElForm ref={formRef} model={formObj.data} rules={rules} labelWidth={props.labelWidth} disabled={dialogObj.type === 'view'}>
-              <ElRow gutter={props.gutter}>
-                {columns.value.map((m: IColumn) => {
-                  const type = m?.type || 'string'
-                  const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
-                  if (!m.formHide) {
-                    if (m.formWatch) {
-                      watch(
-                        () => formObj.data[m.key],
-                        (newV) => {
-                          m.formWatch({
-                            col: m,
-                            column: columns.value,
-                            data: formObj.data,
-                            value: newV,
-                          })
-                        },
-                        {
-                          immediate: true,
-                          deep: true,
-                        }
+              <div>
+                <ElRow gutter={props.gutter}>
+                  {columns.value.map((m: IColumn) => {
+                    const type = m?.type || 'string'
+                    const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
+                    if (!m.formHide) {
+                      if (m.formWatch) {
+                        watch(
+                          () => formObj.data[m.key],
+                          (newV) => {
+                            m.formWatch({
+                              col: m,
+                              column: columns.value,
+                              data: formObj.data,
+                              value: newV,
+                            })
+                          },
+                          {
+                            immediate: true,
+                            deep: true,
+                          }
+                        )
+                      }
+                      return (
+                        <ElCol span={props.col}>
+                          {!m.formItemSlot ? (
+                            <ElFormItem label={m.label + ':'} prop={typeof m.key === 'string' ? m.key : ''} key={m.key}>
+                              {!m.formSlot ? (
+                                <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
+                                  {renderOptions(m)}
+                                </Com>
+                              ) : (
+                                slots[m.key + 'Form']?.({
+                                  column: m,
+                                  row: formObj.data,
+                                })
+                              )}
+                            </ElFormItem>
+                          ) : (
+                            slots[m.key + 'FormItem']?.({
+                              column: m,
+                              row: formObj.data,
+                            })
+                          )}
+                        </ElCol>
                       )
                     }
-                    return (
-                      <ElCol span={props.col}>
-                        {!m.formItemSlot ? (
-                          <ElFormItem label={m.label + ':'} prop={typeof m.key === 'string' ? m.key : ''} key={m.key}>
-                            {!m.formSlot ? (
-                              <Com v-model={formObj.data[m.key]} {...getAttr(m)}>
-                                {renderOptions(m)}
-                              </Com>
-                            ) : (
-                              slots[m.key + 'Form']?.({
-                                column: m,
-                                row: formObj.data,
-                              })
-                            )}
-                          </ElFormItem>
-                        ) : (
-                          slots[m.key + 'FormItem']?.({
-                            column: m,
-                            row: formObj.data,
-                          })
-                        )}
-                      </ElCol>
-                    )
-                  }
-                })}
-              </ElRow>
+                  })}
+                </ElRow>
+              </div>
             </ElForm>
           ),
           footer: () => (
             <div class="dialog-footer">
-              <ElButton onClick={cancel}>取 消</ElButton>
+              <ElButton loading={props.loading} onClick={cancel}>
+                取 消
+              </ElButton>
               {dialogObj.type !== 'view' && (
-                <ElButton type="primary" onClick={submitForm}>
+                <ElButton loading={props.loading} type="primary" onClick={submitForm}>
                   保 存
                 </ElButton>
               )}

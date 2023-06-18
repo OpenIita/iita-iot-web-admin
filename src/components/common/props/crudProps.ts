@@ -86,6 +86,7 @@ export const formProps = {
   width: propTypes.number.def(600) || propTypes.string,
   gutter: propTypes.number.def(0),
   col: propTypes.number.def(24),
+  loading: propTypes.bool.def(false),
 }
 
 export const crudProps = {

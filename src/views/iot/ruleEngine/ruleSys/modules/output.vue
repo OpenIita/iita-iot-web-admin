@@ -22,7 +22,7 @@
             </div>
           </template>
           <div class="condition-box" v-if="item.type === 'device'">
-            <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction>
+            <!-- <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction> -->
           </div>
           <div class="condition-box" v-if="item.type === 'http'">
             <HttpAction :config="item"></HttpAction>
@@ -74,7 +74,7 @@ watch(() => dataList, (newV) => {
   dataList.value = arr
   emits('update:list', arr)
 }, {
-  deep: true,
+  // deep: true,
   immediate: true,
 })
 // 新增输出

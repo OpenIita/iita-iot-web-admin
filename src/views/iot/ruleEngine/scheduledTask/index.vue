@@ -108,12 +108,15 @@ const column: IColumn[] = [{
   type: 'radioButton',
   hide: true,
   formItemSlot: true,
-}, {
-  label: '执行动作',
-  key: 'action',
-  hide: true,
-  formSlot: true,
-}, {
+  }
+  // TODO: 暂时隐藏 没时间了
+//   , {
+//   label: '执行动作',
+//   key: 'action',
+//   hide: true,
+//   formSlot: true,
+// }
+  , {
   label: '状态',
   key: 'state',
   slot: true,

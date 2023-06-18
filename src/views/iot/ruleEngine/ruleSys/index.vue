@@ -143,6 +143,7 @@ const onSave = ({type, data, cancel}: any) => {
       deviceDn: m.deviceDn,
       device: m.device,
       conditions: m.conditions,
+      deviceRadio: m.deviceRadio,
     }
     return {
       ...mObj,
@@ -155,13 +156,16 @@ const onSave = ({type, data, cancel}: any) => {
       config: JSON.stringify(m),
     }
   })
-  saveRule(obj).then(res => {
-    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-    cancel()
-    getData()
-  }).finally(() => {
+  // saveRule(obj).then(res => {
+  //   ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+  //   cancel()
+  //   getData()
+  // }).finally(() => {
+    // state.loading = false
+  // })
+  setTimeout(() => {
     state.loading = false
-  })
+  }, 2000)
 }
 const getData = () => {
   state.loading = true

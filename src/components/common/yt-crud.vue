@@ -42,7 +42,7 @@
         </template>
       </yt-table>
     </yt-table-fun>
-    <yt-table-form ref="tableFormRef" v-bind="bind.formBind" :data="data" :column="column" @on-success="onSuccess">
+    <yt-table-form ref="tableFormRef" :loading="loading" v-bind="bind.formBind" :data="data" :column="column" @on-success="onSuccess">
       <template v-for="(item, index) in formSlots" :key="index" #[item]="scope">
         <slot
           :name="item"
