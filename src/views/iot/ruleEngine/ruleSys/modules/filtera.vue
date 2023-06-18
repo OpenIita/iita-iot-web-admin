@@ -16,7 +16,11 @@
                   </el-radio-group>
                 </div>
                 <div class="item" v-if="item.deviceRadio === '指定设备'">
-                  <select-device v-model:id="data.id" placeholder="选择设备"></select-device>
+                  <select-device
+                    v-model:dn="item.deviceDn"
+                    placeholder="选择设备"
+                    @on-select="(row) => hadnleSelectDevice(row, item)"
+                  ></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -24,7 +28,7 @@
               </div>
             </div>
           </template>
-          <div class="condition-box" v-if="data.id || item.deviceRadio === '使用当前设备'">
+          <div class="condition-box" v-if="item.deviceDn || item.deviceRadio === '使用当前设备'">
             <div class="main">
               <div class="title">条件</div>
               <div class="main-box">
@@ -32,8 +36,8 @@
                   <div class="item">
                     <el-row style="width: 100%;">
                       <el-col :span="7">
-                        <el-select v-if="item.deviceRadio !== '使用当前设备'" v-model="cond.identifier" @change="typeChanged">
-                          <el-option-group v-for="group in types" :key="group.name" :label="group.name">
+                        <el-select v-if="item.deviceRadio !== '使用当前设备'" v-model="cond.identifier">
+                          <el-option-group v-for="group in item.types" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
                         </el-select>
@@ -47,11 +51,6 @@
                       </el-col>
                       <el-col :span="10">
                         <el-row class="param-item">
-                          <el-col :span="10" v-if="cond.identifier == 'report'">
-                            <el-select v-model="cond.identifier" style="width: 100%;">
-                              <el-option v-for="p in data.model.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
-                            </el-select>
-                          </el-col>
                           <el-col :span="8">
                             <el-select v-model="cond.comparator">
                               <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
@@ -84,20 +83,74 @@
 </template>
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
+import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 
 import SelectDevice from '@/components/YtSelect/select-device.vue'
 
 const props = defineProps({
   row: propTypes.object.def({}),
 })
+const emits = defineEmits(['update:row'])
 const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
-const list = ref<any[]>([])
+const list = ref<any[]>(props.row.filters || [])
+
+const hadnleSelectDevice = (device, row) => {
+  if (!device.productKey) return
+  row.pk = device.productKey
+  getProductObjectModel(device.productKey, row)
+}
+const getProductObjectModel = (pk, row) => {
+  getObjectModel(pk).then(res => {
+    initThingModel(res.data, row)
+  })
+}
+watch(list, (newV) => {
+  const obj = toRaw(props.row)
+  obj.filters = toRaw(newV || [])
+  obj.filters.forEach(item => {
+    item.device = `${item.pk}/${item.deviceDn || '#'}`
+    item.config = JSON.stringify(item)
+  })
+  emits('update:row', obj)
+}, {
+  immediate: true,
+  deep: true,
+})
+const initThingModel = (res, row) => {
+  const modelItems: any[] = []
+  let items: any[] = []
+  modelItems.push({
+    name: '属性',
+    items: items,
+  })
+  res.model.properties.forEach((p) => {
+    items.push({
+      type: 'property',
+      identifier: p.identifier,
+      name: p.name,
+    })
+  })
+
+  modelItems.push({
+    name: '状态',
+    items: [
+      {
+        type: 'state',
+        identifier: 'online',
+        name: '是否在线',
+      },
+    ],
+  })
+  row.types = modelItems
+  console.log('row.types', row.types)
+}
 // 新增监听器
 const handleAdd = () => {
+  console.log(list.value)
   list.value.push({
     deviceRadio: '指定设备',
     conditions: [{
@@ -166,118 +219,7 @@ const addParmeter = (cond: any) => {
 const removeParmeter = (index: number, cond: any) => {
   cond.parameters.splice(index, 1)
 }
-const data = ref(toRaw(props.row))
-data.value.model = {
-  properties: [
-    {
-      'identifier': 'powerstate',
-      'dataType': {
-        'type': 'enum',
-        'specs': {
-          '0': '关',
-          '1': '开'
-        }
-      },
-      'name': '开关',
-      'accessMode': 'rw'
-    },
-    {
-      'identifier': 'brightness',
-      'dataType': {
-        'type': 'int32',
-        'specs': {
-          'min': '1',
-          'max': '100'
-        }
-      },
-      'name': '亮度',
-      'accessMode': 'rw'
-    }
-  ],
-  'services': [
-    {
-      'identifier': 'open',
-      'inputData': [
-        {
-          'identifier': 'bujian',
-          'dataType': {
-            'type': 'text',
-            'specs': {}
-          },
-          'name': '部件',
-          'required': false
-        }
-      ],
-      'outputData': [
-        {
-          'identifier': 'result',
-          'dataType': {
-            'type': 'bool',
-            'specs': {
-              '0': '成功',
-              '1': '失败'
-            }
-          },
-          'name': '执行结果',
-          'required': false
-        }
-      ],
-      'name': '打开设备'
-    },
-    {
-      'identifier': 'alarm',
-      'inputData': [
-        {
-          'identifier': 'event',
-          'dataType': {
-            'type': 'enum',
-            'specs': {
-              '0': '发生水灾',
-              '1': '发生火灾',
-              '2': '发生水火灾'
-            }
-          },
-          'name': '报警事件',
-          'required': false
-        }
-      ],
-      'outputData': [],
-      'name': '报警'
-    }
-  ],
-  'events': []
-}
-const types = ref([{
-  name: '属性',
-  items: [
-    ...(data.value?.model?.properties || []).map((m: any) => ({
-      type: 'property',
-      identifier: m.identifier,
-      name: m.name,
-    })),
-  ],
-}, {
-  name: '状态',
-  items: [
-    {
-      type: 'state',
-      identifier: 'online',
-      name: '是否在线',
-    },
-  ],
-}])
-const typeChanged = () => {
-  types.value.forEach((t) => {
-    t.items.forEach((item) => {
-      if (item.identifier == data.value.identifier) {
-        data.value.type = item.type
-        return
-      }
-    })
-  })
-}
 onUnmounted(() => {
-  console.log('onUnmounted')
   list.value = []
 })
 </script>

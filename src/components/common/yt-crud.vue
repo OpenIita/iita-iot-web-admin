@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yt-table-search v-bind="bind.searchBind" :data="data" :column="column" v-model="query" @handle-search="search">
+    <yt-table-search v-bind="bind.searchBind" :data="data" :column="column" v-model:query="query" @handle-search="search">
       <template v-for="(item, index) in searchSlots" :key="index" #[item]="scope">
         <slot
           :name="item"
@@ -98,7 +98,6 @@ const tableFormRef = ref()
 const handleAdd = () => {
   tableFormRef.value?.openDialog('add')
 }
-console.log(props)
 const handleDel = (row: any) => {
   emits('delFun', row)
 }

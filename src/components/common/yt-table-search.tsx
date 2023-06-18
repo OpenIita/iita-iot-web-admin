@@ -29,16 +29,16 @@ export default defineComponent({
     const handleQuery = () => {
       emit('handleSearch', formModel.value)
     }
-    watch(
-      () => formModel,
-      (newV) => {
-        emit('update:query', newV.value || {})
-      },
-      {
-        immediate: true,
-        deep: true,
-      }
-    )
+    // watch(
+    //   () => formModel,
+    //   (newV) => {
+    //     emit('update:query', newV.value || {})
+    //   },
+    //   {
+    //     immediate: true,
+    //     deep: true,
+    //   }
+    // )
     const resetQuery = () => {
       queryFormRef.value.resetFields()
       handleQuery()

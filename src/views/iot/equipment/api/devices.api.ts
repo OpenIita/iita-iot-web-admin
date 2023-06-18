@@ -40,13 +40,9 @@ export interface IDevicesVO {
   updateBy: number
   updateTime: string
 }
-interface IPage {
-  pageNum?: number
-  pageSize?: number
-  coverData?: number | string
-}
+
 // 获取列表
-export const getDevicesList = (data?: IPage): AxiosPromise<any> => {
+export const getDevicesList = (data): AxiosPromise<any> => {
   return request({
     url: Api.devicesList,
     method: 'post',
@@ -130,7 +126,7 @@ export const serviceInvoke = (data) => {
   })
 }
 // 获取子设备列表
-export const getChildrenDeviceList = (data?: IPage) => {
+export const getChildrenDeviceList = (data) => {
   return request({
     url: Api.childrenDeviceList,
     method: 'post',

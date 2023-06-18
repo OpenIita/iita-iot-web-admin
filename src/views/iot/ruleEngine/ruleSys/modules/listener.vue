@@ -10,10 +10,10 @@
                   <el-radio label="device" size="large">设备监听</el-radio>
                 </el-radio-group>
                 <div class="item">
-                  <select-product @onSelect="(row) => handleSelectProduct(row, item)"></select-product>
+                  <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row, item)"></select-product>
                 </div>
                 <div class="item" v-if="item.pk">
-                  <select-device placeholder="默认全部设备" :product-id="item.pk || ''"></select-device>
+                  <select-device v-model:dn="item.deviceDn" placeholder="默认全部设备" :product-pk="item.pk || ''"></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -105,18 +105,22 @@ const activeName = ref<number[]>(arr)
 const list = ref<any[]>(props.row.listeners || [])
 watch(list, (newV) => {
   const obj = toRaw(props.row)
-  obj.listeners = toRaw(newV)
-  console.log('newV', obj)
+  obj.listeners = toRaw(newV || [])
+  obj.listeners.forEach(item => {
+    item.device = `${item.pk}/${item.deviceDb || '#'}`
+    item.config = JSON.stringify(item)
+  })
   emits('update:row', obj)
 }, {
   immediate: true,
   deep: true,
 })
+// 选择产品-调用物模型
 const handleSelectProduct = (product, row) => {
   if (!product.productKey) return
-  row.pk = product.productKey
   getProductObjectModel(product.productKey, row)
 }
+
 const getProductObjectModel = (pk, row) => {
   getObjectModel(pk).then(res => {
     initThingModel(res.data, row)

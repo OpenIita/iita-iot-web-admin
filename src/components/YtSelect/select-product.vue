@@ -41,10 +41,11 @@ import YtCrud from '@/components/common/yt-crud.vue'
 
 const props = defineProps({
   id: propTypes.string.def(''),
+  pk: propTypes.string.def(''),
   // 是否多选
   multiple: propTypes.bool.def(false)
 })
-const emits = defineEmits(['onSelect', 'update:id'])
+const emits = defineEmits(['onSelect', 'update:id', 'update:pk'])
 const state = reactive({
   page: {
     pageSize: 10,
@@ -64,6 +65,7 @@ const rowClick = (row: any) => {
   }
   emits('onSelect', row)
   emits('update:id', row.id)
+  emits('update:pk', row.productKey)
   dialogState.data = row
   dialogState.show = false
   console.log(row)
@@ -99,12 +101,16 @@ const handleSelect = () => {
 const cateOptions = ref<any[]>([])
 const getDict = () => {
   getCategoriesAll().then(res => {
-    console.log(res.data)
     cateOptions.value = res.data || []
+    column.value.forEach(item => {
+      if (item.key === 'category') {
+        item.componentProps.options = cateOptions
+      }
+    })
   })
 }
 getDict()
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: 'ProductKey',
   key: 'id',
   rules: [{ required: true, message: 'ProductKey不能为空' }],
@@ -161,7 +167,7 @@ const column: IColumn[] = [{
       }
     ]
   }
-}]
+}])
 const data = ref<any[]>([])
 const getData = () => {
   state.loading = true

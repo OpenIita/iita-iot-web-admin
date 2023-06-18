@@ -22,7 +22,12 @@
       v-model:query="state.query"
       @row-click="rowClick"
       @on-load="getData"
-    ></yt-crud>
+    >
+      <template #state="scope">
+        <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
+        <el-tag v-else type="danger" size="mini">离线</el-tag>
+      </template>
+    </yt-crud>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogState.show = false">取消</el-button>
@@ -34,21 +39,22 @@
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 import { IColumn } from '../common/types/tableCommon'
-import { getDevicesList } from '@/views/iot/equipment/api/devices.api';
+import { getDevicesList } from '@/views/iot/equipment/api/devices.api'
 import { getProductsList } from '@/views/iot/equipment/api/products.api'
 
 import YtCrud from '@/components/common/yt-crud.vue'
 
 const props = defineProps({
   id: propTypes.string.def(''),
+  dn: propTypes.string.def(''),
   // TODO:调接口时有产品id就传入
-  // 固定产品id
-  productId: propTypes.string,
+  // 固定产品key
+  productPk: propTypes.string.def(''),
   // 是否多选
   multiple: propTypes.bool.def(false),
   placeholder: propTypes.string.def('请选择设备'),
 })
-const emits = defineEmits(['onSelect', 'update:id'])
+const emits = defineEmits(['onSelect', 'update:id', 'update:dn'])
 
 const state = reactive({
   page: {
@@ -69,6 +75,7 @@ const rowClick = (row: any) => {
   }
   emits('onSelect', row)
   emits('update:id', row.id)
+  emits('update:dn', row.deviceName)
   dialogState.data = row
   dialogState.show = false
   console.log(row)
@@ -108,6 +115,11 @@ const getDict = () => {
     pageSize: 10000000,
   }).then(res => {
     productOptions.value = res.data.rows || []
+    column.value.forEach(item => {
+      if (item.key === 'productKey') {
+        item.componentProps.options = productOptions.value
+      }
+    })
   })
 }
 getDict()
@@ -138,21 +150,20 @@ const groupOptions = [
     'createAt': 1659872082805
   }
 ]
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: '产品',
   key: 'productKey',
   type: 'select',
-  search: !!props.productId,
+  search: !props.productPk,
   componentProps: {
     labelAlias: 'name',
-    valueAlias: 'id',
+    valueAlias: 'productKey',
     options: productOptions.value,
   },
   rules: [{ required: true, message: '产品名称不能为空' }],
 }, {
   label: '设备DN',
   key: 'deviceName',
-  tableWidth: 240,
   componentProps: {
     placeholder: '一般为设备mac'
   },
@@ -188,13 +199,14 @@ const column: IColumn[] = [{
   tableWidth: 180,
   type: 'date',
   formHide: true,
-}]
+}])
 const data = ref([])
 
 const getData = () => {
   state.loading = true
   getDevicesList({
     ...state.query,
+    productKey: props.productPk,
     ...state.page,
   }).then((res) => {
     data.value = res.data.rows || []

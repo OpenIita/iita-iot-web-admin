@@ -112,7 +112,9 @@ const state = reactive({
   },
   total: 0,
   loading: false,
-  query: {},
+  query: {
+    type: 'scene',
+  },
 })
 const data = ref([])
 // 保存数据
@@ -132,6 +134,7 @@ const getData = () => {
   state.loading = true
   getRuleList({
     ...state.page,
+    ...state.query,
   }).then((res) => {
     data.value = res.data.rows
     state.total = res.data.total
