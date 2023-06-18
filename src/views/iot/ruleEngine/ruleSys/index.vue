@@ -33,7 +33,7 @@
             <filtera v-model:filters="row.filters"></filtera>
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <!-- <Output :list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output> -->
+            <Output v-model:list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output>
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -147,6 +147,12 @@ const onSave = ({type, data, cancel}: any) => {
     return {
       ...mObj,
       config: JSON.stringify(mObj)
+    }
+  })
+  obj.actions = obj.actions.map(m => {
+    return {
+      ...m,
+      config: JSON.stringify(m),
     }
   })
   saveRule(obj).then(res => {

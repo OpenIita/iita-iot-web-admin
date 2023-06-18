@@ -7,7 +7,7 @@
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
                 <el-radio-group v-model="item.type" @change="actionTypeChange(item)">
-                  <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio>
+                  <!-- <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio> -->
                   <el-radio v-if="actions.indexOf('alarm') >= 0" :label="'alarm'">告警消息 </el-radio>
                   <el-radio v-if="actions.indexOf('scene') >= 0" :label="'scene'">场景控制 </el-radio>
                   <el-radio v-if="actions.indexOf('http') >= 0" :label="'http'">http推送 </el-radio>
@@ -56,17 +56,36 @@ const props = defineProps({
   list: propTypes.array.def([]),
   actions: propTypes.string.def(''),
 })
+const emits = defineEmits(['update:list'])
 const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
 const dataList = ref<any[]>(props.list)
-
+watch(() => dataList, (newV) => {
+  const arr = newV.value.map(m => {
+    if (m.config) {
+      const obj = JSON.parse(m.config || '{}')
+      return obj
+    }
+    return m
+  })
+  dataList.value = arr
+  emits('update:list', arr)
+}, {
+  deep: true,
+  immediate: true,
+})
 // 新增输出
 const handleAdd = () => {
   dataList.value.push({
-    services: [{}],
+    services: [{
+      script:
+      `this.translate=function(msg){
+
+}`
+    }],
   })
 }
 

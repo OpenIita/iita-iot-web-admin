@@ -1,5 +1,15 @@
 <template>
-  <el-dialog ref="logDialogRef" width="70%" :title="title" v-model="dialog">
+  <el-dialog
+    ref="logDialogRef"
+    width="70%"
+    :title="title"
+    :loading="state.loading"
+    :total="state.total"
+    v-model:page="state.page"
+    v-model:query="state.query"
+    @on-load="getData"
+    v-model="dialog"
+  >
     <div class="mb10">
       <el-button type="primary" plain icon="Refresh">刷新</el-button>
       <ElPopconfirm title="是否确认删除该规则所有日志？">
@@ -20,6 +30,7 @@
 </template>
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
+import { getRulesLog } from '../api/rule.api'
 
 import ytTable from '@/components/common/yt-table'
 import { IColumn } from '@/components/common/types/tableCommon'
@@ -42,7 +53,16 @@ const getStateName = (state: string) => {
   }
   return ''
 }
-
+const state = reactive({
+  page: {
+    pageSize: 10,
+    pageNum: 1,
+  },
+  total: 0,
+  loading: false,
+  query: {},
+  id: '',
+})
 const data = ref([
   {
     'id': '74999c3d-4dfa-400b-a4e7-48c3de07804b',
@@ -146,7 +166,21 @@ const dialog = ref(false)
 const logDialogRef = ref()
 // 打开日志
 const openDialog = (id: string) => {
+  state.id = id
+  getData()
   dialog.value = true
+}
+const getData = () => {
+  state.loading = true
+  getRulesLog({
+    ...state.page,
+    ...state.query,
+    ruleId: state.id,
+  }).then(res => {
+    console.log('getRulesLog', res)
+  }).finally(() => {
+    state.loading = false
+  })
 }
 defineExpose({
   openDialog,

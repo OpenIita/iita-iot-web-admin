@@ -51,3 +51,12 @@ export const resumeRule = (data) => {
     data,
   })
 }
+
+// 获取日志
+export const getRulesLog = (data) => {
+  return request({
+    url: Api.logList,
+    method: 'post',
+    data,
+  })
+}
