@@ -91,7 +91,7 @@ const dialogState = reactive({
   data: {} as any,
 })
 const name = computed(() => {
-  return dialogState.data?.name || ''
+  return dialogState.data?.name || props.id || props.pk || ''
 })
 const handleSelect = () => {
   console.log('handleSelect')

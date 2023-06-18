@@ -1,4 +1,7 @@
 <template>
+  <div class="item" style="width: 240px;margin-left: 15px;display: inherit;">
+    <select-device v-if="item.type === 'device'" placeholder="选择设备" @onSelect="selectDevices"></select-device>
+  </div>
   <div v-if="productKey">
     <el-row v-for="service in config.services" :key="service.identifier">
       <el-col :span="22">

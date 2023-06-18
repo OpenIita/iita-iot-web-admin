@@ -30,7 +30,7 @@
                     <el-row style="width: 100%;">
                       <el-col :span="7">
                         <el-select v-model="cond.identifier">
-                          <el-option-group v-for="group in item.types" :key="group.name" :label="group.name">
+                          <el-option-group v-for="group in (stateMap.get(item.pk)?.modelItems || [])" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
                         </el-select>
@@ -39,7 +39,12 @@
                         <el-row class="param-item" v-for="(param, paramIndex) in cond.parameters" :key="param.identifier">
                           <el-col :span="10" v-if="cond.identifier == 'report'">
                             <el-select v-model="param.identifier" style="width: 100%;">
-                              <el-option v-for="p in item.state.properties" :label="p.name" :value="p.identifier" :key="p.identifier"></el-option>
+                              <el-option
+                                v-for="p in (stateMap.get(item.pk)?.properties || [])"
+                                :label="p.name"
+                                :value="p.identifier"
+                                :key="p.identifier"
+                              ></el-option>
                             </el-select>
                           </el-col>
                           <el-col :span="6">
@@ -94,39 +99,29 @@ import SelectProduct from '@/components/YtSelect/select-product.vue'
 import SelectDevice from '@/components/YtSelect/select-device.vue'
 
 const props = defineProps({
-  row: propTypes.object.def({}),
+  listeners: propTypes.array.def([]),
 })
-const emits = defineEmits(['update:row'])
+const emits = defineEmits(['update:listeners'])
 const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
+
 const activeName = ref<number[]>(arr)
-const list = ref<any[]>(props.row.listeners || [])
-watch(list, (newV) => {
-  const obj = toRaw(props.row)
-  obj.listeners = toRaw(newV || [])
-  obj.listeners.forEach(item => {
-    item.device = `${item.pk}/${item.deviceDb || '#'}`
-    item.config = JSON.stringify(item)
-  })
-  emits('update:row', obj)
-}, {
-  immediate: true,
-  deep: true,
-})
+const list = ref<any[]>(props.listeners || [])
+
 // 选择产品-调用物模型
-const handleSelectProduct = (product, row) => {
+const handleSelectProduct = (product) => {
   if (!product.productKey) return
-  getProductObjectModel(product.productKey, row)
+  getProductObjectModel(product.productKey)
 }
 
-const getProductObjectModel = (pk, row) => {
+const getProductObjectModel = (pk) => {
   getObjectModel(pk).then(res => {
-    initThingModel(res.data, row)
+    initThingModel(pk, res.data)
   })
 }
-const initThingModel = (res, row) => {
+const initThingModel = (pk, res) => {
   const state: any = {
     modelItems: [],
     properties: [],
@@ -220,15 +215,40 @@ const initThingModel = (res, row) => {
       })
     })
   })
-  row.state = state
-  row.types = state.modelItems
-  console.log(row)
+  stateMap.value.set(pk, state)
 }
 
+const stateMap = ref(new Map())
+watch(list, (newV) => {
+  const arr = toRaw(newV).map(m => {
+    if (m.config) {
+      const obj = JSON.parse(m.config || '{}')
+      if (obj.conditions[0]) {
+        const firstObj = obj.conditions[0].device ? obj.conditions[0].device.split('/') : ''
+        if (firstObj) {
+          obj.pk = firstObj[0] || ''
+          obj.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
+        }
+      }
+      if (!stateMap.value.has(obj.pk)) getProductObjectModel(obj.pk)
+      return {
+        ...obj,
+      }
+    }
+    return {
+      ...m,
+      device: `${m.pk}/${m.deviceDn || '#'}`
+    }
+  })
+  list.value = arr
+  emits('update:listeners', arr)
+}, {
+  immediate: true,
+  deep: true,
+})
 // 新增监听器
 const handleAdd = () => {
   list.value.push({
-    id: generateUUID(),
     type: 'device',
     conditions: [{
       parameters: [],

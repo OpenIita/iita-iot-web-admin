@@ -37,7 +37,7 @@
                     <el-row style="width: 100%;">
                       <el-col :span="7">
                         <el-select v-if="item.deviceRadio !== '使用当前设备'" v-model="cond.identifier">
-                          <el-option-group v-for="group in item.types" :key="group.name" :label="group.name">
+                          <el-option-group v-for="group in stateMap.get(item.pk)" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
                         </el-select>
@@ -88,39 +88,29 @@ import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 import SelectDevice from '@/components/YtSelect/select-device.vue'
 
 const props = defineProps({
-  row: propTypes.object.def({}),
+  filters: propTypes.array.def([]),
 })
-const emits = defineEmits(['update:row'])
+const emits = defineEmits(['update:filters'])
 const arr: number[] = []
 for (let i = 0; i < 100; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
-const list = ref<any[]>(props.row.filters || [])
+const list = ref<any[]>(props.filters || [])
 
 const hadnleSelectDevice = (device, row) => {
   if (!device.productKey) return
   row.pk = device.productKey
-  getProductObjectModel(device.productKey, row)
+  getProductObjectModel(device.productKey)
 }
-const getProductObjectModel = (pk, row) => {
+const getProductObjectModel = (pk) => {
   getObjectModel(pk).then(res => {
-    initThingModel(res.data, row)
+    initThingModel(pk, res.data)
   })
 }
-watch(list, (newV) => {
-  const obj = toRaw(props.row)
-  obj.filters = toRaw(newV || [])
-  obj.filters.forEach(item => {
-    item.device = `${item.pk}/${item.deviceDn || '#'}`
-    item.config = JSON.stringify(item)
-  })
-  emits('update:row', obj)
-}, {
-  immediate: true,
-  deep: true,
-})
-const initThingModel = (res, row) => {
+
+const stateMap = ref(new Map())
+const initThingModel = (pk, res) => {
   const modelItems: any[] = []
   let items: any[] = []
   modelItems.push({
@@ -145,9 +135,36 @@ const initThingModel = (res, row) => {
       },
     ],
   })
-  row.types = modelItems
-  console.log('row.types', row.types)
+  stateMap.value.set(pk, modelItems)
 }
+
+watch(list, (newV) => {
+  const arr = toRaw(newV).map(m => {
+    if (m.config) {
+      const obj = JSON.parse(m.config || '{}')
+      if (obj.conditions[0]) {
+        const firstObj = obj.conditions[0].device ? obj.conditions[0].device.split('/') : ''
+        if (firstObj) {
+          obj.pk = firstObj[0] || ''
+          obj.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
+        }
+      }
+      if (!stateMap.value.has(obj.pk)) getProductObjectModel(obj.pk)
+      return {
+        ...obj,
+      }
+    }
+    return {
+      ...m,
+      device: `${m.pk}/${m.deviceDn || '#'}`
+    }
+  })
+  list.value = arr
+  emits('update:filters', arr)
+}, {
+  immediate: true,
+  deep: true,
+})
 // 新增监听器
 const handleAdd = () => {
   console.log(list.value)

@@ -11,6 +11,7 @@
       v-model:query="state.query"
       @on-load="getData"
       @saveFun="onSave"
+      @del-fun="handleDelete"
     >
       <template #state="scope">
         <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
@@ -20,19 +21,19 @@
         <el-button size="small" type="primary" @click="handleViewLog(scope.row.id)">查看</el-button>
       </template>
       <template #menuSlot="scope">
-        <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close">停止</el-button>
-        <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open">开启</el-button>
+        <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close" @click="handlePause(scope.row)">停止</el-button>
+        <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)">开启</el-button>
       </template>
       <template #customFormItem="{row}">
         <el-tabs v-model="activeName" type="border-card">
           <el-tab-pane label="监听器" :name="1">
-            <listener :row="row"></listener>
+            <listener v-model:listeners="row.listeners"></listener>
           </el-tab-pane>
           <el-tab-pane label="过滤器" :name="2">
-            <filtera :row="row"></filtera>
+            <filtera v-model:filters="row.filters"></filtera>
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output :list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output>
+            <!-- <Output :list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output> -->
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -119,10 +120,36 @@ const state = reactive({
 const data = ref([])
 // 保存数据
 const onSave = ({type, data, cancel}: any) => {
-  console.log('onSave')
-  console.log(data)
   state.loading = true
-  saveRule(toRaw(data)).then(res => {
+  const obj = toRaw(data)
+  console.log('obj', obj)
+  obj.listeners = obj.listeners.map(m => {
+    const mObj = {
+      type: m.type,
+      pk: m.pk,
+      deviceDn: m.deviceDn,
+      device: m.device,
+      conditions: m.conditions,
+    }
+    return {
+      ...mObj,
+      config: JSON.stringify(mObj)
+    }
+  })
+  obj.filters = obj.filters.map(m => {
+    const mObj = {
+      type: m.type,
+      pk: m.pk,
+      deviceDn: m.deviceDn,
+      device: m.device,
+      conditions: m.conditions,
+    }
+    return {
+      ...mObj,
+      config: JSON.stringify(mObj)
+    }
+  })
+  saveRule(obj).then(res => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
     getData()
@@ -140,6 +167,33 @@ const getData = () => {
     state.total = res.data.total
   })
   state.loading = false
+}
+const handleDelete = (row) => {
+  state.loading = true
+  deleteRule(row.id).then(res => {
+    ElMessage.success('删除成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+}
+const handleOpen = (row) => {
+  state.loading = true
+  resumeRule(row.id).then(res => {
+    ElMessage.success('开启成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
+}
+const handlePause = (row) => {
+  state.loading = true
+  pauseRule(row.id).then(res => {
+    ElMessage.success('停止成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
 }
 const options = reactive({
   formProps: {

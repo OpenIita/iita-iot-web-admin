@@ -15,9 +15,6 @@
                   <el-radio v-if="actions.indexOf('kafka') >= 0" :label="'kafka'">kafka推送 </el-radio>
                   <el-radio v-if="actions.indexOf('tcp') >= 0" :label="'tcp'">tcp推送 </el-radio>
                 </el-radio-group>
-                <div class="item" style="width: 240px;margin-left: 15px;display: inherit;">
-                  <select-device v-if="item.type === 'device'" placeholder="选择设备" @onSelect="selectDevices"></select-device>
-                </div>
               </div>
               <div style="padding-right: 10px;">
                 <el-button @click="removeListener(index)">删除</el-button>
