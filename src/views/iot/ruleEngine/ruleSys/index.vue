@@ -33,7 +33,7 @@
             <filtera v-model:filters="row.filters"></filtera>
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output v-model:list="row.actions" actions="device,http,mqtt,kafka,tcp"></Output>
+            <Output v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp"></Output>
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -156,16 +156,13 @@ const onSave = ({type, data, cancel}: any) => {
       config: JSON.stringify(m),
     }
   })
-  // saveRule(obj).then(res => {
-  //   ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-  //   cancel()
-  //   getData()
-  // }).finally(() => {
-    // state.loading = false
-  // })
-  setTimeout(() => {
+  saveRule(obj).then(res => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  }).finally(() => {
     state.loading = false
-  }, 2000)
+  })
 }
 const getData = () => {
   state.loading = true

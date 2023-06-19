@@ -60,7 +60,7 @@
         <optput style="width: 100%;" :row="row.actions || []" actions="device"></optput>
       </template>
     </yt-crud>
-    <log-dialog ref="logDialogRef" title="任务执行日志"></log-dialog>
+    <log-dialog ref="logDialogRef" type="task"></log-dialog>
   </div>
 </template>
 <script lang="ts" setup>

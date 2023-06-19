@@ -7,7 +7,7 @@ enum Api {
   resume = '/rule_engine/resume',
   pause = '/rule_engine/pause',
   logList = '/rule_engine/ruleLog/list',
-  logDelete = '/rule_engine/task/delete',
+  logClear = '/rule_engine/ruleLog/clear',
 }
 
 // 获取列表
@@ -56,6 +56,14 @@ export const resumeRule = (data) => {
 export const getRulesLog = (data) => {
   return request({
     url: Api.logList,
+    method: 'post',
+    data,
+  })
+}
+// 清空日志
+export const clearRulesLog = (data) => {
+  return request({
+    url: Api.logClear,
     method: 'post',
     data,
   })

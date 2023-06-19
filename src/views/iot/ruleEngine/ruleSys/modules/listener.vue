@@ -219,8 +219,8 @@ const initThingModel = (pk, res) => {
 }
 
 const stateMap = ref(new Map())
-watch(list, (newV) => {
-  const arr = toRaw(newV).map(m => {
+watch(() => list.value.length, (newV) => {
+  const arr = toRaw(list.value).map(m => {
     if (m.config) {
       const obj = JSON.parse(m.config || '{}')
       if (obj.conditions[0]) {
