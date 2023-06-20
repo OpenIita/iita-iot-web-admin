@@ -22,7 +22,7 @@
             </div>
           </template>
           <div class="condition-box" v-if="item.type === 'device'">
-            <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction>
+            <DeviceAction ref="deviceActionRef" v-model:services="item.services"></DeviceAction>
           </div>
           <div class="condition-box" v-if="item.type === 'http'">
             <HttpAction :config="item"></HttpAction>
@@ -58,7 +58,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['update:list'])
 const arr: number[] = []
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
@@ -80,12 +80,7 @@ watch(() => dataList.value.length, (newV) => {
 // 新增输出
 const handleAdd = () => {
   dataList.value.push({
-    services: [{
-      script:
-      `this.translate=function(msg){
-
-}`
-    }],
+    services: [],
   })
 }
 
@@ -95,15 +90,8 @@ const removeListener = (index: number) => {
 }
 
 const deviceActionRef = ref()
-const productKey = ref('')
-const selectDevices = (e) => {
-  nextTick(() => {
-    console.log(deviceActionRef.value[0])
-    productKey.value = e.productKey
-    deviceActionRef.value[0].onDeviceSelected(e)
-  })
-}
 const actionTypeChange = (item) => {
+  console.log(item)
   if (item.services.length == 0) {
     if (item.type == 'http') {
       item.services = [

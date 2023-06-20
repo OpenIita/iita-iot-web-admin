@@ -57,7 +57,7 @@
         </el-form-item>
       </template>
       <template #actionForm="{ row }">
-        <optput style="width: 100%;" :row="row.actions || []" actions="device"></optput>
+        <optput style="width: 100%;" v-model:list="row.actions" actions="device"></optput>
       </template>
     </yt-crud>
     <log-dialog ref="logDialogRef" type="task"></log-dialog>
@@ -108,14 +108,12 @@ const column: IColumn[] = [{
   type: 'radioButton',
   hide: true,
   formItemSlot: true,
-  }
-  // TODO: 暂时隐藏 没时间了
-//   , {
-//   label: '执行动作',
-//   key: 'action',
-//   hide: true,
-//   formSlot: true,
-// }
+}, {
+  label: '执行动作',
+  key: 'action',
+  hide: true,
+  formSlot: true,
+}
   , {
   label: '状态',
   key: 'state',
@@ -178,7 +176,10 @@ const state = reactive({
 const onSave = ({type, data, cancel}: any) => {
   console.log('onSave')
   state.loading = true
-  saveTask(toRaw(data)).then(res => {
+  saveTask({
+    ...toRaw(data),
+    actions: JSON.stringify(data.actions),
+  }).then(res => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
     getData()

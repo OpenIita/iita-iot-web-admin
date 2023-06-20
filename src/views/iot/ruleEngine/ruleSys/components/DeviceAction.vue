@@ -1,24 +1,24 @@
 <template>
-  <div class="item" style="width: 240px;margin-left: 15px;display: inherit;">
-    <select-device v-if="item.type === 'device'" placeholder="选择设备" @onSelect="selectDevices"></select-device>
+  <div class="select-device" style="width: 240px;margin-bottom: 10px;display: inherit;">
+    <select-device v-model:dn="selectedDn" placeholder="选择设备" @on-select="hadnleSelectDevice"></select-device>
   </div>
-  <div v-if="productKey">
-    <el-row v-for="service in config.services" :key="service.identifier">
+  <div v-if="selectedDn">
+    <el-row v-for="service in servicesRef" :key="service.identifier" style="margin-bottom: 10px;">
       <el-col :span="22">
         <el-row class="service-box">
           <el-col :span="8">
             <el-select size="mini" v-model="service.identifier" @change="serviceSelected(service)">
               <el-option label="设置属性" value="set"></el-option>
-              <el-option v-for="s in services" :label="s.name" :value="s.identifier" :key="s.identifier"></el-option>
+              <el-option v-for="s in servicesList || []" :label="s.name" :value="s.identifier" :key="s.identifier"></el-option>
             </el-select>
           </el-col>
           <el-col :span="16" style="padding-left: 5px">
             <el-row v-if="service.identifier == 'set'">
               <el-col :span="20">
-                <el-row v-for="param in service.inputData" :key="param.identifier">
+                <el-row v-for="param in service.inputData" :key="param.identifier" style="margin-bottom: 10px;">
                   <el-col :span="10">
                     <el-select size="mini" v-model="param.identifier">
-                      <el-option v-for="prop in properties" :label="prop.name" :value="prop.identifier" :key="prop.identifier"></el-option>
+                      <el-option v-for="prop in propertiesList" :label="prop.name" :value="prop.identifier" :key="prop.identifier"></el-option>
                     </el-select>
                   </el-col>
                   <el-col :span="2"> 值: </el-col>
@@ -36,7 +36,7 @@
             </el-row>
             <el-row v-else>
               <el-col :span="20">
-                <el-row v-for="param in findService(service.identifier).inputData" :key="param.identifier">
+                <el-row v-for="param in findService(service.identifier).inputData" :key="param.identifier" style="margin-bottom: 10px;">
                   <el-col :span="10">
                     {{ param.name }}
                   </el-col>
@@ -62,26 +62,17 @@
 import { propTypes } from '@/utils/propTypes'
 import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 
-// import { GetThingModel } from '../../api/productApi'
+import SelectDevice from '@/components/YtSelect/select-device.vue'
 export default defineComponent ({
   name: 'DeviceAction',
   props: {
-    productKey: propTypes.string.def(''),
-    config: {
-      type: Object,
-      default: () => {
-        return {
-          type: 'device',
-          services: [
-            {
-              device: '',
-              identifier: 'set',
-              inputData: [],
-            },
-          ],
-        }
-      },
+    services: {
+      type: Array,
+      default: () => [],
     },
+  },
+  components: {
+    SelectDevice,
   },
   data() {
     return {
@@ -89,92 +80,81 @@ export default defineComponent ({
       selectedPk: '',
       selectedDn: '',
       properties: [],
-      services: [],
-      configRef: {},
+      servicesRef: this.services,
+      propertiesList: [],
+      servicesList: [],
     }
   },
-  created() {
-    this.init()
-  },
-  watch: {
-    config() {
-      this.init()
-    },
+  emits: ['update:services'],
+  mounted () {
+    this.servicesRef = this.services
+    this.services.map((m, i) => {
+      if (m.device && i === 0) {
+        const firstObj =m.device ?m.device.split('/') : ''
+        if (firstObj) {
+          this.selectedPk = firstObj[0] || ''
+          this.selectedDn = firstObj[1] === '#' ? '' : firstObj[1]
+        }
+        this.getProductObjectModel(this.selectedPk)
+      }
+    })
   },
   methods: {
-    init() {
-      if (!this.configRef.services || this.configRef.services.length == 0) {
-        return
-      }
-      console.log('this.config', this.config)
-      this.configRef = this.config
-      let service = this.configRef.services[0]
-      if (service.device) {
-        let pkDn = service.device.split('/')
-        this.selectedPk = pkDn[0]
-        this.selectedDn = pkDn[1]
-        this.getThingModel(pkDn[0])
-      }
-      console.log(this.configRef)
-    },
     openDeviceSelector() {
       this.showDeviceSelector = !this.showDeviceSelector
     },
-    onDeviceSelected(device) {
-      this.selectedPk = device.productKey
+    hadnleSelectDevice(device) {
+      if (!device.productKey) return
       this.selectedDn = device.deviceName
-      this.showDeviceSelector = false
-      this.configRef.services = []
-      this.getThingModel(device.productKey)
+      this.selectedPk = device.productKey
+      this.getProductObjectModel(device.productKey)
     },
-    getThingModel(pk) {
+    getProductObjectModel (pk) {
       getObjectModel(pk).then((res) => {
-        console.log('res', res)
-        this.initThingModel(res)
+        this.initThingModel(pk, res.data)
       })
     },
-    initThingModel(res) {
-      this.properties = []
-      this.services = []
+    initThingModel (pk, res) {
+      this.propertiesList = []
+      this.servicesList = []
       res.model.properties.forEach((p) => {
-        this.properties.push(p)
+        this.propertiesList.push(p)
       })
-
       res.model.services.forEach((s) => {
-        this.services.push(s)
+        this.servicesList.push(s)
       })
     },
-    addService() {
-      this.configRef.services.push({
-        device: this.selectedPk + '/' + this.selectedDn,
+    addService () {
+      console.log(this.selectedPk + '/' + (this.selectedDn || '#'))
+      this.servicesRef.push({
+        device: this.selectedPk + '/' + (this.selectedDn || '#'),
         identifier: 'set',
         inputData: [],
       })
     },
     serviceSelected (service) {
-      this.services.forEach((s) => {
+      this.servicesList.forEach((s) => {
         if (service.identifier == s.identifier) {
           service.inputData = s.inputData
         }
       })
     },
     delService(service) {
-      let idx = this.configRef.services.findIndex(
+      let idx = this.servicesRef.findIndex(
         (s) => s.identifier == service.identifier
       )
-      this.configRef.services.splice(idx, 1)
+      this.servicesRef.splice(idx, 1)
     },
     findService(identifier) {
       let service = {}
-      console.log('this.services', this.services.length)
-      if (this.services.length === 0) return ''
-      this.services.forEach((s) => {
+      if (this.servicesList.length === 0) return ''
+      this.servicesList.forEach((s) => {
         if (s.identifier == identifier) {
           service = s
           return service
         }
       })
-      this.configRef.services.forEach((s) => {
+      this.servicesRef.forEach((s) => {
         if (s.identifier == identifier) {
           service = s
           return service
@@ -197,8 +177,7 @@ export default defineComponent ({
 .service-box {
   border: 1px solid #ddd;
   border-radius: 3px;
-  padding: 0 5px;
-  margin: 5px 0;
+  padding: 5px 5px;
   background-color: #eee;
 }
 </style>
