@@ -7,7 +7,7 @@
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
                 <el-radio-group v-model="item.type" @change="actionTypeChange(item)">
-                  <!-- <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio> -->
+                  <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio>
                   <el-radio v-if="actions.indexOf('alarm') >= 0" :label="'alarm'">告警消息 </el-radio>
                   <el-radio v-if="actions.indexOf('scene') >= 0" :label="'scene'">场景控制 </el-radio>
                   <el-radio v-if="actions.indexOf('http') >= 0" :label="'http'">http推送 </el-radio>
@@ -22,7 +22,7 @@
             </div>
           </template>
           <div class="condition-box" v-if="item.type === 'device'">
-            <!-- <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction> -->
+            <DeviceAction ref="deviceActionRef" :config="item" :product-key="productKey"></DeviceAction>
           </div>
           <div class="condition-box" v-if="item.type === 'http'">
             <HttpAction :config="item"></HttpAction>
@@ -63,8 +63,8 @@ for (let i = 0; i < 100; i++) {
 }
 const activeName = ref<number[]>(arr)
 const dataList = ref<any[]>(props.list)
-watch(() => dataList, (newV) => {
-  const arr = newV.value.map(m => {
+watch(() => dataList.value.length, (newV) => {
+  const arr = dataList.value.map(m => {
     if (m.config) {
       const obj = JSON.parse(m.config || '{}')
       return obj

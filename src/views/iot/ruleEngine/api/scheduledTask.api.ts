@@ -8,6 +8,8 @@ enum Api {
   stop = '/rule_engine/task/pause',
   resume = '/rule_engine/task/resume',
   start = '/rule_engine/task/renew',
+  logList = '/rule_engine/taskLogs/list',
+  logClear = '/rule_engine/taskLogs/clear',
 }
 
 export interface ITaskVO {
@@ -68,6 +70,23 @@ export const startTask = (data) => {
   return request({
     url: Api.start,
     method: 'POST',
+    data,
+  })
+}
+
+// 获取日志
+export const getTaskLog = (data) => {
+  return request({
+    url: Api.logList,
+    method: 'post',
+    data,
+  })
+}
+// 清空日志
+export const clearTaskLog = (data) => {
+  return request({
+    url: Api.logClear,
+    method: 'post',
     data,
   })
 }

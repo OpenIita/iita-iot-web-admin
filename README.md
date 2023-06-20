@@ -28,6 +28,8 @@ pnpm install
 # 启动服务
 pnpm run dev
 
-# 构建生产环境 yarn build:prod
-# 前端访问地址 http://localhost:8082
+# 构建生产环境 
+yarn build:prod
+# 前端访问地址
+http://localhost:8082
 
