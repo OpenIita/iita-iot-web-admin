@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-const url = ref('https://javalionli.gitee.io/plus-doc')
+const url = ref('http://iotkit-open-source.gitee.io/document')
 
 function goto() {
   window.open(url.value)
