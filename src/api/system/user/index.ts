@@ -144,7 +144,10 @@ export function uploadAvatar(data: FormData) {
   return request({
     url: '/system/user/profile/avatar',
     method: 'post',
-    data,
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: {
+      avatarfile: data,
+    },
   })
 }
 

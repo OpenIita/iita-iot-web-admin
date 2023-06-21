@@ -3,7 +3,7 @@ import { AxiosPromise } from 'axios'
 
 enum Api {
   list = '/rule_engine/tasks/list',
-  delete = '/rule_engine/tasks/delete',
+  delete = '/rule_engine/task/delete',
   save = '/rule_engine/task/save',
   stop = '/rule_engine/task/pause',
   resume = '/rule_engine/task/resume',
@@ -14,6 +14,7 @@ enum Api {
 
 export interface ITaskVO {
   actions: string
+  config?: string | any[]
   createAt: number
   desc: string
   expression: string
@@ -34,7 +35,7 @@ export const getTaskList = (data) => {
 }
 
 // 编辑、保存
-export const saveTask = (data: ITaskVO) => {
+export const saveTask = (data) => {
   return request({
     url: Api.save,
     method: 'POST',

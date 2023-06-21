@@ -54,11 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import "vue-cropper/dist/index.css"
-import { VueCropper } from "vue-cropper"
-import { uploadAvatar } from "@/api/system/user"
-import useUserStore from "@/store/modules/user"
-import { ComponentInternalInstance } from "vue"
+import 'vue-cropper/dist/index.css'
+import { VueCropper } from 'vue-cropper'
+import { uploadAvatar } from '@/api/system/user'
+import useUserStore from '@/store/modules/user'
+import { ComponentInternalInstance } from 'vue'
 
 interface Options {
     img: string | ArrayBuffer | null // 裁剪图片的地址
@@ -78,7 +78,7 @@ const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 const open = ref(false)
 const visible = ref(false)
-const title = ref("修改头像")
+const title = ref('修改头像')
 
 const cropper = ref<any>({})
 //图片裁剪数据
@@ -88,7 +88,7 @@ const options = reactive<Options>({
   autoCropWidth: 200,
   autoCropHeight: 200,
   fixedBox: true,
-  outputType: "png",
+  outputType: 'png',
   fileName: '',
   previews: {},
   visible: false
@@ -119,8 +119,8 @@ const changeScale = (num: number) => {
 }
 /** 上传预处理 */
 const beforeUpload = (file: any) => {
-  if (file.type.indexOf("image/") == -1) {
-    proxy?.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+  if (file.type.indexOf('image/') == -1) {
+    proxy?.$modal.msgError('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。')
   } else {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -134,12 +134,14 @@ const beforeUpload = (file: any) => {
 const uploadImg = async () => {
   cropper.value.getCropBlob(async (data: any) => {
     let formData = new FormData()
-    formData.append("avatarfile", data, options.fileName)
-    const res = await uploadAvatar(formData)
+    formData.append('avatarfile', data, options.fileName)
+    console.log(data)
+    console.log(formData)
+    const res = await uploadAvatar(data)
     open.value = false
     options.img = res.data.imgUrl
     userStore.avatar = options.img as string
-    proxy?.$modal.msgSuccess("修改成功")
+    proxy?.$modal.msgSuccess('修改成功')
     visible.value = false
   })
 }

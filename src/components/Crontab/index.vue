@@ -27,7 +27,6 @@ const cronBoxRef = ref()
 const cronDialog = ref(false)
 const submitFill = () => {
   nextTick(() => {
-    console.log(cronBoxRef.value)
     cronBoxRef.value.submitFill()
   })
 }
@@ -43,10 +42,12 @@ const hidePopup = () => {
   })
 }
 const cronFill = (string: string) => {
-  emits('update:value', string)
   stringValue.value = string
   cronDialog.value = false
 }
+watch(() => stringValue.value, (newV) => {
+  emits('update:value', newV)
+})
 const openDialog = () => {
   cronDialog.value = true
 }

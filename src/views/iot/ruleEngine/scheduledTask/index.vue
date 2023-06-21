@@ -39,7 +39,7 @@
       </template>
       <template #expressionFormItem="{column, row}">
         <el-form-item v-if="row.type === 'timer'" :label="column.label" :prop="column.key">
-          <crontab-box v-model="row[column.key]"></crontab-box>
+          <crontab-box v-model:value="row.expression"></crontab-box>
         </el-form-item>
       </template>
       <template #secondsFormItem="{column, row}">
@@ -65,7 +65,7 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { getTaskList, saveTask, stopTask, reloadTask, startTask } from '../api/scheduledTask.api'
+import { getTaskList, saveTask, stopTask, reloadTask, startTask, deleteTask} from '../api/scheduledTask.api'
 
 import CrontabBox from '@/components/Crontab/index.vue'
 import LogDialog from '../modules/logDialog.vue'
@@ -160,7 +160,13 @@ const secondsInput = (val: number, row) => {
 }
 
 const handleDelete = (row) => {
-  console.log(row)
+  state.loading = true
+  deleteTask(row.id).then(res => {
+    ElMessage.success('删除成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
 }
 
 const state = reactive({
@@ -178,7 +184,10 @@ const onSave = ({type, data, cancel}: any) => {
   state.loading = true
   saveTask({
     ...toRaw(data),
-    actions: JSON.stringify(data.actions),
+    actions: toRaw(data).actions.map(m => ({
+      config: JSON.stringify(m),
+      type: m.type,
+    })),
   }).then(res => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
