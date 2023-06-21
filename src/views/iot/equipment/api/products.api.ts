@@ -10,6 +10,7 @@ enum Api {
   saveObjectModel = '/product/thingModel/save',
   productModelList = '/product/getModelsByProductKey',
   productModelSave = '/product/productModel/edit',
+  productModelDelete = '/product/productModel/delete',
 }
 export interface IProductsVO {
   id?: number
@@ -74,6 +75,16 @@ export const getProductModelList = (data) => {
 export const saveProductModel = (data) => {
   return request({
     url: Api.productModelSave,
+    method: 'post',
+    data,
+  })
+}
+
+
+// 删除型号
+export const deleteProductModel = (data: string | number) => {
+  return request({
+    url: Api.productModelDelete,
     method: 'post',
     data,
   })
