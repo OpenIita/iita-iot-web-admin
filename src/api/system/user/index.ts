@@ -23,7 +23,7 @@ export function listUser(query: UserQuery): AxiosPromise<UserVO[]> {
  */
 export function getUser(userId?: string | number): AxiosPromise<UserInfoVO> {
   return request({
-    url: '/system/user/profile/getDetail',
+    url: '/system/user/getDetail',
     method: 'post',
     data: parseStrEmpty(userId),
   })
@@ -41,12 +41,11 @@ export function addUser(data: UserForm) {
 }
 
 /**
- * 修改用户个人信息
- * @param data 用户信息
+ * 修改用户
  */
-export function updateUserProfile(data: UserForm) {
+export function updateUser(data: UserForm) {
   return request({
-    url: '/system/user/profile/updateProfile',
+    url: '/system/user/edit',
     method: 'post',
     data,
   })
@@ -98,7 +97,27 @@ export function changeUserStatus(id: number | string, status: string) {
   })
 }
 
+/**
+ * 查询用户个人信息
+ */
+export function getUserProfile(): AxiosPromise<UserInfoVO> {
+  return request({
+    url: '/system/user/profile/getDetail',
+    method: 'post',
+  })
+}
 
+/**
+ * 修改用户个人信息
+ * @param data 用户信息
+ */
+export function updateUserProfile(data: UserForm) {
+  return request({
+    url: '/system/user/profile/updateProfile',
+    method: 'post',
+    data,
+  })
+}
 
 /**
  * 用户密码重置
@@ -125,7 +144,7 @@ export function uploadAvatar(data: FormData) {
   return request({
     url: '/system/user/profile/avatar',
     method: 'post',
-    data,
+    data: data,
   })
 }
 
