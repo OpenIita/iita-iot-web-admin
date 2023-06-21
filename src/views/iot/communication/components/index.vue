@@ -3,7 +3,7 @@
     <yt-table-fun @handle-add="handleAdd()">
       <el-row :gutter="40">
         <el-col :span="6" :sm="6" :xs="24" v-for="com in data" :key="com.id" style="margin: 10px 0">
-          <el-card v-loading="loading">
+          <el-card>
             <template #header>
               <div class="clearfix">
                 <b>{{ com.name }}</b>

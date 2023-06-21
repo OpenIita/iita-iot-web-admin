@@ -66,7 +66,7 @@
 import userAvatar from "./userAvatar.vue"
 import userInfo from "./userInfo.vue"
 import resetPwd from "./resetPwd.vue"
-import { getUserProfile } from "@/api/system/user"
+import { getUser } from "@/api/system/user"
 
 const activeTab = ref("userinfo")
 const state = ref<{ user: any; roleGroup: string;  postGroup: string}>({
@@ -77,8 +77,8 @@ const state = ref<{ user: any; roleGroup: string;  postGroup: string}>({
 
 const userForm = ref({})
 
-const getUser = async () => {
-  const res = await getUserProfile()
+const getUserDetail = async () => {
+  const res = await getUser()
   state.value.user = res.data.user
   userForm.value = { ...res.data.user }
   state.value.roleGroup = res.data.roleGroup
@@ -86,6 +86,6 @@ const getUser = async () => {
 }
 
 onMounted(() => {
-  getUser()
+  getUserDetail()
 })
 </script>
