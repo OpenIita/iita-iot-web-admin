@@ -11,6 +11,7 @@
         v-model:query="state.query"
         :total="state.total"
         :loading="state.loading"
+        @handle-delete="handleDel"
         @handle-update="handleUpdate"
       >
         <template #dataType="{ row }">
@@ -24,10 +25,13 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { propTypes } from '@/utils/propTypes'
-
+import { saveObjectModel } from '../../api/products.api'
 import FunctionDetail from './modeuls/functionDetail.vue'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
+import { useEmitt } from '@/hooks/web/useEmitt'
+
+const { emitter } = useEmitt()
 
 const props = defineProps({
   id: propTypes.string.def(''),
@@ -78,6 +82,39 @@ const handleUpdate = (row: any) => {
   }
   functionDetailRef.value.openDialog(toRaw(row), props)
 }
+
+const submitThingModelChange = () => {
+  saveObjectModel({
+    productKey: props.id,
+    model: JSON.stringify(props.model),
+  }).then(() => {
+    state.loading = false
+    emitter.emit('updateObjectModel')
+  })
+}
+
+// 删除
+const handleDel = (row: any) => {
+  state.loading = true
+  if (row.type == "property") {
+        let index = props.model.properties.findIndex((p) => {
+          return p.identifier == row.identifier;
+        });
+        props.model.properties.splice(index, 1);
+      } else if (row.type == "service") {
+        let index = props.model.services.findIndex((s) => {
+          return s.identifier == row.identifier;
+        });
+        props.model.services.splice(index, 1);
+      } else if (row.type == "event") {
+        let index = props.model.events.findIndex((e) => {
+          return e.identifier == row.identifier;
+        });
+        props.model.events.splice(index, 1);
+      }
+      submitThingModelChange()
+}
+
 const column = ref<IColumn[]>([
   {
     label: '功能类型',
@@ -162,6 +199,7 @@ const getInfo = (model) => {
   console.log('modelFuncs', modelFuncs)
   data.value = modelFuncs
 }
+
 watch(() => props.model, (newV) => {
   if (newV) getInfo(newV)
 }, {
