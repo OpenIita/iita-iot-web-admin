@@ -102,7 +102,7 @@ export function changeUserStatus(id: number | string, status: string) {
  */
 export function getUserProfile(): AxiosPromise<UserInfoVO> {
   return request({
-    url: '/system/user/profile',
+    url: '/system/user/profile/getDetail',
     method: 'post',
   })
 }
@@ -113,7 +113,7 @@ export function getUserProfile(): AxiosPromise<UserInfoVO> {
  */
 export function updateUserProfile(data: UserForm) {
   return request({
-    url: '/system/user/profile',
+    url: '/system/user/profile/updateProfile',
     method: 'post',
     data,
   })
@@ -144,7 +144,10 @@ export function uploadAvatar(data: FormData) {
   return request({
     url: '/system/user/profile/avatar',
     method: 'post',
-    data,
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: {
+      avatarfile: data,
+    },
   })
 }
 

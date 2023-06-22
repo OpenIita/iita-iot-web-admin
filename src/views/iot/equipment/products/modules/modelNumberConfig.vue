@@ -1,6 +1,7 @@
 <template>
   <yt-table-fun @handle-add="handleAdd">
-    <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" @handle-update="handleUpdate">
+    <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" 
+    @handle-update="handleUpdate" @handle-delete="handleDel">
       <template #model="{ row }">
         <div>{{ row.model.endsWith("_default") ? "默认" : row.model }}</div>
       </template>
@@ -17,8 +18,7 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { propTypes } from '@/utils/propTypes'
-import { getProductModelList, saveProductModel } from '../../api/products.api'
-
+import { getProductModelList, deleteProductModel } from '../../api/products.api'
 import ModelNumberDetail from './modeuls/modelNumberDetail.vue'
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTable from '@/components/common/yt-table'
@@ -49,6 +49,14 @@ this.decode(msg){
 const handleUpdate = (row: any) => {
   modelNumberDetailRef.value.openDialog(toRaw(row))
 }
+// 删除
+const handleDel = (row: any) => {
+   deleteProductModel(row.id).then(() => {
+    ElMessage.success('删除成功')
+    getData()
+  })
+}
+
 const column = ref<IColumn[]>([
   {
     label: '型号',

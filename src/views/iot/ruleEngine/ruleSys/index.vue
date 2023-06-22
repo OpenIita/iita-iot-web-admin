@@ -122,7 +122,6 @@ const data = ref([])
 const onSave = ({type, data, cancel}: any) => {
   state.loading = true
   const obj = toRaw(data)
-  console.log('obj', obj)
   obj.listeners = obj.listeners.map(m => {
     const mObj = {
       type: m.type,
