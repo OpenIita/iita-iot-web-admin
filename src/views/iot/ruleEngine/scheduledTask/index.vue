@@ -45,10 +45,11 @@
       <template #secondsFormItem="{column, row}">
         <el-form-item v-if="row.type === 'delay'" :label="column.label" :prop="column.key">
           <el-input
-            type="number"
-            :onkeyup="row.seconds = (row.seconds || '').replace(/\-/g,'')"
+            :onkeyup="row.seconds"
             :min="0"
+            type="number"
             v-model="row.seconds"
+            :precision="0"
             auto-complete="off"
             @input="secondsInput($event, row)"
           >
@@ -65,7 +66,7 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { getTaskList, saveTask, stopTask, reloadTask, startTask, deleteTask} from '../api/scheduledTask.api'
+import { getTaskList, saveTask, stopTask, reloadTask, startTask, deleteTask } from '../api/scheduledTask.api'
 
 import CrontabBox from '@/components/Crontab/index.vue'
 import LogDialog from '../modules/logDialog.vue'
@@ -153,26 +154,35 @@ const column: IColumn[] = [
 
 const data = ref()
 
-const secondsInput = (val: number, row) => {
+const secondsInput = (val: string, row) => {
   let param = ''
-  if (val < 60) {
-    param = val + '秒'
-  } else if (val < 3600) {
-    param = parseInt((val / 60).toString()) + '分' + (val % 60) + '秒'
-  } else {
-    param = parseInt((val / 3600).toString()) + '时' + parseInt(((val % 3600) / 60).toString()) + '分' + (val % 60) + '秒'
+  let val2: number = parseInt(val.replace(/[^\d].*/g, ''))
+  if (!val2) {
+    row.seconds = val2
+    return
   }
+
+  if (val2 < 60) {
+    param = val2 + '秒'
+  } else if (val2 < 3600) {
+    param = parseInt((val2 / 60).toString()) + '分' + (val2 % 60) + '秒'
+  } else {
+    param = parseInt((val2 / 3600).toString()) + '时' + parseInt(((val2 % 3600) / 60).toString()) + '分' + (val2 % 60) + '秒'
+  }
+  row.seconds = val2
   row.secondsDesc = param
 }
 
 const handleDelete = (row) => {
   state.loading = true
-  deleteTask(row.id).then(res => {
-    ElMessage.success('删除成功!')
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  deleteTask(row.id)
+    .then((res) => {
+      ElMessage.success('删除成功!')
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 const state = reactive({
@@ -199,17 +209,19 @@ const onSave = ({ type, data, cancel }: any) => {
 
   saveTask({
     ...toRaw(data),
-    actions: toRaw(data).actions.map(m => ({
+    actions: toRaw(data).actions.map((m) => ({
       config: JSON.stringify(m),
       type: m.type,
     })),
-  }).then(res => {
-    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-    cancel()
-    getData()
-  }).finally(() => {
-    state.loading = false
   })
+    .then((res) => {
+      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+      cancel()
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
     .then((res) => {
       ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
       cancel()
