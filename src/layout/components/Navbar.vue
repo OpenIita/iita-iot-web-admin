@@ -1,7 +1,12 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
+    <div class="flex align-center ml20">
+      <div class="logo">
+        <img src="@/assets/logo/logo.png" alt="" />
+      </div>
+      <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    </div>
+    <!-- <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" /> -->
     <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
 
     <div class="right-menu flex align-center">
@@ -38,9 +43,9 @@
           <lang-select id="lang-select" class="right-menu-item hover-effect" />
         </el-tooltip> -->
 
-        <el-tooltip :content="$t('navbar.layoutSize')" effect="dark" placement="bottom">
+        <!-- <el-tooltip :content="$t('navbar.layoutSize')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
       </template>
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
@@ -53,9 +58,9 @@
               <router-link to="/user/profile" v-if="!dynamic">
                 <el-dropdown-item>{{ $t('navbar.personalCenter') }}</el-dropdown-item>
               </router-link>
-              <el-dropdown-item command="setLayout">
+              <!-- <el-dropdown-item command="setLayout">
                 <span>{{ $t('navbar.layoutSetting') }}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item divided command="logout">
                 <span>{{ $t('navbar.logout') }}</span>
               </el-dropdown-item>
@@ -71,10 +76,10 @@
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
-import { getTenantList } from "@/api/login"
-import { dynamicClear, dynamicTenant } from "@/api/system/tenant"
-import { ComponentInternalInstance } from "vue"
-import { TenantVO } from "@/api/types"
+import { getTenantList } from '@/api/login'
+import { dynamicClear, dynamicTenant } from '@/api/system/tenant'
+import { ComponentInternalInstance } from 'vue'
+import { TenantVO } from '@/api/types'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -166,20 +171,36 @@ const handleCommand = (command: string) => {
 }
 
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 50px;
   overflow: hidden;
-  position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  justify-content: space-between;
+  z-index: 1002;
+  .logo {
+    width: 120px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 
   .hamburger-container {
-    line-height: 46px;
-    height: 100%;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    margin-left: 30px;
     float: left;
     cursor: pointer;
     transition: background 0.3s;
     -webkit-tap-highlight-color: transparent;
-
+    background: rgba(0, 0, 0, 0.025);
     &:hover {
       background: rgba(0, 0, 0, 0.025);
     }
@@ -238,7 +259,7 @@ const handleCommand = (command: string) => {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
           margin-top: 10px;
         }
 

@@ -23,7 +23,7 @@ const setting: DefaultSettings = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * 是否固定头部
@@ -33,7 +33,7 @@ const setting: DefaultSettings = {
   /**
    * 是否显示logo
    */
-  sidebarLogo: true,
+  sidebarLogo: false,
 
   /**
    * 是否显示动态标题

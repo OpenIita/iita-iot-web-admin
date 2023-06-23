@@ -1,7 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
-    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <side-bar v-if="!sidebar.hide" class="sidebar-container" />
+    <!-- <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" /> -->
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
       <!-- <el-scrollbar>
         <div :class="{ 'fixed-header': fixedHeader }">
@@ -15,8 +14,11 @@
         <navbar ref="navbarRef" @setLayout="setLayout" />
         <tags-view v-if="needTagsView" />
       </div>
-      <app-main />
-      <settings ref="settingRef" />
+      <div class="layout-box">
+        <side-bar v-if="!sidebar.hide" class="sidebar-container" />
+        <app-main />
+      </div>
+      <!-- <settings ref="settingRef" /> -->
     </div>
   </div>
 </template>
@@ -77,13 +79,17 @@ const setLayout = () => {
 <style lang="scss" scoped>
   @import "@/assets/styles/mixin.scss";
   @import "@/assets/styles/variables.module.scss";
-
+.layout-box {
+  position: relative;
+  display: flex;
+  padding-top: 50px;
+}
 .app-wrapper {
   @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
-
+  overflow: hidden;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;

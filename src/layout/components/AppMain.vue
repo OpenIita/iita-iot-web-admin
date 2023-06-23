@@ -1,28 +1,34 @@
 <template>
-  <section class="app-main">
-    <router-view v-slot="{ Component, route }">
-      <transition :enter-active-class="animante" mode="out-in">
-        <div>
-          <keep-alive :include="tagsViewStore.cachedViews">
-            <component v-if="!route.meta.link" :is="Component" :key="route.path" />
-          </keep-alive>
-        </div>
-      </transition>
-    </router-view>
-    <iframe-toggle />
-  </section>
+  <div class="app-box">
+    <div style="padding: 16px;">
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
+      <section class="app-main">
+        <router-view v-slot="{ Component, route }">
+          <transition :enter-active-class="animante" mode="out-in">
+            <div>
+              <keep-alive :include="tagsViewStore.cachedViews">
+                <component v-if="!route.meta.link" :is="Component" :key="route.path" />
+              </keep-alive>
+            </div>
+          </transition>
+        </router-view>
+        <iframe-toggle />
+      </section>
+    </div>
+  </div>
 </template>
 
 <script setup name="AppMain" lang="ts">
 import useTagsViewStore from '@/store/modules/tagsView'
 import useSettingsStore from '@/store/modules/settings'
 import IframeToggle  from './IframeToggle/index.vue'
-import { ComponentInternalInstance } from "vue"
+import { ComponentInternalInstance } from 'vue'
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const tagsViewStore = useTagsViewStore()
 
 // 随机动画集合
 const animante = ref<string>('')
+const settingsStore = useSettingsStore()
 const animationEnable = ref(useSettingsStore().animationEnable)
 watch(()=> useSettingsStore().animationEnable, (val) => {
   animationEnable.value = val
@@ -35,12 +41,25 @@ watch(()=> useSettingsStore().animationEnable, (val) => {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/variables.module.scss';
+.app-box {
+  padding-left: $base-sidebar-width;
+  transition: .3s ease;
+  width: 100%;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+}
+#app .hideSidebar {
+  .app-box {
+    padding-left: 54px;
+  }
+}
 .app-main {
   /* 50= navbar  50  */
-  min-height: calc(100vh - 50px);
+  // min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
-  overflow: hidden;
+  // overflow-y: auto;
 }
 
 .fixed-header+.app-main {
