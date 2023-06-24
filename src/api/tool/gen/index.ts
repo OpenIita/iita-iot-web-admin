@@ -91,8 +91,7 @@ export const synchDb = (tableName: string) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/synchDb',
     method: 'post',
-    data: {
-      tableName,
-    },
+    data: tableName,
+  
   })
 }
