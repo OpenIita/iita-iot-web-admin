@@ -165,8 +165,8 @@ onActivated(() => {
 const getList = async () => {
   loading.value = true
   const res = await listTable(proxy?.addDateRange(queryParams.value, dateRange.value))
-  tableList.value = res.rows
-  total.value = res.total
+  tableList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 /** 搜索按钮操作 */
@@ -231,7 +231,7 @@ const handleEditTable = (row?: TableVO) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: TableVO) => {
-  const tableIds = row?.tableId || ids.value
+  const tableIds = row?.tableId ? [row.tableId]: ids.value
   await proxy?.$modal.confirm('是否确认删除表编号为"' + tableIds + '"的数据项？')
   await delTable(tableIds)
   getList()
