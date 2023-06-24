@@ -59,7 +59,14 @@ export default defineComponent({
                 const type = m?.type || 'string'
                 const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
                 return (
-                  <ElFormItem label={m.label + ':'} prop={m.key}>
+                  <ElFormItem
+                    label={m.label + ':'}
+                    labelWidth="auto"
+                    prop={m.key}
+                    style={{
+                      marginBottom: 0,
+                    }}
+                  >
                     {!m.searchSlot ? (
                       <Com v-model={formModel.value[m.key]} {...getAttr(m)}>
                         {renderOptions(m)}
@@ -73,13 +80,27 @@ export default defineComponent({
                   </ElFormItem>
                 )
               })}
-              <ElFormItem>
-                <ElButton type="primary" onClick={handleQuery} icon="Search" loading={props.loading}>
-                  搜索
-                </ElButton>
-                <ElButton onClick={resetQuery} icon="Refresh">
-                  重置
-                </ElButton>
+              <ElFormItem
+                style={{
+                  marginBottom: 0,
+                }}
+              >
+                <ElButton
+                  type="primary"
+                  onClick={handleQuery}
+                  icon="Search"
+                  style={{
+                    padding: '8px',
+                  }}
+                  loading={props.loading}
+                ></ElButton>
+                <ElButton
+                  onClick={resetQuery}
+                  style={{
+                    padding: '8px',
+                  }}
+                  icon="Refresh"
+                ></ElButton>
               </ElFormItem>
             </ElForm>
           </div>

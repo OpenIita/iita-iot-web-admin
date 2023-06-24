@@ -1,9 +1,9 @@
 <template>
   <el-card shadow="never" v-if="!hide">
     <template #header>
-      <el-row :gutter="gutter" class="mb8">
+      <el-row :gutter="gutter" justify="space-between" align="center" class="mb8">
         <el-col :span="span" v-if="addBtn">
-          <el-button v-bind="addBind" type="primary" plain icon="Plus" @click="emits('handleAdd')">{{ addBtnText }}</el-button>
+          <el-button v-bind="addBind" type="primary" icon="Plus" @click="emits('handleAdd')">{{ addBtnText }}</el-button>
         </el-col>
         <el-col :span="span" v-if="delBtn">
           <el-button type="danger" plain icon="Delete" v-bind="delBind" :disabled="false" @click="emits('handleDel')">{{ delBtnText }}</el-button>
@@ -11,7 +11,9 @@
         <el-col :span="span" v-if="exportBtn">
           <el-button v-bind="exportBind" type="warning" plain icon="Download" @click="emits('handleExport')">{{ exportBtnText }}</el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="emits('reloadData')"></right-toolbar>
+        <div class="rightToolbar">
+          <slot name="rightToolbar"></slot>
+        </div>
       </el-row>
     </template>
     <div>
@@ -42,6 +44,10 @@ const showSearch = ref(false)
 const emits = defineEmits(['handleAdd', 'handleDel', 'handleExport', 'reloadData'])
 </script>
 
-<!-- <style lang="scss" scoped>
-
-</style> -->
+<style lang="scss" scoped>
+.rightToolbar {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+</style>

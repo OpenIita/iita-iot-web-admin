@@ -11,6 +11,9 @@
       </template>
     </yt-table-search>
     <yt-table-fun v-bind="bind.funBind" v-loading="loading" @handle-add="handleAdd()">
+      <template #rightToolbar>
+        <slot name="rightToolbar"></slot>
+      </template>
       <yt-table
         v-bind="bind.tableBind"
         :data="data"
@@ -24,6 +27,9 @@
         @change-page="changePage"
         @row-click="rowClick"
       >
+        <template #customTable>
+          <slot name="customTable" :handle-update="handleUpdate" :handle-delete="handleDel" :handle-view="handleView"></slot>
+        </template>
         <template #menuSlot="scope">
           <slot
             name="menuSlot"
@@ -143,28 +149,37 @@ const bind = reactive({
   formBind: objBind,
 })
 
-// 搜索组件绑定值
-if (props.searchProps) bind.searchBind = {
-  ...bind.searchBind,
-  ...props.searchProps,
-}
-// 表格组件绑定值
-if (props.tableProps) bind.tableBind = {
-  ...bind.tableBind,
-  ...props.tableProps,
-}
-// 功能区组件绑定值
-if (props.funProps) bind.funBind = {
-  ...props.funProps,
-}
-// 表单组件绑定值
-if (props.formProps) bind.formBind = {
-  ...bind.formBind,
-  ...props.formProps,
-}
+watch(props, (newV) => {
+  // 搜索组件绑定值
+  if (props.searchProps) bind.searchBind = {
+    ...bind.searchBind,
+    ...props.searchProps,
+  }
+  // 表格组件绑定值
+  if (props.tableProps) bind.tableBind = {
+    ...bind.tableBind,
+    ...props.tableProps,
+  }
+  // 功能区组件绑定值
+  if (props.funProps) bind.funBind = {
+    ...props.funProps,
+  }
+  // 表单组件绑定值
+  if (props.formProps) bind.formBind = {
+    ...bind.formBind,
+    ...props.formProps,
+  }
+}, {
+  immediate: true,
+  deep: true,
+})
 
 defineExpose({
   getTableRef,
+  handleAdd,
+  handleDel,
+  handleUpdate,
+  handleView,
 })
 </script>
 

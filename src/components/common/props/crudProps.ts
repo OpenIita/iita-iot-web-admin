@@ -49,6 +49,8 @@ export const tableProps = {
   size: propTypes.string.def('default '),
   columnKey: propTypes.string.def('id'),
   menuWidth: propTypes.number.def(220) || propTypes.string,
+  // 自定义表格
+  customTable: propTypes.bool.def(false),
   // 序号
   index: propTypes.bool.def(true),
   loading: propTypes.bool.def(false),
