@@ -34,7 +34,7 @@ export default defineComponent({
     total: propTypes.number.def(0),
     ...tableProps,
   },
-  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page'],
+  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page', 'update:multipleSelection'],
   setup(props, { emit, slots, expose }) {
     const tableRef = ref()
     // 渲染菜单
@@ -153,6 +153,14 @@ export default defineComponent({
     const rowClick = (row: any) => {
       emit('rowClick', row)
     }
+    // 多选
+    const multipleSelection = ref([])
+    const handleSelectionChange = (val) => {
+      multipleSelection.value = val
+      console.log('multipleSelection.value', multipleSelection.value)
+      emit('handleSelectionChange', val)
+      emit('update:multipleSelection', val)
+    }
     // const onLoad = (params: any) => {
     //   const listParams = {
     //     ...params,
@@ -168,7 +176,7 @@ export default defineComponent({
           <ElTable
             ref={tableRef}
             data={props.data}
-            onSelection-change={() => emit('handleSelectionChange')}
+            onSelection-change={handleSelectionChange}
             size={props.size}
             column-key={props.columnKey}
             onCurrent-change={rowClick}

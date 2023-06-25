@@ -10,7 +10,13 @@
         ></slot>
       </template>
     </yt-table-search>
-    <yt-table-fun v-bind="bind.funBind" v-loading="loading" @handle-add="handleAdd()">
+    <yt-table-fun
+      v-bind="bind.funBind"
+      v-loading="loading"
+      :multipleSelection="multipleSelection"
+      :limit="pageParams.pageSize"
+      @handle-add="handleAdd()"
+    >
       <template #rightToolbar>
         <slot name="rightToolbar"></slot>
       </template>
@@ -21,6 +27,8 @@
         :total="total"
         v-model:page="pageParams"
         ref="ytTableRef"
+        v-model:multiple-selection="multipleSelection"
+        @handle-selection-change="handleSelectionChange"
         @handle-update="handleUpdate"
         @handle-delete="handleDel"
         @handle-view="handleView"
@@ -116,6 +124,12 @@ const handleView = (row: any) => {
 const rowClick = (row: any) => {
   emits('rowClick', row)
 }
+// 多选
+const multipleSelection = ref([])
+const handleSelectionChange = (val) => {
+  console.log('val', val)
+}
+
 // 表单保存
 const onSuccess = (obj: any) => {
   emits('saveFun', obj)
