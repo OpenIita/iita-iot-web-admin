@@ -15,6 +15,9 @@
       v-loading="loading"
       :multipleSelection="multipleSelection"
       :limit="pageParams.pageSize"
+      @change-all="changeAll"
+      @handleDel="handleDel"
+      @handle-export="emits('exportFun')"
       @handle-add="handleAdd()"
     >
       <template #rightToolbar>
@@ -103,7 +106,7 @@ watch(() => props.column, (newV) => {
   immediate: true,
   deep: true,
 })
-const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'update:page'])
+const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'exportFun', 'update:page'])
 const ytTableRef = ref()
 const getTableRef = () => {
   return ytTableRef.value
@@ -129,7 +132,11 @@ const multipleSelection = ref([])
 const handleSelectionChange = (val) => {
   console.log('val', val)
 }
-
+const changeAll = (e) => {
+  console.log()
+  getTableRef().tableRef.toggleAllSelection()
+  console.log('e', e)
+}
 // 表单保存
 const onSuccess = (obj: any) => {
   emits('saveFun', obj)
