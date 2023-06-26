@@ -144,22 +144,22 @@ const data = reactive<PageData<DemoForm, DemoQuery>>({
   },
   rules: {
     id: [
-      { required: true, message: "主键不能为空", trigger: "blur" }
+      { required: true, message: '主键不能为空', trigger: 'blur' }
     ],
     deptId: [
-      { required: true, message: "部门id不能为空", trigger: "blur" }
+      { required: true, message: '部门id不能为空', trigger: 'blur' }
     ],
     userId: [
-      { required: true, message: "用户id不能为空", trigger: "blur" }
+      { required: true, message: '用户id不能为空', trigger: 'blur' }
     ],
     orderNum: [
-      { required: true, message: "排序号不能为空", trigger: "blur" }
+      { required: true, message: '排序号不能为空', trigger: 'blur' }
     ],
     testKey: [
-      { required: true, message: "key键不能为空", trigger: "blur" }
+      { required: true, message: 'key键不能为空', trigger: 'blur' }
     ],
     value: [
-      { required: true, message: "值不能为空", trigger: "blur" }
+      { required: true, message: '值不能为空', trigger: 'blur' }
     ],
   }
 })
@@ -209,7 +209,7 @@ const handleSelectionChange = (selection: DemoVO[]) => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加测试单"
+  dialog.title = '添加测试单'
   nextTick(() => {
     reset()
   })
@@ -219,7 +219,7 @@ const handleAdd = () => {
 const handleUpdate = (row?: DemoVO) => {
   loading.value = true
   dialog.visible = true
-  dialog.title = "修改测试单"
+  dialog.title = '修改测试单'
   nextTick(async () => {
     reset()
     const _id = row?.id || ids.value[0]
@@ -239,7 +239,7 @@ const submitForm = () => {
       } else {
         await addDemo(form.value).finally(() =>  buttonLoading.value = false)
       }
-      proxy?.$modal.msgSuccess("修改成功")
+      proxy?.$modal.msgSuccess('修改成功')
       dialog.visible = false
       await getList()
     }
@@ -251,7 +251,7 @@ const handleDelete = async (row?: DemoVO) => {
   const _ids = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除测试单编号为"' + _ids + '"的数据项？').finally(() => loading.value = false)
   await delDemo(_ids)
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
   await getList()
 }
 

@@ -33,8 +33,8 @@
 import { isExternal } from '@/utils/validate'
 import AppLink from './Link.vue'
 import { getNormalPath } from '@/utils/ruoyi'
-import { RouteOption } from "vue-router"
-import { PropType } from "vue"
+import { RouteOption } from 'vue-router'
+import { PropType } from 'vue'
 
 const props = defineProps({
   // route object
@@ -98,7 +98,7 @@ const resolvePath = (routePath:string, routeQuery?:string): any => {
 
 const hasTitle = (title: string | undefined): string => {
   if(!title || title.length <= 5) {
-    return ""
+    return ''
   }
   return title
 }

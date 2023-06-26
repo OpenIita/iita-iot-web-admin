@@ -126,7 +126,7 @@ const multiple = ref(true)
 const total = ref(0)
 const tableNames = ref<Array<string>>([])
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
-const uniqueId = ref("")
+const uniqueId = ref('')
 
 const queryFormRef = ref(ElForm)
 const importRef = ref(importTable)
@@ -136,7 +136,7 @@ const queryParams = ref<TableQuery>({
   pageSize: 10,
   tableName: '',
   tableComment: '',
-  dataName: "master"
+  dataName: 'master'
 })
 
 const preview = ref <any>({
@@ -178,11 +178,11 @@ const handleQuery = () => {
 /** 生成代码操作 */
 const handleGenTable = async (row?: TableVO) => {
   const tbNames = row?.tableName || tableNames.value
-  if (tbNames == "") {
+  if (tbNames == '') {
     proxy?.$modal.msgError('请选择要生成的数据')
     return
   }
-  if (row?.genType === "1") {
+  if (row?.genType === '1') {
     await genCode(row.tableName)
     proxy?.$modal.msgSuccess('成功生成到自定义路径：' + row.genPath)
   } else {

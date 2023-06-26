@@ -78,35 +78,35 @@
 </template>
 
 <script>
-import CrontabSecond from "./second.vue"
-import CrontabMin from "./min.vue"
-import CrontabHour from "./hour.vue"
-import CrontabDay from "./day.vue"
-import CrontabMonth from "./month.vue"
-import CrontabWeek from "./week.vue"
-import CrontabYear from "./year.vue"
-import CrontabResult from "./result.vue"
+import CrontabSecond from './second.vue'
+import CrontabMin from './min.vue'
+import CrontabHour from './hour.vue'
+import CrontabDay from './day.vue'
+import CrontabMonth from './month.vue'
+import CrontabWeek from './week.vue'
+import CrontabYear from './year.vue'
+import CrontabResult from './result.vue'
 
 export default {
   data() {
     return {
-      tabTitles: ["秒", "分钟", "小时", "日", "月", "周", "年"],
+      tabTitles: ['秒', '分钟', '小时', '日', '月', '周', '年'],
       tabActive: 0,
       myindex: 0,
       crontabValueObj: {
-        second: "*",
-        min: "*",
-        hour: "*",
-        day: "*",
-        month: "*",
-        week: "?",
-        year: ""
+        second: '*',
+        min: '*',
+        hour: '*',
+        day: '*',
+        month: '*',
+        week: '?',
+        year: ''
       }
     }
   },
-  name: "vcrontab",
+  name: 'vcrontab',
   expose: ['submitFill', 'clearCron', 'hidePopup'],
-  props: ["expression", "hideComponent"],
+  props: ['expression', 'hideComponent'],
   methods: {
     shouldHide(key) {
       if (this.hideComponent && this.hideComponent.includes(key)) return false
@@ -115,7 +115,7 @@ export default {
     resolveExp() {
       // 反解析 表达式
       if (this.expression) {
-        let arr = this.expression.split(" ")
+        let arr = this.expression.split(' ')
         if (arr.length >= 6) {
           //6 位以上是合法表达式
           let obj = {
@@ -125,7 +125,7 @@ export default {
             day: arr[3],
             month: arr[4],
             week: arr[5],
-            year: arr[6] ? arr[6] : ""
+            year: arr[6] ? arr[6] : ''
           }
           this.crontabValueObj = {
             ...obj
@@ -145,7 +145,7 @@ export default {
     },
     // 由子组件触发，更改表达式组成的字段值
     updateCrontabValue(name, value, from) {
-      "updateCrontabValue", name, value, from
+      'updateCrontabValue', name, value, from
       this.crontabValueObj[name] = value
       if (from && from !== name) {
         // console.log(`来自组件 ${from} 改变了 ${name} ${value}`);
@@ -154,24 +154,24 @@ export default {
     },
     // 赋值到组件
     changeRadio(name, value) {
-      let arr = ["second", "min", "hour", "month"],
-        refName = "cron" + name,
+      let arr = ['second', 'min', 'hour', 'month'],
+        refName = 'cron' + name,
         insValue
 
       if (!this.$refs[refName]) return
 
       if (arr.includes(name)) {
-        if (value === "*") {
+        if (value === '*') {
           insValue = 1
-        } else if (value.indexOf("-") > -1) {
-          let indexArr = value.split("-")
+        } else if (value.indexOf('-') > -1) {
+          let indexArr = value.split('-')
           isNaN(indexArr[0])
             ? (this.$refs[refName].cycle01 = 0)
             : (this.$refs[refName].cycle01 = indexArr[0])
           this.$refs[refName].cycle02 = indexArr[1]
           insValue = 2
-        } else if (value.indexOf("/") > -1) {
-          let indexArr = value.split("/")
+        } else if (value.indexOf('/') > -1) {
+          let indexArr = value.split('/')
           isNaN(indexArr[0])
             ? (this.$refs[refName].average01 = 0)
             : (this.$refs[refName].average01 = indexArr[0])
@@ -179,79 +179,79 @@ export default {
           insValue = 3
         } else {
           insValue = 4
-          this.$refs[refName].checkboxList = value.split(",")
+          this.$refs[refName].checkboxList = value.split(',')
         }
-      } else if (name == "day") {
-        if (value === "*") {
+      } else if (name == 'day') {
+        if (value === '*') {
           insValue = 1
-        } else if (value == "?") {
+        } else if (value == '?') {
           insValue = 2
-        } else if (value.indexOf("-") > -1) {
-          let indexArr = value.split("-")
+        } else if (value.indexOf('-') > -1) {
+          let indexArr = value.split('-')
           isNaN(indexArr[0])
             ? (this.$refs[refName].cycle01 = 0)
             : (this.$refs[refName].cycle01 = indexArr[0])
           this.$refs[refName].cycle02 = indexArr[1]
           insValue = 3
-        } else if (value.indexOf("/") > -1) {
-          let indexArr = value.split("/")
+        } else if (value.indexOf('/') > -1) {
+          let indexArr = value.split('/')
           isNaN(indexArr[0])
             ? (this.$refs[refName].average01 = 0)
             : (this.$refs[refName].average01 = indexArr[0])
           this.$refs[refName].average02 = indexArr[1]
           insValue = 4
-        } else if (value.indexOf("W") > -1) {
-          let indexArr = value.split("W")
+        } else if (value.indexOf('W') > -1) {
+          let indexArr = value.split('W')
           isNaN(indexArr[0])
             ? (this.$refs[refName].workday = 0)
             : (this.$refs[refName].workday = indexArr[0])
           insValue = 5
-        } else if (value === "L") {
+        } else if (value === 'L') {
           insValue = 6
         } else {
-          this.$refs[refName].checkboxList = value.split(",")
+          this.$refs[refName].checkboxList = value.split(',')
           insValue = 7
         }
-      } else if (name == "week") {
-        if (value === "*") {
+      } else if (name == 'week') {
+        if (value === '*') {
           insValue = 1
-        } else if (value == "?") {
+        } else if (value == '?') {
           insValue = 2
-        } else if (value.indexOf("-") > -1) {
-          let indexArr = value.split("-")
+        } else if (value.indexOf('-') > -1) {
+          let indexArr = value.split('-')
           isNaN(indexArr[0])
             ? (this.$refs[refName].cycle01 = 0)
             : (this.$refs[refName].cycle01 = indexArr[0])
           this.$refs[refName].cycle02 = indexArr[1]
           insValue = 3
-        } else if (value.indexOf("#") > -1) {
-          let indexArr = value.split("#")
+        } else if (value.indexOf('#') > -1) {
+          let indexArr = value.split('#')
           isNaN(indexArr[0])
             ? (this.$refs[refName].average01 = 1)
             : (this.$refs[refName].average01 = indexArr[0])
           this.$refs[refName].average02 = indexArr[1]
           insValue = 4
-        } else if (value.indexOf("L") > -1) {
-          let indexArr = value.split("L")
+        } else if (value.indexOf('L') > -1) {
+          let indexArr = value.split('L')
           isNaN(indexArr[0])
             ? (this.$refs[refName].weekday = 1)
             : (this.$refs[refName].weekday = indexArr[0])
           insValue = 5
         } else {
-          this.$refs[refName].checkboxList = value.split(",")
+          this.$refs[refName].checkboxList = value.split(',')
           insValue = 6
         }
-      } else if (name == "year") {
-        if (value == "") {
+      } else if (name == 'year') {
+        if (value == '') {
           insValue = 1
-        } else if (value == "*") {
+        } else if (value == '*') {
           insValue = 2
-        } else if (value.indexOf("-") > -1) {
+        } else if (value.indexOf('-') > -1) {
           insValue = 3
-        } else if (value.indexOf("/") > -1) {
+        } else if (value.indexOf('/') > -1) {
           insValue = 4
         } else {
-          this.$refs[refName].checkboxList = value.split(",")
+          this.$refs[refName].checkboxList = value.split(',')
           insValue = 5
         }
       }
@@ -270,24 +270,24 @@ export default {
     },
     // 隐藏弹窗
     hidePopup() {
-      this.$emit("hide")
+      this.$emit('hide')
     },
     // 填充表达式
     submitFill() {
-      this.$emit("fill", this.crontabValueString)
+      this.$emit('fill', this.crontabValueString)
       this.hidePopup()
     },
     clearCron() {
       // 还原选择项
-      ("准备还原")
+      ('准备还原')
       this.crontabValueObj = {
-        second: "*",
-        min: "*",
-        hour: "*",
-        day: "*",
-        month: "*",
-        week: "?",
-        year: ""
+        second: '*',
+        min: '*',
+        hour: '*',
+        day: '*',
+        month: '*',
+        week: '?',
+        year: ''
       }
       for (let j in this.crontabValueObj) {
         this.changeRadio(j, this.crontabValueObj[j])
@@ -299,17 +299,17 @@ export default {
       let obj = this.crontabValueObj
       let str =
         obj.second +
-        " " +
+        ' ' +
         obj.min +
-        " " +
+        ' ' +
         obj.hour +
-        " " +
+        ' ' +
         obj.day +
-        " " +
+        ' ' +
         obj.month +
-        " " +
+        ' ' +
         obj.week +
-        (obj.year == "" ? "" : " " + obj.year)
+        (obj.year == '' ? '' : ' ' + obj.year)
       return str
     },
   },
@@ -324,7 +324,7 @@ export default {
     CrontabResult,
   },
   watch: {
-    expression: "resolveExp",
+    expression: 'resolveExp',
     hideComponent(value) {
       // 隐藏部分组件
     },

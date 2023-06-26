@@ -11,8 +11,7 @@
       :tableProps=" {
         selection: false,
         viewBtn: false,
-        menuSlot: true,
-        menuWidth: 300,
+        menuWidth: 100,
 
       }"
       @onLoad="getData"
@@ -37,11 +36,13 @@ const column: IColumn[] = [{
 }, {
   label: '名称',
   key: 'name',
+  search: true,
   rules: [{ required: true, message: '名称不能为空' }],
 }, {
-  label: '添加日期',
+  label: '创建日期',
   key: 'createAt',
   type: 'date',
+  sortable: true,
   formHide: true,
 }]
 

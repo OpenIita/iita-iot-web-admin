@@ -68,7 +68,7 @@ export const selectDictLabel = (datas: any, value: number | string) => {
   if (value === undefined) {
     return ''
   }
-  const actions = []
+  const actions: any = []
   Object.keys(datas).some((key) => {
     if (datas[key].value == '' + value) {
       actions.push(datas[key].label)
@@ -113,6 +113,7 @@ export function sprintf(str: string) {
     let flag = true,
       i = 1
     str = str.replace(/%s/g, function () {
+      // eslint-disable-next-line prefer-rest-params
       const arg = arguments[i++]
       if (typeof arg === 'undefined') {
         flag = false

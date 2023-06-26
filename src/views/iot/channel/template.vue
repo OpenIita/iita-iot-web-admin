@@ -1,16 +1,17 @@
 <template>
   <div>
-    <yt-crud 
-    ref="crudRef" 
-    :data="data" 
-    :column="column"
-    v-model:page="state.page"
-    v-model:query="state.query"
-    :total="state.total"
-    :loading="state.loading"
-    @onLoad="getData"
-    @saveFun="onSave"
-    @delFun="onDelete"></yt-crud>
+    <yt-crud
+      ref="crudRef"
+      :data="data"
+      :column="column"
+      v-model:page="state.page"
+      v-model:query="state.query"
+      :total="state.total"
+      :loading="state.loading"
+      @onLoad="getData"
+      @saveFun="onSave"
+      @delFun="onDelete"
+    ></yt-crud>
   </div>
 </template>
 <script lang="ts" setup>

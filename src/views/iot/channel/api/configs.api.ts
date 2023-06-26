@@ -60,17 +60,16 @@ export const getConfigList = (data?: IPage): AxiosPromise<AxiosResponse<IChannel
 export const getConfigAll = (): AxiosPromise<AxiosResponse<IChannelConfigsVO[]>> => {
   return request({
     url: Api.getConfigAll,
-    method: 'post'
+    method: 'post',
   })
 }
-
 
 // 保存修改通道配置
 export const addConfig = (data: IChannelConfigsVO) => {
   return request({
     url: Api.addConfig,
     method: 'post',
-    data:data,
+    data: data,
   })
 }
 
@@ -79,17 +78,16 @@ export const getConfigById = (data: string | number): AxiosPromise<AxiosResponse
   return request({
     url: Api.getConfigById,
     method: 'post',
-    data:data,
+    data: data,
   })
 }
-
 
 // 删除通道配置
 export const delConfigById = (data: string | number) => {
   return request({
     url: Api.delConfigById,
     method: 'post',
-    data:data,
+    data: data,
   })
 }
 
@@ -98,6 +96,6 @@ export const getMsgs = (data?: IPage): AxiosPromise<AxiosResponse<INotifyMessage
   return request({
     url: Api.getMsgList,
     method: 'post',
-    data:data,
+    data: data,
   })
 }

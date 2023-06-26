@@ -5,7 +5,7 @@
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
       :layout="layout"
-      :page-sizes="pageSizes"
+      :page-sizes="customPageSize"
       :pager-count="pagerCount"
       :total="total"
       @size-change="handleSizeChange"
@@ -21,6 +21,7 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { deepClone } from '@/utils'
 import { scrollTo } from '@/utils/scroll-to'
 import { PropType } from 'vue'
 
@@ -68,6 +69,15 @@ const props = defineProps({
     type: String,
     default: 'right'
   }
+})
+
+const customPageSize = computed(() => {
+  if (!props.pageSizes.includes(props.limit)) {
+    const pageSizes = deepClone(props.pageSizes)
+    pageSizes.push(props.limit)
+    return pageSizes.sort((a, b) => a - b)
+  }
+  return props.pageSizes
 })
 
 const emit = defineEmits(['update:page', 'update:limit', 'pagination'])

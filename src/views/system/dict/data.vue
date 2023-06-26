@@ -133,15 +133,15 @@
 
 <script setup name="Data" lang="ts">
 import useDictStore from '@/store/modules/dict'
-import { optionselect as getDictOptionselect, getType } from "@/api/system/dict/type"
-import { listData, getData, delData, addData, updateData } from "@/api/system/dict/data"
+import { optionselect as getDictOptionselect, getType } from '@/api/system/dict/type'
+import { listData, getData, delData, addData, updateData } from '@/api/system/dict/data'
 import { DictTypeVO } from '@/api/system/dict/type/types'
-import { ComponentInternalInstance } from "vue"
-import { DictDataForm, DictDataQuery, DictDataVO } from "@/api/system/dict/data/types"
+import { ComponentInternalInstance } from 'vue'
+import { DictDataForm, DictDataQuery, DictDataVO } from '@/api/system/dict/data/types'
 import { ElForm } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_normal_disable } = toRefs<any>(proxy?.useDict("sys_normal_disable"))
+const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
 const route = useRoute()
 
 const dataList = ref<DictDataVO[]>([])
@@ -151,7 +151,7 @@ const ids = ref<Array<string | number>>([])
 const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
-const defaultDictType = ref("")
+const defaultDictType = ref('')
 const typeOptions = ref<DictTypeVO[]>([])
 
 const dataFormRef = ref(ElForm)
@@ -165,12 +165,12 @@ const dialog = reactive<DialogOption>({
 
 // 数据标签回显样式
 const listClassOptions = ref<Array<{ value: string, label: string }>>([
-  { value: "default", label: "默认" },
-  { value: "primary", label: "主要" },
-  { value: "success", label: "成功" },
-  { value: "info", label: "信息" },
-  { value: "warning", label: "警告" },
-  { value: "danger", label: "危险" }
+  { value: 'default', label: '默认' },
+  { value: 'primary', label: '主要' },
+  { value: 'success', label: '成功' },
+  { value: 'info', label: '信息' },
+  { value: 'warning', label: '警告' },
+  { value: 'danger', label: '危险' }
 ])
 
 const initFormData: DictDataForm = {
@@ -178,9 +178,9 @@ const initFormData: DictDataForm = {
   dictLabel: '',
   dictValue: '',
   cssClass: '',
-  listClass: "default",
+  listClass: 'default',
   dictSort: 0,
-  status: "0",
+  status: '0',
   remark: ''
 }
 const data = reactive<PageData<DictDataForm, DictDataQuery>>({
@@ -194,9 +194,9 @@ const data = reactive<PageData<DictDataForm, DictDataQuery>>({
     dictLabel: ''
   },
   rules: {
-    dictLabel: [{ required: true, message: "数据标签不能为空", trigger: "blur" }],
-    dictValue: [{ required: true, message: "数据键值不能为空", trigger: "blur" }],
-    dictSort: [{ required: true, message: "数据顺序不能为空", trigger: "blur" }]
+    dictLabel: [{ required: true, message: '数据标签不能为空', trigger: 'blur' }],
+    dictValue: [{ required: true, message: '数据键值不能为空', trigger: 'blur' }],
+    dictSort: [{ required: true, message: '数据顺序不能为空', trigger: 'blur' }]
   }
 })
 
@@ -240,7 +240,7 @@ const handleQuery = () => {
 }
 /** 返回按钮操作 */
 const handleClose = () => {
-  const obj = { path: "/system/dict" }
+  const obj = { path: '/system/dict' }
   proxy?.$tab.closeOpenPage(obj)
 }
 /** 重置按钮操作 */
@@ -252,7 +252,7 @@ const resetQuery = () => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加字典数据"
+  dialog.title = '添加字典数据'
   nextTick(() => {
     reset()
     form.value.dictType = queryParams.value.dictType
@@ -268,7 +268,7 @@ const handleSelectionChange = (selection: DictDataVO[]) => {
 const handleUpdate = (row?: DictDataVO) => {
   const dictId = row?.id || ids.value[0]
   dialog.visible = true
-  dialog.title = "修改字典数据"
+  dialog.title = '修改字典数据'
   nextTick(async () => {
     const res =  await getData(dictId)
     reset()
@@ -281,7 +281,7 @@ const submitForm = () => {
     if (valid) {
       form.value.dictCode ? await updateData(form.value) : await addData(form.value)
       useDictStore().removeDict(queryParams.value.dictType)
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
 
@@ -294,13 +294,13 @@ const handleDelete = async (row?: DictDataVO) => {
   await proxy?.$modal.confirm('是否确认删除字典编码为"' + dictCodes + '"的数据项？')
   await delData(dictCodes)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
   useDictStore().removeDict(queryParams.value.dictType)
 
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/dict/data/export", {
+  proxy?.download('system/dict/data/export', {
     ...queryParams.value
   }, `dict_data_${new Date().getTime()}.xlsx`)
 }

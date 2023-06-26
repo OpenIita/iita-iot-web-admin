@@ -7,7 +7,6 @@
 @import './ruoyi.scss';
 @import 'animate.css';
 @import 'element-plus/dist/index.css';
-
 body {
   height: 100%;
   margin: 0;
@@ -136,7 +135,7 @@ aside {
   border-radius: 0.25rem;
   border: 1px solid var(--el-border-color-light);
   background-color: var(--el-bg-color-overlay);
-  padding: 0.75rem;
+  padding: 16px;
 
   &:hover {
     // box-shadow: 0 2px 12px #0000001a;

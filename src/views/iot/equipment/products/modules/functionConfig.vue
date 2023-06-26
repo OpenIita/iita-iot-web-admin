@@ -96,21 +96,24 @@ const submitThingModelChange = () => {
 // 删除
 const handleDel = (row: any) => {
   state.loading = true
-  if (row.type == "property") {
+  if (row.type == 'property') {
         let index = props.model.properties.findIndex((p) => {
-          return p.identifier == row.identifier;
-        });
-        props.model.properties.splice(index, 1);
-      } else if (row.type == "service") {
+          return p.identifier == row.identifier
+        })
+        // eslint-disable-next-line vue/no-mutating-props
+        props.model.properties.splice(index, 1)
+      } else if (row.type == 'service') {
         let index = props.model.services.findIndex((s) => {
-          return s.identifier == row.identifier;
-        });
-        props.model.services.splice(index, 1);
-      } else if (row.type == "event") {
+          return s.identifier == row.identifier
+        })
+        // eslint-disable-next-line vue/no-mutating-props
+        props.model.services.splice(index, 1)
+      } else if (row.type == 'event') {
         let index = props.model.events.findIndex((e) => {
-          return e.identifier == row.identifier;
-        });
-        props.model.events.splice(index, 1);
+          return e.identifier == row.identifier
+        })
+        // eslint-disable-next-line vue/no-mutating-props
+        props.model.events.splice(index, 1)
       }
       submitThingModelChange()
 }

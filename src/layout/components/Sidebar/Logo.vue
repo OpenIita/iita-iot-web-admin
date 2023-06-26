@@ -69,6 +69,9 @@ const sideTheme = computed(() => settingsStore.sideTheme)
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
+      img {
+        width: 100%;
+      }
     }
 
     & .sidebar-title {

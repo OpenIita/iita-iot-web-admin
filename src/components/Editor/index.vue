@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { QuillEditor, Quill } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { getToken } from "@/utils/auth"
-import { ComponentInternalInstance } from "vue"
+import { getToken } from '@/utils/auth'
+import { ComponentInternalInstance } from 'vue'
 
 const props = defineProps({
   /* 编辑器的内容 */
@@ -60,44 +60,44 @@ const props = defineProps({
   /* 类型（base64格式、url格式） */
   type: {
     type: String,
-    default: "url",
+    default: 'url',
   }
 })
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 const upload = reactive<UploadOption>({
-  headers: { Authorization: "Bearer " + getToken() },
+  headers: { Authorization: 'Bearer ' + getToken() },
   url: import.meta.env.VITE_APP_BASE_API + '/resource/oss/upload'
 })
 const myQuillEditor = ref()
 
 const options = ref({
-  theme: "snow",
+  theme: 'snow',
   bounds: document.body,
-  debug: "warn",
+  debug: 'warn',
   modules: {
     // 工具栏配置
     toolbar: {
       container: [
-        ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
-        ["blockquote", "code-block"],                    // 引用  代码块
-        [{ list: "ordered" }, { list: "bullet"} ],       // 有序、无序列表
-        [{ indent: "-1" }, { indent: "+1" }],            // 缩进
-        [{ size: ["small", false, "large", "huge"] }],   // 字体大小
+        ['bold', 'italic', 'underline', 'strike'],       // 加粗 斜体 下划线 删除线
+        ['blockquote', 'code-block'],                    // 引用  代码块
+        [{ list: 'ordered' }, { list: 'bullet'} ],       // 有序、无序列表
+        [{ indent: '-1' }, { indent: '+1' }],            // 缩进
+        [{ size: ['small', false, 'large', 'huge'] }],   // 字体大小
         [{ header: [1, 2, 3, 4, 5, 6, false] }],         // 标题
         [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
         [{ align: [] }],                                 // 对齐方式
-        ["clean"],                                       // 清除文本格式
-        ["link", "image", "video"]                       // 链接、图片、视频
+        ['clean'],                                       // 清除文本格式
+        ['link', 'image', 'video']                       // 链接、图片、视频
       ],
       handlers: {
         image: function (value: any) {
           if (value) {
             // 调用element图片上传
-            (document.querySelector(".editor-img-uploader>.el-upload") as HTMLDivElement)?.click()
+            (document.querySelector('.editor-img-uploader>.el-upload') as HTMLDivElement)?.click()
           } else {
-            Quill.format("image", true)
+            Quill.format('image', true)
           }
         },
       },
@@ -118,10 +118,10 @@ const styles = computed(() => {
   return style
 })
 
-const content = ref("")
+const content = ref('')
 watch(() => props.modelValue, (v) => {
   if (v !== content.value) {
-    content.value = v === undefined ? "<p></p>" : v
+    content.value = v === undefined ? '<p></p>' : v
   }
 }, { immediate: true })
 
@@ -134,7 +134,7 @@ const handleUploadSuccess = (res: any) => {
     // 获取光标位置
     let length = quill.selection.savedRange.index
     // 插入图片，res为服务器返回的图片链接地址
-    quill.insertEmbed(length, "image", res.data.url)
+    quill.insertEmbed(length, 'image', res.data.url)
     // 调整光标到最后
     quill.setSelection(length + 1)
     proxy?.$modal.closeLoading()

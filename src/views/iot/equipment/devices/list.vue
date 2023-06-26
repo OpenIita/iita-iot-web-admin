@@ -29,11 +29,13 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
+import { getDevicesList, deleteDevices, saveDevices } from '../api/devices.api'
+import { getProductsList } from '../api/products.api'
 
 import ChildrenDialog from './modules/childrenDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
 import { ElPopconfirm } from 'element-plus'
-import { getDevicesList, deleteDevices, saveDevices } from '../api/devices.api'
+
 
 const state = reactive({
   page: {
@@ -59,178 +61,7 @@ const showChidrenDevices = (row: any) => {
 }
 
 // 产品字典
-const productOptions = [
-  {
-    'id': 'xpsYHExTKPFaQMS7',
-    'name': '调光灯',
-    'category': 'light',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'null',
-    'transparent': false,
-    'createAt': 1681962512815
-  },
-  {
-    'id': 'hdX3PCMcFrCYpesJ',
-    'name': '智能风扇',
-    'category': 'fan',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': null,
-    'transparent': null,
-    'createAt': 1659872083983
-  },
-  {
-    'id': 'hbtgIA0SuVw9lxjB',
-    'name': 'GW01网关',
-    'category': 'gateway',
-    'nodeType': 0,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/hbtgIA0SuVw9lxjB/cover.jpg?Expires=1967598154&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=2gh2jad14mVHGvWThwOd%2FykiB5g%3D',
-    'transparent': false,
-    'createAt': 1659872083984
-  },
-  {
-    'id': 'eDhXKwEzwFybM5R7',
-    'name': '三路开关',
-    'category': 'switch',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/eDhXKwEzwFybM5R7/cover.jpeg?Expires=1967598172&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ZrFgANkomVEDQRV5JdmONL0S2sY%3D',
-    'transparent': false,
-    'createAt': 1659872083985
-  },
-  {
-    'id': 'cGCrkK7Ex4FESAwe',
-    'name': '插座',
-    'category': 'SmartPlug',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/cGCrkK7Ex4FESAwe/cover.jpeg?Expires=1967598137&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=vOjqav0pRZqQFgx8xBo99WhgWXk%3D',
-    'transparent': false,
-    'createAt': 1659872083986
-  },
-  {
-    'id': 'Rf4QSjbm65X45753',
-    'name': '一路开关',
-    'category': 'switch',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/Rf4QSjbm65X45753/cover.jpeg?Expires=1967598145&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=ksQhmEm5Rn7C7FFqY09o9l%2BZ%2BIQ%3D',
-    'transparent': false,
-    'createAt': 1659872083987
-  },
-  {
-    'id': 'PN3EDmkBZDD8whDd',
-    'name': '门磁',
-    'category': 'door',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'null',
-    'transparent': null,
-    'createAt': 1659872083988
-  },
-  {
-    'id': 'N523nWsCiG3CAn6X',
-    'name': 'ZGW01',
-    'category': 'gateway',
-    'nodeType': 0,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/N523nWsCiG3CAn6X/cover.jpg?Expires=1967597641&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=%2BaGcHBT%2FHA3s%2BrZ687U50b4YE0A%3D',
-    'transparent': false,
-    'createAt': 1659872083988
-  },
-  {
-    'id': 'KdJYpTp5ywNhmrmC',
-    'name': '第三方接入',
-    'category': '',
-    'nodeType': 0,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D',
-    'transparent': false,
-    'createAt': 1659872083990
-  },
-  {
-    'id': 'Eit3kmGJtxSHfCKT',
-    'name': '燃气表',
-    'category': 'meter',
-    'nodeType': 2,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': null,
-    'transparent': false,
-    'createAt': 1659872083990
-  },
-  {
-    'id': 'DSGxxKk6E8mmDk6C',
-    'name': '通断器',
-    'category': 'switch',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/DSGxxKk6E8mmDk6C/cover.jpeg?Expires=1967598201&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=k2PqHc%2BI14DfCwD8kQIflwoBAog%3D',
-    'transparent': false,
-    'createAt': 1659872083991
-  },
-  {
-    'id': 'D8c5pXFmt2KJDxNm',
-    'name': '四路场景面板',
-    'category': 'switch',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': null,
-    'transparent': null,
-    'createAt': 1659872083992
-  },
-  {
-    'id': 'AWcJnf7ymGSkaz5M',
-    'name': 'smart pulg',
-    'category': 'SmartPlug',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/AWcJnf7ymGSkaz5M/cover.jpeg?Expires=1967598035&OSSAccessKeyId=LTAI5tGEHNoVu5tWHUWnosrs&Signature=tXzWH5%2B4JNcnuTFrJbvGwsbx97c%3D',
-    'transparent': true,
-    'createAt': 1659872083993
-  },
-  {
-    'id': '6kYp6jszrDns2yh4',
-    'name': '温湿度传感器',
-    'category': 'sensor',
-    'nodeType': 1,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': null,
-    'transparent': null,
-    'createAt': 1659872083994
-  },
-  {
-    'id': 'nFSJHYW744dzDYfW',
-    'name': '测试',
-    'category': 'switch',
-    'nodeType': 2,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': null,
-    'transparent': false,
-    'createAt': 1659914779161
-  },
-  {
-    'id': '64WyYNJfWNJrJBsB',
-    'name': 'T100S400L',
-    'category': 'T100',
-    'nodeType': 2,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'null',
-    'transparent': false,
-    'createAt': 1681869020035
-  },
-  {
-    'id': 'hdJZjrZjrB2SG4Hm',
-    'name': 'T100',
-    'category': 'T100',
-    'nodeType': 2,
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'img': 'null',
-    'transparent': false,
-    'createAt': 1681864702527
-  }
-]
+const productOptions = ref([])
 // 组列表
 const groupOptions = [
   {
@@ -258,7 +89,7 @@ const groupOptions = [
     'createAt': 1659872082805
   }
 ]
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: '设备ID',
   key: 'deviceId',
   formHide: true,
@@ -272,8 +103,8 @@ const column: IColumn[] = [{
   editDisabled: true,
   componentProps: {
     labelAlias: 'name',
-    valueAlias: 'id',
-    options: productOptions,
+    valueAlias: 'productKey',
+    options: [],
   },
   rules: [{ required: true, message: '产品名称不能为空' }],
 }, {
@@ -314,7 +145,7 @@ const column: IColumn[] = [{
   tableWidth: 180,
   type: 'date',
   formHide: true,
-}]
+}])
 
 const data = ref([])
 const getData =  () => {
@@ -329,6 +160,20 @@ const getData =  () => {
     state.loading = false
   })
 }
+
+const getDict = () => {
+  getProductsList({
+    pageNum: 1,
+    pageSize: 99999,
+  }).then(res => {
+    column.value.forEach(item => {
+      if (item.key === 'productKey') {
+        item.componentProps.options = res.data.rows
+      }
+    })
+  })
+}
+getDict()
 // 保存数据
 const onSave = async ({type, data, cancel}: any) => {
   state.loading = true

@@ -3,7 +3,7 @@ import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
 import { IColumn, TFormType } from '@/components/common/types/tableCommon'
-import { ElButton, ElTable, ElTableColumn, ElPopconfirm } from 'element-plus'
+import { ElButton, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
 import { formatDate } from '@/utils/formatTime'
 
@@ -34,59 +34,68 @@ export default defineComponent({
     total: propTypes.number.def(0),
     ...tableProps,
   },
-  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page'],
+  emits: ['handleView', 'handleUpdate', 'handleDelete', 'handleSelectionChange', 'changePage', 'rowClick', 'update:page', 'update:multipleSelection'],
   setup(props, { emit, slots, expose }) {
     const tableRef = ref()
     // 渲染菜单
     const renderMenus = (scope: { row: any }) => {
       return (
-        <div>
+        <div style="display: inline-flex;">
           {props.viewBtn && (
-            <ElButton
-              link
-              type="primary"
-              icon="View"
-              {...() => {
-                if (props.viewPermi) return { vHasPermi: props.viewPermi }
-                return {}
-              }}
-              onClick={() => emit('handleView', scope.row)}
-            >
-              详情
-            </ElButton>
+            <div>
+              <ElTooltip class="box-item" effect="dark" content="详情" placement="top">
+                <ElButton
+                  link
+                  type="primary"
+                  icon="View"
+                  {...() => {
+                    if (props.viewPermi) return { vHasPermi: props.viewPermi }
+                    return {}
+                  }}
+                  onClick={() => emit('handleView', scope.row)}
+                ></ElButton>
+              </ElTooltip>
+              <ElDivider direction="vertical" />
+            </div>
           )}
           {props.editBtn && (
-            <ElButton
-              link
-              type="primary"
-              icon="Edit"
-              onClick={() => emit('handleUpdate', scope.row)}
-              {...() => {
-                if (props.editPermi) return { vHasPermi: props.editPermi }
-                return {}
-              }}
-            >
-              编辑
-            </ElButton>
+            <div>
+              <ElTooltip class="box-item" effect="dark" content="编辑" placement="top">
+                <ElButton
+                  link
+                  type="primary"
+                  icon="Edit"
+                  onClick={() => emit('handleUpdate', scope.row)}
+                  {...() => {
+                    if (props.editPermi) return { vHasPermi: props.editPermi }
+                    return {}
+                  }}
+                ></ElButton>
+              </ElTooltip>
+              <ElDivider direction="vertical" />
+            </div>
           )}
           {props.delBtn && (
-            <ElPopconfirm title="是否确认删除该数据?" onConfirm={() => emit('handleDelete', scope.row)}>
-              {{
-                reference: () => (
-                  <ElButton
-                    link
-                    type="danger"
-                    icon="Delete"
-                    {...() => {
-                      if (props.delPermi) return { vHasPermi: props.delPermi }
-                      return {}
-                    }}
-                  >
-                    删除
-                  </ElButton>
-                ),
-              }}
-            </ElPopconfirm>
+            <div>
+              <ElTooltip class="box-item" effect="dark" content="删除" placement="top">
+                <ElPopconfirm title="是否确认删除该数据?" onConfirm={() => emit('handleDelete', scope.row)}>
+                  {{
+                    reference: () => (
+                      <ElButton
+                        link
+                        type="danger"
+                        icon="Delete"
+                        {...() => {
+                          if (props.delPermi) return { vHasPermi: props.delPermi }
+                          return {}
+                        }}
+                      ></ElButton>
+                    ),
+                  }}
+                </ElPopconfirm>
+              </ElTooltip>
+              {props.menuSlot && <ElDivider direction="vertical" />}
+            </div>
           )}
           {props.menuSlot}
           {props.menuSlot && slots.menuSlot?.(scope)}
@@ -121,7 +130,13 @@ export default defineComponent({
         return slots[column.key]?.(scope)
       }
       return (
-        <ElTableColumn label={column.label} align="center" width={column.tableWidth || props.width} prop={column.key}>
+        <ElTableColumn
+          label={column.label}
+          align="center"
+          width={column.tableWidth || props.width}
+          sortable={column.sortable || false}
+          prop={column.key}
+        >
           {{
             default: (scope: IScope) => renDiv(scope),
           }}
@@ -138,6 +153,14 @@ export default defineComponent({
     const rowClick = (row: any) => {
       emit('rowClick', row)
     }
+    // 多选
+    const multipleSelection = ref([])
+    const handleSelectionChange = (val) => {
+      multipleSelection.value = val
+      console.log('multipleSelection.value', multipleSelection.value)
+      emit('handleSelectionChange', val)
+      emit('update:multipleSelection', val)
+    }
     // const onLoad = (params: any) => {
     //   const listParams = {
     //     ...params,
@@ -149,25 +172,29 @@ export default defineComponent({
     })
     return () => (
       <div>
-        <ElTable
-          ref={tableRef}
-          data={props.data}
-          onSelection-change={() => emit('handleSelectionChange')}
-          size={props.size}
-          column-key={props.columnKey}
-          onCurrent-change={rowClick}
-        >
-          {props.selection && <ElTableColumn type="selection" width="55" align="center" />}
-          {props.index && <ElTableColumn type="index" width="55" align="center" label="序号" />}
-          {props.column.map((m: IColumn) => {
-            if (!m.hide) return renderColumn(m)
-          })}
-          {props.menu && (
-            <ElTableColumn label="操作" align="center" width={props.menuWidth} class-name="small-padding fixed-width">
-              {{ default: (scope: { row: any }) => renderMenus(scope) }}
-            </ElTableColumn>
-          )}
-        </ElTable>
+        {!props.customTable ? (
+          <ElTable
+            ref={tableRef}
+            data={props.data}
+            onSelection-change={handleSelectionChange}
+            size={props.size}
+            column-key={props.columnKey}
+            onCurrent-change={rowClick}
+          >
+            {props.selection && <ElTableColumn type="selection" width="55" align="center" />}
+            {props.index && <ElTableColumn type="index" width="55" align="center" label="序号" />}
+            {props.column.map((m: IColumn) => {
+              if (!m.hide) return renderColumn(m)
+            })}
+            {props.menu && (
+              <ElTableColumn label="操作" align="center" width={props.menuWidth} class-name="small-padding fixed-width">
+                {{ default: (scope: { row: any }) => renderMenus(scope) }}
+              </ElTableColumn>
+            )}
+          </ElTable>
+        ) : (
+          slots.customTable?.()
+        )}
         {!props.pageHide && (
           <Pagination total={props.total} v-model:page={pageObj.pageNum} v-model:limit={pageObj.pageSize} onPagination={changePage}></Pagination>
         )}

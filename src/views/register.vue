@@ -64,13 +64,13 @@ import { to } from 'await-to-js'
 const router = useRouter()
 const title = import.meta.env.VITE_APP_TITLE
 const registerForm = ref<RegisterForm>({
-  tenantId: "",
-  username: "",
-  password: "",
-  confirmPassword: "",
-  code: "",
-  uuid: "",
-  userType: "sys_user"
+  tenantId: '',
+  username: '',
+  password: '',
+  confirmPassword: '',
+  code: '',
+  uuid: '',
+  userType: 'sys_user'
 })
 
 // 租户开关
@@ -79,7 +79,7 @@ const tenantEnabled = ref(true)
 
 const equalToPassword = (rule: any, value: string, callback: any) => {
   if (registerForm.value.password !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error('两次输入的密码不一致'))
   } else {
     callback()
   }
@@ -87,23 +87,23 @@ const equalToPassword = (rule: any, value: string, callback: any) => {
 
 const registerRules: FormRules = {
   tenantId: [
-    { required: true, trigger: "blur", message: "请输入您的租户编号" }
+    { required: true, trigger: 'blur', message: '请输入您的租户编号' }
   ],
   username: [
-    { required: true, trigger: "blur", message: "请输入您的账号" },
-    { min: 2, max: 20, message: "用户账号长度必须介于 2 和 20 之间", trigger: "blur" }
+    { required: true, trigger: 'blur', message: '请输入您的账号' },
+    { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
   ],
   password: [
-    { required: true, trigger: "blur", message: "请输入您的密码" },
-    { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }
+    { required: true, trigger: 'blur', message: '请输入您的密码' },
+    { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: "请再次输入您的密码" },
-    { required: true, validator: equalToPassword, trigger: "blur" }
+    { required: true, trigger: 'blur', message: '请再次输入您的密码' },
+    { required: true, validator: equalToPassword, trigger: 'blur' }
   ],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: 'change', message: '请输入验证码' }]
 }
-const codeUrl = ref("")
+const codeUrl = ref('')
 const loading = ref(false)
 const captchaEnabled = ref(true)
 const registerRef = ref(ElForm)
@@ -117,11 +117,11 @@ const handleRegister = () => {
       const [err] = await to(register(registerForm.value))
       if (!err) {
         const username = registerForm.value.username
-        await ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
+        await ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + ' 注册成功！</font>', '系统提示', {
           dangerouslyUseHTMLString: true,
-          type: "success",
+          type: 'success',
         })
-        await router.push("/login")
+        await router.push('/login')
       } else {
         loading.value = false
         if (captchaEnabled) {
@@ -136,7 +136,7 @@ const getCode = async () => {
   const { data } = await getCodeImg()
   captchaEnabled.value = data.captchaEnabled === undefined ? true : data.captchaEnabled
   if (captchaEnabled.value) {
-    codeUrl.value = "data:image/gif;base64," + data.img
+    codeUrl.value = 'data:image/gif;base64,' + data.img
     registerForm.value.uuid = data.uuid
   }
 }

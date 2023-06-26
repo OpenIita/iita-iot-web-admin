@@ -4,7 +4,7 @@ const setting: DefaultSettings = {
    */
   title: import.meta.env.VITE_APP_TITLE,
 
-  theme: '#409EFF',
+  theme: '#0070FF',
 
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
@@ -23,7 +23,7 @@ const setting: DefaultSettings = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * 是否固定头部
@@ -33,7 +33,7 @@ const setting: DefaultSettings = {
   /**
    * 是否显示logo
    */
-  sidebarLogo: true,
+  sidebarLogo: false,
 
   /**
    * 是否显示动态标题

@@ -32,11 +32,11 @@
 <script setup lang="ts">
 import ScrollPane from './ScrollPane.vue'
 import { getNormalPath } from '@/utils/ruoyi'
-import useTagsViewStore from "@/store/modules/tagsView"
+import useTagsViewStore from '@/store/modules/tagsView'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
-import { ComponentInternalInstance } from "vue"
-import { RouteOption, TagView, RouteLocationRaw } from "vue-router"
+import { ComponentInternalInstance } from 'vue'
+import { RouteOption, TagView, RouteLocationRaw } from 'vue-router'
 
 const visible = ref(false)
 const top = ref(0)
@@ -71,8 +71,8 @@ const isActive = (r: TagView): boolean => {
 const activeStyle = (tag: TagView) => {
   if (!isActive(tag)) return {}
   return {
-    "background-color": theme.value,
-    "border-color": theme.value
+    'background-color': theme.value,
+    'border-color': theme.value
   }
 }
 const isAffix = (tag: TagView) => {
