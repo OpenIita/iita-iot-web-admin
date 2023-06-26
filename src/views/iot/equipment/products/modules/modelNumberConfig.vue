@@ -1,7 +1,14 @@
 <template>
   <yt-table-fun @handle-add="handleAdd">
-    <yt-table :selection="false" :page-hide="true" :column="column" :data="data" :view-btn="false" 
-    @handle-update="handleUpdate" @handle-delete="handleDel">
+    <yt-table
+      :selection="false"
+      :page-hide="true"
+      :column="column"
+      :data="data"
+      :view-btn="false"
+      @handle-update="handleUpdate"
+      @handle-delete="handleDel"
+    >
       <template #model="{ row }">
         <div>{{ row.model.endsWith("_default") ? "默认" : row.model }}</div>
       </template>

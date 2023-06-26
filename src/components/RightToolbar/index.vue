@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { TransferKey } from "element-plus"
-import { PropType } from "vue"
+import { TransferKey } from 'element-plus'
+import { PropType } from 'vue'
 
 const props = defineProps({
   showSearch: {
@@ -44,7 +44,7 @@ const emits = defineEmits(['update:showSearch', 'queryTable'])
 // 显隐数据
 const value = ref<Array<number>>([])
 // 弹出层标题
-const title = ref("显示/隐藏")
+const title = ref('显示/隐藏')
 // 是否显示弹出层
 const open = ref(false)
 
@@ -58,12 +58,12 @@ const style = computed(() => {
 
 // 搜索
 function toggleSearch() {
-  emits("update:showSearch", !props.showSearch)
+  emits('update:showSearch', !props.showSearch)
 }
 
 // 刷新
 function refresh() {
-  emits("queryTable")
+  emits('queryTable')
 }
 
 // 右侧列表元素变化

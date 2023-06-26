@@ -98,13 +98,13 @@
 </template>
 
 <script setup name="TenantPackage" lang="ts">
-import { listTenantPackage, getTenantPackage, delTenantPackage, addTenantPackage, updateTenantPackage, changePackageStatus } from "@/api/system/tenantPackage"
-import { treeselect as menuTreeselect, tenantPackageMenuTreeselect } from "@/api/system/menu"
-import { ComponentInternalInstance } from "vue"
-import { TenantPkgForm, TenantPkgQuery, TenantPkgVO } from "@/api/system/tenantPackage/types"
-import { MenuTreeOption } from "@/api/system/menu/types"
+import { listTenantPackage, getTenantPackage, delTenantPackage, addTenantPackage, updateTenantPackage, changePackageStatus } from '@/api/system/tenantPackage'
+import { treeselect as menuTreeselect, tenantPackageMenuTreeselect } from '@/api/system/menu'
+import { ComponentInternalInstance } from 'vue'
+import { TenantPkgForm, TenantPkgQuery, TenantPkgVO } from '@/api/system/tenantPackage/types'
+import { MenuTreeOption } from '@/api/system/menu/types'
 import { CheckboxValueType, ElTree, ElForm } from 'element-plus'
-import to from "await-to-js"
+import to from 'await-to-js'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
@@ -145,8 +145,8 @@ const data = reactive<PageData<TenantPkgForm, TenantPkgQuery>>({
     packageName: ''
   },
   rules: {
-    packageId: [{ required: true, message: "租户套餐id不能为空", trigger: "blur" }],
-    packageName: [{ required: true, message: "套餐名称不能为空", trigger: "blur" }]
+    packageId: [{ required: true, message: '租户套餐id不能为空', trigger: 'blur' }],
+    packageName: [{ required: true, message: '套餐名称不能为空', trigger: 'blur' }]
   }
 })
 
@@ -186,13 +186,13 @@ const getList = async () => {
 
 // 租户套餐状态修改
 const handleStatusChange = async (row: TenantPkgVO) => {
-  let text = row.status === "0" ? "启用" : "停用"
+  let text = row.status === '0' ? '启用' : '停用'
   const [err] = await to(proxy?.$modal.confirm('确认要"' + text + '""' + row.packageName + '"套餐吗？') as Promise<any>)
   if (err) {
-    row.status = row.status === "0" ? "1" : "0"
+    row.status = row.status === '0' ? '1' : '0'
   } else {
     await changePackageStatus(row.packageId, row.status)
-    proxy?.$modal.msgSuccess(text + "成功")
+    proxy?.$modal.msgSuccess(text + '成功')
   }
 }
 
@@ -257,7 +257,7 @@ const handleCheckedTreeConnect = (value: CheckboxValueType, type: string) => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加租户套餐"
+  dialog.title = '添加租户套餐'
   nextTick(() => {
     reset()
     getMenuTreeselect()
@@ -268,7 +268,7 @@ const handleAdd = () => {
 const handleUpdate = (row?: TenantPkgVO) => {
   loading.value = true
   dialog.visible = true
-  dialog.title = "修改租户套餐"
+  dialog.title = '修改租户套餐'
   nextTick(async () => {
     reset()
     const _packageId = row?.packageId || ids.value[0]
@@ -299,7 +299,7 @@ const submitForm = () => {
       } else {
         await addTenantPackage(form.value).finally(() => buttonLoading.value = false)
       }
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -315,7 +315,7 @@ const handleDelete = async (row?: TenantPkgVO) => {
   await delTenantPackage(_packageIds)
   loading.value = true
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 /** 导出按钮操作 */

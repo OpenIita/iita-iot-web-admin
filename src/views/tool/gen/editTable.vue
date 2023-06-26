@@ -118,8 +118,8 @@ import { DbColumnVO, DbTableVO } from '@/api/tool/gen/types'
 import { optionselect as getDictOptionselect } from '@/api/system/dict/type'
 import { DictTypeVO } from '@/api/system/dict/type/types'
 import basicInfoForm from './basicInfoForm.vue'
-import genInfoForm from "./genInfoForm.vue"
-import { ComponentInternalInstance } from "vue"
+import genInfoForm from './genInfoForm.vue'
+import { ComponentInternalInstance } from 'vue'
 
 const route = useRoute()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -156,7 +156,7 @@ const submitForm = () => {
         close()
       }
     } else {
-      proxy?.$modal.msgError("表单校验未通过，请重新检查提交内容")
+      proxy?.$modal.msgError('表单校验未通过，请重新检查提交内容')
     }
   })
 }
@@ -168,7 +168,7 @@ const getFormPromise = (form: any) => {
   })
 }
 const close = () => {
-  const obj = {path: "/tool/gen", query: {t: Date.now(), pageNum: route.query.pageNum}}
+  const obj = {path: '/tool/gen', query: {t: Date.now(), pageNum: route.query.pageNum}}
   proxy?.$tab.closeOpenPage(obj)
 }
 

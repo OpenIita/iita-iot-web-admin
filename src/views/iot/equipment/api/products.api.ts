@@ -80,7 +80,6 @@ export const saveProductModel = (data) => {
   })
 }
 
-
 // 删除型号
 export const deleteProductModel = (data: string | number) => {
   return request({

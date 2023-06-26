@@ -75,7 +75,7 @@ import { to } from 'await-to-js'
 const userStore = useUserStore()
 const router = useRouter()
 
-const title = import.meta.env.VITE_APP_TITLE
+// const title = import.meta.env.VITE_APP_TITLE
 const loginForm = ref<LoginData>({
   tenantId: '000000',
   username: 'openiita',

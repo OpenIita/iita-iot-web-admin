@@ -137,14 +137,14 @@ import {
   addOssConfig,
   updateOssConfig,
   changeOssConfigStatus
-} from "@/api/system/ossConfig"
-import { ComponentInternalInstance } from "vue"
-import { OssConfigForm, OssConfigQuery, OssConfigVO } from "@/api/system/ossConfig/types"
+} from '@/api/system/ossConfig'
+import { ComponentInternalInstance } from 'vue'
+import { OssConfigForm, OssConfigQuery, OssConfigVO } from '@/api/system/ossConfig/types'
 import { ElForm } from 'element-plus'
 
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_yes_no } = toRefs<any>(proxy?.useDict("sys_yes_no"))
+const { sys_yes_no } = toRefs<any>(proxy?.useDict('sys_yes_no'))
 
 const ossConfigList = ref<OssConfigVO[]>([])
 const buttonLoading = ref(false)
@@ -165,15 +165,15 @@ const dialog = reactive<DialogOption>({
 
 // 列显隐信息
 const columns = ref<FieldOption[]>([
-  { key: 0, label: `主建`, visible: true },
-  { key: 1, label: `配置key`, visible: false },
-  { key: 2, label: `访问站点`, visible: true },
-  { key: 3, label: `自定义域名`, visible: true },
-  { key: 4, label: `桶名称`, visible: true },
-  { key: 5, label: `前缀`, visible: true },
-  { key: 6, label: `域`, visible: true },
-  { key: 7, label: `桶权限类型`, visible: true },
-  { key: 8, label: `状态`, visible: true }
+  { key: 0, label: '主建', visible: true },
+  { key: 1, label: '配置key', visible: false },
+  { key: 2, label: '访问站点', visible: true },
+  { key: 3, label: '自定义域名', visible: true },
+  { key: 4, label: '桶名称', visible: true },
+  { key: 5, label: '前缀', visible: true },
+  { key: 6, label: '域', visible: true },
+  { key: 7, label: '桶权限类型', visible: true },
+  { key: 8, label: '状态', visible: true }
 ])
 
 
@@ -186,10 +186,10 @@ const initFormData: OssConfigForm = {
   prefix: '',
   endpoint: '',
   domain: '',
-  isHttps: "N",
-  accessPolicy: "1",
+  isHttps: 'N',
+  accessPolicy: '1',
   region: '',
-  status: "1",
+  status: '1',
   remark: '',
 }
 const data = reactive<PageData<OssConfigForm, OssConfigQuery>>({
@@ -203,44 +203,44 @@ const data = reactive<PageData<OssConfigForm, OssConfigQuery>>({
     status: '',
   },
   rules: {
-    configKey: [{ required: true, message: "configKey不能为空", trigger: "blur" },],
+    configKey: [{ required: true, message: 'configKey不能为空', trigger: 'blur' },],
     accessKey: [
-      { required: true, message: "accessKey不能为空", trigger: "blur" },
+      { required: true, message: 'accessKey不能为空', trigger: 'blur' },
       {
         min: 2,
         max: 200,
-        message: "accessKey长度必须介于 2 和 100 之间",
-        trigger: "blur",
+        message: 'accessKey长度必须介于 2 和 100 之间',
+        trigger: 'blur',
       },
     ],
     secretKey: [
-      { required: true, message: "secretKey不能为空", trigger: "blur" },
+      { required: true, message: 'secretKey不能为空', trigger: 'blur' },
       {
         min: 2,
         max: 100,
-        message: "secretKey长度必须介于 2 和 100 之间",
-        trigger: "blur",
+        message: 'secretKey长度必须介于 2 和 100 之间',
+        trigger: 'blur',
       },
     ],
     bucketName: [
-      { required: true, message: "bucketName不能为空", trigger: "blur" },
+      { required: true, message: 'bucketName不能为空', trigger: 'blur' },
       {
         min: 2,
         max: 100,
-        message: "bucketName长度必须介于 2 和 100 之间",
-        trigger: "blur",
+        message: 'bucketName长度必须介于 2 和 100 之间',
+        trigger: 'blur',
       },
     ],
     endpoint: [
-      { required: true, message: "endpoint不能为空", trigger: "blur" },
+      { required: true, message: 'endpoint不能为空', trigger: 'blur' },
       {
         min: 2,
         max: 100,
-        message: "endpoint名称长度必须介于 2 和 100 之间",
-        trigger: "blur",
+        message: 'endpoint名称长度必须介于 2 和 100 之间',
+        trigger: 'blur',
       },
     ],
-    accessPolicy: [{ required: true, message: "accessPolicy不能为空", trigger: "blur" }]
+    accessPolicy: [{ required: true, message: 'accessPolicy不能为空', trigger: 'blur' }]
   }
 })
 
@@ -283,7 +283,7 @@ const handleSelectionChange = (selection: OssConfigVO[]) => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加对象存储配置"
+  dialog.title = '添加对象存储配置'
   nextTick(() => {
     reset()
   })
@@ -292,7 +292,7 @@ const handleAdd = () => {
 const handleUpdate = (row?: OssConfigVO) => {
   loading.value = true
   dialog.visible = true
-  dialog.title = "修改对象存储配置"
+  dialog.title = '修改对象存储配置'
   const ossConfigId = row?.id || ids.value[0]
   nextTick(async () => {
     reset()
@@ -311,7 +311,7 @@ const submitForm = () => {
       } else {
         await addOssConfig(form.value).finally(() => buttonLoading.value = false)
       }
-      proxy?.$modal.msgSuccess("新增成功")
+      proxy?.$modal.msgSuccess('新增成功')
       dialog.visible = false
       getList()
     }
@@ -319,14 +319,14 @@ const submitForm = () => {
 }
 /** 状态修改  */
 const  handleStatusChange = async (row: OssConfigVO) => {
-  let text = row.status === "0" ? "启用" : "停用"
+  let text = row.status === '0' ? '启用' : '停用'
   try {
     await proxy?.$modal.confirm('确认要"' + text + '""' + row.configKey + '"配置吗?')
     await changeOssConfigStatus(row.id, row.status, row.configKey)
     getList()
-    proxy?.$modal.msgSuccess(text + "成功")
+    proxy?.$modal.msgSuccess(text + '成功')
   } catch { return } finally {
-    row.status = row.status === "0" ? "1" : "0"
+    row.status = row.status === '0' ? '1' : '0'
   }
 
 }
@@ -337,7 +337,7 @@ const handleDelete = async (row?: OssConfigVO) => {
   loading.value = true
   await delOssConfig(ossConfigIds).finally(() => loading.value = false)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 
 }
 

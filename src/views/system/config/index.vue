@@ -121,13 +121,13 @@
 </template>
 
 <script setup name="Config" lang="ts">
-import { listConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from "@/api/system/config"
-import { ConfigForm, ConfigQuery, ConfigVO } from "@/api/system/config/types"
-import { ComponentInternalInstance } from "vue"
+import { listConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from '@/api/system/config'
+import { ConfigForm, ConfigQuery, ConfigVO } from '@/api/system/config/types'
+import { ComponentInternalInstance } from 'vue'
 import { DateModelType } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_yes_no } = toRefs<any>(proxy?.useDict("sys_yes_no"))
+const { sys_yes_no } = toRefs<any>(proxy?.useDict('sys_yes_no'))
 
 const configList = ref<ConfigVO[]>([])
 const loading = ref(true)
@@ -149,7 +149,7 @@ const initFormData: ConfigForm = {
   configName: '',
   configKey: '',
   configValue: '',
-  configType: "Y",
+  configType: 'Y',
   remark: ''
 }
 const data = reactive<PageData<ConfigForm, ConfigQuery>>({
@@ -162,9 +162,9 @@ const data = reactive<PageData<ConfigForm, ConfigQuery>>({
     configType: '',
   },
   rules: {
-    configName: [{ required: true, message: "参数名称不能为空", trigger: "blur" }],
-    configKey: [{ required: true, message: "参数键名不能为空", trigger: "blur" }],
-    configValue: [{ required: true, message: "参数键值不能为空", trigger: "blur" }]
+    configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
+    configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
+    configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }]
   }
 })
 
@@ -208,7 +208,7 @@ const handleSelectionChange = (selection: ConfigVO[]) => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加参数"
+  dialog.title = '添加参数'
   nextTick(() => {
     reset()
   })
@@ -216,7 +216,7 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = (row?: ConfigVO) => {
   dialog.visible = true
-  dialog.title = "修改参数"
+  dialog.title = '修改参数'
   const configId = row?.id ? row.id: ids.value[0]
   nextTick(async () => {
     reset()
@@ -229,7 +229,7 @@ const submitForm = () => {
   configFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateConfig(form.value) : await addConfig(form.value)
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -242,18 +242,18 @@ const handleDelete = async (row?: ConfigVO) => {
   await proxy?.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
   await delConfig(configIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/config/export", {
+  proxy?.download('system/config/export', {
     ...queryParams.value
   }, `config_${new Date().getTime()}.xlsx`)
 }
 /** 刷新缓存按钮操作 */
 const handleRefreshCache = async () => {
   await refreshCache()
-  proxy?.$modal.msgSuccess("刷新缓存成功")
+  proxy?.$modal.msgSuccess('刷新缓存成功')
 }
 
 onMounted(() => {

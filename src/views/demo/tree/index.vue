@@ -87,7 +87,7 @@
 </template>
 
 <script setup name="Tree" lang="ts">
-import { listTree, getTree, delTree, addTree, updateTree } from "@/api/demo/tree"
+import { listTree, getTree, delTree, addTree, updateTree } from '@/api/demo/tree'
 import { TreeVO, TreeQuery, TreeForm } from '@/api/demo/tree/types'
 import { ComponentInternalInstance } from 'vue'
 import { ElForm, ElTable } from 'element-plus'
@@ -137,19 +137,19 @@ const data = reactive<PageData<TreeForm, TreeQuery>>({
   },
   rules: {
     id: [
-      { required: true, message: "主键不能为空", trigger: "blur" }
+      { required: true, message: '主键不能为空', trigger: 'blur' }
     ],
     parentId: [
-      { required: true, message: "父id不能为空", trigger: "blur" }
+      { required: true, message: '父id不能为空', trigger: 'blur' }
     ],
     deptId: [
-      { required: true, message: "部门id不能为空", trigger: "blur" }
+      { required: true, message: '部门id不能为空', trigger: 'blur' }
     ],
     userId: [
-      { required: true, message: "用户id不能为空", trigger: "blur" }
+      { required: true, message: '用户id不能为空', trigger: 'blur' }
     ],
     treeName: [
-      { required: true, message: "值不能为空", trigger: "blur" }
+      { required: true, message: '值不能为空', trigger: 'blur' }
     ],
   }
 })
@@ -160,7 +160,7 @@ const { queryParams, form, rules } = toRefs(data)
 const getList = async () => {
   loading.value = true
   const res = await listTree(queryParams.value)
-  const data = proxy?.handleTree<TreeVO>(res.data, "id", "parentId")
+  const data = proxy?.handleTree<TreeVO>(res.data, 'id', 'parentId')
   if (data) {
     treeList.value = data
     loading.value = false
@@ -172,7 +172,7 @@ const getTreeselect = async () => {
   const res = await listTree()
   treeOptions.value = []
   const data: TreeOption = { id: 0, treeName: '顶级节点', children: [] }
-  data.children = proxy?.handleTree<TreeOption>(res.data, "id", "parentId")
+  data.children = proxy?.handleTree<TreeOption>(res.data, 'id', 'parentId')
   treeOptions.value.push(data)
 }
 
@@ -202,7 +202,7 @@ const resetQuery = () => {
 /** 新增按钮操作 */
 const handleAdd = (row?: TreeVO) => {
   dialog.visible = true
-  dialog.title = "添加测试树"
+  dialog.title = '添加测试树'
   nextTick(() => {
     reset()
     getTreeselect()
@@ -232,7 +232,7 @@ const toggleExpandAll = (data: TreeVO[], status: boolean) => {
 const handleUpdate = (row: TreeVO) => {
   loading.value = true
   dialog.visible = true
-  dialog.title = "修改测试树"
+  dialog.title = '修改测试树'
   nextTick(async () => {
     reset()
     await getTreeselect()
@@ -255,7 +255,7 @@ const submitForm = () => {
       } else {
         addTree(form.value).finally(() => buttonLoading.value = false)
       }
-      proxy?.$modal.msgSuccess("操作成功")
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -268,7 +268,7 @@ const handleDelete = async (row: TreeVO) => {
   loading.value = true
   await delTree(row.id).finally(() => loading.value = false)
   await getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {

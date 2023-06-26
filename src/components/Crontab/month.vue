@@ -48,50 +48,50 @@ export default {
       checkNum: this.$props.check
     }
   },
-  name: "crontab-month",
-  props: ["check", "cron"],
+  name: 'crontab-month',
+  props: ['check', 'cron'],
   methods: {
     // 单选按钮值变化时
     radioChange() {
       switch (this.radioValue) {
         case 1:
-          this.$emit("update", "month", "*")
+          this.$emit('update', 'month', '*')
           break
         case 2:
-          this.$emit("update", "month", this.cycleTotal)
+          this.$emit('update', 'month', this.cycleTotal)
           break
         case 3:
-          this.$emit("update", "month", this.averageTotal)
+          this.$emit('update', 'month', this.averageTotal)
           break
         case 4:
-          this.$emit("update", "month", this.checkboxString)
+          this.$emit('update', 'month', this.checkboxString)
           break
       }
     },
     // 周期两个值变化时
     cycleChange() {
-      if (this.radioValue == "2") {
-        this.$emit("update", "month", this.cycleTotal)
+      if (this.radioValue == '2') {
+        this.$emit('update', 'month', this.cycleTotal)
       }
     },
     // 平均两个值变化时
     averageChange() {
-      if (this.radioValue == "3") {
-        this.$emit("update", "month", this.averageTotal)
+      if (this.radioValue == '3') {
+        this.$emit('update', 'month', this.averageTotal)
       }
     },
     // checkbox值变化时
     checkboxChange() {
-      if (this.radioValue == "4") {
-        this.$emit("update", "month", this.checkboxString)
+      if (this.radioValue == '4') {
+        this.$emit('update', 'month', this.checkboxString)
       }
     }
   },
   watch: {
-    radioValue: "radioChange",
-    cycleTotal: "cycleChange",
-    averageTotal: "averageChange",
-    checkboxString: "checkboxChange"
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    checkboxString: 'checkboxChange'
   },
   computed: {
     // 计算两个周期值
@@ -102,18 +102,18 @@ export default {
         cycle01 ? cycle01 + 1 : 2,
         12
       )
-      return cycle01 + "-" + cycle02
+      return cycle01 + '-' + cycle02
     },
     // 计算平均用到的值
     averageTotal: function () {
       const average01 = this.checkNum(this.average01, 1, 11)
       const average02 = this.checkNum(this.average02, 1, 12 - average01 || 0)
-      return average01 + "/" + average02
+      return average01 + '/' + average02
     },
     // 计算勾选的checkbox值合集
     checkboxString: function () {
       let str = this.checkboxList.join()
-      return str == "" ? "*" : str
+      return str == '' ? '*' : str
     }
   }
 }

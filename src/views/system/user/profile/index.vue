@@ -63,12 +63,12 @@
 </template>
 
 <script setup name="Profile" lang="ts">
-import userAvatar from "./userAvatar.vue"
-import userInfo from "./userInfo.vue"
-import resetPwd from "./resetPwd.vue"
-import { getUserProfile } from "@/api/system/user"
+import userAvatar from './userAvatar.vue'
+import userInfo from './userInfo.vue'
+import resetPwd from './resetPwd.vue'
+import { getUserProfile } from '@/api/system/user'
 
-const activeTab = ref("userinfo")
+const activeTab = ref('userinfo')
 const state = ref<{ user: any; roleGroup: string;  postGroup: string}>({
   user: {},
   roleGroup: '',

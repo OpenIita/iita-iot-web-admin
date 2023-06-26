@@ -20,7 +20,7 @@ export const checkPermi = (value: any) => {
     }
     return true
   } else {
-    console.error(`need roles! Like checkPermi="['system:user:add','system:user:edit']"`)
+    console.error("need roles! Like checkPermi=\"['system:user:add','system:user:edit']\"")
     return false
   }
 }
@@ -45,7 +45,7 @@ export const checkRole = (value: any): boolean => {
     }
     return true
   } else {
-    console.error(`need roles! Like checkRole="['admin','editor']"`)
+    console.error("need roles! Like checkRole=\"['admin','editor']\"")
     return false
   }
 }
