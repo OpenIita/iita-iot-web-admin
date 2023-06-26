@@ -20,7 +20,9 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getConfigList, saveConfig, deleteConfig } from './api/alarm.api'
+import { getRuleList } from '../ruleEngine/api/rule.api'
 import YtCrud from '@/components/common/yt-crud.vue'
+import { getConfigAll } from '../channel/api/configs.api'
 
 const state = reactive({
   page: {
@@ -31,7 +33,7 @@ const state = reactive({
   loading: false,
   query: {},
 })
-const column: IColumn[] = [{
+const column = ref<IColumn[]>([{
   label: '配置名称',
   key: 'name',
   search: true,
@@ -69,34 +71,7 @@ const column: IColumn[] = [{
   componentProps: {
     labelAlias: 'title',
     valueAlias: 'id',
-    options: [
-      {
-        'id': '947d22b7-305b-d959-874a-06e277143d44',
-        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb832',
-        'title': '告警邮件配置',
-        'param': {},
-        'createAt': 1684824055050
-      },
-      {
-        'id': '75f37720-22bb-4f0b-f127-78f2091507a0',
-        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb832',
-        'title': '告警钉钉配置',
-        'param': {
-          'dingTalkWebhook': 'xxxxxxxxxxxxxxxx',
-          'dingTalkSecret': 'xxxx'
-        },
-        'createAt': 1684824055053
-      },
-      {
-        'id': '6e5db9b5-a709-723b-665b-bbca5ce6a62c',
-        'channelId': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb833',
-        'title': '告警企业微信配置',
-        'param': {
-          'qyWechatWebhook': 'xxxxxxxxxxxxxxxx'
-        },
-        'createAt': 1684824055053
-      }
-    ]
+    options: []
   }
 }, {
   label: '规则',
@@ -106,35 +81,7 @@ const column: IColumn[] = [{
   componentProps: {
     labelAlias: 'name',
     valueAlias: 'id',
-    options: [
-      {
-        'id': '2820c218-660e-48ff-a234-c7b6793a5bb8',
-        'name': '测试场景1',
-        'type': 'scene',
-        'listeners': [
-          {
-            'type': 'device',
-            'config': '{"id":"4ff98e8c-e6f6-4e96-8932-de488a0a4bfb","type":"device","topic":"","conditions":[{"id":0.8212160690052512,"type":"property","device":"Rf4QSjbm65X45753/ABC12400001","identifier":"report","parameters":[{"identifier":"powerstate","comparator":">","value":"0"}]}]}'
-          }
-        ],
-        'filters': [
-          {
-            'type': 'device',
-            'config': '{"id":"24b4b975-d8ac-431d-881d-8c8b40e92861","type":"device","conditions":[{"id":0.08981222614734863,"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"powerSwitch","type":"property","comparator":"==","value":"0"}]}'
-          }
-        ],
-        'actions': [
-          {
-            'type': 'device',
-            'config': '{"id":"fde024b5-5105-4639-8602-d04300613af9","type":"device","services":[{"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"set","inputData":[{"identifier":"powerSwitch","value":"1"}]},{"device":"hdX3PCMcFrCYpesJ/ABD12300002","identifier":"set","inputData":[{"identifier":"windSpeed","value":"20"}]}]}'
-          }
-        ],
-        'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-        'state': 'stopped',
-        'desc': 'test',
-        'createAt': 1649167998895
-      }
-    ]
+    options: []
   }
 }, {
   label: '是否启用',
@@ -149,8 +96,36 @@ const column: IColumn[] = [{
     type: 'textarea',
     rows: 4,
   }
-}]
+}])
 
+const getDict = async () => {
+  let options: any[] = []
+  const res1 = await getRuleList({
+    pageSize: 999999,
+    pageNum: 1,
+    type: 'scene',
+  })
+  const res2 = await getRuleList({
+    pageSize: 999999,
+    pageNum: 1,
+    type: 'flow',
+  })
+  options = [...res1.data.rows, ...res2.data.rows]
+  column.value.forEach(item => {
+    if (item.key === 'ruleInfoId') {
+      item.componentProps.options = options
+    }
+  })
+
+  getConfigAll().then(res => {
+    column.value.forEach(item => {
+    if (item.key === 'messageTemplateId') {
+      item.componentProps.options = res.data
+    }
+  })
+  })
+}
+getDict()
 const getData =  () => {
   state.loading = true
   getConfigList({
