@@ -117,6 +117,7 @@ export default defineComponent ({
     initThingModel (pk, res) {
       this.propertiesList = []
       this.servicesList = []
+      if (!res) return
       res.model.properties.forEach((p) => {
         this.propertiesList.push(p)
       })

@@ -117,7 +117,7 @@ const initThingModel = (pk, res) => {
     name: '属性',
     items: items,
   })
-  res.model.properties.forEach((p) => {
+  res?.model?.properties && res.model.properties.forEach((p) => {
     items.push({
       type: 'property',
       identifier: p.identifier,
