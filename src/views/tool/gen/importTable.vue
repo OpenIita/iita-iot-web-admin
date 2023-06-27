@@ -54,7 +54,7 @@ const queryParams = reactive<DbTableQuery>({
   tableComment: ''
 })
 
-const emit = defineEmits(["ok"])
+const emit = defineEmits(['ok'])
 
 /** 查询参数列表 */
 const show = () => {
@@ -87,16 +87,16 @@ const resetQuery = () => {
 }
 /** 导入按钮操作 */
 const handleImportTable = async () => {
-  const tableNames = tables.value.join(",")
-  if (tableNames == "") {
-    proxy?.$modal.msgError("请选择要导入的表")
+  const tableNames = tables.value.join(',')
+  if (tableNames == '') {
+    proxy?.$modal.msgError('请选择要导入的表')
     return
   }
   const res = await importTable({ tables: tableNames })
   proxy?.$modal.msgSuccess(res.msg)
   if (res.code === 200) {
     visible.value = false
-    emit("ok")
+    emit('ok')
   }
 }
 

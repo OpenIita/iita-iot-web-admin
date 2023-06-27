@@ -12,7 +12,7 @@ const props = defineProps({
   }
 })
 
-const height = ref(document.documentElement.clientHeight - 94.5 + "px;")
+const height = ref(document.documentElement.clientHeight - 94.5 + 'px;')
 const loading = ref(true)
 const url = computed(() => props.src)
 
@@ -21,7 +21,7 @@ onMounted(() => {
     loading.value = false
   }, 300)
   window.onresize = function temp() {
-    height.value = document.documentElement.clientHeight - 94.5 + "px;"
+    height.value = document.documentElement.clientHeight - 94.5 + 'px;'
   }
 })
 </script>

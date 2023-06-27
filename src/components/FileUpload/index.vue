@@ -123,7 +123,7 @@ const handleBeforeUpload = (file: any) => {
     const fileExt = fileName[fileName.length - 1]
     const isTypeOk = props.fileType.indexOf(fileExt) >= 0
     if (!isTypeOk) {
-      proxy?.$modal.msgError(`文件格式不正确, 请上传${props.fileType.join("/")}格式文件!`)
+      proxy?.$modal.msgError(`文件格式不正确, 请上传${props.fileType.join('/')}格式文件!`)
       return false
     }
   }
@@ -147,7 +147,7 @@ const handleExceed = () => {
 
 // 上传失败
 const handleUploadError = () => {
-  proxy?.$modal.msgError("上传文件失败")
+  proxy?.$modal.msgError('上传文件失败')
 }
 
 // 上传成功回调
@@ -169,7 +169,7 @@ const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
   delOss(ossId)
   fileList.value.splice(index, 1)
-  emit("update:modelValue", listToString(fileList.value))
+  emit('update:modelValue', listToString(fileList.value))
 }
 
 // 上传结束处理
@@ -178,7 +178,7 @@ const uploadedSuccessfully =() => {
     fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
     uploadList.value = []
     number.value = 0
-    emit("update:modelValue", listToString(fileList.value))
+    emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }
 }
@@ -186,8 +186,8 @@ const uploadedSuccessfully =() => {
 // 获取文件名称
 const getFileName = (name: string) => {
   // 如果是url那么取最后的名字 如果不是直接返回
-  if (name.lastIndexOf("/") > -1) {
-    return name.slice(name.lastIndexOf("/") + 1)
+  if (name.lastIndexOf('/') > -1) {
+    return name.slice(name.lastIndexOf('/') + 1)
   } else {
     return name
   }
@@ -195,14 +195,14 @@ const getFileName = (name: string) => {
 
 // 对象转成指定字符串分隔
 const listToString = (list: any[], separator?: string) => {
-  let strs = ""
-  separator = separator || ","
+  let strs = ''
+  separator = separator || ','
   list.forEach(item => {
     if (item.ossId) {
       strs += item.ossId + separator
     }
   })
-  return strs != "" ? strs.substring(0, strs.length - 1) : ""
+  return strs != '' ? strs.substring(0, strs.length - 1) : ''
 }
 </script>
 

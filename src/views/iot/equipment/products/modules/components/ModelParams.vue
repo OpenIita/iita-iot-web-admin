@@ -70,7 +70,7 @@ const handleParamEdit = (index: number, row: any) => {
   state.currParamProperty = row
 
   let specs = row.dataType.specs
-  if (row.dataType.type == "enum" && specs) {
+  if (row.dataType.type == 'enum' && specs) {
     let enumSpecs = []
     for (var p in specs) {
       enumSpecs.push({
@@ -80,7 +80,7 @@ const handleParamEdit = (index: number, row: any) => {
       state.enumItems = enumSpecs
     }
   }
-  if (row.dataType.type == "bool" && specs) {
+  if (row.dataType.type == 'bool' && specs) {
     state.boolItem = {
       _true: specs['0'],
       _false: specs['1']

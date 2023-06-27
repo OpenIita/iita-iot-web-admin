@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter, RouteOption } from 'vue-router'
+import { createWebHashHistory, createRouter, RouteOption } from 'vue-router'
 /* Layout */
 import Layout from '@/layout/index.vue'
 
@@ -164,7 +164,7 @@ export const dynamicRoutes: RouteOption[] = [
  * 创建路由
  */
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_APP_CONTEXT_PATH),
+  history: createWebHashHistory(import.meta.env.VITE_APP_CONTEXT_PATH),
   routes: constantRoutes,
   // 刷新时，滚动条位置还原
   scrollBehavior(to, from, savedPosition) {

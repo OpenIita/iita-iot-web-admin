@@ -131,10 +131,10 @@
 </template>
 
 <script setup name="Oss" lang="ts">
-import { listOss, delOss } from "@/api/system/oss"
-import ImagePreview from "@/components/ImagePreview/index.vue"
-import { ComponentInternalInstance } from "vue"
-import { OssForm, OssQuery, OssVO } from "@/api/system/oss/types"
+import { listOss, delOss } from '@/api/system/oss'
+import ImagePreview from '@/components/ImagePreview/index.vue'
+import { ComponentInternalInstance } from 'vue'
+import { OssForm, OssQuery, OssVO } from '@/api/system/oss/types'
 import { DateModelType } from 'element-plus'
 
 const router = useRouter()
@@ -183,7 +183,7 @@ const data = reactive<PageData<OssForm, OssQuery>>({
   },
   rules: {
     file: [
-      { required: true, message: "文件不能为空", trigger: "blur" }
+      { required: true, message: '文件不能为空', trigger: 'blur' }
     ]
   }
 })
@@ -193,16 +193,16 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询OSS对象存储列表 */
 const getList = async () => {
   loading.value = true
-  const res = await proxy?.getConfigKey("sys.oss.previewListResource")
+  const res = await proxy?.getConfigKey('sys.oss.previewListResource')
   previewListResource.value = res?.msg === undefined ? true : res.msg === 'true'
-  const response = await listOss(proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, "CreateTime"))
+  const response = await listOss(proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime'))
   ossList.value = response.rows
   total.value = response.total
   loading.value = false
   showTable.value = true
 }
 function checkFileSuffix(fileSuffix: string[]) {
-  let arr = ["png", "jpg", "jpeg"]
+  let arr = ['png', 'jpg', 'jpeg']
   return arr.some(type => {
     return fileSuffix.indexOf(type) > -1
   })
@@ -260,8 +260,8 @@ const handleHeaderCLick = (column: any) => {
   handleOrderChange(column.property, column.multiOrder)
 }
 const handleOrderChange = (prop: string, order: string) => {
-  let orderByArr = queryParams.value.orderByColumn ? queryParams.value.orderByColumn.split(",") : []
-  let isAscArr = queryParams.value.isAsc ? queryParams.value.isAsc.split(",") : []
+  let orderByArr = queryParams.value.orderByColumn ? queryParams.value.orderByColumn.split(',') : []
+  let isAscArr = queryParams.value.isAsc ? queryParams.value.isAsc.split(',') : []
   let propIndex = orderByArr.indexOf(prop)
   if (propIndex !== -1) {
     if (order) {
@@ -278,8 +278,8 @@ const handleOrderChange = (prop: string, order: string) => {
     isAscArr.push(order)
   }
   //合并排序
-  queryParams.value.orderByColumn = orderByArr.join(",")
-  queryParams.value.isAsc = isAscArr.join(",")
+  queryParams.value.orderByColumn = orderByArr.join(',')
+  queryParams.value.isAsc = isAscArr.join(',')
   getList()
 }
 /** 任务日志列表查询 */
@@ -289,7 +289,7 @@ const handleOssConfig = () => {
 /** 文件按钮操作 */
 const handleFile = () => {
   dialog.visible = true
-  dialog.title = "上传文件"
+  dialog.title = '上传文件'
   nextTick(() => {
     reset()
     type.value = 0
@@ -298,7 +298,7 @@ const handleFile = () => {
 /** 图片按钮操作 */
 const handleImage = () => {
   dialog.visible = true
-  dialog.title = "上传图片"
+  dialog.title = '上传图片'
   nextTick(() => {
     reset()
     type.value = 1
@@ -315,11 +315,11 @@ const handleDownload = (row: OssVO) => {
 }
 /** 用户状态修改  */
 const handlePreviewListResource = async (preview: boolean) => {
-  let text = preview ? "启用" : "停用"
+  let text = preview ? '启用' : '停用'
   await proxy?.$modal.confirm('确认要"' + text + '""预览列表图片"配置吗?')
-  await proxy?.updateConfigByKey("sys.oss.previewListResource", preview)
+  await proxy?.updateConfigByKey('sys.oss.previewListResource', preview)
   getList()
-  proxy?.$modal.msgSuccess(text + "成功")
+  proxy?.$modal.msgSuccess(text + '成功')
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OssVO) => {
@@ -328,7 +328,7 @@ const handleDelete = async (row?: OssVO) => {
   loading.value = true
   await delOss(ossIds).finally(() => loading.value = false)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {

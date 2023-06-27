@@ -8,7 +8,7 @@
       filterable
       default-first-option
       remote
-      placeholder="Search"
+      placeholder="搜索菜单"
       class="header-search-select"
       @change="change"
     >
@@ -53,8 +53,8 @@ const change = (val: any) => {
   const path = val.path
   if (isHttp(path)) {
     // http(s):// 路径新窗口打开
-    const pindex = path.indexOf("http")
-    window.open(path.substr(pindex, path.length), "_blank")
+    const pindex = path.indexOf('http')
+    window.open(path.substr(pindex, path.length), '_blank')
   } else {
     router.push(path)
   }

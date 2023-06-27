@@ -170,7 +170,7 @@ import { OperLogForm, OperLogQuery, OperLogVO } from '@/api/monitor/operlog/type
 import { DateModelType } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_oper_type, sys_common_status } = toRefs<any>(proxy?.useDict("sys_oper_type","sys_common_status"))
+const { sys_oper_type, sys_common_status } = toRefs<any>(proxy?.useDict('sys_oper_type','sys_common_status'))
 
 const operlogList = ref<OperLogVO[]>([])
 const loading = ref(true)
@@ -179,7 +179,7 @@ const ids = ref<Array<number | string>>([])
 const multiple = ref(true)
 const total = ref(0)
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
-const defaultSort = ref<any>({ prop: "operTime", order: "descending" })
+const defaultSort = ref<any>({ prop: 'operTime', order: 'descending' })
 
 const operLogTableRef = ref(ElTable)
 const queryFormRef = ref(ElForm)
@@ -273,20 +273,20 @@ const handleDelete = async (row?: OperLogVO) => {
   await proxy?.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?')
   await delOperlog(operIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 /** 清空按钮操作 */
 const handleClean = async () => {
-  await proxy?.$modal.confirm("是否确认清空所有操作日志数据项?")
+  await proxy?.$modal.confirm('是否确认清空所有操作日志数据项?')
   await cleanOperlog()
   getList()
-  proxy?.$modal.msgSuccess("清空成功")
+  proxy?.$modal.msgSuccess('清空成功')
 }
 
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("monitor/operlog/export", {
+  proxy?.download('monitor/operlog/export', {
     ...queryParams.value,
   }, `config_${new Date().getTime()}.xlsx`)
 }

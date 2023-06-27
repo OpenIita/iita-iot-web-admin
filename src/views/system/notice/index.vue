@@ -118,13 +118,13 @@
 </template>
 
 <script setup name="Notice" lang="ts">
-import { listNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/system/notice"
-import { ComponentInternalInstance } from "vue"
-import { NoticeForm, NoticeQuery, NoticeVO } from "@/api/system/notice/types"
+import { listNotice, getNotice, delNotice, addNotice, updateNotice } from '@/api/system/notice'
+import { ComponentInternalInstance } from 'vue'
+import { NoticeForm, NoticeQuery, NoticeVO } from '@/api/system/notice/types'
 import { ElForm } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_notice_status, sys_notice_type } = toRefs<any>(proxy?.useDict("sys_notice_status", "sys_notice_type"))
+const { sys_notice_status, sys_notice_type } = toRefs<any>(proxy?.useDict('sys_notice_status', 'sys_notice_type'))
 
 const noticeList = ref<NoticeVO[]>([])
 const loading = ref(true)
@@ -148,7 +148,7 @@ const initFormData: NoticeForm = {
   noticeTitle: '',
   noticeType: '',
   noticeContent: '',
-  status: "0",
+  status: '0',
   remark: '',
   createByName: ''
 }
@@ -163,8 +163,8 @@ const data = reactive<PageData<NoticeForm, NoticeQuery>>({
     noticeType: ''
   },
   rules: {
-    noticeTitle: [{ required: true, message: "公告标题不能为空", trigger: "blur" }],
-    noticeType: [{ required: true, message: "公告类型不能为空", trigger: "change" }]
+    noticeTitle: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }],
+    noticeType: [{ required: true, message: '公告类型不能为空', trigger: 'change' }]
   },
 })
 
@@ -207,7 +207,7 @@ const handleSelectionChange = (selection: NoticeVO[]) => {
 /** 新增按钮操作 */
 const handleAdd = () => {
   dialog.visible = true
-  dialog.title = "添加公告"
+  dialog.title = '添加公告'
   nextTick(() => {
     reset()
   })
@@ -215,7 +215,7 @@ const handleAdd = () => {
 /**修改按钮操作 */
 const handleUpdate = (row?: NoticeVO) => {
   dialog.visible = true
-  dialog.title = "修改公告"
+  dialog.title = '修改公告'
   nextTick(async () => {
     const noticeId = row?.id || ids.value[0]
     reset()
@@ -228,7 +228,7 @@ const submitForm = () => {
   noticeFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateNotice(form.value) : await addNotice(form.value)
-      proxy?.$modal.msgSuccess("修改成功")
+      proxy?.$modal.msgSuccess('修改成功')
       dialog.visible = false
       getList()
     }
@@ -240,7 +240,7 @@ const handleDelete = async (row?: NoticeVO) => {
   await proxy?.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？')
   await delNotice(noticeIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {

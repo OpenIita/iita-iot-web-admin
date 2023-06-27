@@ -32,13 +32,15 @@ export const funProps = {
   },
   // 按钮显示
   addBtn: propTypes.bool.def(true),
-  // 删除暂无批量删除
+  // 批量删除
+  limit: propTypes.number.def(10),
+  multipleSelection: propTypes.array.def([]),
   delBtn: propTypes.bool.def(false),
-  // TODO: 导出暂时没得、后面加
+  // 导出
   exportBtn: propTypes.bool.def(false),
   // 按钮文字
   addBtnText: propTypes.string.def('新增'),
-  delBtnText: propTypes.string.def('删除'),
+  delBtnText: propTypes.string.def('批量删除'),
   exportBtnText: propTypes.string.def('导出'),
   hide: propTypes.bool.def(false),
 }
@@ -49,11 +51,14 @@ export const tableProps = {
   size: propTypes.string.def('default '),
   columnKey: propTypes.string.def('id'),
   menuWidth: propTypes.number.def(220) || propTypes.string,
+  // 自定义表格
+  customTable: propTypes.bool.def(false),
   // 序号
   index: propTypes.bool.def(true),
   loading: propTypes.bool.def(false),
   // 多选
   selection: propTypes.bool.def(true),
+  multipleSelection: propTypes.array.def([]),
   // 菜单
   menu: propTypes.bool.def(true),
   // 按钮权限

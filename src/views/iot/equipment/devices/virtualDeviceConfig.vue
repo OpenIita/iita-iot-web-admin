@@ -48,26 +48,26 @@ const goBack = () => {
   router.back()
 }
 const data = ref({
-  "id": "6293953092084e2df303ba3e",
-  "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-  "name": "三路开关",
-  "productKey": "cGCrkK7Ex4FESAwe",
-  "devices": [
-    "null"
+  'id': '6293953092084e2df303ba3e',
+  'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+  'name': '三路开关',
+  'productKey': 'cGCrkK7Ex4FESAwe',
+  'devices': [
+    'null'
   ],
-  "type": "thingModel",
-  "script": "\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+\"\";\n}\n\nfunction getRequestId(){\n  return \"RID\"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    \"mid\":getRequestId(),\n    \"productKey\":device.productKey,  \n    \"deviceName\":device.deviceName,\n    \"type\":\"property\",\n    \"identifier\":\"report\",\n    \"occurred\":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    \"time\":new Date().getTime(),\t\t//时间戳，消息上报时间\n    \"data\":{\n\t  \"rssi\":127-parseInt(Math.random()*127),\n\t  \"powerstate_1\":Math.random()>0.5?1:0,\n\t  \"powerstate_2\":Math.random()>0.5?1:0,\n\t  \"powerstate_3\":Math.random()>0.5?1:0\n    }\n  }\n}",
-  "trigger": "none",
-  "triggerExpression": "hour",
-  "state": "stopped",
-  "createAt": 1653839152090
+  'type': 'thingModel',
+  'script': '\nvar mid=1000;\n\nfunction getMid(){\n  mid++;\n  if(mid>9999){\n\tmid=1;\n  }\n  return mid+"";\n}\n\nfunction getRequestId(){\n  return "RID"+new Date().getTime()+getMid();\n}\n\n\nthis.receive=function(service,device){\n  return [];\n}\n\nthis.report=function(device){\n  return {\n    "mid":getRequestId(),\n    "productKey":device.productKey,  \n    "deviceName":device.deviceName,\n    "type":"property",\n    "identifier":"report",\n    "occurred":new Date().getTime(),\t//时间戳，设备上的事件或数据产生的本地时间\n    "time":new Date().getTime(),\t\t//时间戳，消息上报时间\n    "data":{\n\t  "rssi":127-parseInt(Math.random()*127),\n\t  "powerstate_1":Math.random()>0.5?1:0,\n\t  "powerstate_2":Math.random()>0.5?1:0,\n\t  "powerstate_3":Math.random()>0.5?1:0\n    }\n  }\n}',
+  'trigger': 'none',
+  'triggerExpression': 'hour',
+  'state': 'stopped',
+  'createAt': 1653839152090
 })
 const state = reactive<any>({
   detail: {},
   activeName: 'config',
   typeName: {
-    thingModel: "基于物模型",
-    protocol: "基于设备协议",
+    thingModel: '基于物模型',
+    protocol: '基于设备协议',
   },
 })
 function run(id) {

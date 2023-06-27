@@ -97,13 +97,13 @@
 </template>
 
 <script setup name="Logininfor" lang="ts">
-import { list, delLoginInfo, cleanLoginInfo, unlockLoginInfo } from "@/api/monitor/loginInfo"
-import { ComponentInternalInstance } from "vue"
-import { LoginInfoQuery, LoginInfoVO } from "@/api/monitor/loginInfo/types"
+import { list, delLoginInfo, cleanLoginInfo, unlockLoginInfo } from '@/api/monitor/loginInfo'
+import { ComponentInternalInstance } from 'vue'
+import { LoginInfoQuery, LoginInfoVO } from '@/api/monitor/loginInfo/types'
 import { DateModelType } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const { sys_common_status } = toRefs<any>(proxy?.useDict("sys_common_status"))
+const { sys_common_status } = toRefs<any>(proxy?.useDict('sys_common_status'))
 
 const loginInfoList = ref<LoginInfoVO[]>([])
 const loading = ref(true)
@@ -114,7 +114,7 @@ const multiple = ref(true)
 const selectName = ref<Array<string>>([])
 const total = ref(0)
 const dateRange = ref<[DateModelType,DateModelType]>(['', ''])
-const defaultSort = ref<any>({ prop: "loginTime", order: "descending" })
+const defaultSort = ref<any>({ prop: 'loginTime', order: 'descending' })
 
 const queryFormRef = ref(ElForm)
 const loginInfoTableRef = ref(ElTable)
@@ -168,25 +168,25 @@ const handleDelete = async (row?: LoginInfoVO) => {
   await proxy?.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
   await delLoginInfo(infoIds)
   getList()
-  proxy?.$modal.msgSuccess("删除成功")
+  proxy?.$modal.msgSuccess('删除成功')
 }
 /** 清空按钮操作 */
 const handleClean = async () => {
-  await proxy?.$modal.confirm("是否确认清空所有登录日志数据项?")
+  await proxy?.$modal.confirm('是否确认清空所有登录日志数据项?')
   await cleanLoginInfo()
   getList()
-  proxy?.$modal.msgSuccess("清空成功")
+  proxy?.$modal.msgSuccess('清空成功')
 }
 /** 解锁按钮操作 */
 const handleUnlock = async () => {
   const username = selectName.value
   await proxy?.$modal.confirm('是否确认解锁用户"' + username + '"数据项?')
   await unlockLoginInfo(username)
-  proxy?.$modal.msgSuccess("用户" + username + "解锁成功")
+  proxy?.$modal.msgSuccess('用户' + username + '解锁成功')
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("monitor/logininfor/export", {
+  proxy?.download('monitor/logininfor/export', {
     ...queryParams.value,
   }, `config_${new Date().getTime()}.xlsx`)
 }

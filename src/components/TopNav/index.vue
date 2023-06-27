@@ -50,7 +50,7 @@ const topMenus = computed(() => {
   routers.value.map((menu) => {
     if (menu.hidden !== true) {
       // 兼容顶部栏一级菜单内部跳转
-      if (menu.path === "/") {
+      if (menu.path === '/') {
         topMenus.push(menu.children? menu.children[0] : menu)
       } else {
         topMenus.push(menu)
@@ -66,11 +66,11 @@ const childrenMenus = computed(() => {
   routers.value.map((router) => {
     router.children?.forEach((item) => {
       if (item.parentPath === undefined) {
-        if(router.path === "/") {
-          item.path = "/" + item.path
+        if(router.path === '/') {
+          item.path = '/' + item.path
         } else {
           if(!isHttp(item.path)) {
-            item.path = router.path + "/" + item.path
+            item.path = router.path + '/' + item.path
           }
         }
         item.parentPath = router.path
@@ -85,9 +85,9 @@ const childrenMenus = computed(() => {
 const activeMenu = computed(() => {
   const path = route.path
   let activePath = path
-  if (path !== undefined && path.lastIndexOf("/") > 0 && hideList.indexOf(path) === -1) {
+  if (path !== undefined && path.lastIndexOf('/') > 0 && hideList.indexOf(path) === -1) {
     const tmpPath = path.substring(1, path.length)
-    activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"))
+    activePath = '/' + tmpPath.substring(0, tmpPath.indexOf('/'))
     if (!route.meta.link) {
       appStore.toggleSideBarHide(false)
     }
@@ -109,7 +109,7 @@ const handleSelect = (key: string) => {
   const route = routers.value.find(item => item.path === key)
   if (isHttp(key)) {
     // http(s):// 路径新窗口打开
-    window.open(key, "_blank")
+    window.open(key, '_blank')
   } else if (!route || !route.children) {
     // 没有子路由路径内部打开
     const routeMenu = childrenMenus.value.find(item => item.path === key)
@@ -131,7 +131,7 @@ const activeRoutes = (key: string) => {
   let routes:RouteOption[] = []
   if (childrenMenus.value && childrenMenus.value.length > 0) {
     childrenMenus.value.map((item) => {
-      if (key == item.parentPath || (key == "index" && "" == item.path)) {
+      if (key == item.parentPath || (key == 'index' && '' == item.path)) {
         routes.push(item)
       }
     })

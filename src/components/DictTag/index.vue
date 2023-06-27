@@ -43,7 +43,7 @@ const props = defineProps({
 })
 
 const values = computed(() => {
-  if (props.value !== null && typeof props.value !== "undefined") {
+  if (props.value !== null && typeof props.value !== 'undefined') {
     return Array.isArray(props.value) ? props.value : [String(props.value)]
   } else {
     return []
@@ -51,7 +51,7 @@ const values = computed(() => {
 })
 
 const unmatch = computed(() => {
-  if (props.value !== null && typeof props.value !== "undefined") {
+  if (props.value !== null && typeof props.value !== 'undefined') {
     // 传入值为非数组
     if (!Array.isArray(props.value)) {
       if (props.options.some((v) => v.value == props.value)) {
@@ -68,7 +68,7 @@ const unmatch = computed(() => {
 const unmatchArray = computed(() => {
 // 记录未匹配的项
   const itemUnmatchArray: Array<string | number> = []
-  if (props.value !== null && typeof props.value !== "undefined") {
+  if (props.value !== null && typeof props.value !== 'undefined') {
     // 传入值为非数组
     if (!Array.isArray(props.value)) {
       itemUnmatchArray.push(props.value)
@@ -86,9 +86,9 @@ const unmatchArray = computed(() => {
 })
 
 const handleArray = (array: Array<string | number>) => {
-  if (array.length === 0) return ""
+  if (array.length === 0) return ''
   return array.reduce((pre, cur) => {
-    return pre + " " + cur
+    return pre + ' ' + cur
   })
 }
 </script>

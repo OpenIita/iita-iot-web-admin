@@ -79,120 +79,125 @@ export default {
       weekList: [
         {
           key: 2,
-          value: "星期一"
+          value: '星期一'
         },
         {
           key: 3,
-          value: "星期二"
+          value: '星期二'
         },
         {
           key: 4,
-          value: "星期三"
+          value: '星期三'
         },
         {
           key: 5,
-          value: "星期四"
+          value: '星期四'
         },
         {
           key: 6,
-          value: "星期五"
+          value: '星期五'
         },
         {
           key: 7,
-          value: "星期六"
+          value: '星期六'
         },
         {
           key: 1,
-          value: "星期日"
+          value: '星期日'
         }
       ],
       checkNum: this.$props.check
     }
   },
-  name: "crontab-week",
-  props: ["check", "cron"],
+  name: 'crontab-week',
+  props: ['check', 'cron'],
   methods: {
     // 单选按钮值变化时
     radioChange() {
-      if (this.radioValue !== 2 && this.cron.day !== "?") {
-        this.$emit("update", "day", "?", "week")
+      if (this.radioValue !== 2 && this.cron.day !== '?') {
+        this.$emit('update', 'day', '?', 'week')
       }
       switch (this.radioValue) {
         case 1:
-          this.$emit("update", "week", "*")
+          this.$emit('update', 'week', '*')
           break
         case 2:
-          this.$emit("update", "week", "?")
+          this.$emit('update', 'week', '?')
           break
         case 3:
-          this.$emit("update", "week", this.cycleTotal)
+          this.$emit('update', 'week', this.cycleTotal)
           break
         case 4:
-          this.$emit("update", "week", this.averageTotal)
+          this.$emit('update', 'week', this.averageTotal)
           break
         case 5:
-          this.$emit("update", "week", this.weekdayCheck + "L")
+          this.$emit('update', 'week', this.weekdayCheck + 'L')
           break
         case 6:
-          this.$emit("update", "week", this.checkboxString)
+          this.$emit('update', 'week', this.checkboxString)
           break
       }
     },
 
     // 周期两个值变化时
     cycleChange() {
-      if (this.radioValue == "3") {
-        this.$emit("update", "week", this.cycleTotal)
+      if (this.radioValue == '3') {
+        this.$emit('update', 'week', this.cycleTotal)
       }
     },
     // 平均两个值变化时
     averageChange() {
-      if (this.radioValue == "4") {
-        this.$emit("update", "week", this.averageTotal)
+      if (this.radioValue == '4') {
+        this.$emit('update', 'week', this.averageTotal)
       }
     },
     // 最近工作日值变化时
     weekdayChange() {
-      if (this.radioValue == "5") {
-        this.$emit("update", "week", this.weekday + "L")
+      if (this.radioValue == '5') {
+        this.$emit('update', 'week', this.weekday + 'L')
       }
     },
     // checkbox值变化时
     checkboxChange() {
-      if (this.radioValue == "6") {
-        this.$emit("update", "week", this.checkboxString)
+      if (this.radioValue == '6') {
+        this.$emit('update', 'week', this.checkboxString)
       }
     }
   },
   watch: {
-    radioValue: "radioChange",
-    cycleTotal: "cycleChange",
-    averageTotal: "averageChange",
-    weekdayCheck: "weekdayChange",
-    checkboxString: "checkboxChange"
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    weekdayCheck: 'weekdayChange',
+    checkboxString: 'checkboxChange'
   },
   computed: {
     // 计算两个周期值
     cycleTotal: function () {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.cycle01 = this.checkNum(this.cycle01, 1, 7)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.cycle02 = this.checkNum(this.cycle02, 1, 7)
-      return this.cycle01 + "-" + this.cycle02
+      return this.cycle01 + '-' + this.cycle02
     },
     // 计算平均用到的值
     averageTotal: function () {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.average01 = this.checkNum(this.average01, 1, 4)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.average02 = this.checkNum(this.average02, 1, 7)
-      return this.average02 + "#" + this.average01
+      return this.average02 + '#' + this.average01
     },
     // 最近的工作日（格式）
     weekdayCheck: function () {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.weekday = this.checkNum(this.weekday, 1, 7)
       return this.weekday
     },
     // 计算勾选的checkbox值合集
     checkboxString: function () {
       let str = this.checkboxList.join()
-      return str == "" ? "*" : str
+      return str == '' ? '*' : str
     }
   }
 }

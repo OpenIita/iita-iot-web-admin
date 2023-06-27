@@ -44,7 +44,7 @@
 </template>
 
 <script setup name="SelectUser" lang="ts">
-import { authUserSelectAll, unallocatedUserList } from "@/api/system/role"
+import { authUserSelectAll, unallocatedUserList } from '@/api/system/role'
 import { UserVO } from '@/api/system/user/types'
 import { UserQuery } from '@/api/system/user/types'
 import { ComponentInternalInstance } from 'vue'
@@ -110,12 +110,12 @@ const resetQuery = () => {
   getList()
 }
 
-const emit = defineEmits(["ok"])
+const emit = defineEmits(['ok'])
 /**选择授权用户操作 */
 const handleSelectUser = async () => {
   const roleId = queryParams.roleId
   const ids = userIds.value
-  if (ids == "") {
+  if (ids == '') {
     proxy?.$modal.msgError('请选择要分配的用户')
     return
   }

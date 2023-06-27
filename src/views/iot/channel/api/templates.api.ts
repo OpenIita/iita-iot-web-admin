@@ -23,7 +23,7 @@ export const getTemplatesList = (data?: IPage): AxiosPromise<AxiosResponse<IChan
   return request({
     url: Api.list,
     method: 'post',
-    data:data,
+    data: data,
   })
 }
 
@@ -32,7 +32,7 @@ export const saveTemplate = (data: IChannelTemplateVo) => {
   return request({
     url: Api.add,
     method: 'post',
-    data:data,
+    data: data,
   })
 }
 

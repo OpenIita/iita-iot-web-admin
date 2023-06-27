@@ -176,7 +176,7 @@ const secondsInput = (val: string, row) => {
 const handleDelete = (row) => {
   state.loading = true
   deleteTask(row.id)
-    .then((res) => {
+    .then(() => {
       ElMessage.success('删除成功!')
       getData()
     })
@@ -214,7 +214,7 @@ const onSave = ({ type, data, cancel }: any) => {
       type: m.type,
     })),
   })
-    .then((res) => {
+    .then(() => {
       ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
       cancel()
       getData()
@@ -222,7 +222,7 @@ const onSave = ({ type, data, cancel }: any) => {
     .finally(() => {
       state.loading = false
     })
-    .then((res) => {
+    .then(() => {
       ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
       cancel()
       getData()

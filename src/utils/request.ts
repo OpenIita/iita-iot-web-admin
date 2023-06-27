@@ -141,7 +141,7 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
-    let { message , response } = error
+    let { message, response } = error
     if (response.status == 401) {
       ElMessage({ message: '未授权的请求', type: 'error', duration: 5 * 1000 })
       return Promise.reject(error)
