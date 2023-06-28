@@ -637,6 +637,7 @@ const showInvokeService = (service) => {
     })
   })
   state.serviceForm.params = params
+  submitServiceForm()
 }
 const submitServiceForm = () => {
   let form = state.serviceForm
