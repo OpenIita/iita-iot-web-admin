@@ -87,15 +87,9 @@ const resetQuery = () => {
 }
 /** 导入按钮操作 */
 const handleImportTable = async () => {
-<<<<<<< HEAD
   const tableNames = tables.value
   if (!tableNames) {
     proxy?.$modal.msgError("请选择要导入的表")
-=======
-  const tableNames = tables.value.join(',')
-  if (tableNames == '') {
-    proxy?.$modal.msgError('请选择要导入的表')
->>>>>>> dev-V0.4.5
     return
   }
   const res = await importTable({ tables: tableNames })
