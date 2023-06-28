@@ -17,8 +17,13 @@ export interface ICategoriesVO {
   updateBy: number
   updateTime: string
 }
+
+interface IPage {
+  pageSize: number
+  pageNum: number
+}
 // 获取列表
-export const getCategoriesList = (data?: ICategoriesVO): AxiosPromise<any> => {
+export const getCategoriesList = (data?: IPage): AxiosPromise<any> => {
   return request({
     url: Api.list,
     method: 'post',

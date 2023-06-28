@@ -75,7 +75,7 @@ const onDelete = async (row: any) => {
 // 获取数据
 const getData = async () => {
   state.loading = true
-  getCategoriesList().then(res => {
+  getCategoriesList(state.page).then(res => {
     data.value = res.data.rows
     state.total = res.data.total
   }).finally(() => {
