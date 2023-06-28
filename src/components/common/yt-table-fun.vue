@@ -20,7 +20,7 @@
             </el-button>
           </el-col>
           <el-col :span="span" v-if="delBtn" class="ml10" style="display: flex;align-items: center;">
-            <el-checkbox v-model="isAll" :indeterminate="isIndeterminate" label="all" size="large">
+            <el-checkbox v-model="isAll" @change="(e) => emits('changeAll', e)" :indeterminate="isIndeterminate" label="all" size="large">
               <div class="checkbox-txt">
                 已选<span>{{ props.multipleSelection.length || 0 }}</span
                 >项
@@ -32,8 +32,8 @@
               link
               icon="Delete"
               v-bind="delBind"
-              :disabled="false"
-              @click="emits('handleDel')"
+              :disabled="props.multipleSelection.length === 0"
+              @click="handleDel"
               >{{ delBtnText }}</el-button
             >
           </el-col>
@@ -53,6 +53,8 @@
 </template>
 <script lang="ts" setup>
 import { funProps } from './props/crudProps'
+
+import { ElMessageBox } from 'element-plus'
 const props = defineProps({...funProps})
 const exportBind = reactive(props.exportPermi ? {
   vHasPermi: props.exportPermi
@@ -69,7 +71,20 @@ const delBind = reactive(props.delPermi ? {
 const showSearch = ref(false)
 const isAll = ref(false)
 const isIndeterminate = ref(false)
-const emits = defineEmits(['handleAdd', 'handleDel', 'handleExport', 'reloadData'])
+const emits = defineEmits(['handleAdd', 'handleDel', 'handleExport', 'reloadData', 'changeAll'])
+
+const handleDel = () => {
+  ElMessageBox.confirm(
+    `是否确认批量删除${props.multipleSelection.length}条数据?`,
+    '提示',
+    {
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      emits('handleDel', props.multipleSelection)
+    })
+}
 watch(() => props.multipleSelection, (newV) => {
   isAll.value = newV.length === props.limit
   isIndeterminate.value = 0 < newV.length && newV.length < props.limit
