@@ -21,6 +21,8 @@ export interface IProductsVO {
   name: string
   nodeType: number
   transparent: string
+  isOpenLocate: boolean
+  locateUpdateType: string
   uid: string
 }
 interface IPage {

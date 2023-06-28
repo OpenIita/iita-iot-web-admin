@@ -74,6 +74,10 @@
                     <div class="label">透传设备</div>
                     <div class="value">{{ item.transparent ? '是' : '否' }}</div>
                   </div>
+                  <div class="txt-item">
+                    <div class="label">设备定位</div>
+                    <div class="value">{{ item.isOpenLocate ? item.locateUpdateType=='manual'?'手动':'设备上报' : '关闭' }}</div>
+                  </div>
                 </div>
                 <div class="img">
                   <img :src="item.img || defaultImg" alt="" />
@@ -187,11 +191,29 @@ let cateOptions: any[] = []
 const getCateName = (id: string) => {
   return cateOptions.find(f => f.id === id).name || ''
 }
+const data = ref<IProductsVO[]>([])
+const randomString=(len:number)=> {
+      len = len || 32
+      var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+      var maxPos = $chars.length
+      var pwd = ''
+      for (var i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
+      }
+      if (data.value.findIndex(f => f.productKey === pwd) !== -1) {
+        return randomString(len)
+      }
+      return pwd
+    }
 const column = ref<IColumn[]>([{
   label: '产品Key',
   key: 'productKey',
   search: true,
   editDisabled: true,
+  addDisabled:true,
+  componentProps: {
+    defaultValue: randomString(16),
+  },
   rules: [{ required: true, message: '产品Key不能为空' }],
 }, {
   label: '产品名称',
@@ -217,23 +239,12 @@ const column = ref<IColumn[]>([{
     options: nodeTypeOptions,
   }
 }, {
-  label: '节点类型',
-  key: 'nodeType',
-  type: 'select',
-  search: true,
-  hide: true,
-  formHide: true,
-  componentProps: {
-    defaultValue: 0,
-    options: nodeTypeOptions,
-  }
-}, {
   label: '透传设备',
   key: 'transparent',
   type: 'radio',
   tableWidth: 80,
   componentProps: {
-    defaultValue: true,
+    defaultValue: 'true',
     options: [
       {
         value: 'true',
@@ -241,6 +252,49 @@ const column = ref<IColumn[]>([{
       }, {
         value: 'false',
         label: '否',
+      }
+    ]
+  }
+}, {
+  label: '设备定位',
+  key: 'isOpenLocate',
+  type: 'radio',
+  tableWidth: 80,
+  componentProps: {
+    defaultValue: false,
+    options: [
+      {
+        value: true,
+        label: '开启',
+      }, {
+        value: false,
+        label: '关闭',
+      }
+    ]
+  },
+  formWatch: (scope) => {
+    scope.column.forEach((f: IColumn) => {
+      if (f.key === 'locateUpdateType') {
+        f.formHide = !scope.value
+      }
+    })
+    column.value = scope.column
+  }
+}, {
+  label: '定位方式',
+  key: 'locateUpdateType',
+  type: 'radio',
+  tableWidth: 80,
+  formHide:true,
+  componentProps: {
+    defaultValue: 'manual',
+    options: [
+      {
+        value: 'manual',
+        label: '手动定位',
+      }, {
+        value: 'device',
+        label: '设备上报',
       }
     ]
   }
@@ -254,7 +308,7 @@ const column = ref<IColumn[]>([{
   type: 'date',
   formHide: true,
 }])
-const data = ref<IProductsVO[]>([])
+
 const state = reactive({
   total: 0,
   page: {
@@ -310,11 +364,18 @@ const onSave = ({type, data, cancel}: any) => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
     getData()
+    column.value.forEach(item => {
+      if (item.key === 'productKey') {
+        item.componentProps.defaultValue = randomString(16)
+      }
+    })
   }).finally(() => {
     state.loading = false
   })
 
 }
+
+
 
 const objectModelRef = ref()
 const openObjectModel = (row: any) => {
