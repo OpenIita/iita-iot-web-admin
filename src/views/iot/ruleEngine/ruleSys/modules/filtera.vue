@@ -105,7 +105,12 @@ const hadnleSelectDevice = (device, row) => {
 }
 const getProductObjectModel = (pk) => {
   getObjectModel(pk).then(res => {
-    initThingModel(pk, res.data)
+    const data = res.data || {}
+    initThingModel(pk, data.model || {
+      services: [],
+      properties: [],
+      events: [],
+    })
   })
 }
 

@@ -392,8 +392,8 @@ const getdata = () => {
     //取设备物模型信息
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {
-      getObjectModel(data.productKey).then((objRes: any) => {
-        const { data } = objRes
+      getObjectModel(data.productKey).then((res: any) => {
+        const data = res.data || {}
         //取物模型功能列表
         data.model = data.model || {
           properties: [],
