@@ -111,12 +111,18 @@ export default defineComponent ({
     },
     getProductObjectModel (pk) {
       getObjectModel(pk).then((res) => {
-        this.initThingModel(pk, res.data)
+        const data = res.data || {}
+        this.initThingModel(pk, data.model || {
+          services: [],
+          properties: [],
+          events: [],
+        })
       })
     },
     initThingModel (pk, res) {
       this.propertiesList = []
       this.servicesList = []
+      if (!res) return
       res.model.properties.forEach((p) => {
         this.propertiesList.push(p)
       })

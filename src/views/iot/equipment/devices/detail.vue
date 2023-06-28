@@ -393,7 +393,7 @@ const getdata = () => {
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {
       getObjectModel(data.productKey).then((objRes: any) => {
-        const { data } = objRes
+        const data = objRes.data || {}
         //取物模型功能列表
         data.model = data.model || {
           properties: [],

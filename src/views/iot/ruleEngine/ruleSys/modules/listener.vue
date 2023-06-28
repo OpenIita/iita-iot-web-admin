@@ -118,7 +118,12 @@ const handleSelectProduct = (product) => {
 
 const getProductObjectModel = (pk) => {
   getObjectModel(pk).then(res => {
-    initThingModel(pk, res.data)
+    const data = res.data || {}
+    initThingModel(pk, data.model || {
+      services: [],
+      properties: [],
+      events: [],
+    })
   })
 }
 const initThingModel = (pk, res) => {
@@ -160,14 +165,14 @@ const initThingModel = (pk, res) => {
     identifier: 'report',
     name: '属性上报',
   })
-  res.model.events.forEach((s) => {
+  res?.model?.events && res.model.events.forEach((s) => {
     items.push({
       type: 'event',
       identifier: s.identifier,
       name: s.name,
     })
   })
-  res.model.services.forEach((s) => {
+  res.model.services && res.model.services.forEach((s) => {
     items.push({
       type: 'service',
       identifier: s.identifier,
@@ -179,14 +184,14 @@ const initThingModel = (pk, res) => {
     identifier: '*',
     name: '任意',
   })
-  res.model.properties.forEach((p) => {
+  res?.model?.properties && res.model.properties.forEach((p) => {
     state.properties.push({
       identifier: p.identifier,
       name: p.name,
     })
   })
 
-  res.model.events.forEach((s) => {
+  res?.model?.events && res.model.events.forEach((s) => {
     let items: any[] = []
     state.events.push({
       identifier: s.identifier,
@@ -201,7 +206,7 @@ const initThingModel = (pk, res) => {
     })
   })
 
-  res.model.services.forEach((s) => {
+  res?.model?.services && res.model.services.forEach((s) => {
     let items: any[] = []
     state.services.push({
       identifier: s.identifier,

@@ -20,6 +20,8 @@
         exportBtn: true,
         delBtn: layoutType !== 'card',
       }"
+      @delFun="handleDel"
+      @exportFun="handleExport"
       @onLoad="getData"
       @saveFun="onSave"
     >
@@ -83,7 +85,7 @@
               <el-button class="cu-btn" type="warning" icon="View" plain @click="crudRef.handleView(item)">详情</el-button>
               <el-button class="cu-btn" type="success" icon="ScaleToOriginal" plain @click="openObjectModel(item)">物模型</el-button>
               <el-divider direction="vertical" />
-              <el-popconfirm title="是否确认删除?" @confirm="crudRef.handleDelete(item)">
+              <el-popconfirm title="是否确认删除?" @confirm="handleDel(item)">
                 <template #reference>
                   <el-button type="danger" icon="Delete" plain></el-button>
                 </template>
@@ -284,6 +286,20 @@ const getDict = () => {
         item.componentProps.options = cateOptions
       }
     })
+  })
+}
+// 导出
+const handleExport = () => {
+  ElMessage({
+    type: 'warning',
+    message: '功能尚未完善，请耐心等待哟'
+  })
+}
+// 删除
+const handleDel = (rows) => {
+  ElMessage({
+    type: 'warning',
+    message: '功能尚未完善，请耐心等待哟'
   })
 }
 getDict()
