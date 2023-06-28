@@ -5,7 +5,7 @@
         <el-input v-model="propertyRef.name" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item style="margin-bottom: 10px;" label="标识符" prop="identifier">
-        <el-input :disabled="!isUpdate" v-model="propertyRef.identifier" auto-complete="off"></el-input>
+        <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item style="margin-bottom: 10px;" label="数据类型">
         <el-select v-model="propertyRef.dataType.type" placeholder="请选择数据类型">

@@ -643,6 +643,7 @@ const submitServiceForm = () => {
   let form = state.serviceForm
   let param = {}
   state.serviceForm.params.forEach((p) => {
+    console.log('p', p)
     param[p.identifier] = p.value
   })
 

@@ -14,7 +14,7 @@
           :enumItems="state.enumItems"
           :boolItem="state.boolItem"
           :isProperty="true"
-          :isUpdate="state.isAdd"
+          :isUpdate="!state.isAdd"
         ></property-model>
       </div>
       <div v-if="isSelectType('service')">
@@ -26,10 +26,10 @@
             <el-input v-model="state.modelForm.identifier" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="输入参数">
-            <ModelParams :modelParams="state.modelForm.raw.inputData"></ModelParams>
+            <ModelParams :modelParams="state.modelForm.raw.inputData" :is-update="!state.isAdd"></ModelParams>
           </el-form-item>
           <el-form-item label="输出参数">
-            <ModelParams :modelParams="state.modelForm.raw.outputData"></ModelParams>
+            <ModelParams :modelParams="state.modelForm.raw.outputData" :is-update="!state.isAdd"></ModelParams>
           </el-form-item>
         </div>
       </div>
@@ -119,6 +119,7 @@ const openDialog = (row?: any, props?: any) => {
       },
     }
   }
+  console.log('state.isAdd', state.isAdd)
   state.dialogShow = true
 }
 const cancelEdit = () => {

@@ -25,6 +25,7 @@
           :enumItems="state.enumItems"
           :boolItem="state.boolItem"
           :isProperty="false"
+          :is-update="!state.isAdd"
         ></property-model>
         <el-row>
           <el-col :span="16">&nbsp;</el-col>
@@ -38,6 +39,7 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { propTypes } from '@/utils/propTypes'
 import PropertyModel from './PropertyModel.vue'
 import { ParseProperty } from '@/views/iot/equipment/products/util'
 
@@ -45,7 +47,8 @@ const props = defineProps({
   modelParams: {
     type: Array,
     default: () => [],
-  }
+  },
+  isUpdate: propTypes.bool.def(false),
 })
 const modelParamsRef = ref<any>(props.modelParams)
 const state = reactive({
@@ -71,7 +74,7 @@ const handleParamEdit = (index: number, row: any) => {
 
   let specs = row.dataType.specs
   if (row.dataType.type == 'enum' && specs) {
-    let enumSpecs = []
+    let enumSpecs: any[] = []
     for (var p in specs) {
       enumSpecs.push({
         name: specs[p],
