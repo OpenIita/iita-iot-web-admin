@@ -1,13 +1,13 @@
 <template>
   <div style="width: 100%">
-    <el-form class="model-form" label-width="120px" :model="propertyRef">
+    <el-form class="model-form" :rules="rules" label-width="120px" :model="propertyRef">
       <el-form-item style="margin-bottom: 10px;" label="名称" prop="name">
         <el-input v-model="propertyRef.name" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item style="margin-bottom: 10px;" label="标识符" prop="identifier">
         <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" label="数据类型">
+      <el-form-item style="margin-bottom: 10px;" label="数据类型" prop="dataType.type">
         <el-select v-model="propertyRef.dataType.type" placeholder="请选择数据类型">
           <el-option label="int32" value="int32"></el-option>
           <el-option label="float" value="float"></el-option>
@@ -131,6 +131,19 @@ const props = defineProps({
 const propertyRef = ref<any>(props.property)
 const boolItemRef = ref<any>(props.boolItem)
 const enumItemsRef = ref<any>(props.enumItems)
+
+const rules = reactive({
+  name: [
+    { required: true, message: '请输入名称', trigger: 'blur' },
+  ],
+  identifier: [
+    { required: true, message: '请输入标识符', trigger: 'blur' },
+  ],
+  'dataType.type': [
+    { required: true, message: '请选择数据类型', trigger: 'change' },
+  ]
+})
+
 const isSelectType = (type: string | number) => {
   return type == propertyRef.value.dataType.type
   // return true;

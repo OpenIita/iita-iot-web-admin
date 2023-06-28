@@ -197,10 +197,9 @@
         </div>
       </template>
     </el-dialog>
-
-    <el-dialog :title="state.title" v-model:visible="state.serviceFormVisible" width="40%" @click="closeDialog">
+    <el-dialog :title="state.title" v-model="state.serviceFormVisible" width="40%" @close="closeDialog">
       <el-form label-width="120px" :model="state.serviceForm" ref="serviceForm">
-        <div style="display: none">
+        <div>
           <el-input v-model="state.serviceForm.identifier" type="hidden"></el-input>
           <el-input v-model="state.serviceForm.productKey" type="hidden"></el-input>
           <el-input v-model="state.serviceForm.deviceName" type="hidden"></el-input>
@@ -637,13 +636,12 @@ const showInvokeService = (service) => {
     })
   })
   state.serviceForm.params = params
-  submitServiceForm()
+  // submitServiceForm()
 }
 const submitServiceForm = () => {
   let form = state.serviceForm
   let param = {}
   state.serviceForm.params.forEach((p) => {
-    console.log('p', p)
     param[p.identifier] = p.value
   })
 
@@ -651,11 +649,19 @@ const submitServiceForm = () => {
     deviceId: state.deviceId,
     service: form.identifier,
     args: param,
-  }).then(() => {
-    ElMessage({
-      type: 'info',
-      message: '操作成功',
-    })
+  }).then((res) => {
+    if (res.code === 200) {
+      state.serviceFormVisible = false
+      ElMessage({
+        type: 'info',
+        message: '操作成功',
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.message,
+      })
+    }
   })
 }
 const sendDeviceMsg = (fun) => {

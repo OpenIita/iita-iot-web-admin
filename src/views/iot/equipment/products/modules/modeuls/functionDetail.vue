@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="state.modelForm.id ? '编辑' : '新增' + '功能'">
-    <el-form class="model-form" label-width="120px" :model="state.modelForm" ref="state.modelForm">
+    <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="state.modelForm">
       <el-form-item label="功能类型">
         <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="mini">
           <el-radio-button label="property">属性</el-radio-button>
@@ -25,10 +25,10 @@
           <el-form-item label="标识符" prop="identifier">
             <el-input v-model="state.modelForm.identifier" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="输入参数">
+          <el-form-item label="输入参数" prop="inputData">
             <ModelParams :modelParams="state.modelForm.raw.inputData" :is-update="!state.isAdd"></ModelParams>
           </el-form-item>
-          <el-form-item label="输出参数">
+          <el-form-item label="输出参数" prop="outputData">
             <ModelParams :modelParams="state.modelForm.raw.outputData" :is-update="!state.isAdd"></ModelParams>
           </el-form-item>
         </div>
@@ -41,7 +41,7 @@
           <el-form-item label="标识符" prop="identifier">
             <el-input v-model="state.modelForm.identifier" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="输出参数">
+          <el-form-item label="输出参数" prop="outputData">
             <ModelParams :modelParams="state.modelForm.raw.outputData"></ModelParams>
           </el-form-item>
         </div>
@@ -84,7 +84,20 @@ const state = reactive({
     ],
   }
 })
-
+const rules = reactive({
+  name: [
+    { required: true, message: '请输入名称', trigger: 'blur' },
+  ],
+  identifier: [
+    { required: true, message: '请输入标识符', trigger: 'blur' },
+  ],
+  inputData: [
+    { required: true, message: '请增加输入参数' },
+  ],
+  outputData: [
+    { required: true, message: '请增加输出参数' },
+  ]
+})
 watch(() => props.model, (newV) => {
   state.model = newV
 })
