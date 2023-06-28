@@ -18,7 +18,7 @@ export default defineComponent({
     },
     ...formProps,
   },
-  emtis: ['openDialog', 'onSuccess'],
+  emtis: ['openDialog', 'onSuccess', 'openBeforeFun'],
   setup(props, { emit, slots, expose }) {
     console.log('slots', slots.customFormItem)
     const columns = ref<IColumn[]>([])
@@ -92,6 +92,11 @@ export default defineComponent({
     const openDialog = (type: TDialogType, data?: Recordable<string, any>) => {
       dialogObj.type = type
       formObj.data = deepClone(toRaw(data || {}))
+      emit('openBeforeFun', {
+        type: dialogObj.type,
+        data: formObj.data,
+        columns: props.column,
+      })
       const judgmentObj = {
         view: () => {
           dialogObj.title = '详情'

@@ -214,22 +214,14 @@ const onSave = ({ type, data, cancel }: any) => {
       type: m.type,
     })),
   })
-    .then(() => {
-      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-      cancel()
-      getData()
-    })
-    .finally(() => {
-      state.loading = false
-    })
-    .then(() => {
-      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-      cancel()
-      getData()
-    })
-    .finally(() => {
-      state.loading = false
-    })
+  .then(() => {
+    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+    cancel()
+    getData()
+  })
+  .finally(() => {
+    state.loading = false
+  })
 }
 // 重启
 const handleReload = (row) => {

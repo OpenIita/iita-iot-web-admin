@@ -59,7 +59,7 @@
         </template>
       </yt-table>
     </yt-table-fun>
-    <yt-table-form ref="tableFormRef" :loading="loading" v-bind="bind.formBind" :data="data" :column="column" @on-success="onSuccess">
+    <yt-table-form ref="tableFormRef" :loading="loading" v-bind="bind.formBind" :data="data" :column="column" @on-success="onSuccess" @open-before-fun="openBeforeFun">
       <template v-for="(item, index) in formSlots" :key="index" #[item]="scope">
         <slot
           :name="item"
@@ -106,12 +106,16 @@ watch(() => props.column, (newV) => {
   immediate: true,
   deep: true,
 })
-const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'exportFun', 'update:page'])
+const emits = defineEmits(['change', 'onLoad', 'update:query', 'saveFun', 'rowClick', 'delFun', 'openBeforeFun', 'exportFun', 'update:page'])
 const ytTableRef = ref()
 const getTableRef = () => {
   return ytTableRef.value
 }
 const tableFormRef = ref()
+// 上传前
+const openBeforeFun = (data) => {
+  emits('openBeforeFun', data)
+}
 const handleAdd = () => {
   tableFormRef.value?.openDialog('add')
 }

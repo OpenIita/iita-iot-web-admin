@@ -3,7 +3,7 @@ import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
 import { IColumn, TFormType } from '@/components/common/types/tableCommon'
-import { ElButton, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider } from 'element-plus'
+import { ElButton, ElSwitch, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
 import { formatDate } from '@/utils/formatTime'
 
@@ -122,6 +122,8 @@ export default defineComponent({
               })
               return obj ? obj[labelName] : row[column.key]
               break
+            case 'switch':
+              return <ElSwitch value={scope?.row[column.key]}></ElSwitch>
             default:
               break
           }

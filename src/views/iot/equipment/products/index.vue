@@ -20,6 +20,7 @@
         exportBtn: true,
         delBtn: layoutType !== 'card',
       }"
+      @openBeforeFun="openBeforeFun"
       @delFun="handleDel"
       @exportFun="handleExport"
       @onLoad="getData"
@@ -211,9 +212,6 @@ const column = ref<IColumn[]>([{
   search: true,
   editDisabled: true,
   addDisabled:true,
-  componentProps: {
-    defaultValue: randomString(16),
-  },
   rules: [{ required: true, message: '产品Key不能为空' }],
 }, {
   label: '产品名称',
@@ -356,6 +354,12 @@ const handleDel = (rows) => {
     message: '功能尚未完善，请耐心等待哟'
   })
 }
+// 上传前置操作
+const openBeforeFun = ({type, data}) => {
+  if (type === 'add') {
+    data.productKey = randomString(16)
+  }
+}
 getDict()
 // 保存数据
 const onSave = ({type, data, cancel}: any) => {
@@ -364,11 +368,6 @@ const onSave = ({type, data, cancel}: any) => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
     getData()
-    column.value.forEach(item => {
-      if (item.key === 'productKey') {
-        item.componentProps.defaultValue = randomString(16)
-      }
-    })
   }).finally(() => {
     state.loading = false
   })

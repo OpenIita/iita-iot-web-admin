@@ -60,7 +60,6 @@ export const isString = (val: unknown): val is string => {
   return is(val, 'String')
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const isFunction = (val: unknown): val is Function => {
   return typeof val === 'function'
 }
@@ -95,7 +94,7 @@ export const isClient = !isServer
 
 export const isUrl = (path: string): boolean => {
   const reg =
-    /(((^https?:(?:\/\/)?)(?:[-:&=+$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&%@.\w_]*)#?(?:[\w]*))?)$/
+    /(((^https?:(?:\/\/)?)(?:[-:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&%@.\w_]*)#?(?:[\w]*))?)$/
   return reg.test(path)
 }
 
