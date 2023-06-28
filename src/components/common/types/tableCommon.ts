@@ -37,6 +37,8 @@ export interface IColumn {
   sortable?: boolean // 表格列排序
   editDisabled?: boolean // 编辑禁用
   addDisabled?: boolean // 添加禁用
+  editHide?: boolean // 编辑隐藏
+  addHide?: boolean // 添加隐藏
   searchSlot?: boolean // 搜索插槽
   formSlot?: boolean // form插槽
   formItemSlot?: boolean // formItem替换插槽

@@ -207,11 +207,16 @@ const randomString=(len:number)=> {
       return pwd
     }
 const column = ref<IColumn[]>([{
+  label: '产品密钥',
+  key: 'productSecret',
+  addHide: true,
+  editDisabled: true,
+}, {
   label: '产品Key',
   key: 'productKey',
   search: true,
   editDisabled: true,
-  addDisabled:true,
+  addDisabled: true,
   rules: [{ required: true, message: '产品Key不能为空' }],
 }, {
   label: '产品名称',

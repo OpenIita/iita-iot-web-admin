@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="state.modelForm.id ? '编辑' : '新增' + '功能'">
-    <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="state.modelForm">
+    <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="modelFormRef">
       <el-form-item label="功能类型">
         <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="mini">
           <el-radio-button label="property">属性</el-radio-button>
@@ -10,6 +10,7 @@
       </el-form-item>
       <div v-if="isSelectType('property')">
         <property-model
+          ref="propertyModelRef"
           :property="state.modelForm.raw"
           :enumItems="state.enumItems"
           :boolItem="state.boolItem"
@@ -91,17 +92,11 @@ const rules = reactive({
   identifier: [
     { required: true, message: '请输入标识符', trigger: 'blur' },
   ],
-  inputData: [
-    { required: true, message: '请增加输入参数' },
-  ],
-  outputData: [
-    { required: true, message: '请增加输出参数' },
-  ]
 })
 watch(() => props.model, (newV) => {
   state.model = newV
 })
-
+const modelFormRef = ref()
 const openDialog = (row?: any, props?: any) => {
   if (row) {
     state.modelForm = row
@@ -132,7 +127,6 @@ const openDialog = (row?: any, props?: any) => {
       },
     }
   }
-  console.log('state.isAdd', state.isAdd)
   state.dialogShow = true
 }
 const cancelEdit = () => {
@@ -155,8 +149,12 @@ const submitThingModelChange = () => {
     cancelEdit()
   })
 }
-const saveThingModel = () => {
-  if (state.isAdd) {
+const propertyModelRef = ref()
+const saveThingModel = async () => {
+  const fun = state.modelForm.type == 'property' ? propertyModelRef.value.validate : modelFormRef.value.validate
+  const valid = await fun()
+  if (valid) {
+    if (state.isAdd) {
     if (state.modelForm.type == 'property') {
       //删除旧的
       const idx = state.model.properties.findIndex(
@@ -225,6 +223,7 @@ const saveThingModel = () => {
     }
   }
   submitThingModelChange()
+  }
 }
 
 defineExpose({

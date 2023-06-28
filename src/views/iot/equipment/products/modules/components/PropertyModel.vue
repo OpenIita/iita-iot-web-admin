@@ -1,13 +1,13 @@
 <template>
   <div style="width: 100%">
-    <el-form class="model-form" :rules="rules" label-width="120px" :model="propertyRef">
-      <el-form-item style="margin-bottom: 10px;" label="名称" prop="name">
+    <el-form ref="formRef" class="model-form" :rules="rules" label-width="120px" :model="propertyRef">
+      <el-form-item style="margin-bottom: 18px;" label="名称" prop="name">
         <el-input v-model="propertyRef.name" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" label="标识符" prop="identifier">
+      <el-form-item style="margin-bottom: 18px;" label="标识符" prop="identifier">
         <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" label="数据类型" prop="dataType.type">
+      <el-form-item style="margin-bottom: 18px;" label="数据类型" prop="dataType.type">
         <el-select v-model="propertyRef.dataType.type" placeholder="请选择数据类型">
           <el-option label="int32" value="int32"></el-option>
           <el-option label="float" value="float"></el-option>
@@ -18,7 +18,7 @@
           <el-option v-if="isProperty" label="position" value="position"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('position')">
+      <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('position')">
         <el-row :gutter="40" style="width: 100%;">
           <el-col :span="3">定位方式</el-col>
           <el-col :span="6">
@@ -30,7 +30,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('int32')">
+      <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('int32')">
         <el-col :span="3"> 取值范围 </el-col>
         <el-col :span="5">
           <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值"> </el-input>
@@ -41,7 +41,7 @@
         </el-col>
         <el-col :span="10"></el-col>
       </el-form-item>
-      <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('float')">
+      <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('float')">
         <el-col :span="3"> 取值范围 </el-col>
         <el-col :span="3">
           <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值"> </el-input>
@@ -131,7 +131,7 @@ const props = defineProps({
 const propertyRef = ref<any>(props.property)
 const boolItemRef = ref<any>(props.boolItem)
 const enumItemsRef = ref<any>(props.enumItems)
-
+const formRef = ref()
 const rules = reactive({
   name: [
     { required: true, message: '请输入名称', trigger: 'blur' },
@@ -141,9 +141,12 @@ const rules = reactive({
   ],
   'dataType.type': [
     { required: true, message: '请选择数据类型', trigger: 'change' },
-  ]
+  ],
 })
-
+const validate = async () => {
+  const data = await formRef.value.validate()
+  return data
+}
 const isSelectType = (type: string | number) => {
   return type == propertyRef.value.dataType.type
   // return true;
@@ -157,6 +160,10 @@ const delEnum = (ei: any) => {
   let idx = enumItemsRef.value.findIndex((e: any) => e.value == ei.value)
   enumItemsRef.value.splice(idx, 1)
 }
+
+defineExpose({
+  validate,
+})
 </script>
 
 <style lang="scss" scoped>

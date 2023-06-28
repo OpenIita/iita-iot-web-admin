@@ -21,6 +21,7 @@
     <el-tabs v-if="state.showPropertyParam" type="border-card">
       <el-tab-pane label="参数设置">
         <property-model
+          ref="propertyModelRef"
           :property="state.currParamProperty"
           :enumItems="state.enumItems"
           :boolItem="state.boolItem"
@@ -51,6 +52,7 @@ const props = defineProps({
   isUpdate: propTypes.bool.def(false),
 })
 const modelParamsRef = ref<any>(props.modelParams)
+const propertyModelRef = ref()
 const state = reactive({
   showPropertyParam: false,
   isAdd: true,
@@ -118,7 +120,9 @@ function cancelEditParam() {
 function newProperty() {
   return ParseProperty(state.currParamProperty, state.enumItems, state.boolItem)
 }
-function saveParam() {
+async function saveParam() {
+  const valid = await propertyModelRef.value.validate()
+  if (!valid) return
   if (state.isAdd) {
     modelParamsRef.value.push(newProperty())
   } else {

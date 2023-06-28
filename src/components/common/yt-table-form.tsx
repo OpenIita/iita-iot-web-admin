@@ -148,6 +148,8 @@ export default defineComponent({
                   {columns.value.map((m: IColumn) => {
                     const type = m?.type || 'string'
                     const Com = componentMap.get(type) as ReturnType<typeof defineComponent>
+                    if (dialogObj.type === 'add' && m.addHide) return
+                    if (dialogObj.type === 'edit' && m.editHide) return
                     if (!m.formHide) {
                       if (m.formWatch) {
                         watch(

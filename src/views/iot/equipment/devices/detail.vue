@@ -204,6 +204,7 @@
           <el-input v-model="state.serviceForm.productKey" type="hidden"></el-input>
           <el-input v-model="state.serviceForm.deviceName" type="hidden"></el-input>
         </div>
+        <div v-if="state?.serviceForm?.params.length === 0">是否确认调用？</div>
         <el-form-item
           v-for="param in state.serviceForm.params"
           :key="param.identifier"
@@ -216,7 +217,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary" :loading="state.loading" class="title" @click="submitServiceForm('serviceForm')">保存</el-button>
+          <el-button type="primary" :loading="state.loading" class="title" @click="submitServiceForm('serviceForm')">确认</el-button>
         </div>
       </template>
     </el-dialog>
@@ -636,7 +637,6 @@ const showInvokeService = (service) => {
     })
   })
   state.serviceForm.params = params
-  // submitServiceForm()
 }
 const submitServiceForm = () => {
   let form = state.serviceForm
