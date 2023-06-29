@@ -6,6 +6,7 @@ enum Api {
   list = '/product/list',
   add = '/product/add',
   edit = '/product/edit',
+  delete = '/product/deleteProduct',
   objectModelList = '/product/getThingModelByProductKey',
   saveObjectModel = '/product/thingModel/save',
   productModelList = '/product/getModelsByProductKey',
@@ -46,7 +47,13 @@ export const saveProducts = (data: IProductsVO) => {
     data,
   })
 }
-
+export const deleteProduct = (data) => {
+  return request({
+    url: Api.delete,
+    method: 'post',
+    data,
+  })
+}
 // 获取物模型
 export const getObjectModel = (data: string | number) => {
   return request({

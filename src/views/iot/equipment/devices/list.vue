@@ -24,9 +24,9 @@
           </template>
         </el-popconfirm>
       </template>
-      <template #deviceMapFormItem>
+      <template #deviceMapFormItem="{ row }">
         <div v-if="state.showDeviceMap">
-          <Map :clickMap="true" @locateChange="locateChange" :isWrite="true" :center="state.mapLnglat" />
+          <Map :clickMap="true" @locateChange="(lnglat) => locateChange(lnglat, row)" :isWrite="true" v-model:center="state.mapLnglat" />
         </div>
       </template>
 
@@ -57,8 +57,8 @@ const state = reactive({
   },
   total: 0,
   loading: false,
-  showDeviceMap:false,
-  mapLnglat:'',
+  showDeviceMap: false,
+  mapLnglat: '' as any,
   query: {},
 })
 
@@ -125,20 +125,23 @@ const column = ref<IColumn[]>([{
   rules: [{ required: true, message: '产品名称不能为空' }],
   formWatch: (scope) => {
     scope.column.forEach((f: IColumn) => {
-      if (f.key === 'parentId') {
+      if (['parentId', 'longitude', 'latitude'].includes(f.key)) {
+        if (!scope.value) {
+          f.formHide = true
+          state.showDeviceMap = false
+          return
+        }
         productOptions.value.forEach((p)=>{
-          if (p.productKey == scope.value) {
-		    if (p.nodeType == 1) {
-		      f.formHide = false
-		    } else {
-		      f.formHide = true
-		    }
-			if(p.isOpenLocate&&'manual'==p.locateUpdateType){
-        state.showDeviceMap=true
-			}else{
-        state.showDeviceMap=false
-			}
-		  }
+          if (p.productKey == scope.value ) {
+            if (f.key === 'parentId') {
+              f.formHide = p.nodeType !== 1
+            } else {
+              const flag = p.isOpenLocate && 'manual' == p.locateUpdateType
+              state.showDeviceMap = flag
+              f.formHide = !flag
+            }
+
+          }
         })
       }
     })
@@ -148,11 +151,11 @@ const column = ref<IColumn[]>([{
   label: '网关设备',
   key: 'parentId',
   type: 'select',
-  colSpan:12,
+  colSpan: 12,
   tableWidth: 120,
   editDisabled: true,
-  hide:true,
-  formHide:true,
+  hide: true,
+  formHide: true,
   componentProps: {
     labelAlias: 'deviceName',
     valueAlias: 'id',
@@ -173,13 +176,15 @@ const column = ref<IColumn[]>([{
     label: '设备经度',
     key: 'longitude',
     hide: true,
-    colSpan:12,
+    formHide: true,
+    colSpan: 12,
   },
   {
     label: '设备纬度',
     key: 'latitude',
     hide: true,
-    colSpan:12,
+    formHide: true,
+    colSpan: 12,
   },
   {
     label: '设备地图',
@@ -197,7 +202,7 @@ const column = ref<IColumn[]>([{
 //       options: groupOptions,
 //     },
 //   }
-   {
+{
   label: '状态',
   key: 'state',
   search: true,
@@ -258,16 +263,22 @@ const onSave = async ({type, data, cancel}: any) => {
 // 弹窗前置操作
 const openBeforeFun = ({type, data}) => {
   if (type === 'add') {
-    console.log('弹窗前：',data)
+    // console.log('弹窗前：',data)
+  } else if (type === 'update') {
+    const latitude = data?.locate?.latitude || ''
+    const longitude = data?.locate?.longitude || ''
+    if (latitude) data.latitude = latitude
+    if (longitude) data.longitude = longitude
+    state.mapLnglat = latitude + ',' + longitude
   }
 }
 const parentDevices = async () => {
   let data=await getParentDevices()
   column.value.forEach(item => {
-      if (item.key === 'parentId') {
-        item.componentProps.options = data.data
-      }
-    })
+    if (item.key === 'parentId') {
+      item.componentProps.options = data.data
+    }
+  })
 }
 parentDevices()
 // 删除
@@ -278,9 +289,11 @@ const handleDelete = async (row: any) => {
   state.loading = false
   getData()
 }
-const locateChange=(e)=> {
-console.log(e)
-    }
+const locateChange=(e, row)=> {
+  if (!e) return
+  row.longitude = e[1] || ''
+  row.latitude = e[0] || ''
+}
 const options = reactive({
   ref: 'crudRef',
   tableProps: {

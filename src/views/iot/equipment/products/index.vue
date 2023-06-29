@@ -18,7 +18,7 @@
       }"
       :fun-props="{
         exportBtn: true,
-        delBtn: layoutType !== 'card',
+        delBtn: false,
       }"
       @openBeforeFun="openBeforeFun"
       @delFun="handleDel"
@@ -170,7 +170,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 
 import ObjectModel from './modules/objectModel.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
-import { getProductsList, saveProducts, IProductsVO } from '../api/products.api'
+import { getProductsList, saveProducts, IProductsVO, deleteProduct } from '../api/products.api'
 import { getCategoriesAll } from '../api/categories.api'
 import { ElDivider } from 'element-plus'
 
@@ -357,9 +357,24 @@ const handleExport = () => {
 }
 // 删除
 const handleDel = (rows) => {
-  ElMessage({
-    type: 'warning',
-    message: '功能尚未完善，请耐心等待哟'
+  console.log('rows', rows)
+  let key = rows.productKey
+  state.loading = true
+  deleteProduct(key).then(res => {
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getData()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.message
+      })
+    }
+  }).finally(() => {
+    state.loading = false
   })
 }
 // 上传前置操作

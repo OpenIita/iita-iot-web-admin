@@ -24,5 +24,6 @@ declare module 'vue' {
     selectDictLabel: typeof selectDictLabel
     selectDictLabels: typeof selectDictLabels
     parseTime: typeof parseTime
+    AMap: typeof Object
   }
 }
