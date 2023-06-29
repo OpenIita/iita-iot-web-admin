@@ -53,7 +53,7 @@
           <slot
             :name="item"
             v-bind="{
-              ...scope,
+            ...scope,
             }"
           ></slot>
         </template>

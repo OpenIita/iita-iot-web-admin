@@ -1,11 +1,11 @@
 <template>
-  <div v-if="isWrite">
-    <el-form ref="form" label-width="80px">
-      <el-form-item label="设备位置">
+  <div v-if="props.isWrite">
+    <el-form ref="form" label-width="120px">
+      <el-form-item label="设备位置:">
         <el-select
           size="small"
           style="width: 100%"
-          v-model="address"
+          v-model="state.address"
           clearable
           filterable
           remote
@@ -13,33 +13,19 @@
           placeholder="请输入地址"
           :remote-method="autoSearch"
           @change="regeoCode"
-          :loading="loading"
+          :loading="state.loading"
         >
-          <el-option v-for="item in mapAddrOptions" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+          <el-option v-for="item in state.mapAddrOptions" :key="item.value" :label="item.name" :value="item.value"> </el-option>
         </el-select>
       </el-form-item>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="设备经度">
-            <el-input @blur="lonLatChange" size="small" v-model="longitude" placeholder=""></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="设备纬度">
-            <el-input @blur="lonLatChange" size="small" v-model="latitude" placeholder=""></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-form-item label="设备地图">
+      <el-form-item label="设备地图:">
         <div id="rwMap" class="mapContainer" />
       </el-form-item>
     </el-form>
   </div>
   <div v-else>
     <el-descriptions :column="2" border :labelStyle="{ 'font-weight': 'bold' }">
-      <el-descriptions-item label="设备经度">{{longitude}}</el-descriptions-item>
-      <el-descriptions-item label="设备纬度">{{latitude}}</el-descriptions-item>
-      <el-descriptions-item label="设备位置">{{address}}</el-descriptions-item>
+      <el-descriptions-item label="设备位置:">{{state.address}}</el-descriptions-item>
     </el-descriptions>
     <div id="rMap" class="mapContainer" />
   </div>
@@ -48,9 +34,7 @@
 <script setup lang="ts">
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { propTypes } from '@/utils/propTypes'
-window._AMapSecurityConfig = {
-  securityJsCode: 'df23e76ff4be248ce583def2a848cc63',
-}
+const emits = defineEmits(['locateChange'])
 const state = reactive({
     lonLat : '',
     address : '',
@@ -69,11 +53,14 @@ const state = reactive({
       tips: [],
 })
 const props = defineProps({
-    clickMap: propTypes.boolean.def(false),
-    isWrite: propTypes.boolean.def(false),
+    clickMap: propTypes.bool.def(false),
+    isWrite: propTypes.bool.def(false),
     center:propTypes.string.def(''),
 })
 const loadMap=()=> {
+  window._AMapSecurityConfig = {
+  securityJsCode: 'df23e76ff4be248ce583def2a848cc63',
+}
     state.address = ''
     state.latitude = ''
     state.longitude = ''
@@ -88,7 +75,10 @@ const loadMap=()=> {
       }).then(() => {
         initMap()
         if(props.clickMap){
-            state.map.on('click', mapClick())
+            state.map.on('click', (e) =>{
+              state.lonLat=e.lnglat.lng + ',' + e.lnglat.lat
+              regeoCode(state.lonLat)
+            })
         }
         initGeocoder()
         initAutoComplete()
@@ -118,49 +108,28 @@ const loadMap=()=> {
     const initAutoComplete=()=> {
       const autoOptions = {
         city: '全国',
-        zoom: '',
       }
-      state.autoComplete = new AMap.AutoComplete(autoOptions);
+      state.autoComplete = new AMap.AutoComplete(autoOptions)
     }
 
     const autoSearch=(queryValue:string)=> {
         state.autoComplete.search(queryValue, (status, result) => {
         var res = result.tips || [] // 搜索成功时，result即是对应的匹配数据
-		var temp=[]
+        const temp = ref<any[]>([])
 		res.forEach((p) => {
 			if(p.name,p.location.lng&&p.location.lat){
-				temp.push({
+				temp.value.push({
 					name:p.district + p.name,
 					value:p.location.lng + ',' + p.location.lat
 				})
 			}
 		})
-		state.mapAddrOptions=temp
+		state.mapAddrOptions=temp.value
       })
     }
 
-    // 地图点击事件
-    const mapClick=(e:any)=> {
-      if (state.map !== undefined) {
-        state.lonLat=e.lnglat.lng + ',' + e.lnglat.lat
-        regeoCode(state.lonLat)
-      }
-    }
-
-    //经纬度转化为地址、添加标记点
-    const regeoCode=(lonLat:string)=>{
-      if (lonLat) {
-        let lnglat = lonLat.split(',')
-        this.latitude = lnglat[0]
-        this.longitude = lnglat[1]
-        this.$emit('locateChange', lnglat)
-        this.setMarker(lnglat)
-        this.getAddress(lnglat)
-      }
-    }
-
     //添加标记点
-    const setMarker=(lnglat:any)=> {
+    const setMarker=(lnglat)=> {
       if (lnglat) {
         if (state.mapMarker !== null) {
           // 如果点标记已存在则先移除原点
@@ -178,23 +147,42 @@ const loadMap=()=> {
       }
     }
 
+    //经纬度转化为地址、添加标记点
+    const regeoCode=(lonLat)=>{
+      if (lonLat) {
+        let lnglat = lonLat.split(',')
+        state.latitude = lnglat[0]
+        state.longitude = lnglat[1]
+        emits('locateChange', lnglat)
+        setMarker(lnglat)
+        getAddress(lnglat)
+      }
+    }
+
     // 把拿到的经纬度转化为地址信息
     const getAddress=(lnglat)=> {
         state.geocoder.getAddress(lnglat, (status, result) => {
         if (status === 'complete' && result.info === 'OK') {
           if (result && result.regeocode) {
-			state.address=result.regeocode.formattedAddress
+			    state.address=result.regeocode.formattedAddress
           }
         }
       })
     }
 
     const lonLatChange=()=> {
-	  if (state.longitude != '' && this.latitude != '') {
-	    this.regeoCode(this.longitude + ',' + this.latitude)
+	  if (state.longitude != '' && state.latitude != '') {
+	    regeoCode(state.longitude + ',' + state.latitude)
 	  }
 	}
 onMounted(() => {
     loadMap()
 })
 </script>
+
+<style scoped>
+.mapContainer {
+  width: 100%;
+  height: 230px;
+}
+</style>

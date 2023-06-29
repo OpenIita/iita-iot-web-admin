@@ -8,6 +8,7 @@
       v-model:page="state.page"
       v-model:query="state.query"
       @saveFun="onSave"
+      @openBeforeFun="openBeforeFun"
     >
       <template #state="scope">
         <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
@@ -23,14 +24,26 @@
           </template>
         </el-popconfirm>
       </template>
+      <template #deviceMapFormItem>
+        <div v-if="state.showDeviceMap">
+          <Map :clickMap="true" @locateChange="locateChange" :isWrite="true" :center="state.mapLnglat" />
+        </div>
+      </template>
+
+      <!-- <template #locateFormItem="{column, row}">
+        <div v-if="state.showDeviceMap">
+          <Map :clickMap="true" @locateChange="locateChange" :isWrite="true" :center="state.mapLnglat" />
+        </div>
+      </template> -->
     </yt-crud>
     <children-dialog ref="childrenDialogRef"></children-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { getDevicesList, deleteDevices, saveDevices } from '../api/devices.api'
-import { getProductsList } from '../api/products.api'
+import  Map  from '@/components/Map/index.vue'
+import { getDevicesList, deleteDevices, saveDevices,getParentDevices } from '../api/devices.api'
+import { getProductsList,IProductsVO } from '../api/products.api'
 
 import ChildrenDialog from './modules/childrenDialog.vue'
 import YtCrud from '@/components/common/yt-crud.vue'
@@ -44,6 +57,8 @@ const state = reactive({
   },
   total: 0,
   loading: false,
+  showDeviceMap:false,
+  mapLnglat:'',
   query: {},
 })
 
@@ -61,7 +76,7 @@ const showChidrenDevices = (row: any) => {
 }
 
 // 产品字典
-const productOptions = ref([])
+const productOptions = ref<IProductsVO[]>([])
 // 组列表
 const groupOptions = [
   {
@@ -99,6 +114,7 @@ const column = ref<IColumn[]>([{
   key: 'productKey',
   type: 'select',
   search: true,
+  colSpan:12,
   tableWidth: 120,
   editDisabled: true,
   componentProps: {
@@ -107,6 +123,43 @@ const column = ref<IColumn[]>([{
     options: [],
   },
   rules: [{ required: true, message: '产品名称不能为空' }],
+  formWatch: (scope) => {
+    scope.column.forEach((f: IColumn) => {
+      if (f.key === 'parentId') {
+        productOptions.value.forEach((p)=>{
+          if (p.productKey == scope.value) {
+		    if (p.nodeType == 1) {
+		      f.formHide = false
+		    } else {
+		      f.formHide = true
+		    }
+			if(p.isOpenLocate&&'manual'==p.locateUpdateType){
+        state.showDeviceMap=true
+			}else{
+        state.showDeviceMap=false
+			}
+		  }
+        })
+      }
+    })
+    column.value = scope.column
+  }
+}, {
+  label: '网关设备',
+  key: 'parentId',
+  type: 'select',
+  colSpan:12,
+  tableWidth: 120,
+  editDisabled: true,
+  hide:true,
+  formHide:true,
+  componentProps: {
+    labelAlias: 'deviceName',
+    valueAlias: 'id',
+    options: [],
+    placeholder: '子设备可选择父设备'
+  },
+  rules: [{ required: true, message: '网关设备不能为空' }],
 }, {
   label: '设备DN',
   key: 'deviceName',
@@ -115,7 +168,25 @@ const column = ref<IColumn[]>([{
     placeholder: '一般为设备mac'
   },
   rules: [{ required: true, message: '设备DN不能为空' }],
-  }
+  },
+  {
+    label: '设备经度',
+    key: 'longitude',
+    hide: true,
+    colSpan:12,
+  },
+  {
+    label: '设备纬度',
+    key: 'latitude',
+    hide: true,
+    colSpan:12,
+  },
+  {
+    label: '设备地图',
+    key: 'deviceMap',
+    hide: true,
+    formItemSlot: true,
+  },
 // , {
 //     label: '分组',
 //     key: 'group',
@@ -126,7 +197,7 @@ const column = ref<IColumn[]>([{
 //       options: groupOptions,
 //     },
 //   }
-  , {
+   {
   label: '状态',
   key: 'state',
   search: true,
@@ -166,9 +237,10 @@ const getDict = () => {
     pageNum: 1,
     pageSize: 99999,
   }).then(res => {
+    productOptions.value=res.data.rows || []
     column.value.forEach(item => {
       if (item.key === 'productKey') {
-        item.componentProps.options = res.data.rows
+        item.componentProps.options = productOptions.value
       }
     })
   })
@@ -183,6 +255,21 @@ const onSave = async ({type, data, cancel}: any) => {
   cancel()
   getData()
 }
+// 弹窗前置操作
+const openBeforeFun = ({type, data}) => {
+  if (type === 'add') {
+    console.log('弹窗前：',data)
+  }
+}
+const parentDevices = async () => {
+  let data=await getParentDevices()
+  column.value.forEach(item => {
+      if (item.key === 'parentId') {
+        item.componentProps.options = data.data
+      }
+    })
+}
+parentDevices()
 // 删除
 const handleDelete = async (row: any) => {
   state.loading = true
@@ -191,6 +278,9 @@ const handleDelete = async (row: any) => {
   state.loading = false
   getData()
 }
+const locateChange=(e)=> {
+console.log(e)
+    }
 const options = reactive({
   ref: 'crudRef',
   tableProps: {

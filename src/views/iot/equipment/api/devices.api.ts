@@ -20,6 +20,7 @@ enum Api {
   serviceInvoke = '/device/service/invoke',
   childrenDeviceList = '/device/children/list',
   childrenDevice = '',
+  getParentDevices = '/device/getParentDevices',
 }
 export interface IDevicesVO {
   id: number | string
@@ -164,5 +165,13 @@ export const devicePropertyLogs = (data) => {
     url: Api.devicePropertyLogs,
     method: 'post',
     data,
+  })
+}
+
+// 获取网关设备
+export const getParentDevices = () => {
+  return request({
+    url: Api.getParentDevices,
+    method: 'post',
   })
 }
