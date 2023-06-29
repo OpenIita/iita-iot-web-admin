@@ -74,13 +74,13 @@
                   <div class="txt-item">
                     <div class="label">透传设备</div>
                     <div class="value">
-                      <span v-if="item.transparent === 'true'">是</span>
-                      <span v-if="item.transparent === 'false'">否</span>
+                      <span v-if="item.transparent">是</span>
+                      <span v-if="!item.transparent">否</span>
                     </div>
                   </div>
                   <div class="txt-item">
                     <div class="label">设备定位</div>
-                    <div class="value">{{ item.isOpenLocate ? item.locateUpdateType=='manual'?'手动':'设备上报' : '关闭' }}</div>
+                    <div class="value">{{ item.isOpenLocate ? item.locateUpdateType == 'manual' ? '手动' : '设备上报' : '关闭' }}</div>
                   </div>
                 </div>
                 <div class="img">
@@ -250,13 +250,13 @@ const column = ref<IColumn[]>([{
   type: 'radio',
   tableWidth: 80,
   componentProps: {
-    defaultValue: 'true',
+    defaultValue: true,
     options: [
       {
-        value: 'true',
+        value: true,
         label: '是',
       }, {
-        value: 'false',
+        value: false,
         label: '否',
       }
     ]
