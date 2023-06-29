@@ -73,7 +73,10 @@
                   </div>
                   <div class="txt-item">
                     <div class="label">透传设备</div>
-                    <div class="value">{{ item.transparent ? '是' : '否' }}</div>
+                    <div class="value">
+                      <span v-if="item.transparent === 'true'">是</span>
+                      <span v-if="item.transparent === 'false'">否</span>
+                    </div>
                   </div>
                   <div class="txt-item">
                     <div class="label">设备定位</div>

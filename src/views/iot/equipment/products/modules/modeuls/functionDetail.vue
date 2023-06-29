@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="state.modelForm.id ? '编辑' : '新增' + '功能'">
+  <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="!state.isAdd ? '编辑功能' : '新增功能'">
     <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="modelFormRef">
       <el-form-item label="功能类型">
         <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="mini">

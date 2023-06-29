@@ -112,11 +112,7 @@ export default defineComponent ({
     getProductObjectModel (pk) {
       getObjectModel(pk).then((res) => {
         const data = res.data || {}
-        this.initThingModel(pk, data.model || {
-          services: [],
-          properties: [],
-          events: [],
-        })
+        this.initThingModel(pk, data)
       })
     },
     initThingModel (pk, res) {

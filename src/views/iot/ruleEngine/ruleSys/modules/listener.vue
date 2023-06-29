@@ -119,11 +119,7 @@ const handleSelectProduct = (product) => {
 const getProductObjectModel = (pk) => {
   getObjectModel(pk).then(res => {
     const data = res.data || {}
-    initThingModel(pk, data.model || {
-      services: [],
-      properties: [],
-      events: [],
-    })
+    initThingModel(pk, data)
   })
 }
 const initThingModel = (pk, res) => {
