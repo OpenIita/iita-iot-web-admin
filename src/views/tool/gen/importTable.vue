@@ -72,8 +72,8 @@ const handleSelectionChange = (selection: DbTableVO[]) => {
 /** 查询表数据 */
 const getList = async () => {
   const res = await listDbTable(queryParams)
-  dbTableList.value = res.rows
-  total.value = res.total
+  dbTableList.value = res.data.rows
+  total.value = res.data.total
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -87,9 +87,9 @@ const resetQuery = () => {
 }
 /** 导入按钮操作 */
 const handleImportTable = async () => {
-  const tableNames = tables.value.join(',')
-  if (tableNames == '') {
-    proxy?.$modal.msgError('请选择要导入的表')
+  const tableNames = tables.value
+  if (!tableNames) {
+    proxy?.$modal.msgError("请选择要导入的表")
     return
   }
   const res = await importTable({ tables: tableNames })

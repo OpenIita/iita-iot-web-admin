@@ -25,11 +25,10 @@ export const listDbTable = (query: DbTableQuery): AxiosPromise<DbTableVO[]> => {
 export const getGenTable = (tableId: string | number): AxiosPromise<GenTableVO> => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen',
+    url: '/tool/gen/getDetail',
     method: 'post',
-    data: {
-      tableId,
-    },
+    data: tableId,
+ 
   })
 }
 
@@ -37,14 +36,14 @@ export const getGenTable = (tableId: string | number): AxiosPromise<GenTableVO> 
 export const updateGenTable = (data: DbTableForm) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen',
+    url: '/tool/gen/edit',
     method: 'post',
     data,
   })
 }
 
 // 导入表
-export const importTable = (data: { tables: string }) => {
+export const importTable = (data: { tables: Array<string | number> }) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/importTable',
@@ -59,21 +58,18 @@ export const previewTable = (tableId: string | number) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/preview',
     method: 'post',
-    data: {
-      tableId,
-    },
+    data: tableId
+
   })
 }
 
 // 删除表数据
-export const delTable = (tableId: string | number | Array<string | number>) => {
+export const delTable = (tableIds: Array<string | number>) => {
   return request({
     headers: { datasource: localStorage.getItem('dataName') },
-    url: '/tool/gen',
+    url: '/tool/gen/delete',
     method: 'post',
-    data: {
-      tableId,
-    },
+    data: tableIds
   })
 }
 
@@ -95,8 +91,7 @@ export const synchDb = (tableName: string) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/synchDb',
     method: 'post',
-    data: {
-      tableName,
-    },
+    data: tableName,
+  
   })
 }
