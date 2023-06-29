@@ -169,7 +169,7 @@ export default defineComponent({
                         )
                       }
                       return (
-                        <ElCol span={props.col}>
+                        <ElCol span={m.colSpan || props.colSpan || 24}>
                           {!m.formItemSlot ? (
                             <ElFormItem label={m.label + ':'} prop={typeof m.key === 'string' ? m.key : ''} key={m.key}>
                               {!m.formSlot ? (

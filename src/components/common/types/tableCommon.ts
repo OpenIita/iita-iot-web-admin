@@ -41,6 +41,7 @@ export interface IColumn {
   addHide?: boolean // 添加隐藏
   searchSlot?: boolean // 搜索插槽
   formSlot?: boolean // form插槽
+  colSpan?: number // form span 默认24
   formItemSlot?: boolean // formItem替换插槽
   formWatch?: (scope: any) => void // form监听
 }
