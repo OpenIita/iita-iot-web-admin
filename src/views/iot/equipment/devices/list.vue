@@ -17,7 +17,7 @@
       <template #menuSlot="scope">
         <!-- TODO: 没接口,nodeType无法获取，得改成 ！= 0 -->
         <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope.row)">子设备</el-button>
-        <el-button link type="primary" icon="View" @click="handleView(scope.row.id)">详情</el-button>
+        <el-button link type="primary" icon="View" @click="handleView(scope.row)">详情</el-button>
         <el-popconfirm title="是否确认删除该数据" @confirm="handleDelete(scope.row)">
           <template #reference>
             <el-button link type="danger" icon="Delete">删除</el-button>
@@ -55,12 +55,19 @@ const state = reactive({
   mapLnglat: '' as any,
   query: {},
 })
-
+// 产品字典
+const productOptions = ref<IProductsVO[]>([])
 // 查看详情
 const router = useRouter()
-const handleView = (id: string) => {
-  if (!id) return
-  router.push(`devicesDetail/${id}`)
+const handleView = (row: any) => {
+  if (!row.id) return
+  let showMap=false
+  productOptions.value.forEach((p)=>{
+          if (p.productKey == row.productKey ) {
+            showMap=p.isOpenLocate
+          }
+        })
+  router.push(`devicesDetail/${row.id}/${showMap}`)
 }
 
 // 打开子设备
@@ -69,8 +76,7 @@ const showChidrenDevices = (row: any) => {
   childrenDialogRef.value.openDialog(row)
 }
 
-// 产品字典
-const productOptions = ref<IProductsVO[]>([])
+
 // 组列表
 const groupOptions = [
   {
