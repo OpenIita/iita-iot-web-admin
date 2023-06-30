@@ -5,6 +5,7 @@
 * [奇特物联开源 / iotkit-parent V0.4.5(注意版本号)](https://gitee.com/iotkit-open-source/iotkit-parent.git)
 
 ## 前端目录结构
+```
 |-- .editorconfig              编辑器配置
 |-- .env.development           开发环境配置
 |-- .env.production            生产环境配置
@@ -50,6 +51,8 @@
 |   |-- views                  视图层
 |       |-- iot                iot主要功能
 |-- vite                       vite相关扩展
+```
+
 ## 前端运行
 
 |环境|要求|
@@ -59,6 +62,8 @@
 |vue|3.2.45+|
 |element-plus|2.2.27+|
 |vite|2.0.0+|
+
+[常见问题](http://iotkit-open-source.gitee.io/document/pages/772a9f/#creating-server-tcp-listening-socket-127-0-0-1-6379-bind-no-such-file-or-directory)
 
 ```bash
 # 克隆项目
@@ -78,7 +83,6 @@ pnpm run dev
 # 构建生产环境 
 yarn build:prod
 # 前端访问地址
-http://localhost:8082
+http://localhost:8082[奇特目录.md](..%2F..%2F..%2F%CF%C2%D4%D8%2F%C6%E6%CC%D8%C4%BF%C2%BC.md)
 
-# 前端启动报错请查看文档站：常见问题前端启动报错
-[常见问题](http://iotkit-open-source.gitee.io/document/pages/772a9f/#creating-server-tcp-listening-socket-127-0-0-1-6379-bind-no-such-file-or-directory)
+
