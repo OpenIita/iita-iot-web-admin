@@ -171,11 +171,6 @@ const getAddress=(lnglat)=> {
   })
 }
 
-const lonLatChange=()=> {
-  if (state.longitude != '' && state.latitude != '') {
-    regeoCode(state.longitude + ',' + state.latitude)
-  }
-}
 onMounted(() => {
   loadMap()
 })
@@ -184,6 +179,6 @@ onMounted(() => {
 <style scoped>
 .mapContainer {
   width: 100%;
-  height: 230px;
+  height: 240px;
 }
 </style>

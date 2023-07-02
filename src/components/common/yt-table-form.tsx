@@ -108,7 +108,7 @@ export default defineComponent({
           columns.value.forEach((item: IColumn) => {
             // 判断默认值
             const defaultValue = item?.componentProps?.defaultValue
-            if (defaultValue || defaultValue === 0) {
+            if (defaultValue !== null && defaultValue !== undefined) {
               formObj.data[item.key] = defaultValue
             }
           })

@@ -183,12 +183,6 @@
           <Map :clickMap="true" @locateChange="(lnglat) => locateChange(lnglat, row)" :isWrite="true" v-model:center="state.mapLnglat" />
         </div>
       </template>
-
-      <!-- <template #locateFormItem="{column, row}">
-        <div v-if="state.showDeviceMap">
-          <Map :clickMap="true" @locateChange="locateChange" :isWrite="true" :center="state.mapLnglat" />
-        </div>
-      </template> -->
     </yt-crud>
     <children-dialog ref="childrenDialogRef"></children-dialog>
   </div>
@@ -220,11 +214,18 @@ const state = reactive({
   query: {},
 })
 const layoutType = ref('card')
+
 // 查看详情
 const router = useRouter()
-const handleView = (id: string) => {
-  if (!id) return
-  router.push(`devicesDetail/${id}`)
+const handleView = (row: any) => {
+  if (!row.id) return
+  let showMap=false
+  productOptions.value.forEach((p)=>{
+          if (p.productKey == row.productKey ) {
+            showMap=p.isOpenLocate
+          }
+        })
+  router.push(`devicesDetail/${row.id}/${showMap}`)
 }
 const nodeTypeOptions =  [
   {
@@ -252,6 +253,7 @@ const copyIdSuccess = () => {
 
 // 产品字典
 const productOptions = ref<IProductsVO[]>([])
+
 // 组列表
 const groupOptions = [
   {
@@ -333,7 +335,6 @@ const column = ref<IColumn[]>([{
   type: 'select',
   colSpan: 12,
   tableWidth: 120,
-  editDisabled: true,
   hide: true,
   formHide: true,
   componentProps: {
@@ -342,7 +343,6 @@ const column = ref<IColumn[]>([{
     options: [],
     placeholder: '子设备可选择父设备'
   },
-  rules: [{ required: true, message: '网关设备不能为空' }],
 }, {
   label: '设备DN',
   key: 'deviceName',
@@ -451,13 +451,11 @@ const onSave = async ({type, data, cancel}: any) => {
 // 弹窗前置操作
 const openBeforeFun = ({type, data}) => {
   if (type === 'add') {
-    // console.log('弹窗前：',data)
+    state.mapLnglat=''
   } else if (type === 'update') {
     const latitude = data?.locate?.latitude || ''
     const longitude = data?.locate?.longitude || ''
-    if (latitude) data.latitude = latitude
-    if (longitude) data.longitude = longitude
-    state.mapLnglat = latitude + ',' + longitude
+    state.mapLnglat = longitude + ',' + latitude
   }
 }
 const parentDevices = async () => {
@@ -483,8 +481,8 @@ const handleDelete = async (row: any) => {
 }
 const locateChange=(e, row)=> {
   if (!e) return
-  row.longitude = e[1] || ''
-  row.latitude = e[0] || ''
+  row.longitude = e[0] || ''
+  row.latitude = e[1] || ''
 }
 const options = reactive({
   ref: 'crudRef',

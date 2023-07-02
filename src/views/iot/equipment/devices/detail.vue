@@ -35,7 +35,7 @@
             </el-descriptions></el-col
           >
           <el-col v-if="state.showDeviceMap" :span="12">
-            <!-- <Map :center="mapLnglat" /> -->
+            <Map :center="state.mapLnglat" />
           </el-col>
         </el-row>
         <div style="margin: 10px 10px">设备标签&nbsp;<el-button size="mini" icon="Plus" @click="addTag"></el-button></div>
@@ -254,11 +254,12 @@ import {
 
 import PropertyChart from './modules/PropertyChart.vue'
 import DeviceConfig from './modules/detail/DeviceConfig.vue'
+import  Map  from '@/components/Map/index.vue'
 import DeviceSimulator from './modules/detail/DeviceSimulator.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { id } = route.params
+const { id,showMap } = route.params
 const goBack = () => {
   router.back()
 }
@@ -382,13 +383,10 @@ const getdata = () => {
     }
     let prop = data.property || {}
     state.deviceDetail = data
-    // TODO：地图
-    // if (data?.locate.longitude && data.locate.latitude) {
-    //   state.mapLnglat = data.locate.longitude + ',' + data.locate.latitude
-    // }
-    // 是否显示地图
-    state.showDeviceMap = false
-
+    if (data?.locate.longitude && data.locate.latitude) {
+      state.mapLnglat = data.locate.longitude + ',' + data.locate.latitude
+    }
+    state.showDeviceMap=JSON.parse(showMap)
     //取设备物模型信息
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {
