@@ -259,7 +259,8 @@ import DeviceSimulator from './modules/detail/DeviceSimulator.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { id,showMap } = route.params
+const { id } = route.params
+const { showMap } = route.query || false
 const goBack = () => {
   router.back()
 }

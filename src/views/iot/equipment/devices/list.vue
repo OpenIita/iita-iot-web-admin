@@ -144,7 +144,7 @@
             <div class="btn-group">
               <el-button class="cu-btn" type="success" icon="Box" plain @click="showChidrenDevices(item)">子设备</el-button>
               <el-button class="cu-btn" type="primary" icon="EditPen" plain @click="crudRef.handleUpdate(item)">编辑</el-button>
-              <el-button class="cu-btn" type="warning" icon="View" plain @click="crudRef.handleView(item)">详情</el-button>
+              <el-button class="cu-btn" type="warning" icon="View" plain @click="handleView(item)">详情</el-button>
               <el-divider direction="vertical" />
               <el-popconfirm title="是否确认删除?" @confirm="handleDelete(item)">
                 <template #reference>
@@ -225,7 +225,7 @@ const handleView = (row: any) => {
             showMap=p.isOpenLocate
           }
         })
-  router.push(`devicesDetail/${row.id}/${showMap}`)
+  router.push(`devicesDetail/${row.id}?showMap=${showMap}`)
 }
 const nodeTypeOptions =  [
   {
