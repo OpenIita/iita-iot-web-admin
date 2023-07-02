@@ -32,8 +32,10 @@ const column: IColumn[] = [
     componentProps: {
       isShowTip: false,
       fileSize: 10000000,
+      limit: 1,
       fileType: [],
-      uploadFileUrl: '/ota/package/upload'
+      uploadFileUrl: '/ota/package/upload',
+      uploadFileType: 'url',
     }
   },
   {

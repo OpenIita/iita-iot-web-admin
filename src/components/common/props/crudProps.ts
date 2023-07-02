@@ -49,6 +49,7 @@ export const funProps = {
 export const tableProps = {
   width: propTypes.number || propTypes.string,
   size: propTypes.string.def('default '),
+  align: propTypes.string.def('left'),
   columnKey: propTypes.string.def('id'),
   menuWidth: propTypes.number.def(220) || propTypes.string,
   // 自定义表格

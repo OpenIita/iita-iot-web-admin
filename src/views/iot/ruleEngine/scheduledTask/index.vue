@@ -21,8 +21,13 @@
       :column="column"
     >
       <template #state="scope">
-        <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
-        <div v-if="scope.row.state === 'running'" style="color: green;">运行中</div>
+        <el-switch
+          v-model="scope.row.state"
+          active-value="running"
+          inactive-value="stopped"
+          disabled
+          style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
+        ></el-switch>
       </template>
       <template #log="scope">
         <el-button size="small" type="primary" @click="handleViewLog(scope.row.id)">查看</el-button>
@@ -30,12 +35,21 @@
       <template #menuSlot="scope">
         <el-popconfirm title="确认要删除？" @confirm="handleDelete(scope.row)" class="mg-left-10">
           <template #reference>
-            <el-button :disabled="scope.row.state != 'running'" link type="danger" icon="Delete">删除</el-button>
+            <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
+              <el-button :disabled="scope.row.state != 'running'" link type="danger" icon="Delete"></el-button>
+            </el-tooltip>
           </template>
         </el-popconfirm>
-        <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close" @click="handleStop(scope.row)">停止</el-button>
-        <el-button v-else-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)">开启</el-button>
-        <el-button v-else-if="scope.row.state === 'finished'" link type="success" icon="Refresh" @click="handleReload(scope.row)">重新启动</el-button>
+        <el-divider direction="vertical" />
+        <el-tooltip v-if="scope.row.state === 'running'" class="box-item" effect="dark" content="停止" placement="top">
+          <el-button link type="danger" icon="Close" @click="handleStop(scope.row)"></el-button>
+        </el-tooltip>
+        <el-tooltip v-else-if="scope.row.state === 'stopped'" class="box-item" effect="dark" content="开启" placement="top">
+          <el-button link type="success" icon="Open" @click="handleOpen(scope.row)"></el-button>
+        </el-tooltip>
+        <el-tooltip v-else-if="scope.row.state === 'finished'" class="box-item" effect="dark" content="重新启动" placement="top">
+          <el-button link type="success" icon="Refresh" @click="handleReload(scope.row)"></el-button>
+        </el-tooltip>
       </template>
       <template #expressionFormItem="{column, row}">
         <el-form-item v-if="row.type === 'timer'" :label="column.label" :prop="column.key">
@@ -85,6 +99,12 @@ const column: IColumn[] = [
     rules: [{ required: true, message: '任务名称不能为空' }],
   },
   {
+    label: '状态',
+    key: 'state',
+    slot: true,
+    formHide: true,
+  },
+  {
     label: '任务类型',
     key: 'type',
     type: 'radio',
@@ -122,12 +142,6 @@ const column: IColumn[] = [
     key: 'action',
     hide: true,
     formSlot: true,
-  },
-  {
-    label: '状态',
-    key: 'state',
-    slot: true,
-    formHide: true,
   },
   {
     label: '执行日志',

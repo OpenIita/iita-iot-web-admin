@@ -1,6 +1,6 @@
-import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-import IconsResolver from 'unplugin-icons/resolver';
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import IconsResolver from 'unplugin-icons/resolver'
 
 export default (path: any) => {
   return Components({
@@ -9,9 +9,9 @@ export default (path: any) => {
       ElementPlusResolver(),
       // 自动注册图标组件
       IconsResolver({
-        enabledCollections: ['ep']
-      })
+        enabledCollections: ['ep'],
+      }),
     ],
-    dts: path.resolve(path.resolve(__dirname, '../../src'), 'types', 'components.d.ts')
-  });
-};
+    dts: path.resolve(path.resolve(__dirname, '../../src'), 'types', 'components.d.ts'),
+  })
+}

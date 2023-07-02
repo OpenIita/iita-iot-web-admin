@@ -14,15 +14,26 @@
       @del-fun="handleDelete"
     >
       <template #state="scope">
-        <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
-        <div v-if="scope.row.state === 'running'" style="color: green;">运行中</div>
+        <el-switch
+          v-model="scope.row.state"
+          active-value="running"
+          inactive-value="stopped"
+          disabled
+          style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
+        ></el-switch>
+        <!-- <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
+        <div v-if="scope.row.state === 'running'" style="color: green;">运行中</div> -->
       </template>
       <template #log="scope">
         <el-button size="small" type="primary" @click="handleViewLog(scope.row.id)">查看</el-button>
       </template>
       <template #menuSlot="scope">
-        <el-button v-if="scope.row.state === 'running'" link type="danger" icon="Close" @click="handlePause(scope.row)">停止</el-button>
-        <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)">开启</el-button>
+        <el-tooltip class="box-item" effect="dark" content="停止" placement="top">
+          <el-button v-if="scope.row.state === 'running'" link type="danger" icon="SwitchButton" @click="handlePause(scope.row)"></el-button>
+        </el-tooltip>
+        <el-tooltip class="box-item" effect="dark" content="开启" placement="top">
+          <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)"></el-button>
+        </el-tooltip>
       </template>
       <template #customFormItem="{row}">
         <el-tabs v-model="activeName" type="border-card">

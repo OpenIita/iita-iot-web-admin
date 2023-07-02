@@ -8,6 +8,9 @@
       v-model:query="state.query"
       :total="state.total"
       :loading="state.loading"
+      :table-props="{
+        selection: false,
+      }"
       @onLoad="getData"
       @saveFun="onSave"
       @delFun="onDelete"

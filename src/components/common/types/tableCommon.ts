@@ -26,6 +26,7 @@ export interface IColumn {
   label: string // 搜索名称
   key: string // 搜索key
   type?: TFormType // 数据类型
+  align?: 'left' | 'center' | 'right' // 表格对齐
   slot?: boolean // 是否用插槽
   componentProps?: any // 组件props
   search?: boolean // 是否搜索

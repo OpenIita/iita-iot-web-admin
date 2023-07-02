@@ -39,7 +39,7 @@ const column: IColumn[] = [{
   search: true,
   rules: [{ required: true, message: '名称不能为空' }],
 }, {
-  label: '创建日期',
+  label: '创建时间',
   key: 'createAt',
   type: 'date',
   sortable: true,

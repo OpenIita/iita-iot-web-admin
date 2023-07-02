@@ -47,6 +47,7 @@ import { getToken } from '@/utils/auth'
 import { listByIds, delOss } from '@/api/system/oss'
 import { ComponentInternalInstance } from 'vue'
 import { ElUpload, UploadFile } from 'element-plus'
+import { propTypes } from '@/utils/propTypes'
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -73,7 +74,9 @@ const props = defineProps({
   uploadFileUrl: {
     type: String,
     dafault: '/resource/oss/upload',
-  }
+  },
+  // 图片上传类型： ossId || url
+  uploadFileType: propTypes.string.def('ossId')
 })
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -97,15 +100,19 @@ watch(() => props.modelValue, async val => {
   if (val) {
     let temp = 1
     // 首先将值转为数组
-    let list = []
+    let list: any[] = []
     if (Array.isArray(val)) {
       list = val
     } else {
-      const res =  await listByIds(val as string)
-      list = res.data.map((oss) => {
-        const data = { name: oss.originalName, url: oss.url, ossId: oss.ossId }
-        return data
-      })
+      if (props.uploadFileType === 'ossId') {
+        const res =  await listByIds(val as string)
+        list = res.data.map((oss) => {
+          const data = { name: oss.originalName, url: oss.url, ossId: oss.ossId }
+          return data
+        })
+      } else {
+        list = val.split(',').map(m => ({ name: getFileName(m), url: m }))
+      }
     }
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
@@ -156,8 +163,10 @@ const handleUploadError = () => {
 
 // 上传成功回调
 const handleUploadSuccess = (res:any, file: UploadFile) => {
+  console.log(res)
   if (res.code === 200) {
     uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
+    console.log('uploadList.value', uploadList.value)
     uploadedSuccessfully()
   } else {
     number.value--
@@ -171,7 +180,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
 // 删除文件
 const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
-  delOss(ossId)
+  // delOss(ossId)
   fileList.value.splice(index, 1)
   emit('update:modelValue', listToString(fileList.value))
 }
@@ -180,8 +189,10 @@ const handleDelete = (index: number) => {
 const uploadedSuccessfully =() => {
   if (number.value > 0 && uploadList.value.length === number.value) {
     fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
+    console.log('fileList.value', fileList.value)
     uploadList.value = []
     number.value = 0
+    console.log(listToString(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }
@@ -202,8 +213,11 @@ const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
   list.forEach(item => {
-    if (item.ossId) {
+    if (props.uploadFileType === 'ossId' && item.ossId) {
       strs += item.ossId + separator
+    }
+    if (props.uploadFileType === 'url' && item.url) {
+      strs += item.url + separator
     }
   })
   return strs != '' ? strs.substring(0, strs.length - 1) : ''

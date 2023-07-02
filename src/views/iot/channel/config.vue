@@ -8,6 +8,9 @@
       v-model:query="state.query"
       :total="state.total"
       :loading="state.loading"
+      :table-props="{
+        selection: false,
+      }"
       @onLoad="getData"
       @saveFun="onSave"
       @delFun="onDelete"
@@ -96,6 +99,7 @@ const column = ref<IColumn[]>([{
   label: '通道配置名称',
   key: 'title',
   tableWidth: 200,
+  search: true,
   rules: [{ required: true, message: '通道配置名称不能为空' }],
 }, {
   label: '通道类型',

@@ -62,7 +62,7 @@ for (let i = 0; i < 10; i++) {
   arr.push(i)
 }
 const activeName = ref<number[]>(arr)
-const dataList = ref<any[]>(props.list)
+const dataList = ref<any[]>(props.list || [])
 watch(() => dataList.value.length, (newV) => {
   const arr = dataList.value.map(m => {
     if (m.config) {

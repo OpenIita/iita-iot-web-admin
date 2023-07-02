@@ -19,7 +19,9 @@
       @saveFun="onSave"
     >
       <template #menuSlot="scope">
-        <el-button link type="primary" icon="Switch" @click="handleConversionScript(scope.row)">编辑转换脚本</el-button>
+        <el-tooltip class="box-item" effect="dark" content="编辑转换脚本" placement="top">
+          <el-button link type="primary" icon="Switch" @click="handleConversionScript(scope.row)"></el-button>
+        </el-tooltip>
       </template>
     </yt-crud>
     <conversion-script title="转换脚本" ref="conversionScriptRef"></conversion-script>
@@ -51,9 +53,10 @@ const column: IColumn[] = [{
     type: 'textarea'
   }
 }, {
-  label: '添加日期',
+  label: '创建时间',
   key: 'createAt',
   type: 'date',
+  sortable: true,
   formHide: true,
 }]
 

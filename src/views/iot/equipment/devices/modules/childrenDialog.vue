@@ -69,6 +69,7 @@ const columns = ref<IColumn[]>([
     label: '创建时间',
     key: 'createAt',
     type: 'date',
+    sortable: true,
     tableWidth: 180,
   }
 ])

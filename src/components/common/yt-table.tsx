@@ -3,7 +3,7 @@ import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
 import { IColumn, TFormType } from '@/components/common/types/tableCommon'
-import { ElButton, ElSwitch, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider } from 'element-plus'
+import { ElButton, ElSwitch, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider, ElImage } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
 import { formatDate } from '@/utils/formatTime'
 
@@ -40,9 +40,9 @@ export default defineComponent({
     // 渲染菜单
     const renderMenus = (scope: { row: any }) => {
       return (
-        <div style="display: inline-flex;">
+        <div class="menu-cell">
           {props.viewBtn && (
-            <div>
+            <div class="menu-btn">
               <ElTooltip class="box-item" effect="dark" content="详情" placement="top">
                 <ElButton
                   link
@@ -94,6 +94,7 @@ export default defineComponent({
                   }}
                 </ElPopconfirm>
               </ElTooltip>
+
               {props.menuSlot && <ElDivider direction="vertical" />}
             </div>
           )}
@@ -113,6 +114,7 @@ export default defineComponent({
               return formatDate(row[column.key], column?.componentProps?.format)
             case 'select':
             case 'radio':
+            case 'radioButton':
               if (!column.componentProps) return
               const { options, labelAlias, valueAlias } = column.componentProps
               const labelName = labelAlias || 'label'
@@ -124,6 +126,17 @@ export default defineComponent({
               break
             case 'switch':
               return <ElSwitch value={scope?.row[column.key]}></ElSwitch>
+            case 'image':
+              return (
+                <ElImage
+                  style="width: 30px;height: 30px;"
+                  fit="cover"
+                  preview-teleported={true}
+                  z-index={888888}
+                  preview-src-list={[row[column.key]]}
+                  src={row[column.key]}
+                ></ElImage>
+              )
             default:
               break
           }
@@ -134,7 +147,7 @@ export default defineComponent({
       return (
         <ElTableColumn
           label={column.label}
-          align="center"
+          align={column.align || props.align || 'left'}
           width={column.tableWidth || props.width}
           sortable={column.sortable || false}
           prop={column.key}

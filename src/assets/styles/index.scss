@@ -199,3 +199,16 @@ aside {
     margin-bottom: 10px;
   }
 }
+.menu-cell {
+  display: inline-flex;
+  align-items: center;
+}
+.menu-cell .menu-btn:last-child .el-divider.el-divider--vertical {
+  display: none;
+}
+
+.ov-text1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

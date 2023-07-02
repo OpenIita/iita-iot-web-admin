@@ -1,7 +1,7 @@
 <template>
   <div>
     <yt-table-fun @handle-add="handleAdd()">
-      <el-row :gutter="40" v-loading="loading">
+      <el-row :gutter="16" v-loading="loading">
         <el-col :span="6" :sm="6" :xs="24" v-for="com in data" :key="com.id" style="margin: 10px 0">
           <el-card>
             <template #header>
@@ -11,7 +11,7 @@
                   <el-popconfirm title="确认要删除吗？" @confirm="handleDelete(com)">
                     <template #reference>
                       <div>
-                        <el-button size="mini" icon="Delete" plain></el-button>
+                        <el-button icon="Delete" link type="danger"></el-button>
                       </div>
                     </template>
                   </el-popconfirm>
@@ -19,27 +19,30 @@
               </div>
             </template>
             <el-descriptions :column="1" size="medium" :labelStyle="{ fontWeight: 'bold' }">
-              <el-descriptions-item label="通讯协议">{{
+              <el-descriptions-item label-class-name="custom-label" label="通讯协议">{{
                 com.protocol
               }}</el-descriptions-item>
-              <el-descriptions-item label="转换器">{{
+              <el-descriptions-item label-class-name="custom-label" label="转换器">{{
                 getTypeName(com.converter)
               }}</el-descriptions-item>
-              <el-descriptions-item label="jar包" :labelStyle="{ fontWeight: 'bold', width: '50px' }">{{ com.jarFile }}</el-descriptions-item>
-              <el-descriptions-item label="状态">
+              <el-descriptions-item label-class-name="custom-label" label="jar包" class-name="ov-text1">{{ com.jarFile }}</el-descriptions-item>
+              <el-descriptions-item label-class-name="custom-label" label="状态">
                 <el-switch
                   v-model="com.state"
                   active-text="运行中"
                   inactive-text="已停止"
                   active-value="running"
                   inactive-value="stopped"
+                  inline-prompt
+                  size="large"
+                  style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
                   @change="stateChange(com)"
                 >
                 </el-switch>
               </el-descriptions-item>
-              <el-descriptions-item label="操作">
-                <el-button @click="handleEdit(com)" size="mini" icon="Edit" plain></el-button>
-                <el-button @click="handleEditScript(com)" class="mg-left-10" size="mini">编写脚本</el-button>
+              <el-descriptions-item label-class-name="custom-label" label="操作">
+                <el-button @click="handleEdit(com)" link icon="Edit" type="primary">修改</el-button>
+                <el-button @click="handleEditScript(com)" icon="EditPen" type="primary" class="mg-left-10" link>编写脚本</el-button>
               </el-descriptions-item>
             </el-descriptions>
           </el-card>
@@ -508,5 +511,19 @@ getData()
   ::v-deep(.el-form-item) {
     margin-bottom: 15px;
   }
+}
+::v-deep(.el-descriptions__cell) {
+  display: flex;
+  align-items: center;
+}
+::v-deep(.custom-label) {
+  width: 60px;
+  text-align: right;
+}
+::v-deep(.el-descriptions__body .el-descriptions__table:not(.is-bordered) .el-descriptions__cell) {
+  padding-bottom: 6px;
+}
+::v-deep(.el-card__header) {
+  padding: 16px!important;
 }
 </style>

@@ -212,6 +212,7 @@ const randomString=(len:number)=> {
 const column = ref<IColumn[]>([{
   label: '产品密钥',
   key: 'productSecret',
+  hide: true,
   addHide: true,
   editDisabled: true,
 }, {
@@ -306,12 +307,13 @@ const column = ref<IColumn[]>([{
   }
 }, {
   label: '产品图片',
-  key: 'pic',
+  key: 'img',
   type: 'image',
 }, {
-  label: '修改日期',
+  label: '创建时间',
   key: 'createAt',
   type: 'date',
+  sortable: true,
   formHide: true,
 }])
 

@@ -197,7 +197,8 @@ const column = ref<IColumn[]>([{
   label: '创建时间',
   key: 'createAt',
   tableWidth: 180,
-  type: 'date',
+    type: 'date',
+  sortable: true,
   formHide: true,
 }])
 const data = ref([])
