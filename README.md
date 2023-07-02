@@ -62,6 +62,7 @@
 |vue|3.2.45+|
 |element-plus|2.2.27+|
 |vite|2.0.0+|
+|typeScript|4.x+|
 
 [常见问题](http://iotkit-open-source.gitee.io/document/pages/772a9f/#creating-server-tcp-listening-socket-127-0-0-1-6379-bind-no-such-file-or-directory)
 

@@ -191,7 +191,7 @@
 import defaultImg from '@/assets/images/pic_device.png'
 import { IColumn } from '@/components/common/types/tableCommon'
 import { ComponentInternalInstance } from 'vue'
-import { getDevicesList, deleteDevices, saveDevices,getParentDevices } from '../api/devices.api'
+import { getDevicesList, deleteDevices, saveDevices,getParentDevices, deleteBatchDevices } from '../api/devices.api'
 import { getProductsList,IProductsVO } from '../api/products.api'
 import { formatDate } from '@/utils/formatTime'
 
@@ -470,11 +470,11 @@ parentDevices()
 // 删除
 const handleDelete = async (row: any) => {
   state.loading = true
-  let ids = row.id
   if (row instanceof Array) {
-    ids = row.map(m => m.id).join(',')
+    await deleteBatchDevices(row.map(m => m.id))
+  } else {
+    await deleteDevices(row)
   }
-  await deleteDevices(ids)
   ElMessage.success('删除成功!')
   state.loading = false
   getData()

@@ -5,6 +5,7 @@ import { AxiosPromise } from 'axios'
 enum Api {
   devicesList = '/device/list',
   devicesDel = '/device/delete',
+  devicesBatchDel = '/device/batchDelete',
   devicesAdd = '/device/add',
   devicesUpdate = '/device/save',
   devicesDetail = '/device/detail',
@@ -52,9 +53,17 @@ export const getDevicesList = (data): AxiosPromise<any> => {
 }
 
 // 删除
-export const deleteDevices = (data: (string | number)[]) => {
+export const deleteDevices = (data: string) => {
   return request({
     url: Api.devicesDel,
+    method: 'post',
+    data,
+  })
+}
+// 批量删除
+export const deleteBatchDevices = (data: (string | number)[]) => {
+  return request({
+    url: Api.devicesBatchDel,
     method: 'post',
     data,
   })
