@@ -711,7 +711,6 @@ logSearch()
 
 <style lang="scss" scoped>
 .box {
-  margin: 15px;
   padding: 15px;
   background: #fff;
 }

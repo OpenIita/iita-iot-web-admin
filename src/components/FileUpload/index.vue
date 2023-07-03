@@ -10,6 +10,7 @@
       :on-exceed="handleExceed"
       :on-success="handleUploadSuccess"
       :show-file-list="false"
+      :data="params"
       :headers="headers"
       class="upload-file-uploader"
       ref="fileUploadRef"
@@ -75,12 +76,17 @@ const props = defineProps({
     type: String,
     dafault: '/resource/oss/upload',
   },
+  // 上传参数
+  params: {
+    type: Object,
+    default: () => {}
+  },
   // 图片上传类型： ossId || url
   uploadFileType: propTypes.string.def('ossId')
 })
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'stringSuccess'])
 const number = ref(0)
 const uploadList = ref<any[]>([])
 
@@ -163,7 +169,14 @@ const handleUploadError = () => {
 
 // 上传成功回调
 const handleUploadSuccess = (res:any, file: UploadFile) => {
-  console.log(res)
+  if (typeof res === 'string') {
+    proxy?.$modal.closeLoading()
+    emit('stringSuccess', {
+      id: res,
+      fileName: file.name,
+    })
+    return
+  }
   if (res.code === 200) {
     uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
     console.log('uploadList.value', uploadList.value)

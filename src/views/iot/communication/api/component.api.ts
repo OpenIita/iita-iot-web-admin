@@ -55,10 +55,18 @@ export const deleteComponent = (data: (string | number)[]) => {
   })
 }
 
-// 编辑、保存
-export const saveComponent = (data: IComponentVO) => {
+// 编辑
+export const editComponent = (data: IComponentVO) => {
   return request({
-    url: !data.id ? Api.add : Api.update,
+    url: Api.update,
+    method: 'post',
+    data,
+  })
+}
+// 新增
+export const addComponent = (data: IComponentVO) => {
+  return request({
+    url: Api.add,
     method: 'post',
     data,
   })

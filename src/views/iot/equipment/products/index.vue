@@ -197,18 +197,18 @@ const getCateName = (id: string) => {
 }
 const data = ref<IProductsVO[]>([])
 const randomString=(len:number)=> {
-      len = len || 32
-      var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-      var maxPos = $chars.length
-      var pwd = ''
-      for (var i = 0; i < len; i++) {
-        pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
-      }
-      if (data.value.findIndex(f => f.productKey === pwd) !== -1) {
-        return randomString(len)
-      }
-      return pwd
-    }
+  len = len || 32
+  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+  var maxPos = $chars.length
+  var pwd = ''
+  for (var i = 0; i < len; i++) {
+    pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
+  }
+  if (data.value.findIndex(f => f.productKey === pwd) !== -1) {
+    return randomString(len)
+  }
+  return pwd
+}
 const column = ref<IColumn[]>([{
   label: '产品密钥',
   key: 'productSecret',

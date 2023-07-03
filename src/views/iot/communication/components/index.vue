@@ -49,7 +49,7 @@
         </el-col>
       </el-row>
     </yt-table-fun>
-    <yt-table-form ref="tableFormRef" :column="column" @onSuccess="handleSave">
+    <yt-table-form ref="tableFormRef" :column="column" @onSuccess="handleSave" @openBeforeFun="openBeforeFun">
       <template #configForm="scope">
         <el-form
           v-if="scope.row.protocol == 'http'"
@@ -244,6 +244,31 @@
           </el-form-item>
         </el-form>
       </template>
+      <template #jarFileForm="{ row }">
+        <div v-if="row.jarFile">
+          <el-tag
+            size="medium"
+            type="info"
+            closable
+            @close="() => {
+              row.jarFile = ''
+            }"
+            >{{ row.jarFile }}</el-tag
+          >
+        </div>
+        <upload-file
+          v-else
+          v-model:value="row.jarFile"
+          :fileType="['jar']"
+          :limit="1"
+          :params="{
+            id: row.id
+          }"
+          @stringSuccess="(res) => uploadJarSuccess(res, row)"
+          uploadFileType="url"
+          uploadFileUrl="/protocol/uploadJar"
+        ></upload-file>
+      </template>
     </yt-table-form>
     <conversion-script title="通讯脚本" type="communication" ref="conversionScriptRef"></conversion-script>
   </div>
@@ -251,13 +276,14 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { generateUUID } from '@/utils'
-import { getComponentList, deleteComponent, saveComponent, changeState } from '../api/component.api'
+import { getComponentList, deleteComponent, addComponent, editComponent, changeState } from '../api/component.api'
 import type { IComponentVO } from '../api/component.api'
 import { getConvertorsList, IConvertorsVO } from '../api/convertors.api'
 
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTableForm from '@/components/common/yt-table-form'
 import ConversionScript from '../modules/conversionScript.vue'
+import UploadFile from '@/components/FileUpload/index.vue'
 
 // 转换脚本
 const conversionScriptRef = ref()
@@ -272,7 +298,17 @@ const handleAdd = () => {
 }
 // 删除
 const handleDelete = (row: any) => {
-  console.log(row)
+  loading.value = true
+  deleteComponent(row.id).then(res => {
+    if (res.code === 200) {
+      ElMessage.success('删除成功')
+      getData()
+    } else {
+      ElMessage.error(res.message)
+    }
+  }).finally(() => {
+    loading.value = false
+  })
 }
 
 // 编辑
@@ -426,7 +462,7 @@ const column = ref<IColumn[]>([{
       value: 'websocket',
     }]
   },
-  rules: [{required: true, message: '请选择通讯协议'}]
+  rules: [{ required: true, message: '请选择通讯协议' }]
 }, {
   label: '配置',
   key: 'config',
@@ -434,11 +470,8 @@ const column = ref<IColumn[]>([{
 }, {
   label: 'jar包',
   key: 'jarFile',
-  type: 'upload',
-  componentProps: {
-    fileType: ['jar'],
-    limit: 1,
-  }
+  formSlot: true,
+  rules: [{ required: true, message: '请上传jar包' }]
 }])
 const data = ref<IComponentVO[]>([])
 const configRule = reactive({
@@ -458,10 +491,27 @@ const configRule = reactive({
     url: [{ required: true, message: '请输入URL', trigger: 'blur' }]
   },
 })
+// 弹窗前置操作
+const openBeforeFun = ({type, data}) => {
+  if (type === 'add') {
+    data.id = ''
+  }
+}
+// 上传jar成功
+const uploadJarSuccess = (res, row) => {
+  console.log(res)
+  if (res.id) {
+    row.id = res.id
+    row.jarFile = res.fileName
+  }
+  console.log(row)
+}
 // 保存
 const handleSave = ({type, data, cancel}) => {
   loading.value = true
-  saveComponent({
+  let fun = addComponent
+  if (type === 'update') fun = editComponent
+  fun({
     ...toRaw(data),
     config: JSON.stringify(data.config),
   }).then(() => {
