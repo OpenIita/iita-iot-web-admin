@@ -324,9 +324,14 @@ const stateChange = (row: any) => {
   changeState({
     id: row.id,
     state: row.state,
-  }).then(() => {
-    getData()
+  }).then((res) => {
+    if (res.code === 200) {
+      ElMessage.success('变更成功')
+    } else {
+      ElMessage.error(res.message)
+    }
   }).finally(() => {
+    getData()
     loading.value = false
   })
 }

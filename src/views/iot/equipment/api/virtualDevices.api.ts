@@ -6,6 +6,7 @@ enum Api {
   list = '/virtual_device/list',
   add = '/virtual_device/add',
   delete = '/virtual_device/delete',
+  batchDelete = '/virtual_device/batchDelete',
   detail = '/virtual_device/getDetail',
   update = '/virtual_device/modify',
   run = '/virtual_device/run',
@@ -48,7 +49,14 @@ export const deleteVirtualDevices = (data: (string | number)[]) => {
     data,
   })
 }
-
+// 删除
+export const batchDeleteVirtualDevices = (data: (string | number)[]) => {
+  return request({
+    url: Api.batchDelete,
+    method: 'post',
+    data,
+  })
+}
 // 编辑、保存
 export const saveVirtualDevices = (data: IVirtualDevicesVO) => {
   return request({

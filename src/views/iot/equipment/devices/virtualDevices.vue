@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { deleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices } from '../api/virtualDevices.api'
+import { deleteVirtualDevices, batchDeleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices } from '../api/virtualDevices.api'
 import { getProductsList, IProductsVO } from '../api/products.api'
 
 import CrontabBox from '@/components/Crontab/index.vue'
@@ -180,10 +180,12 @@ const onSave = ({type, data, cancel}: any) => {
 const onDelete = async (row: any) => {
   state.loading = true
   let ids = row.id
+  let fun = deleteVirtualDevices
   if (row instanceof Array) {
-    ids = row.map(m => m.id).join(',')
+    ids = row.map(m => m.id)
+    fun = batchDeleteVirtualDevices
   }
-  await deleteVirtualDevices(ids)
+  await fun(ids)
   ElMessage.success('删除成功!')
   state.loading = false
   getData()
