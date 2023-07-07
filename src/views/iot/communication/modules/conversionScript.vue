@@ -32,13 +32,13 @@
       <el-col :span="16">
         {{ title }}：
         <div v-if="editScript.typ == 'js'">new (function () {</div>
-        <code-editor :code="editScript.script"></code-editor>
+        <code-editor v-model:code="editScript.script"></code-editor>
         <div v-if="editScript.typ == 'js'">})()</div>
       </el-col>
       <el-col :span="7" class="right-box">
         测试数据：
         <div style="height: 200px; overflow: auto">
-          <code-editor :code="testDataScript.script"></code-editor>
+          <code-editor v-model:code="testDataScript.script"></code-editor>
         </div>
         <el-row style="padding: 5px 5px">
           <el-col :span="10"> 测试结果： </el-col>
@@ -143,10 +143,12 @@ const handleSave = () => {
   if (!editScript.script) return ElMessage.error('请输入转换脚本!')
   loading.value = true
   const editFun = props.type === 'communication' ? saveComponentScript : editConverterScript
-  editFun({
-    ...data.value,
-    ...toRaw(editScript)
-  }).then(() => {
+  const content = {
+  ...data.value,
+  ...editScript
+  }
+  debugger
+  editFun(content).then(() => {
     ElMessage.success('保存成功')
     dialogModel.value = false
   }).finally(() => {
