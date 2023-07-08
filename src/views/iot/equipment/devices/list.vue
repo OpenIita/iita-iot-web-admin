@@ -166,7 +166,7 @@
         </el-tooltip>
         <el-divider direction="vertical" />
         <el-tooltip class="box-item" effect="dark" content="详情" placement="top">
-          <el-button link type="primary" icon="View" @click="handleView(scope.row.id)"></el-button>
+          <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
         </el-tooltip>
         <el-divider direction="vertical" />
         <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
@@ -385,13 +385,26 @@ const column = ref<IColumn[]>([{
 {
   label: '状态',
   key: 'state',
+  type: 'select',
+  componentProps: {
+    options: [
+      {
+        label: '在线',
+        value: 'online',
+      },
+      {
+        label: '离线',
+        value: 'offline',
+      }
+    ]
+  },
   search: true,
   formHide: true,
   tableWidth: 80,
   slot: true,
 }, {
   label: '关键字',
-  key: 'key',
+  key: 'keyword',
   search: true,
   hide: true,
   formHide: true,

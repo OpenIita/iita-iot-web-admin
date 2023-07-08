@@ -41,7 +41,7 @@ service.interceptors.request.use(
       config.params = {}
       config.url = url
     }
-    const reqeuestId = generateUUID()
+    const requestId = generateUUID()
     if (config.data && config.data.constructor == Object) {
       const { pageNum, pageSize, ...data } = config.data || {}
       const pageObj: any = {}
@@ -49,12 +49,12 @@ service.interceptors.request.use(
       if (pageSize) pageObj.pageSize = pageSize
       config.data = {
         ...pageObj,
-        requestId: reqeuestId,
+        requestId: requestId,
         data: data == null ? {} : data.coverData ? data.coverData : data,
       }
     } else {
       config.data = {
-        requestId: reqeuestId,
+        requestId: requestId,
         data: typeof config.data == 'undefined' ? {} : config.data,
       }
     }

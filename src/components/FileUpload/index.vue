@@ -10,7 +10,7 @@
       :on-exceed="handleExceed"
       :on-success="handleUploadSuccess"
       :show-file-list="false"
-      :data="params"
+      :data="paramsData"
       :headers="headers"
       class="upload-file-uploader"
       ref="fileUploadRef"
@@ -44,11 +44,14 @@
 </template>
 
 <script setup lang="ts">
+import { generateUUID } from '@/utils/index'
 import { getToken } from '@/utils/auth'
 import { listByIds, delOss } from '@/api/system/oss'
+import { propTypes } from '@/utils/propTypes'
+
 import { ComponentInternalInstance } from 'vue'
 import { ElUpload, UploadFile } from 'element-plus'
-import { propTypes } from '@/utils/propTypes'
+
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -74,7 +77,7 @@ const props = defineProps({
   },
   uploadFileUrl: {
     type: String,
-    dafault: '/resource/oss/upload',
+    default: '/resource/oss/upload',
   },
   // 上传参数
   params: {
@@ -84,7 +87,7 @@ const props = defineProps({
   // 图片上传类型： ossId || url
   uploadFileType: propTypes.string.def('ossId')
 })
-
+const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const emit = defineEmits(['update:modelValue', 'stringSuccess'])
 const number = ref(0)
@@ -92,6 +95,7 @@ const uploadList = ref<any[]>([])
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
 const uploadFileUrl = ref(baseUrl + props.uploadFileUrl) // 上传文件服务器地址
+console.log(uploadFileUrl)
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
@@ -102,7 +106,6 @@ const showTip = computed(
 const fileUploadRef = ref(ElUpload)
 
 watch(() => props.modelValue, async val => {
-  console.log(val)
   if (val) {
     let temp = 1
     // 首先将值转为数组
@@ -134,6 +137,7 @@ watch(() => props.modelValue, async val => {
 
 // 上传前校检格式和大小
 const handleBeforeUpload = (file: any) => {
+  paramsData.value.requestId = generateUUID()
   // 校检文件类型
   if (props.fileType.length) {
     const fileName = file.name.split('.')

@@ -16,9 +16,7 @@ export function listByIds(ossId: string | number): AxiosPromise<OssVO[]> {
   return request({
     url: '/resource/oss/listByIds',
     method: 'post',
-    data: {
-      ossId,
-    },
+    data: [ossId],
   })
 }
 

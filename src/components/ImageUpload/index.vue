@@ -13,6 +13,7 @@
       :before-remove="handleDelete"
       :show-file-list="true"
       :headers="headers"
+      :data="paramsData"
       :file-list="fileList"
       :on-preview="handlePictureCardPreview"
       :class="{ hide: fileList.length >= limit }"
@@ -40,8 +41,11 @@
 </template>
 
 <script setup lang="ts">
+import { generateUUID } from '@/utils/index'
 import { getToken } from '@/utils/auth'
 import { listByIds, delOss } from '@/api/system/oss'
+import { propTypes } from '@/utils/propTypes'
+
 import { ComponentInternalInstance, PropType } from 'vue'
 import { OssVO } from '@/api/system/oss/types'
 import { ElUpload, UploadFile } from 'element-plus'
@@ -68,17 +72,28 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  uploadUrl: {
+    type: String,
+    default: '/resource/oss/upload',
+  },
+   // 上传参数
+  params: {
+    type: Object,
+    default: () => {}
+  },
+  // 图片上传类型： ossId || url
+  uploadFileType: propTypes.string.def('ossId')
 })
-
+const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'stringSuccess'])
 const number = ref(0)
 const uploadList = ref<any[]>([])
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadImgUrl = ref(baseUrl + '/resource/oss/upload') // 上传的图片服务器地址
+const uploadImgUrl = ref(baseUrl + props.uploadUrl) // 上传图片服务器地址
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
@@ -118,6 +133,7 @@ watch(() => props.modelValue, async val => {
 
 /** 上传前loading加载 */
 const handleBeforeUpload = (file: any) => {
+  paramsData.value.requestId = generateUUID()
   let isImg = false
   if (props.fileType.length) {
     let fileExtension = ''

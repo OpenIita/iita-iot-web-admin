@@ -181,7 +181,7 @@
         <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail"></DeviceSimulator>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :title="state.title" v-model:visible="state.propertyWriteFormVisible" width="40%" @click="closeDialog">
+    <el-dialog :title="state.title" v-model="state.propertyWriteFormVisible" width="40%" @close="closeDialog">
       <el-form label-width="120px" :model="state.propertyWriteForm" ref="propertyWriteForm">
         <div style="display: none">
           <el-input v-model="state.propertyWriteForm.identifier" type="hidden"></el-input>
@@ -615,11 +615,15 @@ const submitPropertyWriteForm = () => {
   propertySet({
     deviceId: state.deviceId,
     args: prop,
-  }).then(() => {
-    ElMessage({
-      type: 'info',
-      message: '操作成功',
-    })
+  }).then((res) => {
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '操作成功',
+      })
+    } else {
+      ElMessage.error(res.message)
+    }
   })
 }
 const showInvokeService = (service) => {
