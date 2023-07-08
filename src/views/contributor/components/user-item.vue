@@ -1,5 +1,5 @@
 <template>
-  <div class="user-item flex">
+  <div class="user-item flex" @click="goView">
     <div class="img">
       <img :src="data.img || defaultImg" alt="" />
     </div>
@@ -27,7 +27,13 @@ const props = defineProps({
     tag: [],
     id: '',
   })
+})
+const router = useRouter()
+const goView = () => {
+  router.push({
+    path: `/system/user-auth/detail/${props.data.id}/view`,
   })
+}
 </script>
 
 <style lang="scss" scoped>

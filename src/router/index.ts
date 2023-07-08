@@ -95,6 +95,12 @@ export const dynamicRoutes: RouteOption[] = [
     permissions: ['system:user:edit'],
     children: [
       {
+        path: 'detail/:id/:type',
+        component: () => import('@/views/contributor/detail.vue'),
+        name: 'contributorDetail',
+        meta: { title: '贡献者详情', activeMenu: '/contributor', icon: '' },
+      },
+      {
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole.vue'),
         name: 'AuthRole',

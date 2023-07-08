@@ -491,4 +491,31 @@ const openObjectModel = (row: any) => {
     }
   }
 }
+@media screen and (max-width: 1560px) {
+  .card-list .card-item .btn-group {
+    padding: 12px;
+    .el-button {
+      font-size: 12px;
+    }
+    .cu-btn {
+      width: calc((100% - 59px) / 3);
+    }
+    .el-button+.el-button {
+      margin-left: 6px;
+    }
+  }
+}
+@media screen and (max-width: 1400px) {
+  .card-list .card-item {
+    width: calc(100% / 3 - 8px);
+    flex: 0 0 calc(100% / 3 - 8px);
+    margin-right: 12px;
+    &:nth-child(4n) {
+      margin-right: 12px;
+    }
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+}
 </style>
