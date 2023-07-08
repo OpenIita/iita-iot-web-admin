@@ -197,7 +197,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
 // 删除文件
 const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
-  // delOss(ossId)
+  delOss(ossId)
   fileList.value.splice(index, 1)
   emit('update:modelValue', listToString(fileList.value))
 }

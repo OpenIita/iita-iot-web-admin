@@ -173,13 +173,6 @@ const data = reactive<PageData<OssForm, OssQuery>>({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    fileName: '',
-    originalName: '',
-    fileSuffix: '',
-    createTime: '',
-    service: '',
-    orderByColumn: defaultSort.value.prop,
-    isAsc: defaultSort.value.order
   },
   rules: {
     file: [
@@ -195,8 +188,10 @@ const getList = async () => {
   loading.value = true
   const res = await proxy?.getConfigKey('sys.oss.previewListResource')
   previewListResource.value = res?.msg === undefined ? true : res.msg === 'true'
-  const response = await listOss(proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime'))
-  ossList.value = response.rows
+  console.log(daterangeCreateTime)
+  const params = daterangeCreateTime.value[0] ?  proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : {}
+  const response = await listOss(params)
+  ossList.value = response.data.rows
   total.value = response.total
   loading.value = false
   showTable.value = true
