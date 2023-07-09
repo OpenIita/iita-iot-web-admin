@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
     if (res) {
       const data = res.data
       const user = data.user
-      const profile = user.avatar == '' || user.avatar == null ? defAva : user.avatar
+      const profile = user.avatar
 
       if (data.roles && data.roles.length > 0) {
         // 验证返回的roles是否是一个非空数组
@@ -48,10 +48,14 @@ export const useUserStore = defineStore('user', () => {
       }
       name.value = user.userName
       nickname.value = user.nickName
-      const ossObj = await listByIds(profile)
-      console.log('ossObj', ossObj)
-      if (ossObj.data) avatar.value = ossObj.data[0].url
-      console.log(avatar.value)
+      if (profile) {
+        const ossObj = await listByIds(profile)
+        console.log('ossObj', ossObj)
+        if (ossObj.data) avatar.value = ossObj.data[0].url
+        console.log(avatar.value)
+      } else {
+        avatar.value = defAva
+      }
       userId.value = user.id
       return Promise.resolve()
     }
