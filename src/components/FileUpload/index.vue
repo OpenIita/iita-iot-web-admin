@@ -15,8 +15,9 @@
       class="upload-file-uploader"
       ref="fileUploadRef"
     >
+      <slot v-if="isSlot" name="buttonSlot"></slot>
       <!-- 上传按钮 -->
-      <el-button type="primary">选取文件</el-button>
+      <el-button v-else type="primary">选取文件</el-button>
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip">
@@ -30,7 +31,7 @@
       的文件
     </div>
     <!-- 文件列表 -->
-    <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
+    <transition-group v-if="isShowList" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
       <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
         <el-link :href="`${file.url}`" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
@@ -54,6 +55,8 @@ import { ElUpload, UploadFile } from 'element-plus'
 
 
 const props = defineProps({
+  isSlot: propTypes.bool.def(false),
+  isShowList: propTypes.bool.def(true),
   modelValue: [String, Object, Array],
   // 数量限制
   limit: {
@@ -84,6 +87,8 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  // 是否覆盖
+  isCover: propTypes.bool.def(false),
   // 图片上传类型： ossId || url
   uploadType: propTypes.string.def('ossId')
 })

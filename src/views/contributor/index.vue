@@ -149,14 +149,17 @@ const getData = () => {
   }).then((res) => {
     const list: any[] = []
     const maps = new Map()
-    res.data.rows.forEach(item => {
-      if (maps.has(item.post)) {
-        maps.set(item.post, maps.get(item.post).push(item))
-      } else {
-        maps.set(item.post, [item])
+    res.data.rows.forEach((item, index) => {
+      if (!maps.has(item.post)) {
+        maps.set(item.post, [])
       }
+      console.log(item)
+      console.log(maps)
+      const arr = maps.get(item.post) || []
+      arr.push(item)
+      maps.set(item.post, arr)
+
     })
-    console.log('maps', maps)
     maps.forEach((item, key) => {
       const obj = postOptions.find(f => f.value === key)
       list.push({

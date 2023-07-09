@@ -1,16 +1,16 @@
 <template>
   <div class="user-item flex" @click="goView">
     <div class="img">
-      <img :src="data.img || defaultImg" alt="" />
+      <img :src="data.avatar || defaultImg" alt="" />
     </div>
     <div class="text">
       <div class="name flex">
-        <span>{{ data.name }}</span>
+        <span>{{ data.contributor }}</span>
         <el-icon><ArrowRight /></el-icon>
       </div>
       <div class="desc">{{ data.intro }}</div>
       <div class="tag flex">
-        <div class="item" v-for="(item, index) in data.tag" :key="index">{{ item }}</div>
+        <div class="item" v-for="(item, index) in data?.tags?.split(',') || []" :key="index">{{ item }}</div>
       </div>
     </div>
   </div>
@@ -21,15 +21,19 @@ import defaultImg from '@/assets/images/profile.jpg'
 
 const props = defineProps({
   data: propTypes.object.def({
-    name: '',
-    img: '',
-    desc: '',
-    tag: [],
+    contributor: '',
+    avatar: '',
+    intro: '',
+    post: '',
+    tags: [],
     id: '',
+    context: '',
+    title: '',
   })
 })
 const router = useRouter()
 const goView = () => {
+  console.log(props.data)
   router.push({
     path: `/system/user-auth/detail/${props.data.id}/view`,
   })

@@ -1,16 +1,19 @@
 <template>
-  <div class="detail-box">
+  <div class="detail-box" v-loading="state.loading">
     <el-form :model="formModel" label-width="70px">
       <el-card>
         <template #header>
           <div class="card-header flex align-center">
             <span>基本信息</span>
-            <el-button icon="EditPen" type="primary" link @click="handleEdit">编辑</el-button>
+            <div>
+              <el-button v-if="state.type === 'view'" icon="EditPen" type="primary" link @click="handleEdit">编辑</el-button>
+              <el-button icon="Back" type="primary" link @click="router.go(-1)">返回</el-button>
+            </div>
           </div>
         </template>
         <div class="base-info flex">
           <div class="img">
-            <img v-if="state.type === 'view'" src="@/assets/images/profile.jpg" alt="" />
+            <img v-if="state.type === 'view' || formModel.avatar" :src="formModel.avatar" alt="" />
             <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 33 33" class="design-iconfont" width="80" height="80">
               <path fill="#D1D8DF" d="M16.25 0.3169000000000004A16 16 0 1 0 16.25 32.316900000000004A16 16 0 1 0 16.25 0.3169000000000004Z"></path>
               <path
@@ -18,11 +21,25 @@
                 fill="#fff"
               ></path>
             </svg>
-            <el-button v-if="state.type !== 'view'" class="upload-btn" icon="Upload">上传头像</el-button>
+            <file-upload
+              :limit="1"
+              uploadType="url"
+              is-slot
+              is-cover
+              :is-show-tip="false"
+              :file-type="['png', 'jpg', 'jpeg']"
+              :is-show-list="false"
+              v-model="formModel.avatar"
+              v-if="state.type !== 'view'"
+            >
+              <template #buttonSlot>
+                <el-button class="upload-btn" icon="Upload" @click="formModel.avatar = ''">上传头像</el-button>
+              </template>
+            </file-upload>
           </div>
           <div class="text" v-if="state.type === 'view'">
-            <div class="name">Serati Ma</div>
-            <div class="desc">要么做第一个，要么做最好的一个。</div>
+            <div class="name">{{ formModel.contributor || '' }}</div>
+            <div class="desc">{{ formModel.intro || '' }}</div>
             <div class="post flex">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" class="design-iconfont" width="16" height="16">
                 <path
@@ -44,12 +61,12 @@
                 <path d="M8.1665 5.83398H10.4998" stroke="#4E5969" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M8.75 8.16602H10.5" stroke="#4E5969" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <span>设计师</span>
+              <span>{{ getPostName(formModel.post) }}</span>
             </div>
             <div class="skill flex">
               <span>技能</span>
               <div class="tag flex">
-                <div class="item" v-for="(item, index) in tags" :key="index">{{ item }}</div>
+                <div class="item" v-for="(item, index) in formModel.tags?.split(',') || []" :key="index">{{ item }}</div>
               </div>
             </div>
           </div>
@@ -90,8 +107,8 @@
           </div>
         </template>
         <div class="detail-txt" v-if="state.type === 'view'">
-          <div class="tit">标题呢</div>
-          <div class="v-html" v-html="formModel.context"></div>
+          <div class="tit">{{ formModel.title || '' }}</div>
+          <div class="v-html" v-html="formModel.context || ''"></div>
         </div>
         <div class="detail-form" v-else>
           <el-form-item label="标题">
@@ -102,8 +119,8 @@
           </el-form-item>
         </div>
       </el-card>
-      <div class="btn-group">
-        <el-button>取消</el-button>
+      <div class="btn-group" v-if="state.type !== 'view'">
+        <el-button @click="router.go(-1)">取消</el-button>
         <el-button type="primary" @click="submitForm">保存</el-button>
       </div>
     </el-form>
@@ -121,33 +138,64 @@ const state = reactive({
   type: 'add',
   id: '',
   tagList: [],
-  tagOptions: []
+  tagOptions: [],
+  loading: false,
 })
 const { id, type } = route.params
 type && (state.type = type as string)
 id && id !== '0' && (state.id = id as string)
 
+const getInfo = () => {
+  state.loading = true
+  getContributorDetail(id).then(res => {
+    if (res.code === 200) {
+      formModel.value = res.data || {}
+      state.tagList = res.data?.tags?.split(',') || []
+    }
+    console.log(res.data)
+  }).finally(() => {
+    state.loading = false
+  })
+}
+getInfo()
 const tags = ['java', 'Python', 'C']
 
-
+const getPostName = (val) => {
+  return postOptions.find(f => f.value === val)?.label || ''
+}
 const formModel = ref<IContributorVO>({} as IContributorVO)
-
 const handleEdit = () => {
   router.push(`/system/user-auth/detail/${state.id}/edit`)
 }
 
 const submitForm = () => {
+  const verify = {
+    contributor: '请输入名称',
+    intro: '请输入简介',
+    post: '请选择岗位',
+    avatar: '请上传头像',
+  }
+  for (let key in verify) {
+    console.log(key)
+    if (!formModel.value[key]) return ElMessage.error(verify[key])
+  }
+  if (state.tagList?.length <= 0) return ElMessage.error('请选择技能标签')
   const loading = ElLoading.service({
     lock: true,
     text: '加载中...',
     background: 'rgba(0, 0, 0, 0.7)',
   })
-  addContributorList(toRaw(formModel.value)).then(res => {
+  const fun = state.type === 'view' ? editContributorList : addContributorList
+  fun({
+    ...toRaw(formModel.value),
+    tags: state.tagList.join(',')
+  }).then(res => {
+    const txt = state.type === 'edit' ? '编辑' : '新增'
     if (res.code === 200) {
-      ElMessage.success('新增成功')
+      ElMessage.success(`${txt}成功`)
       router.go(-1)
     } else {
-      ElMessage.error('新增失败')
+      ElMessage.error(`${txt}失败`)
     }
   }).finally(() => {
     loading.close()
