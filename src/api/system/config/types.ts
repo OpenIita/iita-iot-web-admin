@@ -8,7 +8,8 @@ export interface ConfigVO extends BaseEntity {
 }
 
 export interface ConfigForm {
-  configId: number | string | undefined
+  id?: number | string
+  configId?: number | string
   configName: string
   configKey: string
   configValue: string

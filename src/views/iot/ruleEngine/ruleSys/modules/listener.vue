@@ -10,7 +10,7 @@
                   <el-radio label="device" size="large">设备监听</el-radio>
                 </el-radio-group>
                 <div class="item">
-                  <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row, item)"></select-product>
+                  <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row)"></select-product>
                 </div>
                 <div class="item" v-if="item.pk">
                   <select-device v-model:dn="item.deviceDn" placeholder="默认全部设备" :product-pk="item.pk || ''"></select-device>

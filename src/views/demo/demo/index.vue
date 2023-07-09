@@ -169,9 +169,9 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询测试单列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listDemo(queryParams.value)
-  demoList.value = res.rows
-  total.value = res.total
+  const res: any = await listDemo(queryParams.value)
+  demoList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 

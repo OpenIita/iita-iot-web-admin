@@ -15,11 +15,13 @@ let downloadLoadingInstance: LoadingInstance
 // 是否显示重新登录
 export const isRelogin = { show: false }
 
-axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建 axios 实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 50000,
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8',
+  },
 })
 
 // 请求拦截器
@@ -141,8 +143,8 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
-    let { message, response } = error
-    if (response.status == 401) {
+    let { message } = error
+    if (error.response.status == 401) {
       ElMessage({ message: '未授权的请求', type: 'error', duration: 5 * 1000 })
       return Promise.reject(error)
     }
@@ -154,7 +156,7 @@ service.interceptors.response.use(
     } else if (message.includes('Request failed with status code')) {
       message = '系统接口' + message.substr(message.length - 3) + '异常'
     }
-    ElMessage({ message: message, type: 'error', duration: 5 * 1000 })
+    ElMessage({ message, type: 'error', duration: 5 * 1000 })
     return Promise.reject(error)
   }
 )

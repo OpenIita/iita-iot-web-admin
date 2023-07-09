@@ -38,7 +38,7 @@
             <Map :center="state.mapLnglat" />
           </el-col>
         </el-row>
-        <div style="margin: 10px 10px">设备标签&nbsp;<el-button size="mini" icon="Plus" @click="addTag"></el-button></div>
+        <div style="margin: 10px 10px">设备标签&nbsp;<el-button size="small" icon="Plus" @click="addTag"></el-button></div>
         <el-descriptions :column="2" border :labelStyle="{ 'font-weight': 'bold' }">
           <el-descriptions-item v-for="tag in state.tags" :key="tag.name" :label="tag.name + '(' + tag.id + ')'">{{ tag.value
           }}</el-descriptions-item>
@@ -98,7 +98,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template v-slot="scope">
-              <el-button @click="showInvokeService(scope.row)" type="success" size="mini" plain>调用</el-button>
+              <el-button @click="showInvokeService(scope.row)" type="success" size="small" plain>调用</el-button>
             </template>
           </el-table-column>
           <el-table-column label="参数">
@@ -156,13 +156,13 @@
             <template v-slot="fun">
               <el-form v-model="fun.row" label-width="80px" style="width: 500px">
                 <el-form-item label="值" v-if="fun.row.type == 'property'">
-                  <el-input v-model="fun.row.value" size="mini"></el-input>
+                  <el-input v-model="fun.row.value" size="small"></el-input>
                 </el-form-item>
                 <el-form-item label="内容" v-else>
-                  <el-input type="textarea" v-model="fun.row.content" size="mini" rows="4"></el-input>
+                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="mini" @click="sendDeviceMsg(fun.row)">发送</el-button>
+                  <el-button type="primary" size="small" @click="sendDeviceMsg(fun.row)">发送</el-button>
                 </el-form-item>
               </el-form>
             </template>
@@ -193,7 +193,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary" :loading="state.loading" class="title" @click="submitPropertyWriteForm('propertyWriteForm')">保存</el-button>
+          <el-button type="primary" :loading="state.loading" class="title" @click="submitPropertyWriteForm">保存</el-button>
         </div>
       </template>
     </el-dialog>
@@ -217,7 +217,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary" :loading="state.loading" class="title" @click="submitServiceForm('serviceForm')">确认</el-button>
+          <el-button type="primary" :loading="state.loading" class="title" @click="submitServiceForm">确认</el-button>
         </div>
       </template>
     </el-dialog>
@@ -387,7 +387,7 @@ const getdata = () => {
     if (data?.locate.longitude && data.locate.latitude) {
       state.mapLnglat = data.locate.longitude + ',' + data.locate.latitude
     }
-    state.showDeviceMap=JSON.parse(showMap)
+    state.showDeviceMap=JSON.parse(showMap as string)
     //取设备物模型信息
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {

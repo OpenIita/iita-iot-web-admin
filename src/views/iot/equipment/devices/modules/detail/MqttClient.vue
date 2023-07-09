@@ -3,10 +3,10 @@
     <el-card shadow="always" style="margin-bottom:30px;">
       <el-row>
         <el-col span="12">
-          <el-button size="mini" icon="el-icon-setting" v-if="!showConfigFlg" @click="handleShowConfig()"></el-button>
+          <el-button size="small" icon="el-icon-setting" v-if="!showConfigFlg" @click="handleShowConfig()"></el-button>
         </el-col>
         <el-col span="12">
-          <el-button size="mini" icon="el-icon-arrow-up" v-if="showConfigFlg" @click="handleShowConfig()"></el-button>
+          <el-button size="small" icon="el-icon-arrow-up" v-if="showConfigFlg" @click="handleShowConfig()"></el-button>
         </el-col>
         <el-col span="3" push="9">
           <el-button
@@ -78,10 +78,10 @@
         </el-col>
         <el-col :span="2">
           <el-col span="12">
-            <el-button size="mini" icon="el-icon-arrow-down" v-if="!showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-down" v-if="!showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
           </el-col>
           <el-col span="12">
-            <el-button size="mini" icon="el-icon-arrow-up" v-if="showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-up" v-if="showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
           </el-col>
         </el-col>
       </el-row>
@@ -126,7 +126,7 @@
                 ><el-button
                   type="danger"
                   :disabled="scope.row.sub"
-                  size="mini"
+                  size="small"
                   @click="handleDelete(scope.$index, scope.row)"
                   circle
                   icon="el-icon-minus"
@@ -145,10 +145,10 @@
         </el-col>
         <el-col :span="2">
           <el-col span="12">
-            <el-button size="mini" icon="el-icon-arrow-down" v-if="!showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-down" v-if="!showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
           </el-col>
           <el-col span="12">
-            <el-button size="mini" icon="el-icon-arrow-up" v-if="showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-up" v-if="showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
           </el-col>
         </el-col>
       </el-row>
@@ -195,7 +195,7 @@
                 ><el-button
                   type="danger"
                   :disabled="scope.row.sub"
-                  size="mini"
+                  size="small"
                   @click="handleDeletePublish(scope.$index, scope.row)"
                   circle
                   icon="el-icon-minus"

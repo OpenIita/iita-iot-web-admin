@@ -49,6 +49,7 @@ export interface MenuVO extends BaseEntity {
 
 export interface MenuForm {
   parentName?: string
+  id?: string | number
   parentId?: string | number
   children?: MenuForm[]
   menuId?: string | number

@@ -218,7 +218,7 @@ const getTypeList = async () => {
 /** 查询字典数据列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listData(queryParams.value)
+  const res: any = await listData(queryParams.value)
   dataList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

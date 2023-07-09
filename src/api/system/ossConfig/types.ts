@@ -22,7 +22,8 @@ export interface OssConfigQuery extends PageQuery {
 }
 
 export interface OssConfigForm {
-  ossConfigId: string | number | undefined
+  id?: string | number
+  ossConfigId?: string | number
   configKey: string
   accessKey: string
   secretKey: string

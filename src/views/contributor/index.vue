@@ -14,7 +14,7 @@
             <div class="total">总人数{{ item.children.length }}</div>
           </div>
           <div class="user" v-if="item.children">
-            <el-row gutter="16" type="flex">
+            <el-row :gutter="16" type="flex">
               <el-col :span="8" v-for="user in item.children" :key="user.id">
                 <user-item :data="user"></user-item>
               </el-col>
@@ -115,7 +115,8 @@
               </div>
             </div>
             <div class="a-link">
-              <a href="http://iotkit-open-source.gitee.io/document/">文档地址
+              <a href="http://iotkit-open-source.gitee.io/document/"
+                >文档地址
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" class="2qofvgpt7__design-iconfont" width="12" height="12">
                   <path
                     fill-rule="evenodd"
@@ -138,7 +139,7 @@ import { getContributorList } from './api/index.api'
 import UserItem from './components/user-item.vue'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 
-const data = ref([])
+const data = ref<any[]>([])
 const loading = ref(false)
 const getData = () => {
   loading.value = true
@@ -151,7 +152,7 @@ const getData = () => {
     loading.value = false
   })
 }
-getData(0)
+getData()
 const joinList = [{
   title: '贡献代码',
   icon: 'join_code',

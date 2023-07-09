@@ -174,7 +174,7 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询字典类型列表 */
 const getList = () => {
   loading.value = true
-  listType(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res) => {
+  listType(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res: any) => {
     typeList.value = res.data.rows
     total.value = res.data.total
     loading.value = false

@@ -132,7 +132,7 @@ const queryParams = ref<LoginInfoQuery>({
 /** 查询登录日志列表 */
 const getList = async () => {
   loading.value = true
-  const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
+  const res: any = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
   loginInfoList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

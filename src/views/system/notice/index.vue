@@ -173,7 +173,7 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询公告列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listNotice(queryParams.value)
+  const res: any = await listNotice(queryParams.value)
   noticeList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

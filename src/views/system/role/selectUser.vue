@@ -95,7 +95,7 @@ const handleSelectionChange = (selection: UserVO[]) => {
 
 /** 查询数据 */
 const getList = async () => {
-  const res = await unallocatedUserList(queryParams)
+  const res: any = await unallocatedUserList(queryParams)
   userList.value = res.data.rows
   total.value = res.data.total
 }
@@ -115,7 +115,7 @@ const emit = defineEmits(['ok'])
 const handleSelectUser = async () => {
   const roleId = queryParams.roleId
   const ids = userIds.value
-  if (ids == '') {
+  if (!ids?.length) {
     proxy?.$modal.msgError('请选择要分配的用户')
     return
   }

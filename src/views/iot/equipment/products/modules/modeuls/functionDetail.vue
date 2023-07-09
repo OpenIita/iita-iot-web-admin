@@ -2,7 +2,7 @@
   <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="!state.isAdd ? '编辑功能' : '新增功能'">
     <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="modelFormRef">
       <el-form-item label="功能类型">
-        <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="mini">
+        <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="small">
           <el-radio-button label="property">属性</el-radio-button>
           <el-radio-button label="service">服务</el-radio-button>
           <el-radio-button label="event">事件</el-radio-button>

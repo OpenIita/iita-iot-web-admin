@@ -275,7 +275,7 @@ const dialog = reactive<DialogOption>({
  */
 const getList = () => {
   loading.value = true
-  listRole(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res) => {
+  listRole(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res: any) => {
     roleList.value = res.data.rows
     total.value = res.data.total
     loading.value = false

@@ -71,7 +71,7 @@ const handleSelectionChange = (selection: DbTableVO[]) => {
 }
 /** 查询表数据 */
 const getList = async () => {
-  const res = await listDbTable(queryParams)
+  const res: any = await listDbTable(queryParams)
   dbTableList.value = res.data.rows
   total.value = res.data.total
 }
@@ -89,7 +89,7 @@ const resetQuery = () => {
 const handleImportTable = async () => {
   const tableNames = tables.value
   if (!tableNames) {
-    proxy?.$modal.msgError("请选择要导入的表")
+    proxy?.$modal.msgError('请选择要导入的表')
     return
   }
   const res = await importTable({ tables: tableNames })

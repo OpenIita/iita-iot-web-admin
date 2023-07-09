@@ -178,9 +178,9 @@ const getPackageMenuTreeselect = async(packageId: string | number) => {
 /** 查询租户套餐列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listTenantPackage(queryParams.value)
-  tenantPackageList.value = res.rows
-  total.value = res.total
+  const res: any = await listTenantPackage(queryParams.value)
+  tenantPackageList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 

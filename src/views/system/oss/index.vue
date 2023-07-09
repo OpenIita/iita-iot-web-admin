@@ -190,7 +190,7 @@ const getList = async () => {
   previewListResource.value = res?.msg === undefined ? true : res.msg === 'true'
   console.log(daterangeCreateTime)
   const params = daterangeCreateTime.value[0] ?  proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : {}
-  const response = await listOss(params)
+  const response: any = await listOss(params)
   ossList.value = response.data.rows
   total.value = response.total
   loading.value = false

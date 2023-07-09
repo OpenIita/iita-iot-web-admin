@@ -12,7 +12,7 @@ export interface OperLogVO extends BaseEntity {
   tenantId: string
   title: string
   businessType: number
-  businessTypes: number[] | undefined
+  businessTypes?: number[]
   method: string
   requestMethod: string
   operatorType: number
@@ -30,11 +30,11 @@ export interface OperLogVO extends BaseEntity {
 }
 
 export interface OperLogForm {
-  operId: number | string | undefined
-  tenantId: string | number | undefined
+  operId?: number | string
+  tenantId?: string | number
   title: string
   businessType: number
-  businessTypes: number[] | undefined
+  businessTypes?: number[]
   method: string
   requestMethod: string
   operatorType: number

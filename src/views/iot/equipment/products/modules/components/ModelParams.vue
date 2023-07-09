@@ -1,18 +1,18 @@
 <template>
   <div style="width: 100%;">
-    <el-table v-if="!state.showPropertyParam" size="mini" :data="modelParams" highlight-current-row border style="width: 100%;">
+    <el-table v-if="!state.showPropertyParam" size="small" :data="modelParams" highlight-current-row border style="width: 100%;">
       <el-table-column prop="name" label="参数名称" width="100"> </el-table-column>
       <el-table-column prop="identifier" label="标识符" width="180"> </el-table-column>
       <el-table-column prop="dataType.type" label="类型" width="80"> </el-table-column>
       <el-table-column label="操作">
         <template v-slot:header>
-          <el-button @click="addParams" type="primary" size="mini" plain>添加参数</el-button>
+          <el-button @click="addParams" type="primary" size="small" plain>添加参数</el-button>
         </template>
         <template #default="scope">
-          <el-button size="mini" @click="handleParamEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" @click="handleParamEdit(scope.$index, scope.row)">编辑</el-button>
           <el-popconfirm title="确认要删除该功能吗？" @confirm="deleteParam(scope.$index)">
             <template #reference>
-              <el-button size="mini" plain type="danger">删除</el-button>
+              <el-button size="small" plain type="danger">删除</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -31,8 +31,8 @@
         <el-row>
           <el-col :span="16">&nbsp;</el-col>
           <el-col :span="8">
-            <el-button size="mini" @click="cancelEditParam()">取消</el-button>
-            <el-button size="mini" @click="saveParam()" type="primary">保存</el-button>
+            <el-button size="small" @click="cancelEditParam()">取消</el-button>
+            <el-button size="small" @click="saveParam()" type="primary">保存</el-button>
           </el-col>
         </el-row>
       </el-tab-pane>
