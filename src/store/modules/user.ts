@@ -48,10 +48,14 @@ export const useUserStore = defineStore('user', () => {
       }
       name.value = user.userName
       nickname.value = user.nickName
-      const ossObj = await listByIds(profile)
-      console.log('ossObj', ossObj)
-      if (ossObj.data) avatar.value = ossObj.data[0].url
-      console.log(avatar.value)
+      if (user.avatar) {
+        const ossObj = await listByIds(profile)
+        console.log('ossObj', ossObj)
+        if (ossObj.data) avatar.value = ossObj.data[0].url
+        console.log(avatar.value)
+      } else {
+        avatar.value = profile
+      }
       userId.value = user.id
       return Promise.resolve()
     }
