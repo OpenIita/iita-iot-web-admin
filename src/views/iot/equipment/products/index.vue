@@ -310,7 +310,7 @@ const column = ref<IColumn[]>([{
   key: 'img',
   type: 'image',
   componentProps: {
-    uploadFileType: 'url',
+    uploadType: 'url',
   }
 }, {
   label: '创建时间',

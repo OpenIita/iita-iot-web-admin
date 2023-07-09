@@ -4,6 +4,7 @@ import store from '@/store'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 import { login as loginApi, logout as logoutApi, getInfo as getUserInfo } from '@/api/login'
 import { LoginData } from '@/api/types'
+import { listByIds } from '@/api/system/oss'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref(getToken())
@@ -47,7 +48,10 @@ export const useUserStore = defineStore('user', () => {
       }
       name.value = user.userName
       nickname.value = user.nickName
-      avatar.value = profile
+      const ossObj = await listByIds(profile)
+      console.log('ossObj', ossObj)
+      if (ossObj.data) avatar.value = ossObj.data[0].url
+      console.log(avatar.value)
       userId.value = user.id
       return Promise.resolve()
     }

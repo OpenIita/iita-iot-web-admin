@@ -34,8 +34,8 @@ const column: IColumn[] = [
       fileSize: 10000000,
       limit: 1,
       fileType: [],
-      uploadFileUrl: '/ota/package/upload',
-      uploadFileType: 'url',
+      uploadUrl: '/ota/package/upload',
+      uploadType: 'url',
     }
   },
   {

@@ -81,6 +81,12 @@ const visible = ref(false)
 const title = ref('修改头像')
 
 const cropper = ref<any>({})
+const getFileName = (url: string) => {
+  if (url) {
+    return url.substring(url.lastIndexOf('/')+1) || ''
+  }
+  return ''
+}
 //图片裁剪数据
 const options = reactive<Options>({
   img: userStore.avatar,
@@ -89,7 +95,7 @@ const options = reactive<Options>({
   autoCropHeight: 200,
   fixedBox: true,
   outputType: 'png',
-  fileName: '',
+  fileName: getFileName(userStore.avatar),
   previews: {},
   visible: false
 })
@@ -135,11 +141,9 @@ const uploadImg = async () => {
   cropper.value.getCropBlob(async (data: any) => {
     let formData = new FormData()
     formData.append('avatarfile', data, options.fileName)
-    console.log(data)
-    console.log(formData)
-    const res = await uploadAvatar(data)
+    const res = await uploadAvatar(formData.get('avatarfile'))
     open.value = false
-    options.img = res.data.url
+    options.img = res.data.imgUrl
     userStore.avatar = options.img as string
     proxy?.$modal.msgSuccess('修改成功')
     visible.value = false

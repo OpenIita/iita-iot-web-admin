@@ -2,7 +2,7 @@
   <div class="upload-file">
     <el-upload
       multiple
-      :action="uploadFileUrl"
+      :action="uploadUrl"
       :before-upload="handleBeforeUpload"
       :file-list="fileList"
       :limit="limit"
@@ -75,7 +75,7 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  uploadFileUrl: {
+  uploadUrl: {
     type: String,
     default: '/resource/oss/upload',
   },
@@ -85,7 +85,7 @@ const props = defineProps({
     default: () => {}
   },
   // 图片上传类型： ossId || url
-  uploadFileType: propTypes.string.def('ossId')
+  uploadType: propTypes.string.def('ossId')
 })
 const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -94,7 +94,7 @@ const number = ref(0)
 const uploadList = ref<any[]>([])
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadFileUrl = ref(baseUrl + props.uploadFileUrl) // 上传文件服务器地址
+const uploadUrl = ref(baseUrl + props.uploadUrl) // 上传文件服务器地址
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
@@ -112,7 +112,7 @@ watch(() => props.modelValue, async val => {
     if (Array.isArray(val)) {
       list = val
     } else {
-      if (props.uploadFileType === 'ossId') {
+      if (props.uploadType === 'ossId') {
         const res =  await listByIds(val as string)
         list = res.data.map((oss) => {
           const data = { name: oss.originalName, url: oss.url, ossId: oss.id }
@@ -226,10 +226,10 @@ const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
   list.forEach(item => {
-    if (props.uploadFileType === 'ossId' && item.ossId) {
+    if (props.uploadType === 'ossId' && item.ossId) {
       strs += item.ossId + separator
     }
-    if (props.uploadFileType === 'url' && item.url) {
+    if (props.uploadType === 'url' && item.url) {
       strs += item.url + separator
     }
   })

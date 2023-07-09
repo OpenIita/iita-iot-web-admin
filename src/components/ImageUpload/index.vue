@@ -82,7 +82,7 @@ const props = defineProps({
     default: () => {}
   },
   // 图片上传类型： ossId || url
-  uploadFileType: propTypes.string.def('ossId')
+  uploadType: propTypes.string.def('ossId')
 })
 const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -110,7 +110,7 @@ watch(() => props.modelValue, async val => {
     if (Array.isArray(val)) {
       list = val as OssVO[]
     } else {
-      if (props.uploadFileType === 'ossIf') {
+      if (props.uploadType === 'ossIf') {
         const res = await listByIds(val as string)
         list = res.data
       } else {
@@ -192,7 +192,7 @@ const handleUploadSuccess = (res: any, file: UploadFile) => {
 const handleDelete = (file: UploadFile): boolean => {
   const findex = fileList.value.map(f => f.name).indexOf(file.name)
   if (findex > -1 && uploadList.value.length === number.value) {
-    if (props.uploadFileType === 'ossId') {
+    if (props.uploadType === 'ossId') {
       let ossId = fileList.value[findex].ossId
       delOss([ossId])
     }
@@ -231,11 +231,11 @@ const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
   for (let i in list) {
-    if (props.uploadFileType === 'ossId') {
+    if (props.uploadType === 'ossId') {
       if (undefined !== list[i].ossId && list[i].url.indexOf('blob:') !== 0) {
         strs += list[i].ossId + separator
       }
-    } else if (props.uploadFileType === 'url') {
+    } else if (props.uploadType === 'url') {
         strs += list[i].url + separator
     }
   }
