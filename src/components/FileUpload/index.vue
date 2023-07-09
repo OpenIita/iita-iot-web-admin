@@ -95,7 +95,6 @@ const uploadList = ref<any[]>([])
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
 const uploadFileUrl = ref(baseUrl + props.uploadFileUrl) // 上传文件服务器地址
-console.log(uploadFileUrl)
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
@@ -116,7 +115,7 @@ watch(() => props.modelValue, async val => {
       if (props.uploadFileType === 'ossId') {
         const res =  await listByIds(val as string)
         list = res.data.map((oss) => {
-          const data = { name: oss.originalName, url: oss.url, ossId: oss.ossId }
+          const data = { name: oss.originalName, url: oss.url, ossId: oss.id }
           return data
         })
       } else {
@@ -183,7 +182,6 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
   }
   if (res.code === 200) {
     uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
-    console.log('uploadList.value', uploadList.value)
     uploadedSuccessfully()
   } else {
     number.value--
@@ -197,7 +195,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
 // 删除文件
 const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
-  delOss(ossId)
+  delOss([ossId])
   fileList.value.splice(index, 1)
   emit('update:modelValue', listToString(fileList.value))
 }
@@ -205,11 +203,9 @@ const handleDelete = (index: number) => {
 // 上传结束处理
 const uploadedSuccessfully =() => {
   if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
-    console.log('fileList.value', fileList.value)
+    fileList.value = fileList.value.filter(f => f.url).concat(toRaw(uploadList.value))
     uploadList.value = []
     number.value = 0
-    console.log(listToString(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }

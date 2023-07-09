@@ -110,8 +110,12 @@ watch(() => props.modelValue, async val => {
     if (Array.isArray(val)) {
       list = val as OssVO[]
     } else {
-      const res = await listByIds(val as string)
-      list = res.data
+      if (props.uploadFileType === 'ossIf') {
+        const res = await listByIds(val as string)
+        list = res.data
+      } else {
+        list = val.split(',') as OssVO[]
+      }
     }
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
@@ -121,7 +125,7 @@ watch(() => props.modelValue, async val => {
         itemData = { name: item, url: item }
       } else {
         // 此处name使用ossId 防止删除出现重名
-        itemData = { name: item.ossId, url: item.url, ossId: item.ossId }
+        itemData = { name: item.ossId, url: item.url, ossId: item.id }
       }
       return itemData
     })
@@ -188,8 +192,10 @@ const handleUploadSuccess = (res: any, file: UploadFile) => {
 const handleDelete = (file: UploadFile): boolean => {
   const findex = fileList.value.map(f => f.name).indexOf(file.name)
   if (findex > -1 && uploadList.value.length === number.value) {
-    let ossId = fileList.value[findex].ossId
-    delOss(ossId)
+    if (props.uploadFileType === 'ossId') {
+      let ossId = fileList.value[findex].ossId
+      delOss([ossId])
+    }
     fileList.value.splice(findex, 1)
     emit('update:modelValue', listToString(fileList.value))
     return false
@@ -225,8 +231,12 @@ const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
   for (let i in list) {
-    if (undefined !== list[i].ossId && list[i].url.indexOf('blob:') !== 0) {
-      strs += list[i].ossId + separator
+    if (props.uploadFileType === 'ossId') {
+      if (undefined !== list[i].ossId && list[i].url.indexOf('blob:') !== 0) {
+        strs += list[i].ossId + separator
+      }
+    } else if (props.uploadFileType === 'url') {
+        strs += list[i].url + separator
     }
   }
   return strs != '' ? strs.substring(0, strs.length - 1) : ''

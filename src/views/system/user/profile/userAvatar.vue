@@ -139,7 +139,7 @@ const uploadImg = async () => {
     console.log(formData)
     const res = await uploadAvatar(data)
     open.value = false
-    options.img = res.data.imgUrl
+    options.img = res.data.url
     userStore.avatar = options.img as string
     proxy?.$modal.msgSuccess('修改成功')
     visible.value = false

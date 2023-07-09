@@ -52,6 +52,8 @@ service.interceptors.request.use(
         requestId: requestId,
         data: data == null ? {} : data.coverData ? data.coverData : data,
       }
+      if (config.data.data.file) config.data.file = config.data.data.file
+      if (config.data.data.avatarfile) config.data.avatarfile = config.data.data.avatarfile
     } else {
       config.data = {
         requestId: requestId,

@@ -309,6 +309,9 @@ const column = ref<IColumn[]>([{
   label: '产品图片',
   key: 'img',
   type: 'image',
+  componentProps: {
+    uploadFileType: 'url',
+  }
 }, {
   label: '创建时间',
   key: 'createAt',

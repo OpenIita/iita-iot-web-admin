@@ -198,9 +198,6 @@ const data = reactive<PageData<OssConfigForm, OssConfigQuery>>({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    configKey: '',
-    bucketName: '',
-    status: '',
   },
   rules: {
     configKey: [{ required: true, message: 'configKey不能为空', trigger: 'blur' },],
