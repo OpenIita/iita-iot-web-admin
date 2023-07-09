@@ -2,7 +2,7 @@
   <div class="upload-file">
     <el-upload
       multiple
-      :action="uploadFileUrl"
+      :action="uploadUrl"
       :before-upload="handleBeforeUpload"
       :file-list="fileList"
       :limit="limit"
@@ -75,7 +75,7 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  uploadFileUrl: {
+  uploadUrl: {
     type: String,
     default: '/resource/oss/upload',
   },
@@ -85,7 +85,7 @@ const props = defineProps({
     default: () => {}
   },
   // 图片上传类型： ossId || url
-  uploadFileType: propTypes.string.def('ossId')
+  uploadType: propTypes.string.def('ossId')
 })
 const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -94,8 +94,7 @@ const number = ref(0)
 const uploadList = ref<any[]>([])
 
 const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadFileUrl = ref(baseUrl + props.uploadFileUrl) // 上传文件服务器地址
-console.log(uploadFileUrl)
+const uploadUrl = ref(baseUrl + props.uploadUrl) // 上传文件服务器地址
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
@@ -113,10 +112,10 @@ watch(() => props.modelValue, async val => {
     if (Array.isArray(val)) {
       list = val
     } else {
-      if (props.uploadFileType === 'ossId') {
+      if (props.uploadType === 'ossId') {
         const res =  await listByIds(val as string)
         list = res.data.map((oss) => {
-          const data = { name: oss.originalName, url: oss.url, ossId: oss.ossId }
+          const data = { name: oss.originalName, url: oss.url, ossId: oss.id }
           return data
         })
       } else {
@@ -183,7 +182,6 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
   }
   if (res.code === 200) {
     uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
-    console.log('uploadList.value', uploadList.value)
     uploadedSuccessfully()
   } else {
     number.value--
@@ -197,7 +195,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
 // 删除文件
 const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
-  delOss(ossId)
+  delOss([ossId])
   fileList.value.splice(index, 1)
   emit('update:modelValue', listToString(fileList.value))
 }
@@ -205,11 +203,9 @@ const handleDelete = (index: number) => {
 // 上传结束处理
 const uploadedSuccessfully =() => {
   if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value)
-    console.log('fileList.value', fileList.value)
+    fileList.value = fileList.value.filter(f => f.url).concat(toRaw(uploadList.value))
     uploadList.value = []
     number.value = 0
-    console.log(listToString(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }
@@ -230,10 +226,10 @@ const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
   list.forEach(item => {
-    if (props.uploadFileType === 'ossId' && item.ossId) {
+    if (props.uploadType === 'ossId' && item.ossId) {
       strs += item.ossId + separator
     }
-    if (props.uploadFileType === 'url' && item.url) {
+    if (props.uploadType === 'url' && item.url) {
       strs += item.url + separator
     }
   })

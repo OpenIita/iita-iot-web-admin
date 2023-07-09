@@ -265,8 +265,8 @@
             id: row.id
           }"
           @stringSuccess="(res) => uploadJarSuccess(res, row)"
-          uploadFileType="url"
-          uploadFileUrl="/protocol/uploadJar"
+          uploadType="url"
+          uploadUrl="/protocol/uploadJar"
         ></upload-file>
       </template>
     </yt-table-form>

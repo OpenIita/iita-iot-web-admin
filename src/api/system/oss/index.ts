@@ -23,10 +23,8 @@ export function listByIds(ossId: string | number): AxiosPromise<OssVO[]> {
 // 删除OSS对象存储
 export function delOss(ossId: string | number | Array<string | number>) {
   return request({
-    url: '/resource/oss',
+    url: '/resource/oss/delete',
     method: 'post',
-    data: {
-      ossId,
-    },
+    data: ossId,
   })
 }
