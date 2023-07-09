@@ -8,7 +8,7 @@
         <span>{{ data.name }}</span>
         <el-icon><ArrowRight /></el-icon>
       </div>
-      <div class="desc">{{ data.desc }}</div>
+      <div class="desc">{{ data.intro }}</div>
       <div class="tag flex">
         <div class="item" v-for="(item, index) in data.tag" :key="index">{{ item }}</div>
       </div>

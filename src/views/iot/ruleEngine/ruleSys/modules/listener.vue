@@ -10,10 +10,15 @@
                   <el-radio label="device" size="large">设备监听</el-radio>
                 </el-radio-group>
                 <div class="item">
-                  <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row, item)"></select-product>
+                  <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row)"></select-product>
                 </div>
                 <div class="item" v-if="item.pk">
-                  <select-device v-model:dn="item.deviceDn" placeholder="默认全部设备" :product-pk="item.pk || ''"></select-device>
+                  <select-device
+                    v-model:dn="item.deviceDn"
+                    placeholder="默认全部设备"
+                    :product-pk="item.pk || ''"
+                    @on-select="handleEmits"
+                  ></select-device>
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -217,15 +222,17 @@ const initThingModel = (pk, res) => {
     })
   })
   stateMap.value.set(pk, state)
+  handleEmits()
 }
 
 const stateMap = ref(new Map())
-watch(() => list.value.length, (newV) => {
+const handleEmits = () => {
   const arr = toRaw(list.value).map(m => {
     if (m.config) {
       const obj = JSON.parse(m.config || '{}')
-      if (obj.conditions[0]) {
-        const firstObj = obj.conditions[0].device ? obj.conditions[0].device.split('/') : ''
+      const data = obj.conditions[0]
+      if (data) {
+        const firstObj = data.device ? data.device.split('/') : ''
         if (firstObj) {
           obj.pk = firstObj[0] || ''
           obj.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
@@ -243,6 +250,9 @@ watch(() => list.value.length, (newV) => {
   })
   list.value = arr
   emits('update:listeners', arr)
+}
+watch(() => list.value.length, (newV) => {
+  handleEmits()
 }, {
   immediate: true,
   // deep: true,

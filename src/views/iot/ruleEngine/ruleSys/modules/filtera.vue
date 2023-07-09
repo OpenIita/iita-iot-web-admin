@@ -137,9 +137,9 @@ const initThingModel = (pk, res) => {
     ],
   })
   stateMap.value.set(pk, modelItems)
+  handleEmits()
 }
-
-watch(() => list.value.length, (newV) => {
+const handleEmits = () => {
   const arr = toRaw(list.value).map(m => {
     if (m.config) {
       const obj = JSON.parse(m.config || '{}')
@@ -162,6 +162,9 @@ watch(() => list.value.length, (newV) => {
   })
   list.value = arr
   emits('update:filters', arr)
+}
+watch(() => list.value.length, (newV) => {
+  handleEmits()
 }, {
   immediate: true,
   // deep: true,

@@ -142,7 +142,7 @@ const submitForm = () => {
     text: '加载中...',
     background: 'rgba(0, 0, 0, 0.7)',
   })
-  addContributorList(toRaw(formModel)).then(res => {
+  addContributorList(toRaw(formModel.value)).then(res => {
     if (res.code === 200) {
       ElMessage.success('新增成功')
       router.go(-1)
