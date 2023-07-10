@@ -1,5 +1,8 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true" :style="{
+  <svg
+    :class="svgClass"
+    aria-hidden="true"
+    :style="{
       color: props.color,
     }"
   >

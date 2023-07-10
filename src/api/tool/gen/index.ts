@@ -28,7 +28,6 @@ export const getGenTable = (tableId: string | number): AxiosPromise<GenTableVO> 
     url: '/tool/gen/getDetail',
     method: 'post',
     data: tableId,
- 
   })
 }
 
@@ -58,8 +57,7 @@ export const previewTable = (tableId: string | number) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/preview',
     method: 'post',
-    data: tableId
-
+    data: tableId,
   })
 }
 
@@ -69,7 +67,7 @@ export const delTable = (tableIds: Array<string | number>) => {
     headers: { datasource: localStorage.getItem('dataName') },
     url: '/tool/gen/delete',
     method: 'post',
-    data: tableIds
+    data: tableIds,
   })
 }
 
@@ -92,6 +90,5 @@ export const synchDb = (tableName: string) => {
     url: '/tool/gen/synchDb',
     method: 'post',
     data: tableName,
-  
   })
 }

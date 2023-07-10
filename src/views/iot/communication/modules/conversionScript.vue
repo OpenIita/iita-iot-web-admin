@@ -147,7 +147,6 @@ const handleSave = () => {
   ...data.value,
   ...editScript
   }
-  debugger
   editFun(content).then(() => {
     ElMessage.success('保存成功')
     dialogModel.value = false

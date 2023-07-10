@@ -139,7 +139,11 @@ const onSave = ({type, data, cancel}: any) => {
       pk: m.pk,
       deviceDn: m.deviceDn,
       device: m.device,
-      conditions: m.conditions,
+      conditions: m.conditions.map(m2 => ({
+        ...m2,
+        device: m.device,
+        type: m.type,
+      })),
     }
     return {
       ...mObj,
@@ -152,7 +156,11 @@ const onSave = ({type, data, cancel}: any) => {
       pk: m.pk,
       deviceDn: m.deviceDn,
       device: m.device,
-      conditions: m.conditions,
+      conditions: m.conditions.map(m2 => ({
+        ...m2,
+        device: m.device,
+        type: m.type,
+      })),
       deviceRadio: m.deviceRadio,
     }
     return {
