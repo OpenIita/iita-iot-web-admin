@@ -73,9 +73,9 @@ const rowClick = (row: any) => {
     ytCrudRef.value.getTableRef().tableRef.toggleRowSelection(toRaw(row), undefined)
     return
   }
-  emits('onSelect', row)
   emits('update:id', row.id)
   emits('update:dn', row.deviceName)
+  emits('onSelect', row)
   dialogState.data = row
   dialogState.show = false
   console.log(row)

@@ -90,9 +90,7 @@ const dialogState = reactive({
   show: false,
   data: {} as any,
 })
-const name = computed(() => {
-  return dialogState.data?.name || props.id || props.pk || ''
-})
+
 const handleSelect = () => {
   console.log('handleSelect')
   dialogState.show = true
@@ -112,7 +110,7 @@ const getDict = () => {
 getDict()
 const column = ref<IColumn[]>([{
   label: 'ProductKey',
-  key: 'id',
+  key: 'productKey',
   rules: [{ required: true, message: 'ProductKey不能为空' }],
 }, {
   label: '产品名称',
@@ -180,6 +178,26 @@ const getData = () => {
   })
   state.loading = false
 }
+const allData = ref<any[]>([])
+const getAllData = () => {
+  getProductsList({
+    pageNum: 1,
+    pageSize: 100000,
+  }).then(res => {
+    if (res.code === 200) {
+      allData.value = res.data.rows || []
+    }
+  })
+}
+getAllData()
+const getName = (str, type: 'id' | 'productKey') => {
+  return allData.value.find(f => f[type] === str)?.name || ''
+}
+const name = computed(() => {
+  if (props.id) return getName(props.id, 'id')
+  if (props.pk) return getName(props.pk, 'productKey')
+  return dialogState.data?.name || ''
+})
 </script>
 
 <style lang="scss" scoped>

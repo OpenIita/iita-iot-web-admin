@@ -135,6 +135,7 @@
 </template>
 <script lang="ts" setup>
 import { getContributorList } from './api/index.api'
+import { postOptions } from './types/index.type'
 
 import UserItem from './components/user-item.vue'
 import SvgIcon from '@/components/SvgIcon/index.vue'
@@ -147,7 +148,28 @@ const getData = () => {
     // pageNum: 1,
     // pageSize: 10000,
   }).then((res) => {
-    data.value = res.data.rows || []
+    const list: any[] = []
+    const maps = new Map()
+    res.data.rows.forEach((item, index) => {
+      if (!maps.has(item.post)) {
+        maps.set(item.post, [])
+      }
+      console.log(item)
+      console.log(maps)
+      const arr = maps.get(item.post) || []
+      arr.push(item)
+      maps.set(item.post, arr)
+
+    })
+    maps.forEach((item, key) => {
+      const obj = postOptions.find(f => f.value === key)
+      list.push({
+        title: obj?.label,
+        children: item,
+      })
+    })
+    console.log(list)
+    data.value = list || []
   }).finally(() => {
     loading.value = false
   })
