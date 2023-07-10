@@ -7,7 +7,7 @@
             <el-row>
               <el-col :span="18">
                 <el-form-item label="值">
-                  <el-input v-model="fun.row.value" size="mini"></el-input>
+                  <el-input v-model="fun.row.value" size="small"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
@@ -15,7 +15,7 @@
                   <div class="flex" style="align-items: center;">
                     <el-button
                       type="primary"
-                      size="mini"
+                      size="small"
                       v-if="propertiesTyp == '属性上报' || propertiesTyp == '事件上报'"
                       @click="sendSimpleThingModelMsg(fun.row)"
                       >发送</el-button

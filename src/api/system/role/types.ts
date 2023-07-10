@@ -46,7 +46,7 @@ export interface RoleForm {
   deptCheckStrictly: boolean
   remark: string
   dataScope?: string
-  id: string | undefined
+  id?: string
   menuIds: Array<string | number>
   deptIds: Array<string | number>
 }

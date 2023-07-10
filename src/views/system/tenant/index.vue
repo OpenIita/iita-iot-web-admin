@@ -222,9 +222,9 @@ const getTenantPackage = async () => {
 /** 查询租户列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listTenant(queryParams.value)
-  tenantList.value = res.rows
-  total.value = res.total
+  const res: any = await listTenant(queryParams.value)
+  tenantList.value = res.data.rows
+  total.value = res.data.total
   loading.value = false
 }
 

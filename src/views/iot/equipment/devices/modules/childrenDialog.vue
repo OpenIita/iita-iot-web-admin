@@ -14,8 +14,8 @@
       menu-slot
     >
       <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
-        <el-tag v-else type="danger" size="mini">离线</el-tag>
+        <el-tag v-if="scope.row.state.online" type="success" size="small">在线</el-tag>
+        <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
       <template #menuSlot="scope">
         <el-popconfirm title="确认要解除与网关的关联吗？" @confirm="handleDelete(scope.row)">

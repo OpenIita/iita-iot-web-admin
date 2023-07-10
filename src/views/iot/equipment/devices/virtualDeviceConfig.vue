@@ -14,11 +14,11 @@
         {{ state.typeName[data.type] }}
       </el-form-item>
       <el-form-item label="状态:">
-        <el-button v-if="data.state == 'running'" type="success" size="mini" plain @click="setState(data.id, 'stopped')">运行中</el-button>
-        <el-button v-if="data.state == 'stopped'" type="danger" size="mini" plain @click="setState(data.id, 'running')">已停止</el-button>
+        <el-button v-if="data.state == 'running'" type="success" size="small" plain @click="setState(data.id, 'stopped')">运行中</el-button>
+        <el-button v-if="data.state == 'stopped'" type="danger" size="small" plain @click="setState(data.id, 'running')">已停止</el-button>
       </el-form-item>
       <el-form-item label=" ">
-        <el-button @click="run(data.id)" size="mini">立即执行</el-button>
+        <el-button @click="run(data.id)" size="small">立即执行</el-button>
       </el-form-item>
     </el-form>
     <el-tabs v-model="state.activeName">

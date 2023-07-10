@@ -416,7 +416,7 @@ const getTreeSelect = async () => {
 /** 查询用户列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listUser(proxy?.addDateRange(queryParams.value, dateRange.value))
+  const res: any = await listUser(proxy?.addDateRange(queryParams.value, dateRange.value))
   loading.value = false
   userList.value = res.data.rows
   total.value = res.data.total

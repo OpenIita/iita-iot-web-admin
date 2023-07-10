@@ -164,7 +164,7 @@ onActivated(() => {
 /** 查询表集合 */
 const getList = async () => {
   loading.value = true
-  const res = await listTable(proxy?.addDateRange(queryParams.value, dateRange.value))
+  const res: any = await listTable(proxy?.addDateRange(queryParams.value, dateRange.value))
   tableList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

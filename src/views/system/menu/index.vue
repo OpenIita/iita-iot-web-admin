@@ -269,7 +269,7 @@ import { ElTable, ElForm } from 'element-plus'
 interface MenuOptionsType {
   id: number
   menuName: string
-  children: MenuOptionsType[] | undefined
+  children?: MenuOptionsType[]
 }
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance

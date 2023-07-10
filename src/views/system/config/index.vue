@@ -173,7 +173,7 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询参数列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listConfig(proxy?.addDateRange(queryParams.value, dateRange.value))
+  const res: any = await listConfig(proxy?.addDateRange(queryParams.value, dateRange.value))
   configList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

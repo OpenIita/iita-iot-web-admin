@@ -155,7 +155,7 @@ export default defineComponent({
                         watch(
                           () => formObj.data[m.key],
                           (newV) => {
-                            m.formWatch({
+                            m.formWatch?.({
                               col: m,
                               column: columns.value,
                               data: formObj.data,

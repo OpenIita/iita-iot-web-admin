@@ -38,8 +38,8 @@ const moveToTarget = (currentTag: TagView) => {
   const $containerWidth = $container.offsetWidth
   const $scrollWrapper = scrollWrapper.value
 
-  let firstTag = null
-  let lastTag = null
+  let firstTag = null as any
+  let lastTag = null as any
 
   // find first tag and last tag
   if (visitedViews.value.length > 0) {
@@ -54,8 +54,8 @@ const moveToTarget = (currentTag: TagView) => {
   } else {
     const tagListDom: any = document.getElementsByClassName('tags-view-item')
     const currentIndex = visitedViews.value.findIndex(item => item === currentTag)
-    let prevTag = null
-    let nextTag = null
+    let prevTag = null as any
+    let nextTag = null as any
 
     for (const k in tagListDom) {
       if (k !== 'length' && Object.hasOwnProperty.call(tagListDom, k)) {

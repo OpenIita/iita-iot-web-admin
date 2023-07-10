@@ -246,7 +246,7 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询对象存储配置列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listOssConfig(queryParams.value)
+  const res: any = await listOssConfig(queryParams.value)
   ossConfigList.value = res.data.rows
   total.value = res.data.total
   loading.value = false
@@ -293,7 +293,7 @@ const handleUpdate = (row?: OssConfigVO) => {
   const ossConfigId = row?.id || ids.value[0]
   nextTick(async () => {
     reset()
-    const res = await getOssConfig(ossConfigId)
+    const res: any = await getOssConfig(ossConfigId)
     loading.value = false
     form.value = res.data
   })

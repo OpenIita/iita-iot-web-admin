@@ -230,7 +230,7 @@ const { queryParams, form } = toRefs(data)
 /** 查询登录日志 */
 const getList = async () => {
   loading.value = true
-  const res = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
+  const res: any = await list(proxy?.addDateRange(queryParams.value, dateRange.value))
   operlogList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

@@ -24,8 +24,8 @@
       @on-load="getData"
     >
       <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="mini">在线</el-tag>
-        <el-tag v-else type="danger" size="mini">离线</el-tag>
+        <el-tag v-if="scope.row.state.online" type="success" size="small">在线</el-tag>
+        <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
     </yt-crud>
     <template #footer>

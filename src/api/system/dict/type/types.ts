@@ -7,7 +7,7 @@ export interface DictTypeVO extends BaseEntity {
 }
 
 export interface DictTypeForm {
-  id: number | string | undefined
+  id?: number | string
   dictName: string
   dictType: string
   status: string

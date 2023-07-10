@@ -98,7 +98,7 @@ const queryParams = reactive<UserQuery>({
 /** 查询授权用户列表 */
 const getList = async () => {
   loading.value = true
-  const res = await allocatedUserList(queryParams)
+  const res: any = await allocatedUserList(queryParams)
   userList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

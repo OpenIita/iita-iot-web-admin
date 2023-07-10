@@ -1,4 +1,8 @@
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 export const useMessage = () => {
   return {
     // 消息提示

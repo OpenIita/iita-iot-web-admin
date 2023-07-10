@@ -158,7 +158,7 @@ const { queryParams, form, rules } = toRefs<PageData<PostForm, PostQuery>>(data)
 /** 查询岗位列表 */
 const getList = async () => {
   loading.value = true
-  const res = await listPost(queryParams.value)
+  const res: any = await listPost(queryParams.value)
   postList.value = res.data.rows
   total.value = res.total
   loading.value = false

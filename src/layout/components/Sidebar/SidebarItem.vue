@@ -96,7 +96,7 @@ const resolvePath = (routePath:string, routeQuery?:string): any => {
   return getNormalPath(props.basePath + '/' + routePath)
 }
 
-const hasTitle = (title: string | undefined): string => {
+const hasTitle = (title?: string): string => {
   if(!title || title.length <= 5) {
     return ''
   }

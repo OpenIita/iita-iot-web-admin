@@ -16,8 +16,8 @@
         </el-tooltip>
       </template>
       <template #state="scope">
-        <el-tag v-if="scope.row.state === 'running'" type="success" size="mini">运行中</el-tag>
-        <el-tag v-else-if="scope.row.state === 'stopped'" type="danger" size="mini">已停止</el-tag>
+        <el-tag v-if="scope.row.state === 'running'" type="success" size="small">运行中</el-tag>
+        <el-tag v-else-if="scope.row.state === 'stopped'" type="danger" size="small">已停止</el-tag>
       </template>
       <template #triggerExpression1FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">

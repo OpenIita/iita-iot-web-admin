@@ -75,7 +75,7 @@ const queryParams = ref<OnlineQuery>({
 /** 查询登录日志列表 */
 const getList = async () => {
   loading.value = true
-  const res = await initData(queryParams.value)
+  const res: any = await initData(queryParams.value)
   onlineList.value = res.data.rows
   total.value = res.data.total
   loading.value = false

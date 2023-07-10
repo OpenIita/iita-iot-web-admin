@@ -228,7 +228,7 @@ import { ComponentInternalInstance, PropType } from 'vue'
 interface MenuOptionsType {
   menuId: number | string;
   menuName: string;
-  children: MenuOptionsType[] | undefined;
+  children?: MenuOptionsType[];
 }
 
 const subColumns = ref<any>([])

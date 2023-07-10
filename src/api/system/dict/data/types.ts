@@ -18,7 +18,7 @@ export interface DictDataVO extends BaseEntity {
 
 export interface DictDataForm {
   dictType?: string
-  dictCode: string | undefined
+  dictCode?: string
   dictLabel: string
   dictValue: string
   cssClass: string
