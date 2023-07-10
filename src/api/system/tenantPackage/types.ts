@@ -12,7 +12,7 @@ export interface TenantPkgQuery extends PageQuery {
 }
 
 export interface TenantPkgForm {
-  packageId: string | number | undefined
+  packageId?: string | number
   packageName: string
   menuIds: string
   remark: string
