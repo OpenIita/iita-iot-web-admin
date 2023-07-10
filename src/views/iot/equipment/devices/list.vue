@@ -486,7 +486,7 @@ const handleDelete = async (row: any) => {
   if (row instanceof Array) {
     await deleteBatchDevices(row.map(m => m.id))
   } else {
-    await deleteDevices(row)
+    await deleteDevices(row.id)
   }
   ElMessage.success('删除成功!')
   state.loading = false
