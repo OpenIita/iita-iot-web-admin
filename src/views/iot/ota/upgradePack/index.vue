@@ -6,15 +6,32 @@
     :total="state.total"
     v-model:page="state.page"
     v-model:query="state.query"
+    :tableProps="{
+      editBtn: false,
+    }"
     @on-load="getData"
     @saveFun="onSave"
+    @delFun="onDelete"
     :column="column"
   >
+    <template #urlForm="{ row }">
+      <file-upload
+        v-model="row.url"
+        :is-show-tip="false"
+        :file-size="10000"
+        :limit="1"
+        :file-type="[]"
+        uploadUrl="/ota/package/upload"
+        uploadType="url"
+        @uploadSuccess="(list) => uploadSuccess(row, list)"
+      ></file-upload>
+    </template>
   </yt-crud>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { getUpgradePack, addUpgradePack } from '../api/upgradePack.api'
+import { getUpgradePack, addUpgradePack, delUpgradePack } from '../api/upgradePack.api'
+
 const column: IColumn[] = [
   {
     label: 'ID',
@@ -29,43 +46,62 @@ const column: IColumn[] = [
     label: '升级包',
     key: 'url',
     type: 'upload',
+    formSlot: true,
     componentProps: {
-      isShowTip: false,
-      fileSize: 10000000,
-      limit: 1,
-      fileType: [],
-      uploadUrl: '/ota/package/upload',
-      uploadType: 'url',
-    }
+
+    },
+    rules: [{
+      required: true, message: '请上传升级包',
+    }]
   },
   {
     label: '是否分包',
     key: 'isDiff',
     type: 'switch',
+    componentProps: {
+      defaultValue: false,
+    }
   },
   {
     label: '签名方式',
     key: 'signMethod',
+    type: 'select',
+    componentProps: {
+      defaultValue: 'md5',
+      options: [{
+        label: 'md5',
+        value: 'md5',
+      }]
+    }
   },
   {
     label: '签名',
-    key: 'versions',
+    key: 'sign',
+    rules: [{
+      required: true, message: '请输入签名',
+    }]
   },
   {
     label: '版本',
     key: 'version',
+    rules: [{
+      required: true, message: '请输入版本',
+    }]
   },
   {
     label: '模块',
     key: 'module',
+    rules: [{
+      required: true, message: '请输入模块',
+    }]
   },
   {
-    label: '包大小',
-    key: 'module',
+    label: '包大小(KB)',
+    key: 'size',
   },
   {
     label: '描述',
-    key: 'modules',
+    key: 'desc',
     hide: true,
     componentProps: {
       type: 'textarea',
@@ -84,6 +120,12 @@ const state = reactive({
   loading: false,
   query: {},
 })
+const uploadSuccess = (row, list) => {
+  console.log(row, list)
+  if (list?.length > 0) {
+    row.size = parseInt((list[0].size / 1024).toString())
+  }
+}
 const onSave = ({ type, data, cancel }: any) => {
   addUpgradePack(toRaw(data)).then(res => {
     ElMessage.success('新增成功')
@@ -100,6 +142,15 @@ const getData = () => {
     state.total = res.data.total
   })
   state.loading = false
+}
+const onDelete = (row) => {
+  state.loading = true
+  delUpgradePack(row.id).then(res => {
+    ElMessage.success('删除成功!')
+    getData()
+  }).finally(() => {
+    state.loading = false
+  })
 }
 </script>
 

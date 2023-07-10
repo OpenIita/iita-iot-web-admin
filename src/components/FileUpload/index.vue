@@ -71,7 +71,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
-    default: () => ['doc', 'xls', 'ppt', 'txt', 'pdf'],
+    default: () => ['png', 'jpg', 'jpeg'],
   },
   // 是否显示提示
   isShowTip: {
@@ -94,7 +94,7 @@ const props = defineProps({
 })
 const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
-const emit = defineEmits(['update:modelValue', 'stringSuccess'])
+const emit = defineEmits(['update:modelValue', 'stringSuccess', 'uploadSuccess'])
 const number = ref(0)
 const uploadList = ref<any[]>([])
 
@@ -186,7 +186,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
     return
   }
   if (res.code === 200) {
-    uploadList.value.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId })
+    uploadList.value.push({ name: res.data.fileName || res.data.originalName, url: res.data.url, ossId: res.data.ossId, size: res.data.size })
     uploadedSuccessfully()
   } else {
     number.value--
@@ -200,7 +200,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
 // 删除文件
 const handleDelete = (index: number) => {
   let ossId = fileList.value[index].ossId
-  delOss([ossId])
+  if (props.uploadType === 'ossId') delOss([ossId])
   fileList.value.splice(index, 1)
   emit('update:modelValue', listToString(fileList.value))
 }
@@ -211,6 +211,7 @@ const uploadedSuccessfully =() => {
     fileList.value = fileList.value.filter(f => f.url).concat(toRaw(uploadList.value))
     uploadList.value = []
     number.value = 0
+    emit('uploadSuccess', toRaw(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
     proxy?.$modal.closeLoading()
   }
@@ -257,8 +258,12 @@ const listToString = (list: any[], separator?: string) => {
   justify-content: space-between;
   align-items: center;
   color: inherit;
+  padding: 0 6px;
 }
 .ele-upload-list__item-content-action .el-link {
   margin-right: 10px;
+}
+.el-icon-document {
+  padding-right: 8px;
 }
 </style>
