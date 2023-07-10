@@ -16,9 +16,9 @@ export interface OssConfigVO extends BaseEntity {
 }
 
 export interface OssConfigQuery extends PageQuery {
-  configKey: string
-  bucketName: string
-  status: string
+  configKey?: string
+  bucketName?: string
+  status?: string
 }
 
 export interface OssConfigForm {
