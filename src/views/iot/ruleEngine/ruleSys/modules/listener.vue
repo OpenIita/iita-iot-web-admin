@@ -34,7 +34,7 @@
                   <div class="item">
                     <el-row style="width: 100%;">
                       <el-col :span="7">
-                        <el-select v-model="cond.identifier">
+                        <el-select v-model="cond.identifier" @change="(e) => conditionChange(cond, (stateMap.get(item.pk)?.modelItems || []), e)">
                           <el-option-group v-for="group in (stateMap.get(item.pk)?.modelItems || [])" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
@@ -306,6 +306,18 @@ const comparators = ref([
     value: '*',
   },
 ])
+
+const conditionChange = (cond, list, e) => {
+  for (let i in list) {
+    for (let k in list[i].items) {
+      const item = list[i].items[k]
+      if (item.identifier === e) {
+        cond.type = item.type || ''
+        return
+      }
+    }
+  }
+}
 
 
 // 新增条件

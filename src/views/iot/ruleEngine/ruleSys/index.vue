@@ -142,7 +142,6 @@ const onSave = ({type, data, cancel}: any) => {
       conditions: m.conditions.map(m2 => ({
         ...m2,
         device: m.device,
-        type: m.type,
       })),
     }
     return {
@@ -152,14 +151,13 @@ const onSave = ({type, data, cancel}: any) => {
   })
   obj.filters = obj.filters.map(m => {
     const mObj = {
-      type: m.type,
+      type: 'device',
       pk: m.pk,
       deviceDn: m.deviceDn,
       device: m.device,
       conditions: m.conditions.map(m2 => ({
         ...m2,
         device: m.device,
-        type: m.type,
       })),
       deviceRadio: m.deviceRadio,
     }

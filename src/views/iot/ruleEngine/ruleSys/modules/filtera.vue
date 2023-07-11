@@ -36,12 +36,16 @@
                   <div class="item">
                     <el-row style="width: 100%;">
                       <el-col :span="7">
-                        <el-select v-if="item.deviceRadio !== '使用当前设备'" v-model="cond.identifier">
+                        <el-select
+                          v-if="item.deviceRadio !== '使用当前设备'"
+                          v-model="cond.identifier"
+                          @change="(e) => conditionChange(cond, stateMap.get(item.pk), e)"
+                        >
                           <el-option-group v-for="group in stateMap.get(item.pk)" :key="group.name" :label="group.name">
                             <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
                           </el-option-group>
                         </el-select>
-                        <el-select v-else v-model="cond.type">
+                        <el-select v-else v-model="cond.type" @change="handleEmits">
                           <el-option label="设备属性" value="property" key="property"></el-option>
                           <el-option label="设备标签" value="tag" key="tag"></el-option>
                         </el-select>
@@ -171,7 +175,6 @@ watch(() => list.value.length, (newV) => {
 })
 // 新增监听器
 const handleAdd = () => {
-  console.log(list.value)
   list.value.push({
     deviceRadio: '指定设备',
     conditions: [{
@@ -240,6 +243,18 @@ const addParmeter = (cond: any) => {
 const removeParmeter = (index: number, cond: any) => {
   cond.parameters.splice(index, 1)
 }
+const conditionChange = (cond, list, e) => {
+  for (let i in list) {
+    for (let k in list[i].items) {
+      const item = list[i].items[k]
+      if (item.identifier === e) {
+        cond.type = item.type || ''
+        return
+      }
+    }
+  }
+}
+
 onUnmounted(() => {
   list.value = []
 })
