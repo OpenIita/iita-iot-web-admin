@@ -194,6 +194,7 @@ const getName = (str, type: 'id' | 'productKey') => {
   return allData.value.find(f => f[type] === str)?.name || ''
 }
 const name = computed(() => {
+  console.log(props.pk)
   if (props.id) return getName(props.id, 'id')
   if (props.pk) return getName(props.pk, 'productKey')
   return dialogState.data?.name || ''

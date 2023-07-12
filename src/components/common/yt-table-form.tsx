@@ -178,6 +178,7 @@ export default defineComponent({
                                 </Com>
                               ) : (
                                 slots[m.key + 'Form']?.({
+                                  type: dialogObj.type,
                                   column: m,
                                   row: formObj.data,
                                 })
@@ -185,6 +186,7 @@ export default defineComponent({
                             </ElFormItem>
                           ) : (
                             slots[m.key + 'FormItem']?.({
+                              type: dialogObj.type,
                               column: m,
                               row: formObj.data,
                             })

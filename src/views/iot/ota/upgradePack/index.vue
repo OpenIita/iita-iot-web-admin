@@ -8,14 +8,16 @@
     v-model:query="state.query"
     :tableProps="{
       editBtn: false,
+      menuSlot: true,
     }"
     @on-load="getData"
     @saveFun="onSave"
     @delFun="onDelete"
     :column="column"
   >
-    <template #urlForm="{ row }">
+    <template #urlForm="{ row, type }">
       <file-upload
+        v-if="type !== 'view'"
         v-model="row.url"
         :is-show-tip="false"
         :file-size="10000"
@@ -25,33 +27,64 @@
         uploadType="url"
         @uploadSuccess="(list) => uploadSuccess(row, list)"
       ></file-upload>
+      <a v-else :href="row.url" target="_blank">{{ row.url }}</a>
+    </template>
+    <template #productKeyForm="{ row }">
+      <div style="width: 250px;">
+        {{ row.productKey }}
+        <select-product v-model:pk="row.productKey"></select-product>
+      </div>
+    </template>
+    <template #menuSlot="scope">
+      <el-tooltip class="box-item" effect="dark" content="设备升级" placement="top">
+        <el-button link type="primary" icon="Upload" @click="handleUpgrades(scope.row)"></el-button>
+      </el-tooltip>
+      <el-divider direction="vertical" />
+      <el-tooltip class="box-item" effect="dark" content="升级历史" placement="top">
+        <el-button link type="primary" icon="Document" @click="handleHistory(scope.row)"></el-button>
+      </el-tooltip>
     </template>
   </yt-crud>
+  <devices-upgraders ref="devicesUpgradersRef"></devices-upgraders>
+  <history-dialog ref="historyRef"></history-dialog>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getUpgradePack, addUpgradePack, delUpgradePack } from '../api/upgradePack.api'
-
-const column: IColumn[] = [
+import { getProductsList } from '@/views/iot/equipment/api/products.api'
+import SelectProduct from '@/components/YtSelect/select-product.vue'
+import DevicesUpgraders from './modules/devicesUpgrades.vue'
+import HistoryDialog from './modules/history.vue'
+const column = ref<IColumn[]>([
   {
-    label: 'ID',
-    key: 'id',
-    formHide: true,
+    label: '名称',
+    key: 'name',
+    rules: [{
+      required: true, message: '请输入名称',
+    }]
   },
-  // {
-  //   label: 'URL',
-  //   key: 'url',
-  // },
   {
     label: '升级包',
     key: 'url',
     type: 'upload',
     formSlot: true,
-    componentProps: {
-
-    },
+    hide: true,
     rules: [{
       required: true, message: '请上传升级包',
+    }]
+  },
+  {
+    label: '绑定产品',
+    key: 'productKey',
+    formSlot: true,
+    type: 'select',
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'productKey',
+      options: [],
+    },
+    rules: [{
+      required: true, message: '请绑定产品',
     }]
   },
   {
@@ -72,7 +105,10 @@ const column: IColumn[] = [
         label: 'md5',
         value: 'md5',
       }]
-    }
+    },
+    rules: [{
+      required: true, message: '请选择签名方式',
+    }]
   },
   {
     label: '签名',
@@ -108,7 +144,7 @@ const column: IColumn[] = [
       rows: 4,
     }
   },
-]
+])
 
 const data = ref()
 const state = reactive({
@@ -137,6 +173,7 @@ const getData = () => {
   state.loading = true
   getUpgradePack({
     ...state.page,
+    ...state.query,
   }).then((res) => {
     data.value = res.data.rows
     state.total = res.data.total
@@ -151,6 +188,34 @@ const onDelete = (row) => {
   }).finally(() => {
     state.loading = false
   })
+}
+const productOptions = ref<any[]>([])
+const getDict = () => {
+  getProductsList({
+    pageNum: 1,
+    pageSize: 99999,
+  }).then(res => {
+    productOptions.value = res.data.rows || []
+    column.value.forEach(item => {
+      if (item.key === 'productKey') {
+        item.componentProps.options = productOptions.value
+      }
+    })
+  })
+}
+getDict()
+const getProductName = (key: string) => {
+  return productOptions.value.find(f => f.productKey === key)?.name || ''
+}
+// 设备升级
+const devicesUpgradersRef = ref()
+const handleUpgrades = (row) => {
+  devicesUpgradersRef.value.openDialog(row.id)
+}
+// 升级历史
+const historyRef = ref()
+const handleHistory = (row) => {
+  historyRef.value.openDialog(row.id)
 }
 </script>
 

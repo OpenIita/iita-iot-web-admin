@@ -7,6 +7,7 @@ enum Api {
   upgrade = '/ota/device/upgrade',
   upload = '/ota/package/upload',
   result = '/ota/result',
+  devices = '/device/list',
 }
 
 // 获取列表
@@ -54,6 +55,15 @@ export const uploadUpgradePack = (data) => {
 export const resultUpgradePack = (data) => {
   return request({
     url: Api.result,
+    method: 'post',
+    data,
+  })
+}
+
+// 获取升级包设备
+export const getDevices = (data) => {
+  return request({
+    url: Api.devices,
     method: 'post',
     data,
   })
