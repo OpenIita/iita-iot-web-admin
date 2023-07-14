@@ -389,6 +389,28 @@ const column = ref<IColumn[]>([{
     column.value = scope.column
   }
 }, {
+  label: '转换器类型',
+  key: 'converType',
+  type: 'radio',
+  componentProps: {
+    defaultValue: 'custom',
+    options: [{
+      label: '自定义',
+      value: 'custom',
+    }, {
+      label: '静态',
+      value: 'static',
+    }]
+  },
+  formWatch: (scope) => {
+    scope.column.forEach((f: IColumn) => {
+      if (f.key === 'converter') {
+        f.formHide = scope.value === 'static'
+      }
+    })
+    column.value = scope.column
+  }
+}, {
   label: '转换器',
   key: 'converter',
   type: 'select',
