@@ -89,12 +89,7 @@
     <!-- 预览界面 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="80%" top="5vh" append-to-body class="scrollbar">
       <el-tabs v-model="preview.activeName">
-        <el-tab-pane
-          v-for="(value, key) in preview.data"
-          :label="(key as any).substring((key as any).lastIndexOf('/') + 1, (key as any).indexOf('.vm'))"
-          :name="(key as any).substring((key as any).lastIndexOf('/') + 1, (key as any).indexOf('.vm'))"
-          :key="value"
-        >
+        <el-tab-pane v-for="(value, key) in preview.data" :label="key" :name="key" :key="value">
           <el-link :underline="false" icon="DocumentCopy" v-copyText="value" v-copyText:callback="copyTextSuccess" style="float:right"
             >&nbsp;复制</el-link
           >
@@ -139,9 +134,9 @@ const queryParams = ref<TableQuery>({
   dataName: 'master'
 })
 
-const preview = ref <any>({
-  data: {},
-  activeName: 'domain.java'
+const preview = ref({
+  data: {} as Record<string, string>,
+  activeName: ''
 })
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -206,12 +201,19 @@ const resetQuery = () => {
   queryFormRef.value.resetFields()
   handleQuery()
 }
+
+const fileNameRegExp = /([\w._-]+)\.vm$/
 /** 预览按钮 */
 const handlePreview = async (row: TableVO) => {
   const res = await previewTable(row.tableId)
-  preview.value.data = res.data
+  const data: Record<string, string> = {}
+  for (const key in res.data) {
+    // key: vm/java/controller.java.vm => controller.java
+    data[key.match(fileNameRegExp)?.[1] || key] = res.data[key]
+  }
+  preview.value.data = data
   dialog.visible = true
-  preview.value.activeName = 'domain.java'
+  preview.value.activeName = Object.keys(data)[0]
 }
 /** 复制代码成功 */
 const copyTextSuccess = () => {
