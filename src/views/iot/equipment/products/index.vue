@@ -193,7 +193,7 @@ const getNodeTypeNmae = (type) => {
 let cateOptions: any[] = []
 
 const getCateName = (id: string) => {
-  return cateOptions.find(f => f.id === id).name || ''
+  return cateOptions.find(f => f.id === id)?.name || ''
 }
 const data = ref<IProductsVO[]>([])
 const randomString=(len:number)=> {
@@ -345,6 +345,7 @@ const getData = () => {
 // 获取字典
 const getDict = () => {
   getCategoriesAll().then(res => {
+    res = res || {}
     cateOptions = res.data || []
     column.value.forEach(item => {
       if (item.key === 'category') {

@@ -1,7 +1,6 @@
-import { propTypes } from '@/utils/propTypes'
 import { searchProps } from './props/crudProps'
-import { ElButton, ElDatePicker, ElForm, ElFormItem, ElInput, DateModelType } from 'element-plus'
-import { Component, PropType } from 'vue'
+import { ElButton, ElForm, ElFormItem } from 'element-plus'
+import { PropType } from 'vue'
 import { IColumn } from '@/components/common/types/tableCommon'
 import { componentMap, renderOptions } from '@/components/common/render/useRenderComponent'
 

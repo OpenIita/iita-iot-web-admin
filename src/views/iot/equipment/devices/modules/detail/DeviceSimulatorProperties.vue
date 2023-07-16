@@ -7,7 +7,7 @@
             <el-row>
               <el-col :span="18">
                 <el-form-item label="值">
-                  <el-input v-model="fun.row.value" size="small"></el-input>
+                  <el-input v-model="fun.row.value" size="small" />
                 </el-form-item>
               </el-col>
               <el-col :span="4">

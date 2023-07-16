@@ -14,7 +14,7 @@
           @change="regeoCode"
           :loading="state.loading"
         >
-          <el-option v-for="item in state.mapAddrOptions" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+          <el-option v-for="item in state.mapAddrOptions" :key="item.value" :label="item.name" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="设备地图:">

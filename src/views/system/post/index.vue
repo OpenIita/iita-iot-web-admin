@@ -107,6 +107,7 @@
 <script setup name="Post" lang="ts">
 import { listPost, addPost, delPost, getPost, updatePost } from '@/api/system/post'
 import { PostForm, PostQuery, PostVO } from '@/api/system/post/types'
+import { FormInstance } from 'element-plus'
 import { ComponentInternalInstance } from 'vue'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -120,8 +121,8 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 
-const postFormRef = ref(ElForm)
-const queryFormRef = ref(ElForm)
+const postFormRef = ref<FormInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -171,7 +172,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  postFormRef.value.resetFields()
+  postFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -180,7 +181,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 多选框选中数据 */
@@ -210,7 +211,7 @@ const handleUpdate = (row?: PostVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  postFormRef.value.validate(async (valid: boolean) => {
+  postFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updatePost(form.value) : await addPost(form.value)
       proxy?.$modal.msgSuccess('操作成功')

@@ -112,15 +112,15 @@
         <el-form :inline="true" :model="state.formInline" class="user-search">
           <el-form-item>
             <el-select v-model="state.formInline.type" placeholder="请选择日志类型">
-              <el-option label="所有" value=""></el-option>
-              <el-option label="状态" value="state"></el-option>
-              <el-option label="事件" value="event"></el-option>
-              <el-option label="属性" value="property"></el-option>
-              <el-option label="服务" value="service"></el-option>
+              <el-option label="所有" value="" />
+              <el-option label="状态" value="state" />
+              <el-option label="事件" value="event" />
+              <el-option label="属性" value="property" />
+              <el-option label="服务" value="service" />
             </el-select>
           </el-form-item>
           <el-form-item label="搜索：">
-            <el-input v-model="state.formInline.identifier" placeholder="日志识符"></el-input>
+            <el-input v-model="state.formInline.identifier" placeholder="日志识符" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="logSearch">搜索</el-button>
@@ -156,10 +156,10 @@
             <template v-slot="fun">
               <el-form v-model="fun.row" label-width="80px" style="width: 500px">
                 <el-form-item label="值" v-if="fun.row.type == 'property'">
-                  <el-input v-model="fun.row.value" size="small"></el-input>
+                  <el-input v-model="fun.row.value" size="small" />
                 </el-form-item>
                 <el-form-item label="内容" v-else>
-                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4"></el-input>
+                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4" />
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="sendDeviceMsg(fun.row)">发送</el-button>
@@ -167,27 +167,27 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="type" label="功能类型" width="100"> </el-table-column>
-          <el-table-column sortable prop="name" label="功能名称" width="180"> </el-table-column>
-          <el-table-column sortable prop="identifier" label="标识符" width="150"> </el-table-column>
-          <el-table-column sortable prop="dataTypeName" label="数据类型" width="100"> </el-table-column>
-          <el-table-column sortable prop="params" label="数据定义" width="200"> </el-table-column>
+          <el-table-column sortable prop="type" label="功能类型" width="100" />
+          <el-table-column sortable prop="name" label="功能名称" width="180" />
+          <el-table-column sortable prop="identifier" label="标识符" width="150" />
+          <el-table-column sortable prop="dataTypeName" label="数据类型" width="100" />
+          <el-table-column sortable prop="params" label="数据定义" width="200" />
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="设备配置">
         <DeviceConfig :deviceId="state.deviceId" />
       </el-tab-pane>
       <el-tab-pane label="模拟设备">
-        <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail"></DeviceSimulator>
+        <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail" />
       </el-tab-pane>
     </el-tabs>
     <el-dialog :title="state.title" v-model="state.propertyWriteFormVisible" width="40%" @close="closeDialog">
       <el-form label-width="120px" :model="state.propertyWriteForm" ref="propertyWriteForm">
         <div style="display: none">
-          <el-input v-model="state.propertyWriteForm.identifier" type="hidden"></el-input>
+          <el-input v-model="state.propertyWriteForm.identifier" type="hidden" />
         </div>
         <el-form-item label="属性值" prop="value">
-          <el-input v-model="state.propertyWriteForm.value" auto-complete="off"></el-input>
+          <el-input v-model="state.propertyWriteForm.value" auto-complete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -200,9 +200,9 @@
     <el-dialog :title="state.title" v-model="state.serviceFormVisible" width="40%" @close="closeDialog">
       <el-form label-width="120px" :model="state.serviceForm" ref="serviceForm">
         <div>
-          <el-input v-model="state.serviceForm.identifier" type="hidden"></el-input>
-          <el-input v-model="state.serviceForm.productKey" type="hidden"></el-input>
-          <el-input v-model="state.serviceForm.deviceName" type="hidden"></el-input>
+          <el-input v-model="state.serviceForm.identifier" type="hidden" />
+          <el-input v-model="state.serviceForm.productKey" type="hidden" />
+          <el-input v-model="state.serviceForm.deviceName" type="hidden" />
         </div>
         <div v-if="state?.serviceForm?.params.length === 0">是否确认调用？</div>
         <el-form-item
@@ -211,7 +211,7 @@
           :label="param.name + '(' + param.identifier + ')'"
           prop="params"
         >
-          <el-input v-model="param.value" auto-complete="off"></el-input>
+          <el-input v-model="param.value" auto-complete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -224,13 +224,13 @@
     <el-dialog title="添加设备标签" v-model="state.showAddTag" width="400px">
       <el-form ref="formRef" :model="state.tagForm" :rules="state.rules" label-width="80px">
         <el-form-item label="标签名称" prop="name">
-          <el-input v-model="state.tagForm.name"></el-input>
+          <el-input v-model="state.tagForm.name" />
         </el-form-item>
         <el-form-item label="标识符" prop="id">
-          <el-input v-model="state.tagForm.id"></el-input>
+          <el-input v-model="state.tagForm.id" />
         </el-form-item>
         <el-form-item label="标签值" prop="value">
-          <el-input v-model="state.tagForm.value"></el-input>
+          <el-input v-model="state.tagForm.value" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitAddTag">提交</el-button>

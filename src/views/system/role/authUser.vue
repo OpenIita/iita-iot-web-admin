@@ -70,8 +70,7 @@ import { UserQuery } from '@/api/system/user/types'
 import { ComponentInternalInstance } from 'vue'
 import { UserVO } from '@/api/system/user/types'
 import SelectUser from './selectUser.vue'
-// import { ElForm, ElSelect} from 'element-plus';
-
+import { FormInstance } from 'element-plus'
 
 const route = useRoute()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -84,7 +83,7 @@ const multiple = ref(true)
 const total = ref(0)
 const userIds = ref<Array<string | number>>([])
 
-const queryFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
 const selectRef = ref(SelectUser)
 
 const queryParams = reactive<UserQuery>({
@@ -114,8 +113,8 @@ const handleQuery=() => {
   getList()
 }
 /** 重置按钮操作 */
-const resetQuery=() =>{
-  queryFormRef.value.resetFields()
+const resetQuery=() => {
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 // 多选框选中数据
@@ -148,5 +147,3 @@ onMounted(() => {
   getList()
 })
 </script>
-
-<style lang="scss" scoped></style>

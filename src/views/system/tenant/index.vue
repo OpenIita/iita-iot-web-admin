@@ -144,7 +144,7 @@ import { selectTenantPackage } from '@/api/system/tenantPackage'
 import { TenantForm, TenantQuery, TenantVO } from '@/api/system/tenant/types'
 import { TenantPkgVO } from '@/api/system/tenantPackage/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
@@ -158,8 +158,8 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 
-const queryFormRef = ref(ElForm)
-const tenantFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const tenantFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -251,7 +251,7 @@ const cancel = () => {
 // 表单重置
 const reset = () => {
   form.value = {...initFormData}
-  tenantFormRef.value.resetFields()
+  tenantFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -262,7 +262,7 @@ const handleQuery = () => {
 
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 
@@ -300,7 +300,7 @@ const handleUpdate = (row?: TenantVO) => {
 
 /** 提交按钮 */
 const submitForm = () => {
-  tenantFormRef.value.validate(async (valid: boolean) => {
+  tenantFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       buttonLoading.value = true
       if (form.value.id) {

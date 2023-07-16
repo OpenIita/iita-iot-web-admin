@@ -132,6 +132,7 @@
 import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from '@/api/system/dept'
 import { ComponentInternalInstance } from 'vue'
 import { DeptForm, DeptQuery, DeptVO } from '@/api/system/dept/types'
+import { FormInstance, TableInstance } from 'element-plus'
 
 interface DeptOptionsType {
   id: number | string
@@ -153,9 +154,9 @@ const dialog = reactive<DialogOption>({
   title: '',
 })
 
-const deptTableRef = ref(ElTable)
-const queryFormRef = ref(ElForm)
-const deptFormRef = ref(ElForm)
+const deptTableRef = ref<TableInstance>()
+const queryFormRef = ref<FormInstance>()
+const deptFormRef = ref<FormInstance>()
 
 const initFormData: DeptForm = {
   id: undefined,
@@ -204,7 +205,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  deptFormRef.value.resetFields()
+  deptFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -213,7 +214,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 新增按钮操作 */
@@ -241,7 +242,7 @@ const handleToggleExpandAll = () => {
 /** 展开/折叠所有 */
 const toggleExpandAll = (data: DeptVO[], status: boolean) => {
   data.forEach((item) => {
-    deptTableRef.value.toggleRowExpansion(item, status)
+    deptTableRef.value?.toggleRowExpansion(item, status)
     if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
@@ -267,7 +268,7 @@ const handleUpdate = async (row: DeptVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  deptFormRef.value.validate(async (valid: boolean) => {
+  deptFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateDept(form.value) : await addDept(form.value)
       proxy?.$modal.msgSuccess('操作成功')

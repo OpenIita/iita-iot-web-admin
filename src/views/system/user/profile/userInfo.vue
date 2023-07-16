@@ -24,10 +24,9 @@
 
 <script setup lang="ts">
 import { updateUserProfile } from '@/api/system/user'
-import { FormRules } from 'element-plus'
+import { FormInstance, FormRules } from 'element-plus'
 import { ComponentInternalInstance } from 'vue'
 import { PropType } from 'vue'
-import { ElForm } from 'element-plus'
 
 const props = defineProps({
   user: {
@@ -38,7 +37,7 @@ const userForm = computed(() => props.user)
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
-const userRef = ref(ElForm)
+const userRef = ref<FormInstance>()
 
 const rules = ref<FormRules>({
   nickName: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
@@ -49,7 +48,7 @@ const rules = ref<FormRules>({
 
 /** 提交按钮 */
 const submit = () => {
-  userRef.value.validate(async (valid: boolean) => {
+  userRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       await updateUserProfile(props.user)
       proxy?.$modal.msgSuccess('修改成功')

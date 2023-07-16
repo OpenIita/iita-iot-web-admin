@@ -33,24 +33,24 @@
               <el-row :gutter="10">
                 <el-col :span="7">
                   <el-select v-model="connection.protocol" @change="handleProtocolChange">
-                    <el-option label="ws://" value="ws"></el-option>
-                    <el-option label="wss://" value="wss"></el-option>
+                    <el-option label="ws://" value="ws" />
+                    <el-option label="wss://" value="wss" />
                   </el-select>
                 </el-col>
                 <el-col :span="17">
-                  <el-input v-model="connection.host"></el-input>
+                  <el-input v-model="connection.host" />
                 </el-col>
               </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="port" label="Port">
-              <el-input v-model.number="connection.port" type="number" placeholder="8083/8084"></el-input>
+              <el-input v-model.number="connection.port" type="number" placeholder="8083/8084" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="endpoint" label="Mountpoint">
-              <el-input v-model="connection.endpoint" placeholder="/mqtt"></el-input>
+              <el-input v-model="connection.endpoint" placeholder="/mqtt" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -60,12 +60,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="username" label="Username">
-              <el-input v-model="connection.username"></el-input>
+              <el-input v-model="connection.username" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="password" label="Password">
-              <el-input v-model="connection.password"></el-input>
+              <el-input v-model="connection.password" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -78,10 +78,10 @@
         </el-col>
         <el-col :span="2">
           <el-col span="12">
-            <el-button size="small" icon="el-icon-arrow-down" v-if="!showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-down" v-if="!showSubFlg" @click="showSubFlg=!showSubFlg" />
           </el-col>
           <el-col span="12">
-            <el-button size="small" icon="el-icon-arrow-up" v-if="showSubFlg" @click="showSubFlg=!showSubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-up" v-if="showSubFlg" @click="showSubFlg=!showSubFlg" />
           </el-col>
         </el-col>
       </el-row>
@@ -90,23 +90,23 @@
         <el-table-column label="说明" width="120">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.desc" placement="top-start">
-              <el-input v-model="scope.row.desc"></el-input>
+              <el-input v-model="scope.row.desc" />
             </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column label="topic" width="250">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.topic" placement="top-start">
-              <el-input v-model="scope.row.topic" placeholder="topic"></el-input>
+              <el-input v-model="scope.row.topic" placeholder="topic" />
             </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column label="qos">
           <template #default="scope">
             <el-select v-model="scope.row.qos" placeholder="qos">
-              <el-option label="0" value="0"></el-option>
-              <el-option label="1" value="1"></el-option>
-              <el-option label="2" value="2"></el-option>
+              <el-option label="0" value="0" />
+              <el-option label="1" value="1" />
+              <el-option label="2" value="2" />
             </el-select>
           </template>
         </el-table-column>
@@ -122,16 +122,16 @@
                 <el-button size="medium" v-if="scope.row.sub" @click="doUnSubscribe(scope.$index, scope.row)">取消订阅</el-button>
               </el-col>
 
-              <el-col :span="4"
-                ><el-button
+              <el-col :span="4">
+                <el-button
                   type="danger"
                   :disabled="scope.row.sub"
                   size="small"
                   @click="handleDelete(scope.$index, scope.row)"
                   circle
                   icon="el-icon-minus"
-                ></el-button
-              ></el-col>
+                />
+              </el-col>
             </el-row>
           </template>
         </el-table-column>
@@ -145,10 +145,10 @@
         </el-col>
         <el-col :span="2">
           <el-col span="12">
-            <el-button size="small" icon="el-icon-arrow-down" v-if="!showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-down" v-if="!showPubFlg" @click="showPubFlg=!showPubFlg" />
           </el-col>
           <el-col span="12">
-            <el-button size="small" icon="el-icon-arrow-up" v-if="showPubFlg" @click="showPubFlg=!showPubFlg"></el-button>
+            <el-button size="small" icon="el-icon-arrow-up" v-if="showPubFlg" @click="showPubFlg=!showPubFlg" />
           </el-col>
         </el-col>
       </el-row>
@@ -156,30 +156,30 @@
         <el-table-column label="说明" width="120" fixed="left">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.desc" placement="top-start">
-              <el-input v-model="scope.row.desc"></el-input>
+              <el-input v-model="scope.row.desc" />
             </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column label="topic" width="150">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.desc" placement="top-start">
-              <el-input v-model="scope.row.topic"></el-input>
+              <el-input v-model="scope.row.topic" />
             </el-tooltip>
           </template>
         </el-table-column>
 
         <el-table-column label="内容" width="350">
           <template #default="scope">
-            <el-input v-model="scope.row.payload" type="textarea"></el-input>
+            <el-input v-model="scope.row.payload" type="textarea" />
           </template>
         </el-table-column>
 
         <el-table-column label="qos">
           <template #default="scope">
             <el-select v-model="scope.row.qos" placeholder="qos">
-              <el-option label="0" value="0"></el-option>
-              <el-option label="1" value="1"></el-option>
-              <el-option label="2" value="2"></el-option>
+              <el-option label="0" value="0" />
+              <el-option label="1" value="1" />
+              <el-option label="2" value="2" />
             </el-select>
           </template>
         </el-table-column>
@@ -191,26 +191,26 @@
                 <el-button size="medium" :disabled="!client.connected" @click="doPublish(scope.$index, scope.row)">发送</el-button>
               </el-col>
 
-              <el-col :span="4"
-                ><el-button
+              <el-col :span="4">
+                <el-button
                   type="danger"
                   :disabled="scope.row.sub"
                   size="small"
                   @click="handleDeletePublish(scope.$index, scope.row)"
                   circle
                   icon="el-icon-minus"
-                ></el-button
-              ></el-col>
+                />
+              </el-col>
             </el-row>
           </template>
         </el-table-column>
       </el-table>
-      <el-button class="mt-4" style="width: 100%" @click="handleAddPublish" icon="el-icon-plus" v-if="showPubFlg"></el-button>
+      <el-button class="mt-4" style="width: 100%" @click="handleAddPublish" icon="el-icon-plus" v-if="showPubFlg" />
     </el-card>
     <el-card shadow="always" style="margin-bottom:30px;">
       <div class="emq-title">Receive</div>
       <el-col :span="24">
-        <el-input type="textarea" :rows="3" style="margin-bottom: 15px" v-model="receiveNews" readOnly></el-input>
+        <el-input type="textarea" :rows="3" style="margin-bottom: 15px" v-model="receiveNews" readOnly />
       </el-col>
     </el-card>
   </div>

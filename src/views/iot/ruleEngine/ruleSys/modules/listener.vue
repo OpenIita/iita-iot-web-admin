@@ -36,7 +36,7 @@
                       <el-col :span="7">
                         <el-select v-model="cond.identifier" @change="(e) => conditionChange(cond, (stateMap.get(item.pk)?.modelItems || []), e)">
                           <el-option-group v-for="group in (stateMap.get(item.pk)?.modelItems || [])" :key="group.name" :label="group.name">
-                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
+                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier" />
                           </el-option-group>
                         </el-select>
                       </el-col>
@@ -49,16 +49,16 @@
                                 :label="p.name"
                                 :value="p.identifier"
                                 :key="p.identifier"
-                              ></el-option>
+                              />
                             </el-select>
                           </el-col>
                           <el-col :span="6">
                             <el-select v-model="param.comparator">
-                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
+                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value" />
                             </el-select>
                           </el-col>
                           <el-col :span="5">
-                            <el-input v-model="param.value" auto-complete="off"></el-input>
+                            <el-input v-model="param.value" auto-complete="off" />
                           </el-col>
                           <el-col :span="1">
                             <el-button

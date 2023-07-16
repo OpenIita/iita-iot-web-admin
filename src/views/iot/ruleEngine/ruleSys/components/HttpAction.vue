@@ -2,7 +2,7 @@
   <div>
     <el-form label-width="120px" v-for="service in config.services" :key="service">
       <el-form-item label="推送地址">
-        <el-input v-model="service.url" auto-complete="off" placeholder="http://或https://开头"></el-input>
+        <el-input v-model="service.url" auto-complete="off" placeholder="http://或https://开头" />
       </el-form-item>
       <el-form-item label="转换脚本">
         <code-editor style="width: 100%" v-model:code="service.script"></code-editor>

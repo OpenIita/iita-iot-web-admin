@@ -48,7 +48,7 @@ import { authUserSelectAll, unallocatedUserList } from '@/api/system/role'
 import { UserVO } from '@/api/system/user/types'
 import { UserQuery } from '@/api/system/user/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElForm, ElTable } from 'element-plus'
+import { FormInstance, TableInstance } from 'element-plus'
 
 
 const props = defineProps({
@@ -73,8 +73,8 @@ const queryParams = reactive<UserQuery>({
   phonenumber: undefined
 })
 
-const tableRef = ref(ElTable)
-const queryFormRef = ref(ElForm)
+const tableRef = ref<TableInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const show = () => {
   queryParams.roleId = props.roleId
@@ -86,7 +86,7 @@ const show = () => {
  * 选择行
  */
 const clickRow = (row: any) => {
-  tableRef.value.toggleRowSelection(row)
+  tableRef.value?.toggleRowSelection(row, true)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: UserVO[]) => {
@@ -106,7 +106,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   getList()
 }
 

@@ -10,7 +10,7 @@
           <el-table-column label="字段列名" prop="columnName" min-width="10%" :show-overflow-tooltip="true" />
           <el-table-column label="字段描述" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.columnComment"></el-input>
+              <el-input v-model="scope.row.columnComment" />
             </template>
           </el-table-column>
           <el-table-column label="物理类型" prop="columnType" min-width="10%" :show-overflow-tooltip="true" />
@@ -29,7 +29,7 @@
           </el-table-column>
           <el-table-column label="java属性" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.javaField"></el-input>
+              <el-input v-model="scope.row.javaField" />
             </template>
           </el-table-column>
 

@@ -2,10 +2,10 @@
   <div>
     <el-form label-width="120px" v-for="(service,index) in config.services" :key="index">
       <el-form-item label="TCP服务地址">
-        <el-input v-model="service.host" auto-complete="off" placeholder="IP地址或域名"></el-input>
+        <el-input v-model="service.host" auto-complete="off" placeholder="IP地址或域名" />
       </el-form-item>
       <el-form-item label="TCP服务端口">
-        <el-input v-model="service.port" auto-complete="off" placeholder="输入端口" type="number"></el-input>
+        <el-input v-model="service.port" auto-complete="off" placeholder="输入端口" type="number" />
       </el-form-item>
       <el-form-item label="转换脚本">
         <code-editor style="width: 100%" :code="service.script"></code-editor>

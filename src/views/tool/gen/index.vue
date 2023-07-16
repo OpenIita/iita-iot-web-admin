@@ -107,7 +107,7 @@ import { TableQuery, TableVO } from '@/api/tool/gen/types'
 import router from '@/router'
 import importTable from './importTable.vue'
 import { ComponentInternalInstance } from 'vue'
-import { ElForm, DateModelType } from 'element-plus'
+import { DateModelType, FormInstance } from 'element-plus'
 
 const route = useRoute()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -123,7 +123,7 @@ const tableNames = ref<Array<string>>([])
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 const uniqueId = ref('')
 
-const queryFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
 const importRef = ref(importTable)
 
 const queryParams = ref<TableQuery>({
@@ -151,7 +151,7 @@ onActivated(() => {
     uniqueId.value = time as string
     queryParams.value.pageNum = Number(route.query.pageNum)
     dateRange.value = ['', '']
-    queryFormRef.value.resetFields()
+    queryFormRef.value?.resetFields()
     getList()
   }
 })
@@ -198,7 +198,7 @@ const openImportTable = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 

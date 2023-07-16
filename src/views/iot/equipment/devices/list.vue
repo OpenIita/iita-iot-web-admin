@@ -220,11 +220,11 @@ const router = useRouter()
 const handleView = (row: any) => {
   if (!row.id) return
   let showMap=false
-  productOptions.value.forEach((p)=>{
-          if (p.productKey == row.productKey ) {
-            showMap=p.isOpenLocate
-          }
-        })
+  productOptions.value.forEach((p) => {
+    if (p.productKey == row.productKey ) {
+      showMap=p.isOpenLocate
+    }
+  })
   router.push(`devicesDetail/${row.id}?showMap=${showMap}`)
 }
 const nodeTypeOptions =  [

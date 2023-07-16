@@ -1,7 +1,7 @@
 <template>
   <el-input class="cu-input" :placeholder="placeholder" size="small" v-model.trim="name" @clear="onClear" clearable @click="handleSelect">
     <template #append>
-      <el-button type="primaqry" @click="handleSelect">选择</el-button>
+      <el-button type="primary" @click="handleSelect">选择</el-button>
     </template>
   </el-input>
   <el-dialog title="选择设备" v-model="dialogState.show" width="1200px">

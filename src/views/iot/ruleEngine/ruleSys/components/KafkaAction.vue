@@ -2,15 +2,15 @@
   <div>
     <el-form label-width="120px" v-for="service in configRef.services" :key="service">
       <el-form-item label="broker地址">
-        <el-input v-model="service.services" auto-complete="off" placeholder="127.0.0.1:9092,127.0.0.1:9093"></el-input>
+        <el-input v-model="service.services" auto-complete="off" placeholder="127.0.0.1:9092,127.0.0.1:9093" />
       </el-form-item>
       <el-form-item label="ACK">
         <el-select v-model="service.ack" placeholder="请选择应答级别">
-          <el-option v-for="item in ackOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          <el-option v-for="item in ackOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="转换脚本">
-        <code-editor style="width: 100%" :code="service.script"></code-editor>
+        <code-editor style="width: 100%" :code="service.script" />
       </el-form-item>
     </el-form>
   </div>

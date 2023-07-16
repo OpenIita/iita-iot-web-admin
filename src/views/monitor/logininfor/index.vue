@@ -100,7 +100,7 @@
 import { list, delLoginInfo, cleanLoginInfo, unlockLoginInfo } from '@/api/monitor/loginInfo'
 import { ComponentInternalInstance } from 'vue'
 import { LoginInfoQuery, LoginInfoVO } from '@/api/monitor/loginInfo/types'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance, TableInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_common_status } = toRefs<any>(proxy?.useDict('sys_common_status'))
@@ -116,8 +116,8 @@ const total = ref(0)
 const dateRange = ref<[DateModelType,DateModelType]>(['', ''])
 const defaultSort = ref<any>({ prop: 'loginTime', order: 'descending' })
 
-const queryFormRef = ref(ElForm)
-const loginInfoTableRef = ref(ElTable)
+const queryFormRef = ref<FormInstance>()
+const loginInfoTableRef = ref<TableInstance>()
 // 查询参数
 const queryParams = ref<LoginInfoQuery>({
   pageNum: 1,
@@ -145,9 +145,9 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.pageNum = 1
-  loginInfoTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
+  loginInfoTableRef.value?.sort(defaultSort.value.prop, defaultSort.value.order)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: LoginInfoVO[]) => {

@@ -16,38 +16,37 @@
           :boolItem="state.boolItem"
           :isProperty="true"
           :isUpdate="!state.isAdd"
-        ></property-model>
+        />
       </div>
       <div v-if="isSelectType('service')">
-        <div>
+        <div class="type-service">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="state.modelForm.name" auto-complete="off"></el-input>
+            <el-input v-model="state.modelForm.name" auto-complete="off" />
           </el-form-item>
           <el-form-item label="标识符" prop="identifier">
-            <el-input v-model="state.modelForm.identifier" auto-complete="off"></el-input>
+            <el-input v-model="state.modelForm.identifier" auto-complete="off" />
           </el-form-item>
           <el-form-item label="输入参数" prop="inputData">
-            <ModelParams :modelParams="state.modelForm.raw.inputData" :is-update="!state.isAdd"></ModelParams>
+            <ModelParams :modelParams="state.modelForm.raw.inputData" :is-update="!state.isAdd" />
           </el-form-item>
           <el-form-item label="输出参数" prop="outputData">
-            <ModelParams :modelParams="state.modelForm.raw.outputData" :is-update="!state.isAdd"></ModelParams>
+            <ModelParams :modelParams="state.modelForm.raw.outputData" :is-update="!state.isAdd" />
           </el-form-item>
         </div>
       </div>
       <div v-if="isSelectType('event')">
-        <div>
+        <div class="type-event">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="state.modelForm.name" auto-complete="off"></el-input>
+            <el-input v-model="state.modelForm.name" auto-complete="off" />
           </el-form-item>
           <el-form-item label="标识符" prop="identifier">
-            <el-input v-model="state.modelForm.identifier" auto-complete="off"></el-input>
+            <el-input v-model="state.modelForm.identifier" auto-complete="off" />
           </el-form-item>
           <el-form-item label="输出参数" prop="outputData">
-            <ModelParams :modelParams="state.modelForm.raw.outputData"></ModelParams>
+            <ModelParams :modelParams="state.modelForm.raw.outputData" />
           </el-form-item>
         </div>
       </div>
-      <el-form-item> </el-form-item>
       <el-form-item>
         <el-button @click="cancelEdit">取消</el-button>
         <el-button @click="saveThingModel()" type="primary">保存</el-button>
@@ -155,74 +154,73 @@ const saveThingModel = async () => {
   const valid = await fun()
   if (valid) {
     if (state.isAdd) {
-    if (state.modelForm.type == 'property') {
-      //删除旧的
-      const idx = state.model.properties.findIndex(
-        (p: any) => p.identifier == state.modelForm.raw.identifier
-      )
-      if (idx >= 0) {
-        state.model.properties.splice(idx, 1)
-      }
+      if (state.modelForm.type == 'property') {
+        //删除旧的
+        const idx = state.model.properties.findIndex(
+          (p: any) => p.identifier == state.modelForm.raw.identifier
+        )
+        if (idx >= 0) {
+          state.model.properties.splice(idx, 1)
+        }
+        state.model.properties.push(newProperty())
+      } else if (state.modelForm.type == 'service') {
+        //删除旧的
+        const idx = state.model.services.findIndex(
+          (p: any) => p.identifier == state.modelForm.raw.identifier
+        )
+        if (idx >= 0) {
+          state.model.services.splice(idx, 1)
+        }
 
-      state.model.properties.push(newProperty())
-    } else if (state.modelForm.type == 'service') {
-      //删除旧的
-      const idx = state.model.services.findIndex(
-        (p: any) => p.identifier == state.modelForm.raw.identifier
-      )
-      if (idx >= 0) {
-        state.model.services.splice(idx, 1)
-      }
+        state.model.services.push({
+          identifier: state.modelForm.identifier,
+          name: state.modelForm.name,
+          inputData: state.modelForm.raw.inputData,
+          outputData: state.modelForm.raw.outputData,
+        })
+      } else if (state.modelForm.type == 'event') {
+        //删除旧的
+        const idx = state.model.events.findIndex(
+          (p: any) => p.identifier == state.modelForm.raw.identifier
+        )
+        if (idx >= 0) {
+          state.model.events.splice(idx, 1)
+        }
 
-      state.model.services.push({
-        identifier: state.modelForm.identifier,
-        name: state.modelForm.name,
-        inputData: state.modelForm.raw.inputData,
-        outputData: state.modelForm.raw.outputData,
-      })
-    } else if (state.modelForm.type == 'event') {
-      //删除旧的
-      const idx = state.model.events.findIndex(
-        (p: any) => p.identifier == state.modelForm.raw.identifier
-      )
-      if (idx >= 0) {
-        state.model.events.splice(idx, 1)
+        state.model.events.push({
+          identifier: state.modelForm.identifier,
+          name: state.modelForm.name,
+          outputData: state.modelForm.raw.outputData,
+        })
       }
-
-      state.model.events.push({
-        identifier: state.modelForm.identifier,
-        name: state.modelForm.name,
-        outputData: state.modelForm.raw.outputData,
-      })
+    } else {
+      if (state.modelForm.type == 'property') {
+        let prop = newProperty()
+        for (var i = 0; i < state.model.properties?.length; i++) {
+          if (state.model.properties[i].identifier == prop.identifier) {
+            state.model.properties[i] = prop
+          }
+        }
+      } else if (state.modelForm.type == 'service') {
+        state.model.services.forEach((s: any) => {
+          if (s.identifier == state.modelForm.identifier) {
+            s.identifier = state.modelForm.identifier
+            s.name = state.modelForm.name
+            s.inputData = state.modelForm.raw.inputData
+            s.outputData = state.modelForm.raw.outputData
+          }
+        })
+      } else if (state.modelForm.type == 'event') {
+        state.model.events.forEach((s: any) => {
+          if (s.identifier == state.modelForm.identifier) {
+            s.identifier = state.modelForm.identifier
+            s.name = state.modelForm.name
+            s.outputData = state.modelForm.raw.outputData
+          }
+        })
+      }
     }
-  } else {
-    if (state.modelForm.type == 'property') {
-      let prop = newProperty()
-      for (var i = 0; i < state.model.properties.length; i++) {
-        if (state.model.properties[i].identifier == prop.identifier) {
-          state.model.properties[i] = prop
-        }
-      }
-    } else if (state.modelForm.type == 'service') {
-      state.model.services.forEach((s: any) => {
-        if (s.identifier == state.modelForm.identifier) {
-          s.identifier = state.modelForm.identifier
-          s.name = state.modelForm.name
-          s.inputData = state.modelForm.raw.inputData
-          s.outputData = state.modelForm.raw.outputData
-        }
-      })
-    } else if (state.modelForm.type == 'event') {
-      state.model.events.forEach((s: any) => {
-        if (s.identifier == state.modelForm.identifier) {
-          s.identifier = state.modelForm.identifier
-          s.name = state.modelForm.name
-          s.outputData = state.modelForm.raw.outputData
-        }
-      })
-    }
-  }
-  submitThingModelChange()
+    submitThingModelChange()
   }
 }
 
@@ -230,5 +228,3 @@ defineExpose({
   openDialog,
 })
 </script>
-
-<style lang="scss" scoped></style>

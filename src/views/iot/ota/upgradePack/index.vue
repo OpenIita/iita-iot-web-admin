@@ -218,5 +218,3 @@ const handleHistory = (row) => {
   historyRef.value.openDialog(row.id)
 }
 </script>
-
-<style lang="scss" scoped></style>

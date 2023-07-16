@@ -107,7 +107,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -125,7 +125,7 @@ import useDictStore from '@/store/modules/dict'
 import { listType, getType, delType, addType, updateType, refreshCache } from '@/api/system/dict/type'
 import { ComponentInternalInstance } from 'vue'
 import { DictTypeForm, DictTypeQuery, DictTypeVO } from '@/api/system/dict/type/types'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
@@ -139,8 +139,8 @@ const multiple = ref(true)
 const total = ref(0)
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 
-const dictFormRef = ref(ElForm)
-const queryFormRef = ref(ElForm)
+const dictFormRef = ref<FormInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -188,7 +188,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  dictFormRef.value.resetFields()
+  dictFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -198,7 +198,7 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 新增按钮操作 */
@@ -228,7 +228,7 @@ const handleUpdate = (row?: DictTypeVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  dictFormRef.value.validate(async (valid: boolean) => {
+  dictFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateType(form.value) : await addType(form.value)
       proxy?.$modal.msgSuccess('操作成功')

@@ -88,7 +88,7 @@
           <el-col :span="12">
             <el-form-item label="公告类型" prop="noticeType">
               <el-select v-model="form.noticeType" placeholder="请选择">
-                <el-option v-for="dict in sys_notice_type" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
+                <el-option v-for="dict in sys_notice_type" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -121,7 +121,7 @@
 import { listNotice, getNotice, delNotice, addNotice, updateNotice } from '@/api/system/notice'
 import { ComponentInternalInstance } from 'vue'
 import { NoticeForm, NoticeQuery, NoticeVO } from '@/api/system/notice/types'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_notice_status, sys_notice_type } = toRefs<any>(proxy?.useDict('sys_notice_status', 'sys_notice_type'))
@@ -134,8 +134,8 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 
-const queryFormRef = ref(ElForm)
-const noticeFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const noticeFormRef = ref<FormInstance>()
 
 
 const dialog = reactive<DialogOption>({
@@ -186,7 +186,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  noticeFormRef.value.resetFields()
+  noticeFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -195,7 +195,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 多选框选中数据 */
@@ -225,7 +225,7 @@ const handleUpdate = (row?: NoticeVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  noticeFormRef.value.validate(async (valid: boolean) => {
+  noticeFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateNotice(form.value) : await addNotice(form.value)
       proxy?.$modal.msgSuccess('修改成功')

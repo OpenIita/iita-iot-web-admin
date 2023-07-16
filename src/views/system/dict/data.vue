@@ -104,12 +104,7 @@
         </el-form-item>
         <el-form-item label="回显样式" prop="listClass">
           <el-select v-model="form.listClass">
-            <el-option
-              v-for="item in listClassOptions"
-              :key="item.value"
-              :label="item.label + '(' + item.value + ')'"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="item in listClassOptions" :key="item.value" :label="item.label + '(' + item.value + ')'" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -118,7 +113,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -138,7 +133,7 @@ import { listData, getData, delData, addData, updateData } from '@/api/system/di
 import { DictTypeVO } from '@/api/system/dict/type/types'
 import { ComponentInternalInstance } from 'vue'
 import { DictDataForm, DictDataQuery, DictDataVO } from '@/api/system/dict/data/types'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
@@ -154,8 +149,8 @@ const total = ref(0)
 const defaultDictType = ref('')
 const typeOptions = ref<DictTypeVO[]>([])
 
-const dataFormRef = ref(ElForm)
-const queryFormRef = ref(ElForm)
+const dataFormRef = ref<FormInstance>()
+const queryFormRef = ref<FormInstance>()
 
 
 const dialog = reactive<DialogOption>({
@@ -231,7 +226,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  dataFormRef.value.resetFields()
+  dataFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -245,7 +240,7 @@ const handleClose = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.dictType = defaultDictType.value
   handleQuery()
 }
@@ -277,7 +272,7 @@ const handleUpdate = (row?: DictDataVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  dataFormRef.value.validate(async (valid: boolean) => {
+  dataFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.dictCode ? await updateData(form.value) : await addData(form.value)
       useDictStore().removeDict(queryParams.value.dictType)

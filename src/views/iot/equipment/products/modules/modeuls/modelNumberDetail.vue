@@ -4,10 +4,10 @@
       <el-form-item label="型号" style="width: 300px" prop="model">
         <el-radio v-model="state.modelType" label="1">默认</el-radio>
         <el-radio v-model="state.modelType" label="2">自定义</el-radio>
-        <el-input v-if="state.modelType == '2'" v-model="productModelForm.model" size="small"></el-input>
+        <el-input v-if="state.modelType == '2'" v-model="productModelForm.model" size="small" />
       </el-form-item>
       <el-form-item v-if="state.modelType == '2'" label="型号名称" style="width: 300px" prop="name">
-        <el-input v-model="productModelForm.name" size="small"></el-input>
+        <el-input v-model="productModelForm.name" size="small" />
       </el-form-item>
       <el-form-item label="状态" prop="state">
         <el-radio-group v-model="productModelForm.state" size="small">
@@ -90,5 +90,3 @@ defineExpose({
   openDialog,
 })
 </script>
-
-<style lang="scss" scoped></style>

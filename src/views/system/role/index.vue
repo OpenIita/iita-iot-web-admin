@@ -136,10 +136,10 @@
             :check-strictly="!form.menuCheckStrictly"
             empty-text="加载中，请稍候"
             :props="{ label: 'label', children: 'children' }"
-          ></el-tree>
+          />
         </el-form-item>
         <el-form-item label="备注">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -161,7 +161,7 @@
         </el-form-item>
         <el-form-item label="权限范围">
           <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
-            <el-option v-for="item in dataScopeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in dataScopeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="数据权限" v-show="form.dataScope === '2'">
@@ -178,7 +178,7 @@
             :check-strictly="!form.deptCheckStrictly"
             empty-text="加载中，请稍候"
             :props="{ label: 'label', children: 'children' }"
-          ></el-tree>
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -197,7 +197,7 @@ import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/m
 import { RoleVO, RoleForm, RoleQuery, DeptTreeOption } from '@/api/system/role/types'
 import { MenuTreeOption, RoleMenuTree } from '@/api/system/menu/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElTree, ElForm, DateModelType } from 'element-plus'
+import { ElTree, DateModelType, FormInstance } from 'element-plus'
 
 const router = useRouter()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -228,9 +228,9 @@ const dataScopeOptions = ref([
   { value: '5', label: '仅本人数据权限' },
 ])
 
-const queryFormRef = ref(ElForm)
-const roleFormRef = ref(ElForm)
-const dataScopeRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const roleFormRef = ref<FormInstance>()
+const dataScopeRef = ref<FormInstance>()
 const menuRef = ref(ElTree)
 const deptRef = ref(ElTree)
 
@@ -293,7 +293,7 @@ const handleQuery = () => {
 /** 重置 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /**删除按钮操作 */
@@ -361,7 +361,7 @@ const reset = () => {
   deptExpand.value = true
   deptNodeAll.value = false
   form.value = initForm
-  roleFormRef.value.resetFields()
+  roleFormRef.value?.resetFields()
 }
 
 /** 添加角色 */
@@ -449,7 +449,7 @@ const getMenuAllCheckedKeys = () => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  roleFormRef.value.validate(async (valid: boolean) => {
+  roleFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.menuIds = getMenuAllCheckedKeys()
       form.value.id ? await updateRole(form.value) : await addRole(form.value)
@@ -498,7 +498,7 @@ const submitDataScope = async () => {
 }
 /** 取消按钮（数据权限）*/
 const cancelDataScope = () => {
-  dataScopeRef.value.resetFields()
+  dataScopeRef.value?.resetFields()
   form.value = { ...initForm }
   openDataScope.value = false
 }

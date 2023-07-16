@@ -4,7 +4,7 @@
       <h3 class="title">{{ title }}</h3>
       <el-form-item prop="tenantId" v-if="tenantEnabled">
         <el-select v-model="registerForm.tenantId" filterable placeholder="请选择/输入公司名称" style="width: 100%">
-          <el-option v-for="item in tenantList" :key="item.tenantId" :label="item.companyName" :value="item.tenantId"> </el-option>
+          <el-option v-for="item in tenantList" :key="item.tenantId" :label="item.companyName" :value="item.tenantId" />
           <template #prefix><svg-icon icon-class="company" class="el-input__icon input-icon" /></template>
         </el-select>
       </el-form-item>
@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { getCodeImg, register, getTenantList } from '@/api/login'
 import { RegisterForm, TenantVO } from '@/api/types'
-import { FormRules } from 'element-plus'
+import { FormInstance, FormRules } from 'element-plus'
 import { to } from 'await-to-js'
 
 const router = useRouter()
@@ -106,12 +106,12 @@ const registerRules: FormRules = {
 const codeUrl = ref('')
 const loading = ref(false)
 const captchaEnabled = ref(true)
-const registerRef = ref(ElForm)
+const registerRef = ref<FormInstance>()
 // 租户列表
 const tenantList = ref<TenantVO[]>([])
 
 const handleRegister = () => {
-  registerRef.value.validate(async (valid: boolean) => {
+  registerRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       loading.value = true
       const [err] = await to(register(registerForm.value))

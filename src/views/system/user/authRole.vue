@@ -58,7 +58,7 @@
 import { RoleVO } from '@/api/system/role/types'
 import { getAuthRole, updateAuthRole } from '@/api/system/user'
 import { UserForm } from '@/api/system/user/types'
-import { ElTable } from 'element-plus'
+import { TableInstance } from 'element-plus'
 import { ComponentInternalInstance } from 'vue'
 const route = useRoute()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -75,11 +75,11 @@ const form = ref<Partial<UserForm>>({
   userId: undefined,
 })
 
-const tableRef = ref(ElTable)
+const tableRef = ref<TableInstance>()
 
 /** 单击选中行数据 */
 const clickRow = (row: RoleVO) => {
-  tableRef.value.toggleRowSelection(row)
+  tableRef.value?.toggleRowSelection(row, true)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: RoleVO[]) => {
@@ -114,7 +114,7 @@ const getList = async () => {
     await nextTick(() => {
       roles.value.forEach((row) => {
         if (row?.flag) {
-          tableRef.value.toggleRowSelection(row)
+          tableRef.value?.toggleRowSelection(row, true)
         }
       })
     })

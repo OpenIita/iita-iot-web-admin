@@ -2,7 +2,7 @@
   <basic-layout>
     <yt-table-search :column="column" @handle-search="search">
       <template #slots="item, formModel">
-        <el-input v-model="formModel[item.key]"></el-input>
+        <el-input v-model="formModel[item.key]" />
       </template>
     </yt-table-search>
     <yt-table-fun @handle-add="handleAdd()">

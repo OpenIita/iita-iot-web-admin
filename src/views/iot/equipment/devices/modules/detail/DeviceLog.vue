@@ -3,15 +3,15 @@
     <el-form :inline="true" :model="formInline" class="user-search">
       <el-form-item>
         <el-select v-model="formInline.type" placeholder="请选择日志类型">
-          <el-option label="所有" value=""></el-option>
-          <el-option label="状态" value="state"></el-option>
-          <el-option label="事件" value="event"></el-option>
-          <el-option label="属性" value="property"></el-option>
-          <el-option label="服务" value="service"></el-option>
+          <el-option label="所有" value="" />
+          <el-option label="状态" value="state" />
+          <el-option label="事件" value="event" />
+          <el-option label="属性" value="property" />
+          <el-option label="服务" value="service" />
         </el-select>
       </el-form-item>
       <el-form-item label="搜索：">
-        <el-input v-model="formInline.identifier" placeholder="日志识符"></el-input>
+        <el-input v-model="formInline.identifier" placeholder="日志识符" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="logSearch">搜索</el-button>

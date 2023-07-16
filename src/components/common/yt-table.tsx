@@ -123,7 +123,6 @@ export default defineComponent({
                 return f[valueName] == toRaw(row[column.key])
               })
               return obj ? obj[labelName] : row[column.key]
-              break
             case 'switch':
               return <ElSwitch value={scope?.row[column.key]}></ElSwitch>
             case 'image':

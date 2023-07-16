@@ -20,12 +20,12 @@
 import { updateUserPwd } from '@/api/system/user'
 import { ComponentInternalInstance } from 'vue'
 import { ResetPwdForm } from '@/api/system/user/types'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 
-const pwdRef = ref(ElForm)
+const pwdRef = ref<FormInstance>()
 
 const user = ref<ResetPwdForm>({
   oldPassword: '',
@@ -48,7 +48,7 @@ const rules = ref({
 
 /** 提交按钮 */
 const submit = () => {
-  pwdRef.value.validate(async (valid: boolean) => {
+  pwdRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       await updateUserPwd(user.value.oldPassword, user.value.newPassword)
       proxy?.$modal.msgSuccess('修改成功')

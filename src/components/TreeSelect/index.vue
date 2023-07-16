@@ -22,7 +22,7 @@
           :default-expanded-keys="defaultExpandedKey"
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
-        ></el-tree>
+        />
       </el-option>
     </el-select>
   </div>

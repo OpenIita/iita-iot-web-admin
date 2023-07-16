@@ -124,7 +124,7 @@
 import { listConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from '@/api/system/config'
 import { ConfigForm, ConfigQuery, ConfigVO } from '@/api/system/config/types'
 import { ComponentInternalInstance } from 'vue'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_yes_no } = toRefs<any>(proxy?.useDict('sys_yes_no'))
@@ -138,8 +138,8 @@ const multiple = ref(true)
 const total = ref(0)
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 
-const queryFormRef = ref(ElForm)
-const configFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const configFormRef = ref<FormInstance>()
 const dialog = reactive<DialogOption>({
   visible: false,
   title: ''
@@ -186,7 +186,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = {...initFormData}
-  configFormRef.value.resetFields()
+  configFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -196,7 +196,7 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 多选框选中数据 */
@@ -226,7 +226,7 @@ const handleUpdate = (row?: ConfigVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  configFormRef.value.validate(async (valid: boolean) => {
+  configFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateConfig(form.value) : await addConfig(form.value)
       proxy?.$modal.msgSuccess('操作成功')

@@ -264,7 +264,7 @@ import { addMenu, delMenu, getMenu, listMenu, updateMenu } from '@/api/system/me
 import { MenuForm, MenuQuery, MenuVO } from '@/api/system/menu/types'
 import { ComponentInternalInstance } from 'vue'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
-import { ElTable, ElForm } from 'element-plus'
+import { FormInstance, TableInstance } from 'element-plus'
 
 interface MenuOptionsType {
   id: number
@@ -286,8 +286,8 @@ const dialog = reactive<DialogOption>({
   title: '',
 })
 
-const queryFormRef = ref(ElForm)
-const menuFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const menuFormRef = ref<FormInstance>()
 const initFormData = {
   path: '',
   id: undefined,
@@ -314,7 +314,7 @@ const data = reactive<PageData<MenuForm, MenuQuery>>({
   },
 })
 
-const menuTableRef = ref(ElTable)
+const menuTableRef = ref<TableInstance>()
 
 const { queryParams, form, rules } = toRefs<PageData<MenuForm, MenuQuery>>(data)
 /** 查询菜单列表 */
@@ -343,7 +343,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  menuFormRef.value.resetFields()
+  menuFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -352,7 +352,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 新增按钮操作 */
@@ -373,7 +373,7 @@ const handleToggleExpandAll = () => {
 /** 展开/折叠所有 */
 const toggleExpandAll = (data: MenuVO[], status: boolean) => {
   data.forEach((item: MenuVO) => {
-    menuTableRef.value.toggleRowExpansion(item, status)
+    menuTableRef.value?.toggleRowExpansion(item, status)
     if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
@@ -392,7 +392,7 @@ const handleUpdate = async (row: MenuVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  menuFormRef.value.validate(async (valid: boolean) => {
+  menuFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateMenu(form.value) : await addMenu(form.value)
       proxy?.$modal.msgSuccess('操作成功')
