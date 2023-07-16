@@ -1,12 +1,15 @@
 <template>
   <el-dialog v-model="state.visible" title="升级历史">
-    <el-collapse v-if="state.visible" v-model="state.activeName" accordion>
+    <el-collapse v-if="state.visible && data?.length > 0" v-model="state.activeName" accordion>
       <el-collapse-item v-for="(item, index) in data" :title="item.title" :name="index" :key="index">
         <div class="dn-list flex" v-for="dItem in item.data" :key="dItem.id">
           <div class="title flex">
-            <span class="name">{{ dItem.name }}</span>
-            <el-tag v-if="dItem.status === '成功'" class="ml-2" size="small" type="success">成功</el-tag>
-            <el-tag v-if="dItem.status === '失败'" class="ml-2" size="small" type="danger">失败</el-tag>
+            <span class="name">{{ dItem.deviceName }}</span>
+            <el-tag v-if="dItem.step === -1" class="ml-2" size="small" type="danger">升级失败</el-tag>
+            <el-tag v-else-if="dItem.step === -2" class="ml-2" size="small" type="danger">下载失败</el-tag>
+            <el-tag v-else-if="dItem.step === -3" class="ml-2" size="small" type="danger">校验失败</el-tag>
+            <el-tag v-else-if="dItem.step === -4" class="ml-2" size="small" type="danger">烧写失败</el-tag>
+            <el-tag v-else class="ml-2" size="small" type="success">成功</el-tag>
           </div>
           <el-tooltip class="box-item" effect="dark" content="查看详情" placement="top">
             <el-button link type="primary" icon="View" />
@@ -14,68 +17,21 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+    <el-empty v-else description="暂无升级数据" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ComponentInternalInstance } from 'vue'
 import { getUpgradePackLot, resultUpgradePack } from '../../api/upgradePack.api'
+import { formatDate } from '@/utils'
 
 const state = reactive({
   visible: false,
   id: '',
   activeName: '1',
 })
-const data = ref([
-  {
-    title: '历史1',
-    data: [{
-      id: 1,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 2,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 3,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 4,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 5,
-      name: 'dn1111',
-      status: '成功'
-    }]
-  },
-  {
-    title: '历史1',
-    data: [{
-      id: 1,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 2,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 3,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 4,
-      name: 'dn1111',
-      status: '成功'
-    }, {
-      id: 5,
-      name: 'dn1111',
-      status: '成功'
-    }]
-  }
-])
+const data = ref<any[]>([])
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const getData = () => {
@@ -84,17 +40,30 @@ const getData = () => {
     taskId: state.id,
   }).then(res => {
     const list: Promise<any>[] = []
+    const dataList: any[] = []
     res.data.rows.forEach((item) => {
+      dataList.push({
+        title: formatDate(item.createAt),
+        data: []
+      })
       list.push(resultUpgradePack({
         otaInfoId: item.id
       }))
     })
-    Promise.all(list).then(res => {
-      console.log(res)
+    data.value = []
+    Promise.all(list).then(res2 => {
+      res2.forEach((item, index) => {
+        if (item.code === 200) {
+          dataList[index].data = item.data.rows
+        }
+      })
+      // 过滤空数据
+      dataList.forEach((item => {
+        if (item.data?.length > 0) data.value.push(item)
+      }))
     }).finally(() => {
       proxy?.$modal.closeLoading()
     })
-    console.log('res', res)
   }).catch(() => {
     proxy?.$modal.closeLoading()
   })
@@ -103,7 +72,9 @@ const openDialog = (id: string) => {
   if (!id) return ElMessage.error('id为空')
   state.visible = true
   state.id = id
-  getData()
+  nextTick(() => {
+    getData()
+  })
 }
 defineExpose({
   openDialog,
