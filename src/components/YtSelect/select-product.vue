@@ -122,7 +122,7 @@ const column = ref<IColumn[]>([{
   key: 'category',
   search: true,
   type: 'select',
-  tableWidth: 80,
+  tableWidth: 150,
   componentProps: {
     labelAlias: 'name',
     valueAlias: 'id',
@@ -151,7 +151,7 @@ const column = ref<IColumn[]>([{
 }, {
   label: '透传设备',
   key: 'transparent',
-  type: 'radio',
+  type: 'switch',
   tableWidth: 80,
   componentProps: {
     defaultValue: 'true',

@@ -31,7 +31,6 @@
     </template>
     <template #productKeyForm="{ row }">
       <div style="width: 250px;">
-        {{ row.productKey }}
         <select-product v-model:pk="row.productKey"></select-product>
       </div>
     </template>
@@ -210,7 +209,7 @@ const getProductName = (key: string) => {
 // 设备升级
 const devicesUpgradersRef = ref()
 const handleUpgrades = (row) => {
-  devicesUpgradersRef.value.openDialog(row.id)
+  devicesUpgradersRef.value.openDialog(row)
 }
 // 升级历史
 const historyRef = ref()

@@ -17,6 +17,8 @@
   </el-dialog>
 </template>
 <script lang="ts" setup>
+import { ComponentInternalInstance } from 'vue'
+import { getUpgradePackLot, resultUpgradePack } from '../../api/upgradePack.api'
 
 const state = reactive({
   visible: false,
@@ -73,10 +75,34 @@ const data = ref([
     }]
   }
 ])
+
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
+const getData = () => {
+  proxy?.$modal.loading('加载中...')
+  getUpgradePackLot({
+    taskId: state.id,
+  }).then(res => {
+    const list: Promise<any>[] = []
+    res.data.rows.forEach((item) => {
+      list.push(resultUpgradePack({
+        otaInfoId: item.id
+      }))
+    })
+    Promise.all(list).then(res => {
+      console.log(res)
+    }).finally(() => {
+      proxy?.$modal.closeLoading()
+    })
+    console.log('res', res)
+  }).catch(() => {
+    proxy?.$modal.closeLoading()
+  })
+}
 const openDialog = (id: string) => {
   if (!id) return ElMessage.error('id为空')
   state.visible = true
   state.id = id
+  getData()
 }
 defineExpose({
   openDialog,

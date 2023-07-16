@@ -1,7 +1,7 @@
 <template>
-  <el-dialog title="设备升级" width="800" v-model="state.visible" :before-close="beforeClose" v-loading="state.loading">
+  <el-dialog title="设备升级" @close="handleClose" width="800" v-model="state.visible" :before-close="beforeClose" v-loading="state.loading">
     <el-transfer
-      v-model="value"
+      v-model="dataValue"
       :props="{
         key: 'id',
         label: 'deviceName',
@@ -13,13 +13,13 @@
       :data="data"
     />
     <template #footer>
-      <el-button>取消</el-button>
-      <el-button type="primary">上传</el-button>
+      <el-button @click="handleClose">取消</el-button>
+      <el-button type="primary" @click="handleSubmit">上传</el-button>
     </template>
   </el-dialog>
 </template>
 <script lang="ts" setup>
-import { getDevices } from '../../api/upgradePack.api'
+import { getDevices, upgradeUpgradePack } from '../../api/upgradePack.api'
 
 const state = reactive({
   visible: false,
@@ -28,11 +28,11 @@ const state = reactive({
 })
 
 const data = ref<any[]>([])
-const value = ref([])
-const getData = () => {
+const dataValue = ref([])
+const getData = (key) => {
   state.loading = true
   getDevices({
-    productKey: 'xpsYHExTKPFaQMS7',
+    productKey: key || '',
   }).then(res => {
     data.value = res.data.rows || []
   }).finally(() => {
@@ -42,16 +42,30 @@ const getData = () => {
 const filterMethod = (query, item) => {
   return item.deviceName.toLowerCase().includes(query.toLowerCase())
 }
-
-const openDialog = (id: string) => {
-  if (!id) return ElMessage.error('id为空')
+const handleClose = () => {
+  state.visible = false
+}
+const handleSubmit = () => {
+  if (dataValue.value.length === 0) return ElMessage.error('请选择设备')
+  upgradeUpgradePack({
+    otaId: state.id,
+    deviceIds: dataValue.value
+  }).then(() => {
+    ElMessage.success('操作成功')
+    handleClose()
+  })
   state.visible = true
-  state.id = id
-  getData()
+}
+
+const openDialog = (row) => {
+  if (!row.id) return ElMessage.error('id为空')
+  state.visible = true
+  state.id = row.id
+  getData(row.productKey)
 }
 const beforeClose = (done: () => void) => {
   data.value = []
-  value.value = []
+  dataValue.value = []
   done()
 }
 defineExpose({

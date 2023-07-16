@@ -6,8 +6,9 @@ enum Api {
   add = '/ota/package/add',
   upgrade = '/ota/device/upgrade',
   upload = '/ota/package/upload',
-  result = '/ota/result',
   devices = '/device/list',
+  lot = '/ota/device/info',
+  result = '/ota/device/detail',
 }
 
 // 获取列表
@@ -64,6 +65,15 @@ export const resultUpgradePack = (data) => {
 export const getDevices = (data) => {
   return request({
     url: Api.devices,
+    method: 'post',
+    data,
+  })
+}
+
+// 设备升级批次查询
+export const getUpgradePackLot = (data) => {
+  return request({
+    url: Api.lot,
     method: 'post',
     data,
   })
