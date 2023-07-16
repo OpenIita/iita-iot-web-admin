@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <i-frame v-model:src="url"></i-frame>
-  </div>
+  <i-frame v-model:src="url" />
 </template>
 
 <script setup lang="ts">

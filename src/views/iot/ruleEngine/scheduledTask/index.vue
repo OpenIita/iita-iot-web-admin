@@ -27,7 +27,7 @@
           inactive-value="stopped"
           disabled
           style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
-        ></el-switch>
+        />
       </template>
       <template #log="scope">
         <el-button size="small" type="primary" @click="handleViewLog(scope.row.id)">查看</el-button>
@@ -36,24 +36,24 @@
         <el-popconfirm title="确认要删除？" @confirm="handleDelete(scope.row)" class="mg-left-10">
           <template #reference>
             <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
-              <el-button :disabled="scope.row.state != 'running'" link type="danger" icon="Delete"></el-button>
+              <el-button :disabled="scope.row.state != 'running'" link type="danger" icon="Delete" />
             </el-tooltip>
           </template>
         </el-popconfirm>
         <el-divider direction="vertical" />
         <el-tooltip v-if="scope.row.state === 'running'" class="box-item" effect="dark" content="停止" placement="top">
-          <el-button link type="danger" icon="Close" @click="handleStop(scope.row)"></el-button>
+          <el-button link type="danger" icon="Close" @click="handleStop(scope.row)" />
         </el-tooltip>
         <el-tooltip v-else-if="scope.row.state === 'stopped'" class="box-item" effect="dark" content="开启" placement="top">
-          <el-button link type="success" icon="Open" @click="handleOpen(scope.row)"></el-button>
+          <el-button link type="success" icon="Open" @click="handleOpen(scope.row)" />
         </el-tooltip>
         <el-tooltip v-else-if="scope.row.state === 'finished'" class="box-item" effect="dark" content="重新启动" placement="top">
-          <el-button link type="success" icon="Refresh" @click="handleReload(scope.row)"></el-button>
+          <el-button link type="success" icon="Refresh" @click="handleReload(scope.row)" />
         </el-tooltip>
       </template>
       <template #expressionFormItem="{column, row}">
         <el-form-item v-if="row.type === 'timer'" :label="column.label" :prop="column.key">
-          <crontab-box v-model:value="row.expression"></crontab-box>
+          <crontab-box v-model:value="row.expression" />
         </el-form-item>
       </template>
       <template #secondsFormItem="{column, row}">
@@ -72,12 +72,13 @@
         </el-form-item>
       </template>
       <template #actionForm="{ row }">
-        <optput style="width: 100%;" v-model:list="row.actions" actions="device"></optput>
+        <optput style="width: 100%;" v-model:list="row.actions" actions="device" />
       </template>
     </yt-crud>
-    <log-dialog ref="logDialogRef" type="task"></log-dialog>
+    <log-dialog ref="logDialogRef" type="task" />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getTaskList, saveTask, stopTask, reloadTask, startTask, deleteTask } from '../api/scheduledTask.api'
@@ -296,5 +297,3 @@ const getData = () => {
   state.loading = false
 }
 </script>
-
-<style lang="less" scoped></style>

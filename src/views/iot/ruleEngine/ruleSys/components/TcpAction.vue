@@ -8,7 +8,7 @@
         <el-input v-model="service.port" auto-complete="off" placeholder="输入端口" type="number" />
       </el-form-item>
       <el-form-item label="转换脚本">
-        <code-editor style="width: 100%" :code="service.script"></code-editor>
+        <code-editor style="width: 100%" :code="service.script" />
       </el-form-item>
     </el-form>
   </div>

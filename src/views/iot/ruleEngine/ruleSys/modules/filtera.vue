@@ -67,13 +67,7 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <el-button
-                    type="danger"
-                    size="small"
-                    icon="Delete"
-                    style="margin-left: 10px;"
-                    @click="handleRemoveCondition(item, condIndex)"
-                  ></el-button>
+                  <el-button type="danger" size="small" icon="Delete" style="margin-left: 10px;" @click="handleRemoveCondition(item, condIndex)" />
                 </div>
               </div>
             </div>

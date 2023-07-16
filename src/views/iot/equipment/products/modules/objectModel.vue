@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="产品物模型" width="70%" v-model="state.visible" append-to-body top="20px">
-    <div v-loading="state.loading">
+    <div v-if="state.visible" v-loading="state.loading">
       <el-tabs type="border-card" v-model="activeTab">
         <el-tab-pane label="功能列表" :name="0">
           <function-config v-if="activeTab === 0" :id="state.id" :model="state.model" />

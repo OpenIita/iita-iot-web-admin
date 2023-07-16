@@ -42,7 +42,7 @@
                   range-separator="-"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
-                ></el-date-picker>
+                />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="handleQuery" icon="Search">搜索</el-button>
@@ -103,7 +103,7 @@
             <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
             <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
               <template #default="scope">
-                <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
+                <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)" />
               </template>
             </el-table-column>
 
@@ -116,18 +116,18 @@
             <el-table-column label="操作" fixed="right" width="180" class-name="small-padding fixed-width">
               <template #default="scope">
                 <el-tooltip content="修改" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                  <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']" />
                 </el-tooltip>
                 <el-tooltip content="删除" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                  <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']" />
                 </el-tooltip>
 
                 <el-tooltip content="重置密码" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"></el-button>
+                  <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']" />
                 </el-tooltip>
 
                 <el-tooltip content="分配角色" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                  <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']" />
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -146,7 +146,7 @@
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="600px" append-to-body @close="closeDialog">
-      <el-form :model="form" :rules="rules" ref="userFormRef" label-width="80px">
+      <el-form v-if="dialog.visible" :model="form" :rules="rules" ref="userFormRef" label-width="80px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -242,6 +242,7 @@
     <!-- 用户导入对话框 -->
     <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
       <el-upload
+        v-if="upload.open"
         ref="uploadRef"
         :limit="1"
         accept=".xlsx, .xls"

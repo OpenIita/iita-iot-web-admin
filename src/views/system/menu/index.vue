@@ -28,7 +28,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -41,15 +41,15 @@
         ref="menuTableRef"
         :default-expand-all="isExpandAll"
       >
-        <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="160"></el-table-column>
+        <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="160" />
         <el-table-column prop="icon" label="图标" align="center" width="100">
           <template #default="scope">
             <svg-icon :icon-class="scope.row.icon" />
           </template>
         </el-table-column>
-        <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
-        <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="orderNum" label="排序" width="60" />
+        <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true" />
+        <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true" />
         <el-table-column prop="status" label="状态" width="80">
           <template #default="scope">
             <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -77,7 +77,7 @@
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" destroy-on-close append-to-bod width="750px">
-      <el-form ref="menuFormRef" :model="form" :rules="rules" label-width="100px">
+      <el-form v-if="dialog.visible" ref="menuFormRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="上级菜单">

@@ -11,7 +11,7 @@
                   <el-popconfirm title="确认要删除吗？" @confirm="handleDelete(com)">
                     <template #reference>
                       <div>
-                        <el-button icon="Delete" link type="danger"></el-button>
+                        <el-button icon="Delete" link type="danger" />
                       </div>
                     </template>
                   </el-popconfirm>
@@ -37,8 +37,7 @@
                   size="large"
                   style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
                   @change="stateChange(com)"
-                >
-                </el-switch>
+                />
               </el-descriptions-item>
               <el-descriptions-item label-class-name="custom-label" label="操作">
                 <el-button @click="handleEdit(com)" link icon="Edit" type="primary">修改</el-button>
@@ -190,7 +189,7 @@
             <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口" />
           </el-form-item>
           <el-form-item label="WebSocket">
-            <el-switch v-model="scope.row.config.useWebSocket" active-text="是" inactive-text="否"></el-switch>
+            <el-switch v-model="scope.row.config.useWebSocket" active-text="是" inactive-text="否" />
             <div>
               <el-tag v-if="scope.row.config.useWebSocket == true" type="info"> 通过websocket连接mqtt broker </el-tag>
             </div>
@@ -243,7 +242,7 @@
           @stringSuccess="(res) => uploadJarSuccess(res, row)"
           uploadType="url"
           uploadUrl="/protocol/uploadJar"
-        ></upload-file>
+        />
       </template>
     </yt-table-form>
     <conversion-script title="通讯脚本" type="communication" ref="conversionScriptRef" />

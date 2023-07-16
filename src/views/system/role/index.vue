@@ -23,7 +23,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-            ></el-date-picker>
+            />
           </el-form-item>
 
           <el-form-item>
@@ -49,7 +49,7 @@
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:role:export']">导出</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -61,7 +61,7 @@
         <el-table-column label="显示顺序" prop="roleSort" width="100" />
         <el-table-column label="状态" align="center" width="100">
           <template #default="scope">
-            <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="创建时间" align="center" prop="createTime">
@@ -73,16 +73,16 @@
         <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
             <el-tooltip content="修改" placement="top" v-if="scope.row.id !== 1">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:role:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:role:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top" v-if="scope.row.id !== 1">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:role:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:role:remove']" />
             </el-tooltip>
             <el-tooltip content="数据权限" placement="top" v-if="scope.row.id !== 1">
-              <el-button link type="primary" icon="CircleCheck" @click="handleDataScope(scope.row)" v-hasPermi="['system:role:edit']"></el-button>
+              <el-button link type="primary" icon="CircleCheck" @click="handleDataScope(scope.row)" v-hasPermi="['system:role:edit']" />
             </el-tooltip>
             <el-tooltip content="分配用户" placement="top" v-if="scope.row.id !== 1">
-              <el-button link type="primary" icon="User" @click="handleAuthUser(scope.row)" v-hasPermi="['system:role:edit']"></el-button>
+              <el-button link type="primary" icon="User" @click="handleAuthUser(scope.row)" v-hasPermi="['system:role:edit']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -98,7 +98,7 @@
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="roleFormRef" :model="form" :rules="rules" label-width="100px">
+      <el-form v-if="dialog.visible" ref="roleFormRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
         </el-form-item>
@@ -152,7 +152,7 @@
 
     <!-- 分配角色数据权限对话框 -->
     <el-dialog :title="dialog.title" v-model="openDataScope" width="500px" append-to-body>
-      <el-form :model="form" label-width="80px" ref="dataScopeRef">
+      <el-form v-if="dialog.visible" :model="form" label-width="80px" ref="dataScopeRef">
         <el-form-item label="角色名称">
           <el-input v-model="form.roleName" :disabled="true" />
         </el-form-item>

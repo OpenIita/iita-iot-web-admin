@@ -1,9 +1,9 @@
 <template>
   <div style="width: 100%;">
     <el-table v-if="!state.showPropertyParam" size="small" :data="modelParams" highlight-current-row border style="width: 100%;">
-      <el-table-column prop="name" label="参数名称" width="100"> </el-table-column>
-      <el-table-column prop="identifier" label="标识符" width="180"> </el-table-column>
-      <el-table-column prop="dataType.type" label="类型" width="80"> </el-table-column>
+      <el-table-column prop="name" label="参数名称" width="100" />
+      <el-table-column prop="identifier" label="标识符" width="180" />
+      <el-table-column prop="dataType.type" label="类型" width="80" />
       <el-table-column label="操作">
         <template v-slot:header>
           <el-button @click="addParams" type="primary" size="small" plain>添加参数</el-button>
@@ -27,9 +27,9 @@
           :boolItem="state.boolItem"
           :isProperty="false"
           :is-update="!state.isAdd"
-        ></property-model>
+        />
         <el-row>
-          <el-col :span="16">&nbsp;</el-col>
+          <el-col :span="16" />
           <el-col :span="8">
             <el-button size="small" @click="cancelEditParam()">取消</el-button>
             <el-button size="small" @click="saveParam()" type="primary">保存</el-button>
@@ -137,5 +137,3 @@ async function saveParam() {
   state.showPropertyParam = false
 }
 </script>
-
-<style lang="less" scoped></style>

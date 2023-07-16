@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.dialogShow" destroy-on-close width="950px" :title="!state.isAdd ? '编辑功能' : '新增功能'">
-    <el-form class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="modelFormRef">
+    <el-form v-if="state.dialogShow" class="model-form" :rules="rules" label-width="120px" :model="state.modelForm" ref="modelFormRef">
       <el-form-item label="功能类型">
         <el-radio-group :disabled="!state.isAdd" v-model="state.modelForm.type" size="small">
           <el-radio-button label="property">属性</el-radio-button>
@@ -54,6 +54,7 @@
     </el-form>
   </el-dialog>
 </template>
+
 <script lang="ts" setup>
 import { ParseProperty } from '@/views/iot/equipment/products/util'
 import { saveObjectModel } from '../../../api/products.api'
@@ -202,7 +203,7 @@ const saveThingModel = async () => {
           }
         }
       } else if (state.modelForm.type == 'service') {
-        state.model.services.forEach((s: any) => {
+        state.model.services?.forEach((s: any) => {
           if (s.identifier == state.modelForm.identifier) {
             s.identifier = state.modelForm.identifier
             s.name = state.modelForm.name
@@ -211,7 +212,7 @@ const saveThingModel = async () => {
           }
         })
       } else if (state.modelForm.type == 'event') {
-        state.model.events.forEach((s: any) => {
+        state.model.events?.forEach((s: any) => {
           if (s.identifier == state.modelForm.identifier) {
             s.identifier = state.modelForm.identifier
             s.name = state.modelForm.name

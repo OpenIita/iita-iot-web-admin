@@ -20,13 +20,14 @@
     >
       <template #menuSlot="scope">
         <el-tooltip class="box-item" effect="dark" content="编辑转换脚本" placement="top">
-          <el-button link type="primary" icon="Switch" @click="handleConversionScript(scope.row)"></el-button>
+          <el-button link type="primary" icon="Switch" @click="handleConversionScript(scope.row)" />
         </el-tooltip>
       </template>
     </yt-crud>
-    <conversion-script title="转换脚本" ref="conversionScriptRef"></conversion-script>
+    <conversion-script title="转换脚本" ref="conversionScriptRef" />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 

@@ -20,7 +20,7 @@
               range-separator="-"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-            ></el-date-picker>
+            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -47,12 +47,12 @@
               删除
             </el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
       <el-table v-loading="loading" :data="tableList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" align="center" width="55"></el-table-column>
+        <el-table-column type="selection" align="center" width="55" />
         <el-table-column label="序号" type="index" width="50" align="center">
           <template #default="scope">
             <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
@@ -66,19 +66,19 @@
         <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="预览" placement="top">
-              <el-button link type="primary" icon="View" @click="handlePreview(scope.row)" v-hasPermi="['tool:gen:preview']"></el-button>
+              <el-button link type="primary" icon="View" @click="handlePreview(scope.row)" v-hasPermi="['tool:gen:preview']" />
             </el-tooltip>
             <el-tooltip content="编辑" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleEditTable(scope.row)" v-hasPermi="['tool:gen:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleEditTable(scope.row)" v-hasPermi="['tool:gen:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['tool:gen:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['tool:gen:remove']" />
             </el-tooltip>
             <el-tooltip content="同步" placement="top">
-              <el-button link type="primary" icon="Refresh" @click="handleSynchDb(scope.row)" v-hasPermi="['tool:gen:edit']"></el-button>
+              <el-button link type="primary" icon="Refresh" @click="handleSynchDb(scope.row)" v-hasPermi="['tool:gen:edit']" />
             </el-tooltip>
             <el-tooltip content="生成代码" placement="top">
-              <el-button link type="primary" icon="Download" @click="handleGenTable(scope.row)" v-hasPermi="['tool:gen:code']"></el-button>
+              <el-button link type="primary" icon="Download" @click="handleGenTable(scope.row)" v-hasPermi="['tool:gen:code']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -88,12 +88,12 @@
 
     <!-- 预览界面 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="80%" top="5vh" append-to-body class="scrollbar">
-      <el-tabs v-model="preview.activeName">
+      <el-tabs v-if="dialog.visible" v-model="preview.activeName">
         <el-tab-pane v-for="(value, key) in preview.data" :label="key" :name="key" :key="value">
           <el-link :underline="false" icon="DocumentCopy" v-copyText="value" v-copyText:callback="copyTextSuccess" style="float:right"
             >&nbsp;复制</el-link
           >
-          <pre>{{ value }}</pre>
+          <pre v-if="preview.activeName === key">{{ value }}</pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>

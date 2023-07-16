@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <codemirror class="code" ref="editScript" v-model="codeModel" :extensions="extensions" v-bind="cmOption" @ready="handleReady"></codemirror>
-  </div>
+  <codemirror class="code" ref="editScript" v-model="codeModel" :extensions="extensions" v-bind="cmOption" @ready="handleReady" />
 </template>
+
 <script lang="ts" setup>
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'

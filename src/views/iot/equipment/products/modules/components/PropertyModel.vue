@@ -4,9 +4,6 @@
       <el-form-item style="margin-bottom: 18px;" label="名称" prop="name">
         <el-input v-model="propertyRef.name" auto-complete="off" />
       </el-form-item>
-      <el-form-item label="说明" prop="tips">
-        <el-input type="textarea" v-model="propertyRef.tips" auto-complete="off" />
-      </el-form-item>
       <el-form-item style="margin-bottom: 18px;" label="标识符" prop="identifier">
         <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off" />
       </el-form-item>

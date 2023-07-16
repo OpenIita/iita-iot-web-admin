@@ -6,6 +6,7 @@
   </el-input>
   <el-dialog title="选择产品" v-model="dialogState.show" width="1200px">
     <yt-crud
+      v-if="dialogState.show"
       ref="ytCrudRef"
       :data="data"
       :column="column"

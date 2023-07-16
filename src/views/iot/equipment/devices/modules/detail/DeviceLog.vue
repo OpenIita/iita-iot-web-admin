@@ -28,15 +28,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="type" label="类型" width="80"> </el-table-column>
-      <el-table-column prop="name" label="名称(标识符)" width="180"> </el-table-column>
+      <el-table-column prop="type" label="类型" width="80" />
+      <el-table-column prop="name" label="名称(标识符)" width="180" />
       <el-table-column label="内容">
         <template #default="scope">
           {{ scope.row.content.data }}
         </template>
       </el-table-column>
     </el-table>
-    <Pagination :data="formInline" @onPagePaging="getEvents"></Pagination>
+    <Pagination :data="formInline" @onPagePaging="getEvents" />
   </div>
 </template>
 

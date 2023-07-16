@@ -23,7 +23,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
       <el-table
@@ -55,7 +55,7 @@
     </el-card>
     <!-- 添加或修改测试树对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="treeFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="treeFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父id" prop="parentId">
           <el-tree-select
             v-model="form.parentId"

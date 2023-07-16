@@ -148,7 +148,7 @@
               <el-divider direction="vertical" />
               <el-popconfirm title="是否确认删除?" @confirm="handleDelete(item)">
                 <template #reference>
-                  <el-button type="danger" icon="Delete" plain></el-button>
+                  <el-button type="danger" icon="Delete" plain />
                 </template>
               </el-popconfirm>
             </div>
@@ -162,17 +162,17 @@
       <template #menuSlot="scope">
         <!-- TODO: 没接口,nodeType无法获取，得改成 ！= 0 -->
         <el-tooltip class="box-item" effect="dark" content="子设备" placement="top">
-          <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope.row)"></el-button>
+          <el-button link icon="Box" :disabled="scope.row.nodeType == 0" @click="showChidrenDevices(scope.row)" />
         </el-tooltip>
         <el-divider direction="vertical" />
         <el-tooltip class="box-item" effect="dark" content="详情" placement="top">
-          <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
+          <el-button link type="primary" icon="View" @click="handleView(scope.row)" />
         </el-tooltip>
         <el-divider direction="vertical" />
         <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
           <el-popconfirm title="是否确认删除该数据" @confirm="handleDelete(scope.row)">
             <template #reference>
-              <el-button link type="danger" icon="Delete"></el-button>
+              <el-button link type="danger" icon="Delete" />
             </template>
           </el-popconfirm>
         </el-tooltip>
@@ -184,16 +184,16 @@
         </div>
       </template>
     </yt-crud>
-    <children-dialog ref="childrenDialogRef"></children-dialog>
+    <children-dialog ref="childrenDialogRef" />
   </div>
 </template>
+
 <script lang="ts" setup>
 import defaultImg from '@/assets/images/pic_device.png'
 import { IColumn } from '@/components/common/types/tableCommon'
 import { ComponentInternalInstance } from 'vue'
 import { getDevicesList, deleteDevices, saveDevices,getParentDevices, deleteBatchDevices } from '../api/devices.api'
 import { getProductsList,IProductsVO } from '../api/products.api'
-import { formatDate } from '@/utils/formatTime'
 
 import Map from '@/components/Map/index.vue'
 import ChildrenDialog from './modules/childrenDialog.vue'

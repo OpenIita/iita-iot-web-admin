@@ -33,7 +33,7 @@
               <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+          <el-table-column type="selection" :reserve-selection="true" width="55" />
           <el-table-column label="角色编号" align="center" prop="roleId" />
           <el-table-column label="角色名称" align="center" prop="roleName" />
           <el-table-column label="权限字符" align="center" prop="roleKey" />

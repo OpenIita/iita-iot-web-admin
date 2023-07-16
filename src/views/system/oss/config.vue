@@ -37,7 +37,7 @@
               删除
             </el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -59,16 +59,16 @@
         </el-table-column>
         <el-table-column label="是否默认" align="center" prop="status" v-if="columns[8].visible">
           <template #default="scope">
-            <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:oss:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:oss:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:oss:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:oss:remove']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -78,7 +78,7 @@
     </el-card>
     <!-- 添加或修改对象存储配置对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="800px" append-to-body>
-      <el-form ref="ossConfigFormRef" :model="form" :rules="rules" label-width="120px">
+      <el-form v-if="dialog.visible" ref="ossConfigFormRef" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="配置key" prop="configKey">
           <el-input v-model="form.configKey" placeholder="请输入配置key" />
         </el-form-item>

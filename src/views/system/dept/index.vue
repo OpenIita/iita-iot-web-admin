@@ -28,7 +28,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -40,8 +40,8 @@
         ref="deptTableRef"
         :default-expand-all="isExpandAll"
       >
-        <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-        <el-table-column prop="orderNum" align="center" label="排序" width="200"></el-table-column>
+        <el-table-column prop="deptName" label="部门名称" width="260" />
+        <el-table-column prop="orderNum" align="center" label="排序" width="200" />
         <el-table-column prop="status" align="center" label="状态" width="100">
           <template #default="scope">
             <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -69,7 +69,7 @@
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" destroy-on-close append-to-bod width="600px">
-      <el-form ref="deptFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="deptFormRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">
             <el-form-item label="上级部门" prop="parentId">

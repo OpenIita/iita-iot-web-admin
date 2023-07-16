@@ -25,7 +25,7 @@
           <div v-for="item in state.typeObj" :key="item.code">
             <div v-if="item.code === getChannelCode(row.channelId)">
               <el-form-item v-for="opt in item.list" :key="opt.value" :label="opt.label + ':'">
-                <el-switch v-if="opt.type === 'switch'" v-model="row.param[opt.value]"></el-switch>
+                <el-switch v-if="opt.type === 'switch'" v-model="row.param[opt.value]" />
                 <el-input v-else v-model="row.param[opt.value]" :placeholder="'请输入' + opt.label" />
               </el-form-item>
             </div>

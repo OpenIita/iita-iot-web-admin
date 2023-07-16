@@ -1,6 +1,6 @@
 <template>
   <div class="select-device" style="width: 240px;margin-bottom: 10px;display: inherit;">
-    <select-device v-model:dn="selectedDn" placeholder="选择设备" @on-select="hadnleSelectDevice"></select-device>
+    <select-device v-model:dn="selectedDn" placeholder="选择设备" @on-select="hadnleSelectDevice" />
   </div>
   <div v-if="selectedDn">
     <el-row v-for="service in servicesRef" :key="service.identifier" style="margin-bottom: 10px;">
@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { propTypes } from '@/utils/propTypes'
 import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 
 import SelectDevice from '@/components/YtSelect/select-device.vue'

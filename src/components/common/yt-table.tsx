@@ -2,7 +2,7 @@
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 import { tableProps } from './props/crudProps'
-import { IColumn, TFormType } from '@/components/common/types/tableCommon'
+import { IColumn } from '@/components/common/types/tableCommon'
 import { ElButton, ElSwitch, ElTable, ElTableColumn, ElPopconfirm, ElTooltip, ElDivider, ElImage } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
 import { formatDate } from '@/utils/formatTime'
@@ -53,7 +53,7 @@ export default defineComponent({
                     return {}
                   }}
                   onClick={() => emit('handleView', scope.row)}
-                ></ElButton>
+                />
               </ElTooltip>
               <ElDivider direction="vertical" />
             </div>
@@ -70,7 +70,7 @@ export default defineComponent({
                     if (props.editPermi) return { vHasPermi: props.editPermi }
                     return {}
                   }}
-                ></ElButton>
+                />
               </ElTooltip>
               <ElDivider direction="vertical" />
             </div>
@@ -89,7 +89,7 @@ export default defineComponent({
                           if (props.delPermi) return { vHasPermi: props.delPermi }
                           return {}
                         }}
-                      ></ElButton>
+                      />
                     ),
                   }}
                 </ElPopconfirm>
@@ -124,7 +124,7 @@ export default defineComponent({
               })
               return obj ? obj[labelName] : row[column.key]
             case 'switch':
-              return <ElSwitch value={scope?.row[column.key]}></ElSwitch>
+              return <ElSwitch value={scope?.row[column.key]} />
             case 'image':
               return (
                 <ElImage
@@ -134,7 +134,7 @@ export default defineComponent({
                   z-index={888888}
                   preview-src-list={[row[column.key]]}
                   src={row[column.key]}
-                ></ElImage>
+                />
               )
             default:
               break
@@ -210,7 +210,7 @@ export default defineComponent({
           slots.customTable?.()
         )}
         {!props.pageHide && (
-          <Pagination total={props.total} v-model:page={pageObj.pageNum} v-model:limit={pageObj.pageSize} onPagination={changePage}></Pagination>
+          <Pagination total={props.total} v-model:page={pageObj.pageNum} v-model:limit={pageObj.pageSize} onPagination={changePage} />
         )}
       </div>
     )

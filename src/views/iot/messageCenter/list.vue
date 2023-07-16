@@ -18,11 +18,12 @@
       }"
     >
       <template #status="{ row }">
-        <el-switch v-model="row.status" disabled></el-switch>
+        <el-switch v-model="row.status" disabled />
       </template>
     </yt-crud>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 

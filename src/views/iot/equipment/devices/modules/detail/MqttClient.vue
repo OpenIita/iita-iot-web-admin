@@ -3,10 +3,10 @@
     <el-card shadow="always" style="margin-bottom:30px;">
       <el-row>
         <el-col span="12">
-          <el-button size="small" icon="el-icon-setting" v-if="!showConfigFlg" @click="handleShowConfig()"></el-button>
+          <el-button size="small" icon="el-icon-setting" v-if="!showConfigFlg" @click="handleShowConfig()" />
         </el-col>
         <el-col span="12">
-          <el-button size="small" icon="el-icon-arrow-up" v-if="showConfigFlg" @click="handleShowConfig()"></el-button>
+          <el-button size="small" icon="el-icon-arrow-up" v-if="showConfigFlg" @click="handleShowConfig()" />
         </el-col>
         <el-col span="3" push="9">
           <el-button
@@ -55,7 +55,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="clientId" label="Client ID">
-              <el-input v-model="connection.clientId" :placeholder="clientId"> </el-input>
+              <el-input v-model="connection.clientId" :placeholder="clientId" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -136,7 +136,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button class="mt-4" style="width: 100%" @click="handleAdd" icon="el-icon-plus" v-if="showSubFlg"></el-button>
+      <el-button class="mt-4" style="width: 100%" @click="handleAdd" icon="el-icon-plus" v-if="showSubFlg" />
     </el-card>
     <el-card shadow="always" style="margin-bottom:30px;">
       <el-row>

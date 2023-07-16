@@ -92,14 +92,14 @@ export default defineComponent({
                     padding: '8px',
                   }}
                   loading={props.loading}
-                ></ElButton>
+                />
                 <ElButton
                   onClick={resetQuery}
                   style={{
                     padding: '8px',
                   }}
                   icon="Refresh"
-                ></ElButton>
+                />
               </ElFormItem>
             </ElForm>
           </div>

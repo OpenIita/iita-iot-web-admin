@@ -20,7 +20,7 @@
           inactive-value="stopped"
           disabled
           style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
-        ></el-switch>
+        />
         <!-- <div v-if="scope.row.state === 'stopped'" style="color: red;">已停止</div>
         <div v-if="scope.row.state === 'running'" style="color: green;">运行中</div> -->
       </template>
@@ -29,27 +29,27 @@
       </template>
       <template #menuSlot="scope">
         <el-tooltip class="box-item" effect="dark" content="停止" placement="top">
-          <el-button v-if="scope.row.state === 'running'" link type="danger" icon="SwitchButton" @click="handlePause(scope.row)"></el-button>
+          <el-button v-if="scope.row.state === 'running'" link type="danger" icon="SwitchButton" @click="handlePause(scope.row)" />
         </el-tooltip>
         <el-tooltip class="box-item" effect="dark" content="开启" placement="top">
-          <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)"></el-button>
+          <el-button v-if="scope.row.state === 'stopped'" link type="success" icon="Open" @click="handleOpen(scope.row)" />
         </el-tooltip>
       </template>
       <template #customFormItem="{row}">
         <el-tabs v-model="activeName" type="border-card">
           <el-tab-pane label="监听器" :name="1">
-            <listener v-model:listeners="row.listeners"></listener>
+            <listener v-if="activeName === 1" v-model:listeners="row.listeners" />
           </el-tab-pane>
           <el-tab-pane label="过滤器" :name="2">
-            <filtera v-model:filters="row.filters"></filtera>
+            <filtera v-if="activeName === 2" v-model:filters="row.filters" />
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp"></Output>
+            <Output v-if="activeName === 3" v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp" />
           </el-tab-pane>
         </el-tabs>
       </template>
     </yt-crud>
-    <log-dialog ref="logDialogRef" title="场景执行日志"></log-dialog>
+    <log-dialog ref="logDialogRef" title="场景执行日志" />
   </div>
 </template>
 <script lang="ts" setup>

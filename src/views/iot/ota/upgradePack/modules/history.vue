@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.visible" title="升级历史">
-    <el-collapse v-model="state.activeName" accordion>
+    <el-collapse v-if="state.visible" v-model="state.activeName" accordion>
       <el-collapse-item v-for="(item, index) in data" :title="item.title" :name="index" :key="index">
         <div class="dn-list flex" v-for="dItem in item.data" :key="dItem.id">
           <div class="title flex">
@@ -9,13 +9,14 @@
             <el-tag v-if="dItem.status === '失败'" class="ml-2" size="small" type="danger">失败</el-tag>
           </div>
           <el-tooltip class="box-item" effect="dark" content="查看详情" placement="top">
-            <el-button link type="primary" icon="View"></el-button>
+            <el-button link type="primary" icon="View" />
           </el-tooltip>
         </div>
       </el-collapse-item>
     </el-collapse>
   </el-dialog>
 </template>
+
 <script lang="ts" setup>
 
 const state = reactive({

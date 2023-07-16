@@ -14,7 +14,7 @@
         <el-input v-model="service.password" auto-complete="off" placeholder="输入密码" />
       </el-form-item>
       <el-form-item label="转换脚本">
-        <code-editor style="width: 100%" v-model:code="service.script"></code-editor>
+        <code-editor style="width: 100%" v-model:code="service.script" />
       </el-form-item>
     </el-form>
   </div>
