@@ -23,7 +23,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-            ></el-date-picker>
+            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -54,7 +54,7 @@
           <el-col :span="1.5">
             <el-button type="danger" plain icon="Refresh" @click="handleRefreshCache" v-hasPermi="['system:config:remove']">刷新缓存</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -78,10 +78,10 @@
         <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:config:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:config:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:config:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:config:remove']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -91,7 +91,7 @@
 
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="configFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="configFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="参数名称" prop="configName">
           <el-input v-model="form.configName" placeholder="请输入参数名称" />
         </el-form-item>
@@ -124,7 +124,7 @@
 import { listConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from '@/api/system/config'
 import { ConfigForm, ConfigQuery, ConfigVO } from '@/api/system/config/types'
 import { ComponentInternalInstance } from 'vue'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_yes_no } = toRefs<any>(proxy?.useDict('sys_yes_no'))
@@ -138,8 +138,8 @@ const multiple = ref(true)
 const total = ref(0)
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 
-const queryFormRef = ref(ElForm)
-const configFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const configFormRef = ref<FormInstance>()
 const dialog = reactive<DialogOption>({
   visible: false,
   title: ''
@@ -186,7 +186,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = {...initFormData}
-  configFormRef.value.resetFields()
+  configFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -196,7 +196,7 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 多选框选中数据 */
@@ -226,7 +226,7 @@ const handleUpdate = (row?: ConfigVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  configFormRef.value.validate(async (valid: boolean) => {
+  configFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateConfig(form.value) : await addConfig(form.value)
       proxy?.$modal.msgSuccess('操作成功')

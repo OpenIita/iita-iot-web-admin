@@ -139,7 +139,7 @@
                 :key="index"
                 :label="column.columnName + '：' + column.columnComment"
                 :value="column.columnName"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
         </el-col>
@@ -157,7 +157,7 @@
                 :key="index"
                 :label="column.columnName + '：' + column.columnComment"
                 :value="column.columnName"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
         </el-col>
@@ -175,7 +175,7 @@
                 :key="index"
                 :label="column.columnName + '：' + column.columnComment"
                 :value="column.columnName"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
         </el-col>
@@ -194,7 +194,7 @@
               </el-tooltip>
             </template>
             <el-select v-model="infoForm.subTableName" placeholder="请选择" @change="subSelectChange">
-              <el-option v-for="(t, index) in table" :key="index" :label="t.tableName + '：' + t.tableComment" :value="t.tableName"></el-option>
+              <el-option v-for="(t, index) in table" :key="index" :label="t.tableName + '：' + t.tableComment" :value="t.tableName" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -212,7 +212,7 @@
                 :key="index"
                 :label="column.columnName + '：' + column.columnComment"
                 :value="column.columnName"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
         </el-col>

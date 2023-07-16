@@ -28,7 +28,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -41,15 +41,15 @@
         ref="menuTableRef"
         :default-expand-all="isExpandAll"
       >
-        <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="160"></el-table-column>
+        <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="160" />
         <el-table-column prop="icon" label="图标" align="center" width="100">
           <template #default="scope">
             <svg-icon :icon-class="scope.row.icon" />
           </template>
         </el-table-column>
-        <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
-        <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="orderNum" label="排序" width="60" />
+        <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true" />
+        <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true" />
         <el-table-column prop="status" label="状态" width="80">
           <template #default="scope">
             <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -77,7 +77,7 @@
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" destroy-on-close append-to-bod width="750px">
-      <el-form ref="menuFormRef" :model="form" :rules="rules" label-width="100px">
+      <el-form v-if="dialog.visible" ref="menuFormRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="上级菜单">
@@ -264,7 +264,7 @@ import { addMenu, delMenu, getMenu, listMenu, updateMenu } from '@/api/system/me
 import { MenuForm, MenuQuery, MenuVO } from '@/api/system/menu/types'
 import { ComponentInternalInstance } from 'vue'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
-import { ElTable, ElForm } from 'element-plus'
+import { FormInstance, TableInstance } from 'element-plus'
 
 interface MenuOptionsType {
   id: number
@@ -286,8 +286,8 @@ const dialog = reactive<DialogOption>({
   title: '',
 })
 
-const queryFormRef = ref(ElForm)
-const menuFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const menuFormRef = ref<FormInstance>()
 const initFormData = {
   path: '',
   id: undefined,
@@ -314,7 +314,7 @@ const data = reactive<PageData<MenuForm, MenuQuery>>({
   },
 })
 
-const menuTableRef = ref(ElTable)
+const menuTableRef = ref<TableInstance>()
 
 const { queryParams, form, rules } = toRefs<PageData<MenuForm, MenuQuery>>(data)
 /** 查询菜单列表 */
@@ -343,7 +343,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  menuFormRef.value.resetFields()
+  menuFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -352,7 +352,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 新增按钮操作 */
@@ -373,7 +373,7 @@ const handleToggleExpandAll = () => {
 /** 展开/折叠所有 */
 const toggleExpandAll = (data: MenuVO[], status: boolean) => {
   data.forEach((item: MenuVO) => {
-    menuTableRef.value.toggleRowExpansion(item, status)
+    menuTableRef.value?.toggleRowExpansion(item, status)
     if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
@@ -392,7 +392,7 @@ const handleUpdate = async (row: MenuVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  menuFormRef.value.validate(async (valid: boolean) => {
+  menuFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateMenu(form.value) : await addMenu(form.value)
       proxy?.$modal.msgSuccess('操作成功')

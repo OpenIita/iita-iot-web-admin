@@ -1,10 +1,10 @@
 <template>
-  <div class="box">
+  <div class="box equipment-detail">
     <el-page-header @back="goBack" content="设备详情"></el-page-header>
     <el-divider></el-divider>
     <el-tabs v-loading="loading" v-model="state.activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="base">
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="state.activeName === 'base'">
           <el-col :span="12">
             <el-descriptions :column="1" border :labelStyle="{ 'font-weight': 'bold' }">
               <el-descriptions-item label="设备ID">{{
@@ -44,18 +44,19 @@
           }}</el-descriptions-item>
         </el-descriptions>
       </el-tab-pane>
+
       <el-tab-pane label="属性" name="property">
-        <el-table :data="state.properties" border v-loading="state.loading" style="width: 100%">
-          <el-table-column prop="name" label="属性名" width="180">
+        <el-table v-if="state.activeName === 'property'" :data="state.properties" border v-loading="state.loading" style="width: 100%">
+          <el-table-column prop="name" label="属性名" width="250">
             <template v-slot="scope"> {{ scope.row.name }}({{ scope.row.identifier }}) </template>
           </el-table-column>
-          <el-table-column prop="value" label="属性值" width="180">
+          <el-table-column prop="value" label="属性值">
             <template v-slot="scope">
               <span>{{ scope.row.value }} &nbsp;</span>
               <el-button @click="showPropertyHistory(scope.row)" size="small">历史</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="可读写">
+          <el-table-column label="可读写" width="80">
             <template v-slot="scope">
               <el-tag v-if="!scope.row.write" type="info" size="small" effect="plain">只读</el-tag>
               <el-button @click="showWriteProperty(scope.row)" v-if="scope.row.write" size="small" type="success" plain>可写</el-button>
@@ -91,8 +92,9 @@
           <PropertyChart :name="state.propertyHistory.name" :properties="state.propertyHistory.data"></PropertyChart>
         </div>
       </el-tab-pane>
+
       <el-tab-pane label="服务" name="service">
-        <el-table :data="state.services" border v-loading="state.loading" style="width: 100%">
+        <el-table v-if="state.activeName === 'service'" :data="state.services" border v-loading="state.loading" style="width: 100%">
           <el-table-column label="服务名称" width="180">
             <template v-slot="scope"> {{ scope.row.name }}({{ scope.row.identifier }}) </template>
           </el-table-column>
@@ -103,24 +105,25 @@
           </el-table-column>
           <el-table-column label="参数">
             <template v-slot="scope">
-              {{ scope.row.inputData }}
+              <pre class="equipment-param">{{ scope.row.inputData }}</pre>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
+
       <el-tab-pane label="日志" name="event">
-        <el-form :inline="true" :model="state.formInline" class="user-search">
+        <el-form v-if="state.activeName === 'event'" :inline="true" :model="state.formInline" class="user-search">
           <el-form-item>
             <el-select v-model="state.formInline.type" placeholder="请选择日志类型">
-              <el-option label="所有" value=""></el-option>
-              <el-option label="状态" value="state"></el-option>
-              <el-option label="事件" value="event"></el-option>
-              <el-option label="属性" value="property"></el-option>
-              <el-option label="服务" value="service"></el-option>
+              <el-option label="所有" value="" />
+              <el-option label="状态" value="state" />
+              <el-option label="事件" value="event" />
+              <el-option label="属性" value="property" />
+              <el-option label="服务" value="service" />
             </el-select>
           </el-form-item>
           <el-form-item label="搜索：">
-            <el-input v-model="state.formInline.identifier" placeholder="日志识符"></el-input>
+            <el-input v-model="state.formInline.identifier" placeholder="日志识符" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="logSearch">搜索</el-button>
@@ -133,18 +136,20 @@
               {{formatDate(scope.row.time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="type" label="类型" width="80"> </el-table-column>
-          <el-table-column prop="name" label="名称(标识符)" width="180"> </el-table-column>
+          <el-table-column prop="type" label="类型" width="80" />
+          <el-table-column prop="name" label="名称(标识符)" width="180" />
           <el-table-column label="内容">
             <template v-slot="scope">
-              {{ scope.row.content.data }}
+              <pre class="equipment-param">{{ scope.row.content.data }}</pre>
             </template>
           </el-table-column>
         </el-table>
-        <Pagination :data="state.formInline" @onPagePaging="getEvents"></Pagination>
+        <Pagination :data="state.formInline" @onPagePaging="getEvents" />
       </el-tab-pane>
-      <el-tab-pane label="模拟上报">
+
+      <el-tab-pane label="模拟上报" name="report">
         <el-table
+          v-if="state.activeName === 'report'"
           :data="state.modelFunctions"
           highlight-current-row
           v-loading="state.loading"
@@ -154,12 +159,12 @@
         >
           <el-table-column type="expand" label="上报">
             <template v-slot="fun">
-              <el-form v-model="fun.row" label-width="80px" style="width: 500px">
+              <el-form inline v-model="fun.row" label-width="80px">
                 <el-form-item label="值" v-if="fun.row.type == 'property'">
-                  <el-input v-model="fun.row.value" size="small"></el-input>
+                  <el-input v-model="fun.row.value" size="small" />
                 </el-form-item>
                 <el-form-item label="内容" v-else>
-                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4"></el-input>
+                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4" />
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="sendDeviceMsg(fun.row)">发送</el-button>
@@ -167,27 +172,30 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="type" label="功能类型" width="100"> </el-table-column>
-          <el-table-column sortable prop="name" label="功能名称" width="180"> </el-table-column>
-          <el-table-column sortable prop="identifier" label="标识符" width="150"> </el-table-column>
-          <el-table-column sortable prop="dataTypeName" label="数据类型" width="100"> </el-table-column>
-          <el-table-column sortable prop="params" label="数据定义" width="200"> </el-table-column>
+          <el-table-column sortable prop="type" label="功能类型" width="100" />
+          <el-table-column sortable prop="name" label="功能名称" width="180" />
+          <el-table-column sortable prop="identifier" label="标识符" width="150" />
+          <el-table-column sortable prop="dataTypeName" label="数据类型" width="100" />
+          <el-table-column sortable prop="params" label="数据定义" />
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="设备配置">
-        <DeviceConfig :deviceId="state.deviceId" />
+
+      <el-tab-pane label="设备配置" name="config">
+        <DeviceConfig v-if="state.activeName === 'config'" :deviceId="state.deviceId" />
       </el-tab-pane>
-      <el-tab-pane label="模拟设备">
-        <DeviceSimulator :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail"></DeviceSimulator>
+
+      <el-tab-pane label="模拟设备" name="simulator">
+        <DeviceSimulator v-if="state.activeName === 'simulator'" :thingModelFunctions="state.modelFunctions" :deviceDetail="state.deviceDetail" />
       </el-tab-pane>
     </el-tabs>
+
     <el-dialog :title="state.title" v-model="state.propertyWriteFormVisible" width="40%" @close="closeDialog">
-      <el-form label-width="120px" :model="state.propertyWriteForm" ref="propertyWriteForm">
+      <el-form v-if="state.propertyWriteFormVisible" label-width="120px" :model="state.propertyWriteForm" ref="propertyWriteForm">
         <div style="display: none">
-          <el-input v-model="state.propertyWriteForm.identifier" type="hidden"></el-input>
+          <el-input v-model="state.propertyWriteForm.identifier" type="hidden" />
         </div>
         <el-form-item label="属性值" prop="value">
-          <el-input v-model="state.propertyWriteForm.value" auto-complete="off"></el-input>
+          <el-input v-model="state.propertyWriteForm.value" auto-complete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -197,21 +205,18 @@
         </div>
       </template>
     </el-dialog>
+
     <el-dialog :title="state.title" v-model="state.serviceFormVisible" width="40%" @close="closeDialog">
-      <el-form label-width="120px" :model="state.serviceForm" ref="serviceForm">
+      <el-form v-if="state.serviceFormVisible" label-width="120px" :model="state.serviceForm" ref="serviceForm">
         <div>
-          <el-input v-model="state.serviceForm.identifier" type="hidden"></el-input>
-          <el-input v-model="state.serviceForm.productKey" type="hidden"></el-input>
-          <el-input v-model="state.serviceForm.deviceName" type="hidden"></el-input>
+          <el-input v-model="state.serviceForm.identifier" type="hidden" />
+          <el-input v-model="state.serviceForm.productKey" type="hidden" />
+          <el-input v-model="state.serviceForm.deviceName" type="hidden" />
         </div>
         <div v-if="state?.serviceForm?.params.length === 0">是否确认调用？</div>
-        <el-form-item
-          v-for="param in state.serviceForm.params"
-          :key="param.identifier"
-          :label="param.name + '(' + param.identifier + ')'"
-          prop="params"
-        >
-          <el-input v-model="param.value" auto-complete="off"></el-input>
+        <el-form-item v-for="param in state.serviceForm.params" :key="param.identifier" :label="param.identifier" prop="params">
+          <el-input v-model="param.value" auto-complete="off" />
+          <div class="form-tips">{{ param.name }}</div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -221,16 +226,17 @@
         </div>
       </template>
     </el-dialog>
+
     <el-dialog title="添加设备标签" v-model="state.showAddTag" width="400px">
-      <el-form ref="formRef" :model="state.tagForm" :rules="state.rules" label-width="80px">
+      <el-form v-if="state.showAddTag" ref="formRef" :model="state.tagForm" :rules="state.rules" label-width="80px">
         <el-form-item label="标签名称" prop="name">
-          <el-input v-model="state.tagForm.name"></el-input>
+          <el-input v-model="state.tagForm.name" />
         </el-form-item>
         <el-form-item label="标识符" prop="id">
-          <el-input v-model="state.tagForm.id"></el-input>
+          <el-input v-model="state.tagForm.id" />
         </el-form-item>
         <el-form-item label="标签值" prop="value">
-          <el-input v-model="state.tagForm.value"></el-input>
+          <el-input v-model="state.tagForm.value" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitAddTag">提交</el-button>
@@ -239,6 +245,7 @@
     </el-dialog>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { formatDate } from '@/utils/formatTime'
 import { getObjectModel } from '@/views/iot/equipment/api/products.api'
@@ -387,7 +394,7 @@ const getdata = () => {
     if (data?.locate.longitude && data.locate.latitude) {
       state.mapLnglat = data.locate.longitude + ',' + data.locate.latitude
     }
-    state.showDeviceMap=JSON.parse(showMap as string)
+    state.showDeviceMap = JSON.parse(showMap as string)
     //取设备物模型信息
     console.log('state.thingModel', state.thingModel)
     if (!state.thingModel) {
@@ -416,7 +423,7 @@ const getdata = () => {
         model = data.model || {}
         let modelFuncs: any[] = []
         model.properties.forEach((p) => {
-          let params = JSON.stringify(p.dataType.specs || '{}')
+          let params = JSON.stringify(p.dataType.specs || '{}', null, 4)
           modelFuncs.push({
             raw: p,
             type: 'property',
@@ -438,8 +445,8 @@ const getdata = () => {
             name: e.name,
             identifier: e.identifier,
             dataTypeName: '-',
-            params: JSON.stringify(output),
-            content: JSON.stringify(output),
+            params: JSON.stringify(output, null, 4),
+            content: JSON.stringify(output, null, 4),
           })
         })
         model.services.forEach((s) => {
@@ -457,8 +464,8 @@ const getdata = () => {
             name: s.name + '回复',
             identifier: s.identifier + '_reply',
             dataTypeName: '-',
-            params: JSON.stringify(output),
-            content: JSON.stringify(output),
+            params: JSON.stringify(output, null, 4),
+            content: JSON.stringify(output, null, 4),
           })
         })
         state.modelFunctions = modelFuncs
@@ -717,5 +724,17 @@ logSearch()
 .box {
   padding: 15px;
   background: #fff;
+}
+.form-tips {
+  font-size: 12px;
+  line-height: 14px;
+}
+.equipment-param {
+  max-height: 160px;
+  overflow: hidden auto;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 14px;
 }
 </style>

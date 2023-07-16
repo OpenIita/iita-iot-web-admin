@@ -1,6 +1,7 @@
 <template>
   <el-dialog v-model="state.show" title="子设备列表" width="1100px">
     <yt-table
+      v-if="state.show"
       :column="columns"
       :data="data"
       :total="state.total"
@@ -146,5 +147,3 @@ defineExpose({
   openDialog,
 })
 </script>
-
-<style lang="scss" scoped></style>

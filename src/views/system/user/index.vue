@@ -15,7 +15,7 @@
             highlight-current
             default-expand-all
             @node-click="handleNodeClick"
-          ></el-tree>
+          />
         </el-card>
       </el-col>
       <el-col :lg="20" :xs="24">
@@ -42,7 +42,7 @@
                   range-separator="-"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
-                ></el-date-picker>
+                />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="handleQuery" icon="Search">搜索</el-button>
@@ -83,7 +83,7 @@
                   </template>
                 </el-dropdown>
               </el-col>
-              <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns" :search="true"></right-toolbar>
+              <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns" :search="true" />
             </el-row>
           </template>
 
@@ -103,7 +103,7 @@
             <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
             <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
               <template #default="scope">
-                <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
+                <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)" />
               </template>
             </el-table-column>
 
@@ -116,18 +116,18 @@
             <el-table-column label="操作" fixed="right" width="180" class-name="small-padding fixed-width">
               <template #default="scope">
                 <el-tooltip content="修改" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                  <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']" />
                 </el-tooltip>
                 <el-tooltip content="删除" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                  <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']" />
                 </el-tooltip>
 
                 <el-tooltip content="重置密码" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"></el-button>
+                  <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']" />
                 </el-tooltip>
 
                 <el-tooltip content="分配角色" placement="top" v-if="scope.row.id !== 1">
-                  <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                  <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']" />
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -146,7 +146,7 @@
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="600px" append-to-body @close="closeDialog">
-      <el-form :model="form" :rules="rules" ref="userFormRef" label-width="80px">
+      <el-form v-if="dialog.visible" :model="form" :rules="rules" ref="userFormRef" label-width="80px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -194,7 +194,7 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.sex" placeholder="请选择">
-                <el-option v-for="dict in sys_user_sex" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
+                <el-option v-for="dict in sys_user_sex" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -211,26 +211,14 @@
           <el-col :span="12">
             <el-form-item label="岗位">
               <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.id"
-                  :label="item.postName"
-                  :value="item.id"
-                  :disabled="item.status == '1'"
-                ></el-option>
+                <el-option v-for="item in postOptions" :key="item.id" :label="item.postName" :value="item.id" :disabled="item.status == '1'" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in roleOptions"
-                  :key="item.id"
-                  :label="item.roleName"
-                  :value="item.id"
-                  :disabled="item.status == '1'"
-                ></el-option>
+                <el-option v-for="item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id" :disabled="item.status == '1'" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -238,7 +226,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="备注">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -254,6 +242,7 @@
     <!-- 用户导入对话框 -->
     <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
       <el-upload
+        v-if="upload.open"
         ref="uploadRef"
         :limit="1"
         accept=".xlsx, .xls"
@@ -296,7 +285,7 @@ import { treeselect } from '@/api/system/dept'
 import { DeptVO } from '@/api/system/dept/types'
 import { RoleVO } from '@/api/system/role/types'
 import { PostVO } from '@/api/system/post/types'
-import { DateModelType, ElTree, ElUpload, UploadFile, ElForm } from 'element-plus'
+import { DateModelType, ElTree, ElUpload, UploadFile, FormInstance } from 'element-plus'
 import { to } from 'await-to-js'
 const router = useRouter()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -342,8 +331,8 @@ const columns = ref<FieldOption[]>([
 ])
 
 const deptTreeRef = ref(ElTree)
-const queryFormRef = ref(ElForm)
-const userFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const userFormRef = ref<FormInstance>()
 const uploadRef = ref(ElUpload)
 
 const dialog = reactive<DialogOption>({
@@ -436,7 +425,7 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.pageNum = 1
   handleQuery()
 }
@@ -545,7 +534,7 @@ const initTreeData = async () => {
 /** 重置操作表单 */
 const reset = () => {
   form.value = { ...initFormData }
-  userFormRef.value.resetFields()
+  userFormRef.value?.resetFields()
 }
 /** 取消按钮 */
 const cancel = () => {
@@ -586,7 +575,7 @@ const handleUpdate = (row?: UserForm) => {
 
 /** 提交按钮 */
 const submitForm = () => {
-  userFormRef.value.validate(async (valid: boolean) => {
+  userFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateUser(form.value) : await addUser(form.value)
       proxy?.$modal.msgSuccess('操作成功')
@@ -608,8 +597,8 @@ const closeDialog = () => {
  * 重置表单
  */
 const resetForm = () => {
-  userFormRef.value.resetFields()
-  userFormRef.value.clearValidate()
+  userFormRef.value?.resetFields()
+  userFormRef.value?.clearValidate()
 
   form.value.id = undefined
   form.value.status = '1'
@@ -619,5 +608,3 @@ onMounted(() => {
   getList() // 初始化列表数据
 })
 </script>
-
-<style lang="scss" scoped></style>

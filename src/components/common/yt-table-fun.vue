@@ -2,7 +2,7 @@
   <el-card shadow="never" v-if="!hide">
     <template #header>
       <el-row justify="space-between" style="margin-bottom: 0;">
-        <el-row :gutter="gutter" align="center" class="mb8">
+        <el-row :gutter="gutter" align="middle" class="mb8">
           <el-col :span="span" v-if="addBtn">
             <el-button v-bind="addBind" type="primary" icon="Plus" @click="emits('handleAdd')">{{ addBtnText }}</el-button>
           </el-col>

@@ -1,6 +1,6 @@
 <template>
   <div class="select-device" style="width: 240px;margin-bottom: 10px;display: inherit;">
-    <select-device v-model:dn="selectedDn" placeholder="选择设备" @on-select="hadnleSelectDevice"></select-device>
+    <select-device v-model:dn="selectedDn" placeholder="选择设备" @on-select="hadnleSelectDevice" />
   </div>
   <div v-if="selectedDn">
     <el-row v-for="service in servicesRef" :key="service.identifier" style="margin-bottom: 10px;">
@@ -8,8 +8,8 @@
         <el-row class="service-box">
           <el-col :span="8">
             <el-select v-model="service.identifier" @change="serviceSelected(service)">
-              <el-option label="设置属性" value="set"></el-option>
-              <el-option v-for="s in servicesList || []" :label="s.name" :value="s.identifier" :key="s.identifier"></el-option>
+              <el-option label="设置属性" value="set" />
+              <el-option v-for="s in servicesList || []" :label="s.name" :value="s.identifier" :key="s.identifier" />
             </el-select>
           </el-col>
           <el-col :span="16" style="padding-left: 5px">
@@ -18,12 +18,12 @@
                 <el-row v-for="param in service.inputData" :key="param.identifier" style="margin-bottom: 10px;">
                   <el-col :span="10">
                     <el-select v-model="param.identifier">
-                      <el-option v-for="prop in propertiesList" :label="prop.name" :value="prop.identifier" :key="prop.identifier"></el-option>
+                      <el-option v-for="prop in propertiesList" :label="prop.name" :value="prop.identifier" :key="prop.identifier" />
                     </el-select>
                   </el-col>
                   <el-col :span="2"> 值: </el-col>
                   <el-col :span="7">
-                    <el-input v-model="param.value"></el-input>
+                    <el-input v-model="param.value" />
                   </el-col>
                   <el-col :span="2">
                     <el-button @click="delParam(service.inputData, param)">-</el-button>
@@ -42,7 +42,7 @@
                   </el-col>
                   <el-col :span="2"> 值: </el-col>
                   <el-col :span="7">
-                    <el-input v-model="param.value"></el-input>
+                    <el-input v-model="param.value" />
                   </el-col>
                 </el-row>
               </el-col>
@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { propTypes } from '@/utils/propTypes'
 import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 
 import SelectDevice from '@/components/YtSelect/select-device.vue'

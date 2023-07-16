@@ -12,7 +12,7 @@
     >
       <template #menuSlot="scope">
         <el-tooltip class="box-item" effect="dark" content="配置" placement="top">
-          <el-button link type="primary" icon="Setting" @click="handleConfig(scope.row.id)"></el-button>
+          <el-button link type="primary" icon="Setting" @click="handleConfig(scope.row.id)" />
         </el-tooltip>
       </template>
       <template #state="scope">
@@ -21,7 +21,7 @@
       </template>
       <template #triggerExpression1FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
-          <crontab-box v-model="row[column.key]"></crontab-box>
+          <crontab-box v-model="row[column.key]" />
         </el-form-item>
       </template>
       <template #triggerExpression2FormItem="{column, row}">
@@ -36,6 +36,7 @@
     </yt-crud>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { deleteVirtualDevices, batchDeleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices } from '../api/virtualDevices.api'
@@ -208,7 +209,3 @@ const options = reactive({
   column,
 })
 </script>
-
-<!-- <style lang="scss" scoped>
-
-</style> -->

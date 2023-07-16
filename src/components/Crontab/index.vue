@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="Cron表达式生成器" v-model="cronDialog">
-    <table-index ref="cronBoxRef" @fill="cronFill"></table-index>
+    <table-index v-if="cronDialog" ref="cronBoxRef" @fill="cronFill" />
     <template #footer>
       <el-button type="primary" @click="submitFill">确定</el-button>
       <el-button type="warning" @click="clearCron">重置</el-button>

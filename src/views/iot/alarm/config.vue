@@ -14,9 +14,10 @@
       :total="state.total"
       v-model:page="state.page"
       v-model:query="state.query"
-    ></yt-crud>
+    />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getConfigList, saveConfig, deleteConfig } from './api/alarm.api'

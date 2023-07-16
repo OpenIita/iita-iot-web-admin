@@ -1,34 +1,28 @@
 <template>
   <el-row>
     <el-col :span="12">
-      <el-tabs type="border-card">
-        <el-tab-pane label="上行指令调试">
-          <el-tabs type="border-card">
+      <el-tabs type="border-card" v-model="activeTab">
+        <el-tab-pane label="上行指令调试" name="up">
+          <el-tabs type="border-card" v-if="activeTab === 'up'">
             <el-tab-pane label="属性上报">
-              <DeviceSimulatorProperties :properties="properties" :deviceDetail="this.deviceDetail" propertiesTyp="属性上报"
-                >S</DeviceSimulatorProperties
-              >
+              <DeviceSimulatorProperties :properties="properties" :deviceDetail="this.deviceDetail" propertiesTyp="属性上报" />
             </el-tab-pane>
             <el-tab-pane label="事件上报">
-              <DeviceSimulatorProperties :properties="events" :deviceDetail="deviceDetail" propertiesTyp="事件上报"></DeviceSimulatorProperties>
+              <DeviceSimulatorProperties :properties="events" :deviceDetail="deviceDetail" propertiesTyp="事件上报" />
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="下行指令调试">
-          <el-tabs type="border-card">
+        <el-tab-pane label="下行指令调试" name="down">
+          <el-tabs type="border-card" v-if="activeTab === 'down'">
             <el-tab-pane label="属性调试">
-              <DeviceSimulatorProperties
-                :properties="properties"
-                :deviceDetail="this.deviceDetail"
-                propertiesTyp="属性调试"
-              ></DeviceSimulatorProperties>
+              <DeviceSimulatorProperties :properties="properties" :deviceDetail="this.deviceDetail" propertiesTyp="属性调试" />
             </el-tab-pane>
-            <el-tab-pane label="服务调用"></el-tab-pane>
+            <el-tab-pane label="服务调用" />
           </el-tabs>
         </el-tab-pane>
         <!-- TODO:不兼容后面改 -->
         <!-- <el-tab-pane label="mqtt模拟器"> -->
-        <!--   <MqttClient :deviceDetail="this.deviceDetail"></MqttClient> -->
+        <!--   <MqttClient :deviceDetail="this.deviceDetail" /> -->
         <!-- </el-tab-pane> -->
       </el-tabs>
       <el-divider direction="vertical" />
@@ -36,7 +30,7 @@
     <el-col :span="12">
       <el-tabs type="border-card">
         <el-tab-pane label="设备日志">
-          <device-log :deviceDetail="this.deviceDetail" :thingModelEvents="events" :thingModelServices="services"></device-log>
+          <device-log :deviceDetail="this.deviceDetail" :thingModelEvents="events" :thingModelServices="services" />
         </el-tab-pane>
         <!-- <el-tab-pane label="服务器日志"> </el-tab-pane> -->
       </el-tabs>
@@ -60,30 +54,32 @@ export default{
       }
     },
     data(){
-        return {
+      return {
+        activeTab: 'up',
         connection: {
-        protocol: 'ws',
-        host: 'broker.emqx.io',
-        // ws: 8083; wss: 8084
-        port: 8083,
-        endpoint: '/mqtt',
-        // for more options, please refer to https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options
-        clean: true,
-        connectTimeout: 30 * 1000, // ms
-        reconnectPeriod: 4000, // ms
-        clientId:
-          'emqx_vue_' +
-          Math.random()
-            .toString(16)
-            .substring(2, 8),
-        // auth
-        username: 'emqx_test',
-        password: 'emqx_test',
-      },qosList: [0, 1, 2],
-      client: {
-        connected: false,
-      },
-        }
+          protocol: 'ws',
+          host: 'broker.emqx.io',
+          // ws: 8083; wss: 8084
+          port: 8083,
+          endpoint: '/mqtt',
+          // for more options, please refer to https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options
+          clean: true,
+          connectTimeout: 30 * 1000, // ms
+          reconnectPeriod: 4000, // ms
+          clientId:
+            'emqx_vue_' +
+            Math.random()
+              .toString(16)
+              .substring(2, 8),
+          // auth
+          username: 'emqx_test',
+          password: 'emqx_test',
+        },
+        qosList: [0, 1, 2],
+        client: {
+          connected: false,
+        },
+      }
     },
     computed:{
       properties(){

@@ -1,32 +1,32 @@
 <template>
   <div>
-    <el-tabs type="border-card">
-      <el-tab-pane label="秒" v-if="shouldHide('second')">
-        <CrontabSecond @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronsecond" />
+    <el-tabs type="border-card" v-model="activeTab">
+      <el-tab-pane label="秒" name="second" v-if="shouldHide('second')">
+        <CrontabSecond v-if="activeTab === 'second'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronsecond" />
       </el-tab-pane>
 
-      <el-tab-pane label="分钟" v-if="shouldHide('min')">
-        <CrontabMin @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronmin" />
+      <el-tab-pane label="分钟" name="minute" v-if="shouldHide('min')">
+        <CrontabMin v-if="activeTab === 'minute'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronmin" />
       </el-tab-pane>
 
-      <el-tab-pane label="小时" v-if="shouldHide('hour')">
-        <CrontabHour @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronhour" />
+      <el-tab-pane label="小时" name="hour" v-if="shouldHide('hour')">
+        <CrontabHour v-if="activeTab === 'hour'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronhour" />
       </el-tab-pane>
 
-      <el-tab-pane label="日" v-if="shouldHide('day')">
-        <CrontabDay @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronday" />
+      <el-tab-pane label="日" name="day" v-if="shouldHide('day')">
+        <CrontabDay v-if="activeTab === 'day'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronday" />
       </el-tab-pane>
 
-      <el-tab-pane label="月" v-if="shouldHide('month')">
-        <CrontabMonth @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronmonth" />
+      <el-tab-pane label="月" name="month" v-if="shouldHide('month')">
+        <CrontabMonth v-if="activeTab === 'month'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronmonth" />
       </el-tab-pane>
 
-      <el-tab-pane label="周" v-if="shouldHide('week')">
-        <CrontabWeek @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronweek" />
+      <el-tab-pane label="周" name="week" v-if="shouldHide('week')">
+        <CrontabWeek v-if="activeTab === 'week'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronweek" />
       </el-tab-pane>
 
-      <el-tab-pane label="年" v-if="shouldHide('year')">
-        <CrontabYear @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronyear" />
+      <el-tab-pane label="年" name="year" v-if="shouldHide('year')">
+        <CrontabYear v-if="activeTab === 'year'" @update="updateCrontabValue" :check="checkNumber" :cron="crontabValueObj" ref="cronyear" />
       </el-tab-pane>
     </el-tabs>
 
@@ -66,7 +66,7 @@
           </tbody>
         </table>
       </div>
-      <CrontabResult :ex="crontabValueString"></CrontabResult>
+      <CrontabResult :ex="crontabValueString" />
 
       <!-- <div class="pop_btn">
         <el-button type="primary" @click="submitFill">确定</el-button>
@@ -90,6 +90,7 @@ import CrontabResult from './result.vue'
 export default {
   data() {
     return {
+      activeTab: 'second',
       tabTitles: ['秒', '分钟', '小时', '日', '月', '周', '年'],
       tabActive: 0,
       myindex: 0,
@@ -334,6 +335,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .pop_btn {
   text-align: center;

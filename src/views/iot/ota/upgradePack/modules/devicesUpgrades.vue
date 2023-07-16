@@ -1,6 +1,7 @@
 <template>
   <el-dialog title="设备升级" width="800" v-model="state.visible" :before-close="beforeClose" v-loading="state.loading">
     <el-transfer
+      v-if="state.visible"
       v-model="value"
       :props="{
         key: 'id',
@@ -18,6 +19,7 @@
     </template>
   </el-dialog>
 </template>
+
 <script lang="ts" setup>
 import { getDevices } from '../../api/upgradePack.api'
 

@@ -1,7 +1,7 @@
 <template>
   <!-- 导入表 -->
   <el-dialog title="导入表" v-model="visible" width="800px" top="5vh" append-to-body>
-    <el-form :model="queryParams" ref="queryFormRef" :inline="true">
+    <el-form v-if="visible" :model="queryParams" ref="queryFormRef" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input v-model="queryParams.tableName" placeholder="请输入表名称" clearable @keyup.enter="handleQuery" />
       </el-form-item>
@@ -15,11 +15,11 @@
     </el-form>
     <el-row>
       <el-table @row-click="clickRow" ref="tableRef" :data="dbTableList" @selection-change="handleSelectionChange" height="260px">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="tableComment" label="表描述" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+        <el-table-column type="selection" width="55" />
+        <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true" />
+        <el-table-column prop="tableComment" label="表描述" :show-overflow-tooltip="true" />
+        <el-table-column prop="createTime" label="创建时间" />
+        <el-table-column prop="updateTime" label="更新时间" />
       </el-table>
       <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-row>
@@ -36,7 +36,7 @@
 import { listDbTable, importTable } from '@/api/tool/gen'
 import { DbTableQuery, DbTableVO } from '@/api/tool/gen/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElTable, ElForm } from 'element-plus'
+import { FormInstance, TableInstance } from 'element-plus'
 
 const total = ref(0)
 const visible = ref(false)
@@ -44,8 +44,8 @@ const tables = ref<Array<string>>([])
 const dbTableList = ref<Array<DbTableVO>>([])
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
-const tableRef = ref(ElTable)
-const queryFormRef = ref(ElForm)
+const tableRef = ref<TableInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const queryParams = reactive<DbTableQuery>({
   pageNum: 1,
@@ -63,7 +63,7 @@ const show = () => {
 }
 /** 单击选择行 */
 const clickRow = (row: DbTableVO) => {
-  tableRef.value.toggleRowSelection(row)
+  tableRef.value?.toggleRowSelection(row, true)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: DbTableVO[]) => {
@@ -82,7 +82,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 导入按钮操作 */

@@ -43,7 +43,7 @@
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Close" @click="handleClose">关闭</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -73,10 +73,10 @@
         <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -86,7 +86,7 @@
     </el-card>
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="dataFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="dataFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="字典类型">
           <el-input v-model="form.dictType" :disabled="true" />
         </el-form-item>
@@ -104,12 +104,7 @@
         </el-form-item>
         <el-form-item label="回显样式" prop="listClass">
           <el-select v-model="form.listClass">
-            <el-option
-              v-for="item in listClassOptions"
-              :key="item.value"
-              :label="item.label + '(' + item.value + ')'"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="item in listClassOptions" :key="item.value" :label="item.label + '(' + item.value + ')'" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -118,7 +113,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -138,7 +133,7 @@ import { listData, getData, delData, addData, updateData } from '@/api/system/di
 import { DictTypeVO } from '@/api/system/dict/type/types'
 import { ComponentInternalInstance } from 'vue'
 import { DictDataForm, DictDataQuery, DictDataVO } from '@/api/system/dict/data/types'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
@@ -154,8 +149,8 @@ const total = ref(0)
 const defaultDictType = ref('')
 const typeOptions = ref<DictTypeVO[]>([])
 
-const dataFormRef = ref(ElForm)
-const queryFormRef = ref(ElForm)
+const dataFormRef = ref<FormInstance>()
+const queryFormRef = ref<FormInstance>()
 
 
 const dialog = reactive<DialogOption>({
@@ -231,7 +226,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  dataFormRef.value.resetFields()
+  dataFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -245,7 +240,7 @@ const handleClose = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.dictType = defaultDictType.value
   handleQuery()
 }
@@ -277,7 +272,7 @@ const handleUpdate = (row?: DictDataVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  dataFormRef.value.validate(async (valid: boolean) => {
+  dataFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.dictCode ? await updateData(form.value) : await addData(form.value)
       useDictStore().removeDict(queryParams.value.dictType)

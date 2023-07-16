@@ -7,7 +7,7 @@
           v-bind="{
             ...scope,
           }"
-        ></slot>
+        />
       </template>
     </yt-table-search>
     <yt-table-fun
@@ -21,7 +21,7 @@
       @handle-add="handleAdd()"
     >
       <template #rightToolbar>
-        <slot name="rightToolbar"></slot>
+        <slot name="rightToolbar" />
       </template>
       <yt-table
         v-bind="bind.tableBind"
@@ -39,7 +39,7 @@
         @row-click="rowClick"
       >
         <template #customTable>
-          <slot name="customTable" :handle-update="handleUpdate" :handle-delete="handleDel" :handle-view="handleView"></slot>
+          <slot name="customTable" :handle-update="handleUpdate" :handle-delete="handleDel" :handle-view="handleView" />
         </template>
         <template #menuSlot="scope">
           <slot
@@ -47,7 +47,7 @@
             v-bind="{
             ...scope,
           }"
-          ></slot>
+          />
         </template>
         <template v-for="(item, index) in tableSlots" :key="index" #[item]="scope">
           <slot
@@ -55,7 +55,7 @@
             v-bind="{
             ...scope,
             }"
-          ></slot>
+          />
         </template>
       </yt-table>
     </yt-table-fun>
@@ -74,7 +74,7 @@
           v-bind="{
             ...scope,
           }"
-        ></slot>
+        />
       </template>
       <template v-for="(item, index) in formItemSlots" :key="index" #[item]="scope">
         <slot
@@ -82,7 +82,7 @@
           v-bind="{
             ...scope,
           }"
-        ></slot>
+        />
       </template>
     </yt-table-form>
   </div>

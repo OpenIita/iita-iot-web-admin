@@ -28,7 +28,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -40,8 +40,8 @@
         ref="deptTableRef"
         :default-expand-all="isExpandAll"
       >
-        <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-        <el-table-column prop="orderNum" align="center" label="排序" width="200"></el-table-column>
+        <el-table-column prop="deptName" label="部门名称" width="260" />
+        <el-table-column prop="orderNum" align="center" label="排序" width="200" />
         <el-table-column prop="status" align="center" label="状态" width="100">
           <template #default="scope">
             <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -69,7 +69,7 @@
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" destroy-on-close append-to-bod width="600px">
-      <el-form ref="deptFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="deptFormRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">
             <el-form-item label="上级部门" prop="parentId">
@@ -132,6 +132,7 @@
 import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from '@/api/system/dept'
 import { ComponentInternalInstance } from 'vue'
 import { DeptForm, DeptQuery, DeptVO } from '@/api/system/dept/types'
+import { FormInstance, TableInstance } from 'element-plus'
 
 interface DeptOptionsType {
   id: number | string
@@ -153,9 +154,9 @@ const dialog = reactive<DialogOption>({
   title: '',
 })
 
-const deptTableRef = ref(ElTable)
-const queryFormRef = ref(ElForm)
-const deptFormRef = ref(ElForm)
+const deptTableRef = ref<TableInstance>()
+const queryFormRef = ref<FormInstance>()
+const deptFormRef = ref<FormInstance>()
 
 const initFormData: DeptForm = {
   id: undefined,
@@ -204,7 +205,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = { ...initFormData }
-  deptFormRef.value.resetFields()
+  deptFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -213,7 +214,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 新增按钮操作 */
@@ -241,7 +242,7 @@ const handleToggleExpandAll = () => {
 /** 展开/折叠所有 */
 const toggleExpandAll = (data: DeptVO[], status: boolean) => {
   data.forEach((item) => {
-    deptTableRef.value.toggleRowExpansion(item, status)
+    deptTableRef.value?.toggleRowExpansion(item, status)
     if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
@@ -267,7 +268,7 @@ const handleUpdate = async (row: DeptVO) => {
 }
 /** 提交按钮 */
 const submitForm = () => {
-  deptFormRef.value.validate(async (valid: boolean) => {
+  deptFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.id ? await updateDept(form.value) : await addDept(form.value)
       proxy?.$modal.msgSuccess('操作成功')

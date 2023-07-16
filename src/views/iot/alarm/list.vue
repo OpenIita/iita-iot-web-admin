@@ -17,7 +17,7 @@
       :total="state.total"
       v-model:page="state.page"
       v-model:query="state.query"
-    ></yt-crud>
+    />
   </div>
 </template>
 <script lang="ts" setup>

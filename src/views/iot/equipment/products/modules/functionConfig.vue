@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="function-config">
     <yt-table-fun @handle-add="handleAdd">
       <yt-table
         :selection="false"
@@ -19,9 +19,10 @@
         </template>
       </yt-table>
     </yt-table-fun>
-    <function-detail ref="functionDetailRef" :id="id" :model="model"></function-detail>
+    <function-detail ref="functionDetailRef" :id="id" :model="model" />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { propTypes } from '@/utils/propTypes'

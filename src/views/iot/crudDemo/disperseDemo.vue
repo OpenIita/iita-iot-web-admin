@@ -2,23 +2,24 @@
   <basic-layout>
     <yt-table-search :column="column" @handle-search="search">
       <template #slots="item, formModel">
-        <el-input v-model="formModel[item.key]"></el-input>
+        <el-input v-model="formModel[item.key]" />
       </template>
     </yt-table-search>
     <yt-table-fun @handle-add="handleAdd()">
       <yt-table :data="data" :column="column" @handle-update="handleUpdate" @handle-delete="handleDel" @handle-view="handleView">
         <template #slots="row">
-          <el-switch v-model="row.slots"></el-switch>
+          <el-switch v-model="row.slots" />
         </template>
       </yt-table>
     </yt-table-fun>
     <yt-table-form ref="tableFormRef" :column="column">
       <template #slots="col, data">
-        <el-switch v-model="data.slots"></el-switch>
+        <el-switch v-model="data.slots" />
       </template>
     </yt-table-form>
   </basic-layout>
 </template>
+
 <script lang="ts" setup>
 import YtTableSearch from '@/components/common/yt-table-search'
 import YtTableFun from '@/components/common/yt-table-fun.vue'

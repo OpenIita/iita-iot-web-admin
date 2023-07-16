@@ -56,6 +56,7 @@
 import { forceLogout, list as initData } from '@/api/monitor/online'
 import { ComponentInternalInstance } from 'vue'
 import { OnlineQuery, OnlineVO } from '@/api/monitor/online/types'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
@@ -63,7 +64,7 @@ const onlineList = ref<OnlineVO[]>([])
 const loading = ref(true)
 const total = ref(0)
 
-const queryFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
 
 const queryParams = ref<OnlineQuery>({
   pageNum: 1,
@@ -87,7 +88,7 @@ const handleQuery = () => {
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 /** 强退按钮操作 */

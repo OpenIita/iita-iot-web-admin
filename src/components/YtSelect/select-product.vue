@@ -1,11 +1,12 @@
 <template>
   <el-input class="cu-input" size="small" placeholder="请选择产品" v-model.trim="name" @clear="onClear" clearable @click="handleSelect">
     <template #append>
-      <el-button type="primaqry" @click="handleSelect">选择</el-button>
+      <el-button type="primary" @click="handleSelect">选择</el-button>
     </template>
   </el-input>
   <el-dialog title="选择产品" v-model="dialogState.show" width="1200px">
     <yt-crud
+      v-if="dialogState.show"
       ref="ytCrudRef"
       :data="data"
       :column="column"
@@ -99,7 +100,7 @@ const handleSelect = () => {
 const cateOptions = ref<any[]>([])
 const getDict = () => {
   getCategoriesAll().then(res => {
-    cateOptions.value = res.data || []
+    cateOptions.value = res?.data || []
     column.value.forEach(item => {
       if (item.key === 'category') {
         item.componentProps.options = cateOptions

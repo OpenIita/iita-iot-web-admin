@@ -23,7 +23,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-            ></el-date-picker>
+            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -52,7 +52,7 @@
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['monitor:logininfor:export']">导出</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -100,7 +100,7 @@
 import { list, delLoginInfo, cleanLoginInfo, unlockLoginInfo } from '@/api/monitor/loginInfo'
 import { ComponentInternalInstance } from 'vue'
 import { LoginInfoQuery, LoginInfoVO } from '@/api/monitor/loginInfo/types'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance, TableInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_common_status } = toRefs<any>(proxy?.useDict('sys_common_status'))
@@ -116,8 +116,8 @@ const total = ref(0)
 const dateRange = ref<[DateModelType,DateModelType]>(['', ''])
 const defaultSort = ref<any>({ prop: 'loginTime', order: 'descending' })
 
-const queryFormRef = ref(ElForm)
-const loginInfoTableRef = ref(ElTable)
+const queryFormRef = ref<FormInstance>()
+const loginInfoTableRef = ref<TableInstance>()
 // 查询参数
 const queryParams = ref<LoginInfoQuery>({
   pageNum: 1,
@@ -145,9 +145,9 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.pageNum = 1
-  loginInfoTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
+  loginInfoTableRef.value?.sort(defaultSort.value.prop, defaultSort.value.order)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: LoginInfoVO[]) => {
