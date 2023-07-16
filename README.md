@@ -90,7 +90,7 @@ http://localhost:8082
 
 ## 生产环境配置示例
 
-- pro 前缀和 `.env.production` 文件中的一致
+- api 前缀和 `.env.production` 文件中的一致
 - 服务器上静态资源的目录 `/www/wwwroot` 根据实际情况调整
 
 ```nginx
