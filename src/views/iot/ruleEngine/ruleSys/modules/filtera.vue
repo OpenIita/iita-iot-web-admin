@@ -16,11 +16,7 @@
                   </el-radio-group>
                 </div>
                 <div class="item" v-if="item.deviceRadio === '指定设备'">
-                  <select-device
-                    v-model:dn="item.deviceDn"
-                    placeholder="选择设备"
-                    @on-select="(row) => hadnleSelectDevice(row, item)"
-                  ></select-device>
+                  <select-device v-model:dn="item.deviceDn" placeholder="选择设备" @on-select="(row) => hadnleSelectDevice(row, item)" />
                 </div>
               </div>
               <div style="padding-right: 10px;">
