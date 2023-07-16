@@ -1,13 +1,13 @@
 <template>
   <yt-crud ref="crudRef" :data="data" :column="column">
     <template #sloo="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
+      <el-input v-model="scope.row.sloo" />
     </template>
     <template #slots3Form="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
+      <el-input v-model="scope.row.sloo" />
     </template>
     <template #slots2Search="scope">
-      <el-input v-model="scope.row.sloo"></el-input>
+      <el-input v-model="scope.row.sloo" />
     </template>
   </yt-crud>
 </template>

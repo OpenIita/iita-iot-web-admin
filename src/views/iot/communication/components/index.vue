@@ -11,14 +11,14 @@
                   <el-popconfirm title="确认要删除吗？" @confirm="handleDelete(com)">
                     <template #reference>
                       <div>
-                        <el-button icon="Delete" link type="danger"></el-button>
+                        <el-button icon="Delete" link type="danger" />
                       </div>
                     </template>
                   </el-popconfirm>
                 </div>
               </div>
             </template>
-            <el-descriptions :column="1" size="medium" :labelStyle="{ fontWeight: 'bold' }">
+            <el-descriptions :column="1" size="default" :labelStyle="{ fontWeight: 'bold' }">
               <el-descriptions-item label-class-name="custom-label" label="通讯协议">{{
                 com.protocol
               }}</el-descriptions-item>
@@ -37,8 +37,7 @@
                   size="large"
                   style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
                   @change="stateChange(com)"
-                >
-                </el-switch>
+                />
               </el-descriptions-item>
               <el-descriptions-item label-class-name="custom-label" label="操作">
                 <el-button @click="handleEdit(com)" link icon="Edit" type="primary">修改</el-button>
@@ -60,7 +59,7 @@
           ref="httpConfigForm"
         >
           <el-form-item label="端口" prop="port">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口" />
           </el-form-item>
         </el-form>
         <el-form
@@ -72,7 +71,7 @@
           ref="mqttConfigForm"
         >
           <el-form-item label="端口" prop="port">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口" />
           </el-form-item>
           <el-form-item label="模式" prop="type">
             <el-radio v-model="scope.row.config.type" label="server">服务端模式</el-radio>
@@ -83,17 +82,17 @@
             </div>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="IP地址" prop="host">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.host" auto-complete="off" placeholder="请输入IP地址"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.host" auto-complete="off" placeholder="请输入IP地址" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'server'" label="IP地址" prop="host">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.host" auto-complete="off" placeholder="请输入IP地址"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.host" auto-complete="off" placeholder="请输入IP地址" />
           </el-form-item>
           <el-form-item label="处理方式" prop="parserType">
             <el-select v-model="scope.row.config.parserType" placeholder="请选择通讯协议">
-              <el-option label="不处理" value="不处理"> </el-option>
-              <el-option label="固定长度" value="固定长度"> </el-option>
-              <el-option label="分隔符" value="分隔符"> </el-option>
-              <el-option label="自定义脚本" value="自定义脚本"> </el-option>
+              <el-option label="不处理" value="不处理" />
+              <el-option label="固定长度" value="固定长度" />
+              <el-option label="分隔符" value="分隔符" />
+              <el-option label="自定义脚本" value="自定义脚本" />
             </el-select>
           </el-form-item>
           <el-form-item v-if="scope.row.config.parserType == '固定长度'" label="长度" prop="fix">
@@ -103,7 +102,7 @@
               v-model="scope.row.config.parserConfiguration.fix"
               auto-complete="off"
               placeholder="请输入长度"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item v-if="scope.row.config.parserType == '分隔符'" label="分隔符" prop="delimited">
             <el-input
@@ -112,7 +111,7 @@
               v-model="scope.row.config.parserConfiguration.delimited"
               auto-complete="off"
               placeholder="请输入分隔符"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item v-if="scope.row.config.parserType == '自定义脚本'" label="script" prop="fix">
             <el-input
@@ -121,7 +120,7 @@
               v-model="scope.row.config.parserConfiguration.script"
               auto-complete="off"
               placeholder="请输入自定义脚本"
-            ></el-input>
+            />
           </el-form-item>
         </el-form>
         <el-form
@@ -133,7 +132,7 @@
           ref="wsConfigForm"
         >
           <el-form-item label="端口" prop="port">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口" />
           </el-form-item>
           <el-form-item label="模式" prop="type">
             <el-radio v-model="scope.row.config.type" label="server">服务端模式</el-radio>
@@ -153,17 +152,17 @@
                   auto-complete="off"
                   prop="tokenName"
                   :placeholder="accessToken.tokenName==''?'请输入令牌名':accessToken.tokenName"
-                ></el-input>
-                <el-button size="small" type="error" style="margin-left: 10px;" @click="delToken(accessToken, scope.row.config)">删除</el-button>
+                />
+                <el-button size="small" type="danger" style="margin-left: 10px;" @click="delToken(accessToken, scope.row.config)">删除</el-button>
               </el-form-item>
             </div>
             <el-button size="small" @click="addToken(scope.row.config)">新增</el-button>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="IP" prop="ip">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.ip" auto-complete="off" placeholder="请输入IP地址"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.ip" auto-complete="off" placeholder="请输入IP地址" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="URL" prop="url">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.url" auto-complete="off" placeholder="请输入URL"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.url" auto-complete="off" placeholder="请输入URL" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="心跳间隔" prop="heartBeatTime">
             <el-input
@@ -172,16 +171,10 @@
               v-model="scope.row.config.heartBeatTime"
               auto-complete="off"
               placeholder="请输入心跳间隔(毫秒)"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="心跳包" prop="heartBeatData">
-            <el-input
-              style="width: 250px"
-              size="small"
-              v-model="scope.row.config.heartBeatData"
-              auto-complete="off"
-              placeholder="请输入心跳包数据"
-            ></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.heartBeatData" auto-complete="off" placeholder="请输入心跳包数据" />
           </el-form-item>
         </el-form>
         <el-form
@@ -193,10 +186,10 @@
           ref="mqttConfigForm"
         >
           <el-form-item label="端口" prop="port">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.port" auto-complete="off" placeholder="请输入端口" />
           </el-form-item>
           <el-form-item label="WebSocket">
-            <el-switch v-model="scope.row.config.useWebSocket" active-text="是" inactive-text="否"></el-switch>
+            <el-switch v-model="scope.row.config.useWebSocket" active-text="是" inactive-text="否" />
             <div>
               <el-tag v-if="scope.row.config.useWebSocket == true" type="info"> 通过websocket连接mqtt broker </el-tag>
             </div>
@@ -210,44 +203,26 @@
             </div>
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="认证端口" prop="authPort">
-            <el-input
-              style="width: 250px"
-              size="small"
-              v-model="scope.row.config.authPort"
-              auto-complete="off"
-              placeholder="请输入认证端口"
-            ></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.authPort" auto-complete="off" placeholder="请输入认证端口" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="地址" prop="broker">
-            <el-input
-              style="width: 250px"
-              size="small"
-              v-model="scope.row.config.broker"
-              auto-complete="off"
-              placeholder="请输入broker地址"
-            ></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.broker" auto-complete="off" placeholder="请输入broker地址" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="clientId" prop="clientId">
-            <el-input
-              style="width: 250px"
-              size="small"
-              v-model="scope.row.config.clientId"
-              auto-complete="off"
-              placeholder="请输入clientId"
-            ></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.clientId" auto-complete="off" placeholder="请输入clientId" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="用户名" prop="username">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.username" auto-complete="off" placeholder="请输入用户名"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.username" auto-complete="off" placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item v-if="scope.row.config.type == 'client'" label="密码" prop="password">
-            <el-input style="width: 250px" size="small" v-model="scope.row.config.password" auto-complete="off" placeholder="请输入密码"></el-input>
+            <el-input style="width: 250px" size="small" v-model="scope.row.config.password" auto-complete="off" placeholder="请输入密码" />
           </el-form-item>
         </el-form>
       </template>
       <template #jarFileForm="{ row }">
         <div v-if="row.jarFile">
           <el-tag
-            size="medium"
+            size="default"
             type="info"
             closable
             @close="() => {
@@ -267,10 +242,10 @@
           @stringSuccess="(res) => uploadJarSuccess(res, row)"
           uploadType="url"
           uploadUrl="/protocol/uploadJar"
-        ></upload-file>
+        />
       </template>
     </yt-table-form>
-    <conversion-script title="通讯脚本" type="communication" ref="conversionScriptRef"></conversion-script>
+    <conversion-script title="通讯脚本" type="communication" ref="conversionScriptRef" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -278,7 +253,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 import { generateUUID } from '@/utils'
 import { getComponentList, deleteComponent, addComponent, editComponent, changeState } from '../api/component.api'
 import type { IComponentVO } from '../api/component.api'
-import { getConvertorsList, IConvertorsVO } from '../api/convertors.api'
+import { getConvertorsList } from '../api/convertors.api'
 
 import YtTableFun from '@/components/common/yt-table-fun.vue'
 import YtTableForm from '@/components/common/yt-table-form'
@@ -384,6 +359,28 @@ const column = ref<IColumn[]>([{
     scope.column.forEach((f: IColumn) => {
       if (f.key === 'converter') {
         f.formHide = scope.value === 'biz'
+      }
+    })
+    column.value = scope.column
+  }
+}, {
+  label: '转换器类型',
+  key: 'converType',
+  type: 'radio',
+  componentProps: {
+    defaultValue: 'custom',
+    options: [{
+      label: '自定义',
+      value: 'custom',
+    }, {
+      label: '静态',
+      value: 'static',
+    }]
+  },
+  formWatch: (scope) => {
+    scope.column.forEach((f: IColumn) => {
+      if (f.key === 'converter') {
+        f.formHide = scope.value === 'static'
       }
     })
     column.value = scope.column

@@ -14,9 +14,10 @@
       @onLoad="getData"
       @saveFun="onSave"
       @delFun="onDelete"
-    ></yt-crud>
+    />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
@@ -102,7 +103,3 @@ const onDelete = async (row: any) => {
   getData()
 }
 </script>
-
-<!-- <style lang="scss" scoped>
-
-</style> -->

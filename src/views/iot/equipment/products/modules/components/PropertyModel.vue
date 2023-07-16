@@ -2,20 +2,20 @@
   <div style="width: 100%">
     <el-form ref="formRef" class="model-form" :rules="rules" label-width="120px" :model="propertyRef">
       <el-form-item style="margin-bottom: 18px;" label="名称" prop="name">
-        <el-input v-model="propertyRef.name" auto-complete="off"></el-input>
+        <el-input v-model="propertyRef.name" auto-complete="off" />
       </el-form-item>
       <el-form-item style="margin-bottom: 18px;" label="标识符" prop="identifier">
-        <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off"></el-input>
+        <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off" />
       </el-form-item>
       <el-form-item style="margin-bottom: 18px;" label="数据类型" prop="dataType.type">
         <el-select v-model="propertyRef.dataType.type" placeholder="请选择数据类型">
-          <el-option label="int32" value="int32"></el-option>
-          <el-option label="float" value="float"></el-option>
-          <el-option label="bool" value="bool"></el-option>
-          <el-option label="enum" value="enum"></el-option>
-          <el-option label="text" value="text"></el-option>
-          <el-option label="date" value="date"></el-option>
-          <el-option v-if="isProperty" label="position" value="position"></el-option>
+          <el-option label="int32" value="int32" />
+          <el-option label="float" value="float" />
+          <el-option label="bool" value="bool" />
+          <el-option label="enum" value="enum" />
+          <el-option label="text" value="text" />
+          <el-option label="date" value="date" />
+          <el-option v-if="isProperty" label="position" value="position" />
         </el-select>
       </el-form-item>
       <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('position')">
@@ -23,9 +23,9 @@
           <el-col :span="3">定位方式</el-col>
           <el-col :span="6">
             <el-select v-model="propertyRef.dataType.specs.locateType" placeholder="请选择定位方式">
-              <el-option label="经纬度定位" value="lonLat"> </el-option>
-              <el-option label="基站信息定位" value="basestation"> </el-option>
-              <el-option label="IP信息定位" value="ipinfo"> </el-option>
+              <el-option label="经纬度定位" value="lonLat" />
+              <el-option label="基站信息定位" value="basestation" />
+              <el-option label="IP信息定位" value="ipinfo" />
             </el-select>
           </el-col>
         </el-row>
@@ -33,22 +33,22 @@
       <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('int32')">
         <el-col :span="3"> 取值范围 </el-col>
         <el-col :span="5">
-          <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值"> </el-input>
+          <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值" />
         </el-col>
         <el-col class="line" :span="1" style="text-align: center;">-</el-col>
         <el-col :span="5">
-          <el-input v-model="propertyRef.dataType.specs.max" placeholder="最大值"> </el-input>
+          <el-input v-model="propertyRef.dataType.specs.max" placeholder="最大值" />
         </el-col>
         <el-col :span="10"></el-col>
       </el-form-item>
       <el-form-item style="margin-bottom: 18px;" v-if="isSelectType('float')">
         <el-col :span="3"> 取值范围 </el-col>
         <el-col :span="3">
-          <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值"> </el-input>
+          <el-input v-model="propertyRef.dataType.specs.min" placeholder="最小值" />
         </el-col>
         <el-col class="line" :span="1" style="text-align: center;">-</el-col>
         <el-col :span="3">
-          <el-input v-model="propertyRef.dataType.specs.max" placeholder="最大值"> </el-input>
+          <el-input v-model="propertyRef.dataType.specs.max" placeholder="最大值" />
         </el-col>
         <el-col :span="1">&nbsp;</el-col>
         <el-col :span="10">
@@ -61,12 +61,12 @@
         <el-col :span="3">布尔值</el-col>
         <el-col :span="1"> 0 - </el-col>
         <el-col :span="3">
-          <el-input v-model="boolItemRef._true" placeholder="如:否"> </el-input>
+          <el-input v-model="boolItemRef._true" placeholder="如:否" />
         </el-col>
         <el-col :span="1">&nbsp; </el-col>
         <el-col :span="1"> 1 - </el-col>
         <el-col :span="3">
-          <el-input v-model="boolItemRef._false" placeholder="如:是"> </el-input>
+          <el-input v-model="boolItemRef._false" placeholder="如:是" />
         </el-col>
       </el-form-item>
       <el-form-item label=" " style="margin-bottom: 10px;" v-if="isSelectType('enum')">
@@ -74,12 +74,12 @@
           <el-row>
             <el-col :span="3"> 枚举值 </el-col>
             <el-col :span="3">
-              <el-input type="number" v-model="ei.value" placeholder="如:0"> </el-input>
+              <el-input type="number" v-model="ei.value" placeholder="如:0" />
             </el-col>
             <el-col :span="2"> &nbsp; </el-col>
             <el-col :span="3"> 枚举描述 </el-col>
             <el-col :span="5">
-              <el-input v-model="ei.name"> </el-input>
+              <el-input v-model="ei.name" />
             </el-col>
             <el-col :span="1"> &nbsp; </el-col>
             <el-col :span="2">
@@ -92,7 +92,7 @@
       <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('text')">
         <el-col :span="3">数据长度</el-col>
         <el-col :span="3">
-          <el-input v-model="propertyRef.dataType.specs.length" placeholder="数据长度"></el-input>
+          <el-input v-model="propertyRef.dataType.specs.length" placeholder="数据长度" />
         </el-col>
       </el-form-item>
       <el-form-item style="margin-bottom: 10px;" v-if="isSelectType('date')"> String类型的UTC时间戳（毫秒） </el-form-item>

@@ -1,18 +1,11 @@
 <template>
-  <yt-crud
-    ref="crudRef"
-    v-model:queryParams="queryParams"
-    :data="data"
-    :column="column"
-    :loading="loading"
-    @save-fun="saveFun"
-    @change="onLoad"
-  ></yt-crud>
+  <yt-crud ref="crudRef" v-model:queryParams="queryParams" :data="data" :column="column" :loading="loading" @save-fun="saveFun" @change="onLoad" />
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 
-import { listTenant, getTenant, delTenant, addTenant, updateTenant } from '@/api/system/tenant'
+import { listTenant, addTenant, updateTenant } from '@/api/system/tenant'
 
 import { ElLoading } from 'element-plus'
 import YtCrud from '@/components/common/yt-crud.vue'

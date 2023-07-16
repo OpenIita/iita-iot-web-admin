@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="dialogModel" width="80%" append-to-body :fullscreen="isFullscreen">
-    <template #header>
+    <template #header v-if="dialogModel">
       <span class="el-dialog__title">{{ title + '编写' }}</span>
       <div class="header-icon">
         <el-icon v-if="!isFullscreen" @click="isFullscreen = true"><FullScreen /></el-icon>
@@ -26,19 +26,19 @@
     </template>
     <!-- <el-row>
       脚本语言:
-      <el-radio v-model="editScript.typ" label="js"></el-radio>
+      <el-radio v-model="editScript.typ" label="js" />
     </el-row> -->
-    <el-row justify="space-between" class="row-box" v-loading="loading">
+    <el-row v-if="dialogModel" justify="space-between" class="row-box" v-loading="loading">
       <el-col :span="16">
         {{ title }}：
         <div v-if="editScript.typ == 'js'">new (function () {</div>
-        <code-editor v-model:code="editScript.script"></code-editor>
+        <code-editor v-model:code="editScript.script" />
         <div v-if="editScript.typ == 'js'">})()</div>
       </el-col>
       <el-col :span="7" class="right-box">
         测试数据：
         <div style="height: 200px; overflow: auto">
-          <code-editor v-model:code="testDataScript.script"></code-editor>
+          <code-editor v-model:code="testDataScript.script" />
         </div>
         <el-row style="padding: 5px 5px">
           <el-col :span="10"> 测试结果： </el-col>
@@ -53,7 +53,7 @@
           </el-col>
         </el-row>
         <div>
-          <el-input type="textarea" v-model="testDataScript.testResult" :readonly="true" :rows="7"> </el-input>
+          <el-input type="textarea" v-model="testDataScript.testResult" :readonly="true" :rows="7" />
         </div>
       </el-col>
     </el-row>
@@ -63,13 +63,13 @@
     </template>
   </el-dialog>
 </template>
+
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 import { getConverterScript, editConverterScript } from '../api/convertors.api'
 import { getComponentDetail, saveComponentScript } from '../api/component.api'
 
 import CodeEditor from '@/components/CodeEditor/index.vue'
-
 
 const dialogModel = ref(false)
 const props = defineProps({

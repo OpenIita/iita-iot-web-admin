@@ -2,9 +2,7 @@
   <div class="p-3 basic-layout">
     <div class="main-box">
       <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-        <div>
-          <slot></slot>
-        </div>
+        <slot />
       </transition>
     </div>
   </div>

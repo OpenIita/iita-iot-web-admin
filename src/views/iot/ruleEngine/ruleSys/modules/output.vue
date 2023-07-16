@@ -22,19 +22,19 @@
             </div>
           </template>
           <div class="condition-box" v-if="item.type === 'device'">
-            <DeviceAction ref="deviceActionRef" v-model:services="item.services"></DeviceAction>
+            <DeviceAction ref="deviceActionRef" v-model:services="item.services" />
           </div>
           <div class="condition-box" v-if="item.type === 'http'">
-            <HttpAction :config="item"></HttpAction>
+            <HttpAction :config="item" />
           </div>
           <div class="condition-box" v-if="item.type === 'mqtt'">
-            <MqttAction :config="item"></MqttAction>
+            <MqttAction :config="item" />
           </div>
           <div class="condition-box" v-if="item.type === 'kafka'">
-            <KafkaAction :config="item"></KafkaAction>
+            <KafkaAction :config="item" />
           </div>
           <div class="condition-box" v-if="item.type === 'tcp'">
-            <TcpAction :config="item"></TcpAction>
+            <TcpAction :config="item" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -44,8 +44,6 @@
 </template>
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
-
-import SelectDevice from '@/components/YtSelect/select-device.vue'
 import DeviceAction from '../components/DeviceAction.vue'
 import HttpAction from '../components/HttpAction.vue'
 import MqttAction from '../components/MqttAction.vue'

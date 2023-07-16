@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <el-page-header @back="goBack" content="虚拟设备详情"></el-page-header>
+    <el-page-header @back="goBack" content="虚拟设备详情" />
     <el-divider></el-divider>
     <!-- 头部信息 -->
     <el-form :inline="true" label-width="80px">
@@ -23,27 +23,25 @@
     </el-form>
     <el-tabs v-model="state.activeName">
       <el-tab-pane label="绑定设备" name="config">
-        <bind-devices></bind-devices>
+        <bind-devices v-if="state.activeName === 'config'" />
       </el-tab-pane>
       <el-tab-pane label="脚本" name="script">
-        <script-box></script-box>
+        <script-box v-if="state.activeName === 'script'" />
       </el-tab-pane>
       <el-tab-pane label="日志" name="log">
-        <log></log>
+        <device-log v-if="state.activeName === 'log'" />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script lang="ts" setup>
 import BindDevices from './modules/virtualDevices/bindDevices.vue'
-import Log from './modules/virtualDevices/log.vue'
+import DeviceLog from './modules/virtualDevices/log.vue'
 import ScriptBox from './modules/virtualDevices/script.vue'
 import { ElNotification } from 'element-plus'
-import { setVirtualDeviceState,runVirtualDevices,IChangeStateVO } from '../api/virtualDevices.api'
+import { setVirtualDeviceState, runVirtualDevices } from '../api/virtualDevices.api'
 
-const route = useRoute()
 const router = useRouter()
-const { id } = route.params
 const goBack = () => {
   router.back()
 }
@@ -62,7 +60,7 @@ const data = ref({
   'state': 'stopped',
   'createAt': 1653839152090
 })
-const state = reactive<any>({
+const state = reactive({
   detail: {},
   activeName: 'config',
   typeName: {

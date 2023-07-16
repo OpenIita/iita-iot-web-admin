@@ -15,6 +15,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 import defaultImg from '@/assets/images/profile.jpg'

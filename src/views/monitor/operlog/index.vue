@@ -28,7 +28,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-            ></el-date-picker>
+            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -52,7 +52,7 @@
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['monitor:operlog:export']">导出</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -108,7 +108,7 @@
         <el-table-column label="操作" fixed="right" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="详细" placement="top">
-              <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:operlog:query']"> </el-button>
+              <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:operlog:query']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -116,9 +116,10 @@
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
+
     <!-- 操作日志详细 -->
     <el-dialog title="操作日志详细" v-model="dialog.visible" width="700px" append-to-body>
-      <el-form :model="form" label-width="100px">
+      <el-form v-if="dialog.visible" :model="form" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="操作模块：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
@@ -167,7 +168,7 @@
 import { list, delOperlog, cleanOperlog } from '@/api/monitor/operlog'
 import { ComponentInternalInstance } from 'vue'
 import { OperLogForm, OperLogQuery, OperLogVO } from '@/api/monitor/operlog/types'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance, TableInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_oper_type, sys_common_status } = toRefs<any>(proxy?.useDict('sys_oper_type','sys_common_status'))
@@ -181,8 +182,8 @@ const total = ref(0)
 const dateRange = ref<[DateModelType, DateModelType]>(['', ''])
 const defaultSort = ref<any>({ prop: 'operTime', order: 'descending' })
 
-const operLogTableRef = ref(ElTable)
-const queryFormRef = ref(ElForm)
+const operLogTableRef = ref<TableInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -247,9 +248,9 @@ const handleQuery = () => {
 /** 重置按钮操作 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.pageNum = 1
-  operLogTableRef.value.sort(defaultSort.value.prop, defaultSort.value.order)
+  operLogTableRef.value?.sort(defaultSort.value.prop, defaultSort.value.order)
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: OperLogVO[]) => {

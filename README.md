@@ -75,7 +75,7 @@ npm i pnpm -g
 pnpm config set registry https://registry.npmmirror.com/
 
 # 安装依赖
-如之前安装老版本，或者使用npm i、yarn、cnpm i安装过node_modules，请先删除在进行安装。
+如之前安装老版本，或者使用 npm i、yarn、cnpm i 安装过 node_modules，请先删除在进行安装。
 pnpm install
 
 # 启动服务
@@ -83,7 +83,35 @@ pnpm run dev
 
 # 构建生产环境 
 yarn build:prod
+
 # 前端访问地址
-http://localhost:8082[奇特目录.md](..%2F..%2F..%2F%CF%C2%D4%D8%2F%C6%E6%CC%D8%C4%BF%C2%BC.md)
+http://localhost:8082
+```
 
+## 生产环境配置示例
 
+- api 前缀和 `.env.production` 文件中的一致
+- 服务器上静态资源的目录 `/www/wwwroot` 根据实际情况调整
+
+```nginx
+server
+{
+    listen 80;
+    server_name your.domain;
+	index index.html;
+    root /www/wwwroot;
+
+    location /api/
+    {
+        rewrite /api(.*) $1 break;
+        proxy_pass http://127.0.0.1:8086/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header REMOTE-HOST $remote_addr;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_http_version 1.1;
+    }
+}
+```

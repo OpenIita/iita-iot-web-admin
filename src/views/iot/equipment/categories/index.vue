@@ -17,10 +17,10 @@
       @onLoad="getData"
       @delFun="onDelete"
       @saveFun="onSave"
-    >
-    </yt-crud>
+    />
   </div>
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 

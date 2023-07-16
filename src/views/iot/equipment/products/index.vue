@@ -95,7 +95,7 @@
               <el-divider direction="vertical" />
               <el-popconfirm title="是否确认删除?" @confirm="handleDel(item)">
                 <template #reference>
-                  <el-button type="danger" icon="Delete" plain></el-button>
+                  <el-button type="danger" icon="Delete" plain />
                 </template>
               </el-popconfirm>
             </div>
@@ -104,7 +104,7 @@
       </template>
       <template #menuSlot="scope">
         <el-tooltip class="box-item" effect="dark" content="物模型" placement="top">
-          <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)"></el-button>
+          <el-button link type="primary" icon="ScaleToOriginal" @click="openObjectModel(scope.row)" />
         </el-tooltip>
       </template>
       <template #rightToolbar>
@@ -161,9 +161,10 @@
         </el-radio-group>
       </template>
     </yt-crud>
-    <object-model ref="objectModelRef"></object-model>
+    <object-model ref="objectModelRef" />
   </div>
 </template>
+
 <script lang="ts" setup>
 import defaultImg from '@/assets/images/pic_device.png'
 import { IColumn } from '@/components/common/types/tableCommon'
@@ -193,7 +194,7 @@ const getNodeTypeNmae = (type) => {
 let cateOptions: any[] = []
 
 const getCateName = (id: string) => {
-  return cateOptions.find(f => f.id === id).name || ''
+  return cateOptions.find(f => f.id === id)?.name || ''
 }
 const data = ref<IProductsVO[]>([])
 const randomString=(len:number)=> {
@@ -345,6 +346,7 @@ const getData = () => {
 // 获取字典
 const getDict = () => {
   getCategoriesAll().then(res => {
+    res = res || {}
     cateOptions = res.data || []
     column.value.forEach(item => {
       if (item.key === 'category') {

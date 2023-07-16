@@ -21,7 +21,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-            ></el-date-picker>
+            />
           </el-form-item>
           <el-form-item label="服务商" prop="service">
             <el-input v-model="queryParams.service" placeholder="请输入服务商" clearable style="width: 200px" @keyup.enter="handleQuery" />
@@ -62,7 +62,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Operation" @click="handleOssConfig" v-hasPermi="['system:oss:list']">配置管理</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -101,10 +101,10 @@
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="下载" placement="top">
-              <el-button link type="primary" icon="Download" @click="handleDownload(scope.row)" v-hasPermi="['system:oss:download']"></el-button>
+              <el-button link type="primary" icon="Download" @click="handleDownload(scope.row)" v-hasPermi="['system:oss:download']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:oss:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:oss:remove']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -114,7 +114,7 @@
     </el-card>
     <!-- 添加或修改OSS对象存储对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="ossFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="ossFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="文件名">
           <fileUpload v-model="form.file" v-if="type === 0" />
           <imageUpload v-model="form.file" v-if="type === 1" />
@@ -135,7 +135,7 @@ import { listOss, delOss } from '@/api/system/oss'
 import ImagePreview from '@/components/ImagePreview/index.vue'
 import { ComponentInternalInstance } from 'vue'
 import { OssForm, OssQuery, OssVO } from '@/api/system/oss/types'
-import { DateModelType } from 'element-plus'
+import { DateModelType, FormInstance } from 'element-plus'
 
 const router = useRouter()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -161,8 +161,8 @@ const dialog = reactive<DialogOption>({
 // 默认排序
 const defaultSort = ref({ prop: 'createTime', order: 'ascending' })
 
-const ossFormRef = ref(ElForm)
-const queryFormRef = ref(ElForm)
+const ossFormRef = ref<FormInstance>()
+const queryFormRef = ref<FormInstance>()
 
 const initFormData = {
   file: undefined,
@@ -210,7 +210,7 @@ function cancel() {
 /** 表单重置 */
 function reset() {
   form.value = { ...initFormData }
-  ossFormRef.value.resetFields()
+  ossFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -221,7 +221,7 @@ function handleQuery() {
 function resetQuery() {
   showTable.value = false
   daterangeCreateTime.value = ['', '']
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   queryParams.value.orderByColumn = defaultSort.value.prop
   queryParams.value.isAsc = defaultSort.value.order
   handleQuery()

@@ -26,7 +26,7 @@
         uploadUrl="/ota/package/upload"
         uploadType="url"
         @uploadSuccess="(list) => uploadSuccess(row, list)"
-      ></file-upload>
+      />
       <a v-else :href="row.url" target="_blank">{{ row.url }}</a>
     </template>
     <template #productKeyForm="{ row }">
@@ -36,16 +36,16 @@
     </template>
     <template #menuSlot="scope">
       <el-tooltip class="box-item" effect="dark" content="设备升级" placement="top">
-        <el-button link type="primary" icon="Upload" @click="handleUpgrades(scope.row)"></el-button>
+        <el-button link type="primary" icon="Upload" @click="handleUpgrades(scope.row)" />
       </el-tooltip>
       <el-divider direction="vertical" />
       <el-tooltip class="box-item" effect="dark" content="升级历史" placement="top">
-        <el-button link type="primary" icon="Document" @click="handleHistory(scope.row)"></el-button>
+        <el-button link type="primary" icon="Document" @click="handleHistory(scope.row)" />
       </el-tooltip>
     </template>
   </yt-crud>
-  <devices-upgraders ref="devicesUpgradersRef"></devices-upgraders>
-  <history-dialog ref="historyRef"></history-dialog>
+  <devices-upgraders ref="devicesUpgradersRef" />
+  <history-dialog ref="historyRef" />
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
@@ -217,5 +217,3 @@ const handleHistory = (row) => {
   historyRef.value.openDialog(row.id)
 }
 </script>
-
-<style lang="scss" scoped></style>

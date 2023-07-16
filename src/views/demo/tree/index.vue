@@ -23,7 +23,7 @@
           <el-col :span="1.5">
             <el-button type="info" plain icon="Sort" @click="handleToggleExpandAll">展开/折叠</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
       <el-table
@@ -55,7 +55,7 @@
     </el-card>
     <!-- 添加或修改测试树对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="treeFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="treeFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父id" prop="parentId">
           <el-tree-select
             v-model="form.parentId"
@@ -90,7 +90,7 @@
 import { listTree, getTree, delTree, addTree, updateTree } from '@/api/demo/tree'
 import { TreeVO, TreeQuery, TreeForm } from '@/api/demo/tree/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElForm, ElTable } from 'element-plus'
+import { FormInstance, TableInstance } from 'element-plus'
 
 
 type TreeOption = {
@@ -109,9 +109,9 @@ const showSearch = ref(true)
 const isExpandAll = ref(true)
 const loading = ref(false)
 
-const queryFormRef = ref(ElForm)
-const treeFormRef = ref(ElForm)
-const treeTableRef = ref(ElTable)
+const queryFormRef = ref<FormInstance>()
+const treeFormRef = ref<FormInstance>()
+const treeTableRef = ref<TableInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -185,7 +185,7 @@ const cancel = () => {
 // 表单重置
 const reset = () => {
   form.value = {...initFormData}
-  treeFormRef.value.resetFields()
+  treeFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -195,7 +195,7 @@ const handleQuery = () => {
 
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 
@@ -223,7 +223,7 @@ const handleToggleExpandAll = () => {
 /** 展开/折叠操作 */
 const toggleExpandAll = (data: TreeVO[], status: boolean) => {
   data.forEach((item) => {
-    treeTableRef.value.toggleRowExpansion(item, status)
+    treeTableRef.value?.toggleRowExpansion(item, status)
     if (item.children && item.children.length > 0) toggleExpandAll(item.children, status)
   })
 }
@@ -247,7 +247,7 @@ const handleUpdate = (row: TreeVO) => {
 
 /** 提交按钮 */
 const submitForm = () => {
-  treeFormRef.value.validate((valid: boolean) => {
+  treeFormRef.value?.validate((valid: boolean) => {
     if (valid) {
       buttonLoading.value = true
       if (form.value.id) {

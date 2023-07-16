@@ -16,11 +16,7 @@
                   </el-radio-group>
                 </div>
                 <div class="item" v-if="item.deviceRadio === '指定设备'">
-                  <select-device
-                    v-model:dn="item.deviceDn"
-                    placeholder="选择设备"
-                    @on-select="(row) => hadnleSelectDevice(row, item)"
-                  ></select-device>
+                  <select-device v-model:dn="item.deviceDn" placeholder="选择设备" @on-select="(row) => hadnleSelectDevice(row, item)" />
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -42,38 +38,32 @@
                           @change="(e) => conditionChange(cond, stateMap.get(item.pk), e)"
                         >
                           <el-option-group v-for="group in stateMap.get(item.pk)" :key="group.name" :label="group.name">
-                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier"></el-option>
+                            <el-option v-for="pro in group.items" :label="pro.name" :value="pro.identifier" :key="pro.identifier" />
                           </el-option-group>
                         </el-select>
                         <el-select v-else v-model="cond.type" @change="handleEmits">
-                          <el-option label="设备属性" value="property" key="property"></el-option>
-                          <el-option label="设备标签" value="tag" key="tag"></el-option>
+                          <el-option label="设备属性" value="property" key="property" />
+                          <el-option label="设备标签" value="tag" key="tag" />
                         </el-select>
                       </el-col>
                       <el-col :span="5" v-if="item.deviceRadio === '使用当前设备'">
-                        <el-input v-model="cond.identifier" auto-complete="off"></el-input>
+                        <el-input v-model="cond.identifier" auto-complete="off" />
                       </el-col>
                       <el-col :span="10">
                         <el-row class="param-item">
                           <el-col :span="8">
                             <el-select v-model="cond.comparator">
-                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value"></el-option>
+                              <el-option v-for="cp in comparators" :label="cp.name" :value="cp.value" :key="cp.value" />
                             </el-select>
                           </el-col>
                           <el-col :span="10">
-                            <el-input v-model="cond.value" auto-complete="off"></el-input>
+                            <el-input v-model="cond.value" auto-complete="off" />
                           </el-col>
                         </el-row>
                       </el-col>
                     </el-row>
                   </div>
-                  <el-button
-                    type="danger"
-                    size="small"
-                    icon="Delete"
-                    style="margin-left: 10px;"
-                    @click="handleRemoveCondition(item, condIndex)"
-                  ></el-button>
+                  <el-button type="danger" size="small" icon="Delete" style="margin-left: 10px;" @click="handleRemoveCondition(item, condIndex)" />
                 </div>
               </div>
             </div>

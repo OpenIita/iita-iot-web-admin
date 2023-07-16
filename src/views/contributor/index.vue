@@ -16,7 +16,7 @@
           <div class="user" v-if="item.children">
             <el-row :gutter="16" type="flex">
               <el-col :span="8" v-for="user in item.children" :key="user.id">
-                <user-item :data="user"></user-item>
+                <user-item :data="user" />
               </el-col>
             </el-row>
           </div>
@@ -45,7 +45,7 @@
           <div class="join-box">
             <div class="item" v-for="(item, index) in joinList" :key="index" @click="goLink(item.url)">
               <div class="icon">
-                <svg-icon :icon-class="item.icon" className="icon-svg" color="#0070FF"></svg-icon>
+                <svg-icon :icon-class="item.icon" className="icon-svg" color="#0070FF" />
               </div>
               <div class="text">{{ item.title }}</div>
             </div>

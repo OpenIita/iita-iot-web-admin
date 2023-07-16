@@ -10,7 +10,7 @@
     @on-load="getData"
     v-model="dialog"
   >
-    <div class="mb10">
+    <div v-if="dialog" class="mb10">
       <el-button type="primary" plain icon="Refresh" @click="getData">刷新</el-button>
       <ElPopconfirm :title="`是否确认删除该${type === 'rule' ? '规则' : '任务'}所有日志？`" @confirm="handleDelete">
         <template #reference>
@@ -18,7 +18,7 @@
         </template>
       </ElPopconfirm>
     </div>
-    <yt-table :data="data" :column="column" :menu="false" :selection="false">
+    <yt-table v-if="dialog" :data="data" :column="column" :menu="false" :selection="false">
       <template #state="scope">
         {{ getStateName(scope.row.state) }}
       </template>
@@ -28,6 +28,7 @@
     </yt-table>
   </el-dialog>
 </template>
+
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 import { getRulesLog, clearRulesLog } from '../api/rule.api'

@@ -7,7 +7,7 @@
       :layout="layout"
       :page-sizes="customPageSize"
       :pager-count="pagerCount"
-      :total="total"
+      :total="total || 0"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
@@ -27,7 +27,7 @@ import { PropType } from 'vue'
 
 const props = defineProps({
   total: {
-    required: true,
+    required: false,
     type: Number
   },
   page: {
@@ -98,7 +98,7 @@ const pageSize = computed({
   }
 })
 function handleSizeChange(val: number) {
-  if (currentPage.value * val > props.total) {
+  if (props.total && currentPage.value * val > props.total) {
     currentPage.value = 1
   }
   emit('pagination', { page: currentPage.value, limit: val })

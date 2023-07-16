@@ -7,7 +7,7 @@
             <el-row>
               <el-col :span="18">
                 <el-form-item label="值">
-                  <el-input v-model="fun.row.value" size="small"></el-input>
+                  <el-input v-model="fun.row.value" size="small" />
                 </el-form-item>
               </el-col>
               <el-col :span="4">
@@ -30,10 +30,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="name" label="功能名称" width="180"> </el-table-column>
-      <el-table-column sortable prop="identifier" label="标识符" width="150"> </el-table-column>
-      <el-table-column sortable prop="dataTypeName" label="数据类型" width="100"> </el-table-column>
-      <el-table-column sortable prop="params" label="数据定义" width="200"> </el-table-column>
+      <el-table-column sortable prop="name" label="功能名称" width="180" />
+      <el-table-column sortable prop="identifier" label="标识符" width="150" />
+      <el-table-column sortable prop="dataTypeName" label="数据类型" width="100" />
+      <el-table-column sortable prop="params" label="数据定义" width="200" />
     </el-table>
     <el-button type="primary" @click="sendThingModelMsg()" v-if="this.propertiesTyp == '属性上报'">发送</el-button>
     <el-button type="primary" @click="sendAllPropertiesGet()" v-if="this.propertiesTyp == '属性调试'">获取</el-button>

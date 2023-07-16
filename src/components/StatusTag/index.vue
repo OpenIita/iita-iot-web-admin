@@ -4,11 +4,12 @@
     <div class="txt">{{ text }}</div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
 import { PropType } from 'vue'
 type TTypeTxt = 'primary' | 'danger' | 'success' | 'info' | 'warning'
-const props = defineProps({
+defineProps({
   text: propTypes.string.def(''),
   type: {
     type: String as PropType<TTypeTxt>,

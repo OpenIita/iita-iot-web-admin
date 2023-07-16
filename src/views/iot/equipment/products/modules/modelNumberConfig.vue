@@ -20,8 +20,9 @@
       </template>
     </yt-table>
   </yt-table-fun>
-  <modelNumber-detail ref="modelNumberDetailRef" @on-success="getData"></modelNumber-detail>
+  <modelNumber-detail ref="modelNumberDetailRef" @on-success="getData" />
 </template>
+
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { propTypes } from '@/utils/propTypes'

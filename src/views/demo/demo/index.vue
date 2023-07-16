@@ -43,7 +43,7 @@
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['demo:demo:export']">导出</el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
         </el-row>
       </template>
 
@@ -58,10 +58,10 @@
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['demo:demo:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['demo:demo:edit']" />
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['demo:demo:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['demo:demo:remove']" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -71,7 +71,7 @@
     </el-card>
     <!-- 添加或修改测试单对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="demoFormRef" :model="form" :rules="rules" label-width="80px">
+      <el-form v-if="dialog.visible" ref="demoFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="部门id" prop="deptId">
           <el-input v-model="form.deptId" placeholder="请输入部门id" />
         </el-form-item>
@@ -102,7 +102,7 @@
 import { listDemo, getDemo, delDemo, addDemo, updateDemo } from '@/api/demo/demo'
 import { DemoVO, DemoQuery, DemoForm } from '@/api/demo/demo/types'
 import { ComponentInternalInstance } from 'vue'
-import { ElForm } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
@@ -115,8 +115,8 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 
-const queryFormRef = ref(ElForm)
-const demoFormRef = ref(ElForm)
+const queryFormRef = ref<FormInstance>()
+const demoFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
@@ -184,7 +184,7 @@ const cancel = () => {
 /** 表单重置 */
 const reset = () => {
   form.value = {...initFormData}
-  demoFormRef.value.resetFields()
+  demoFormRef.value?.resetFields()
 }
 
 /** 搜索按钮操作 */
@@ -195,7 +195,7 @@ const handleQuery = () => {
 
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value.resetFields()
+  queryFormRef.value?.resetFields()
   handleQuery()
 }
 
@@ -231,7 +231,7 @@ const handleUpdate = (row?: DemoVO) => {
 
 /** 提交按钮 */
 const submitForm = () => {
-  demoFormRef.value.validate(async (valid: boolean) => {
+  demoFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       buttonLoading.value = true
       if (form.value.id) {
