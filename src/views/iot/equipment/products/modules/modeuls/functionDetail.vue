@@ -113,6 +113,7 @@ const openDialog = (row?: any, props?: any) => {
       raw: {
         name: '',
         identifier: '',
+        description: '',
         type: 'property',
         dataType: {
           specs: {},

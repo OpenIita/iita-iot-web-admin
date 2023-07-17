@@ -7,6 +7,9 @@
       <el-form-item style="margin-bottom: 18px;" label="标识符" prop="identifier">
         <el-input :disabled="isUpdate" v-model="propertyRef.identifier" auto-complete="off" />
       </el-form-item>
+      <el-form-item style="margin-bottom: 18px;" label="描述" prop="describe">
+        <el-input v-model="propertyRef.description" auto-complete="off"></el-input>
+      </el-form-item>
       <el-form-item style="margin-bottom: 18px;" label="数据类型" prop="dataType.type">
         <el-select v-model="propertyRef.dataType.type" placeholder="请选择数据类型">
           <el-option label="int32" value="int32" />
@@ -133,6 +136,9 @@ const boolItemRef = ref<any>(props.boolItem)
 const enumItemsRef = ref<any>(props.enumItems)
 const formRef = ref()
 const rules = reactive({
+  description: [
+    { required: false, message: '请输入描述', trigger: 'blur' },
+  ],
   name: [
     { required: true, message: '请输入名称', trigger: 'blur' },
   ],

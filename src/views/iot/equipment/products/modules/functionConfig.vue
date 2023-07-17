@@ -129,6 +129,10 @@ const column = ref<IColumn[]>([
     key: 'name',
   },
   {
+    label: '描述',
+    key: 'description',
+  },
+  {
     label: '标识符',
     key: 'identifier',
   },
@@ -159,6 +163,7 @@ const getInfo = (model) => {
       type: 'property',
       name: p.name,
       identifier: p.identifier,
+      description: p.description,
       dataTypeName: p.dataType.type,
       params: params == '{}' ? '' : params,
     })
@@ -172,6 +177,7 @@ const getInfo = (model) => {
       raw: e,
       type: 'event',
       name: e.name,
+      description: e.description,
       identifier: e.identifier,
       dataTypeName: '-',
       params: JSON.stringify(output),
@@ -190,6 +196,7 @@ const getInfo = (model) => {
       raw: s,
       type: 'service',
       name: s.name,
+      description: s.description,
       identifier: s.identifier,
       dataTypeName: '-',
       params:

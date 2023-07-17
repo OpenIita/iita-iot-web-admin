@@ -11,6 +11,7 @@
       :headers="upload.headers"
       style="display: none"
       v-if="type === 'url'"
+      :data="paramsData"
     >
     </el-upload>
     <div class="editor">
@@ -31,6 +32,8 @@ import { QuillEditor, Quill } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { getToken } from '@/utils/auth'
 import { ComponentInternalInstance } from 'vue'
+import { generateUUID } from '@/utils/index'
+
 
 const props = defineProps({
   /* 编辑器的内容 */
@@ -65,6 +68,9 @@ const props = defineProps({
 })
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
+
+const paramsData: any = ref({
+})
 
 const upload = reactive<UploadOption>({
   headers: { Authorization: 'Bearer ' + getToken() },
@@ -147,6 +153,7 @@ const handleUploadSuccess = (res: any) => {
 // 图片上传前拦截
 const handleBeforeUpload = (file: any) => {
   // 校检文件大小
+  paramsData.value.requestId = generateUUID()
   if (props.fileSize) {
     const isLt = file.size / 1024 / 1024 < props.fileSize
     if (!isLt) {
