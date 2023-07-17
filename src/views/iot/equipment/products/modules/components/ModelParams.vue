@@ -3,6 +3,7 @@
     <el-table v-if="!state.showPropertyParam" size="small" :data="modelParams" highlight-current-row border style="width: 100%;">
       <el-table-column prop="name" label="参数名称" width="100" />
       <el-table-column prop="identifier" label="标识符" width="180" />
+      <el-table-column prop="description" label="描述" width="100"> </el-table-column>
       <el-table-column prop="dataType.type" label="类型" width="80" />
       <el-table-column label="操作">
         <template v-slot:header>
@@ -59,6 +60,7 @@ const state = reactive({
   currParamProperty: {
     name: '',
     identifier: '',
+    description: '',
     type: 'property',
     dataType: {}
   },
@@ -99,6 +101,7 @@ const addParams = () => {
   state.currParamProperty = {
     name: '',
     identifier: '',
+    description: '',
     type: 'property',
     dataType: {
       specs: {}
