@@ -1,7 +1,12 @@
 <template>
   <el-dialog v-model="state.visible" title="升级历史">
     <el-collapse v-if="state.visible && data?.length > 0" v-model="state.activeName" accordion>
-      <el-collapse-item v-for="(item, index) in data" :title="item.title" :name="index" :key="index">
+      <el-collapse-item
+        v-for="(item, index) in data"
+        :title="`时间：${item.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量:${item.counts}`"
+        :name="index"
+        :key="index"
+      >
         <div class="dn-list flex" v-for="dItem in item.data" :key="dItem.id">
           <div class="title flex">
             <span class="name">{{ dItem.deviceName }}</span>
@@ -37,18 +42,22 @@ const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const getData = () => {
   proxy?.$modal.loading('加载中...')
   getUpgradePackLot({
-    taskId: state.id,
+    id: state.id,
+    pageSize: 1000000,
   }).then(res => {
     const list: Promise<any>[] = []
     const dataList: any[] = []
     res.data.rows.forEach((item) => {
-      dataList.push({
-        title: formatDate(item.createAt),
-        data: []
-      })
-      list.push(resultUpgradePack({
-        otaInfoId: item.id
-      }))
+      if (item.counts > 0) {
+        dataList.push({
+          title: formatDate(item.createAt),
+          counts: item.counts,
+          data: []
+        })
+        list.push(resultUpgradePack({
+          otaInfoId: item.id
+        }))
+      }
     })
     data.value = []
     Promise.all(list).then(res2 => {
@@ -57,6 +66,9 @@ const getData = () => {
           dataList[index].data = item.data.rows
         }
       })
+      // 逆转数组
+      dataList.reverse()
+      console.log('dataList', dataList)
       // 过滤空数据
       dataList.forEach((item => {
         if (item.data?.length > 0) data.value.push(item)

@@ -41,16 +41,10 @@
           <code-editor v-model:code="testDataScript.script" />
         </div>
         <el-row style="padding: 5px 5px">
-          <el-col :span="10"> 测试结果： </el-col>
-          <el-col :span="7" v-if="type === 'change'">
-            <el-button size="small" type="primary" @click="execTest('decode')">解码测试</el-button>
-          </el-col>
-          <el-col :span="7" v-if="type === 'change'">
-            <el-button size="small" type="primary" @click="execTest('encode')">编码测试</el-button>
-          </el-col>
-          <el-col :span="7" v-if="type === 'communication'">
-            <el-button size="small" type="primary" @click="execTest()">测试</el-button>
-          </el-col>
+          测试结果：
+          <el-button v-if="type === 'change'" size="small" type="primary" @click="execTest('decode')">解码测试</el-button>
+          <el-button v-if="type === 'change'" size="small" type="primary" @click="execTest('encode')">编码测试</el-button>
+          <el-button v-if="type === 'communication'" size="small" type="primary" @click="execTest()">测试</el-button>
         </el-row>
         <div>
           <el-input type="textarea" v-model="testDataScript.testResult" :readonly="true" :rows="7" />

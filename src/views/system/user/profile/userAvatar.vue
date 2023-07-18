@@ -23,7 +23,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row v-if="open">
+      <el-row v-if="open" style="margin-top: 8px;">
         <el-col :lg="2" :md="2">
           <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button>
