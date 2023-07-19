@@ -22,7 +22,7 @@
         </template>
       </ElPopconfirm>
     </div>
-    <yt-table v-if="dialog" :data="data" :column="column" :menu="false" :selection="false">
+    <yt-table v-if="dialog" :data="data" :total="state.total" :column="column" :menu="false" :selection="false">
       <template #state="scope">
         {{ getStateName(scope.row.state) }}
       </template>
@@ -43,7 +43,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 const props = defineProps({
   type: propTypes.string.def('rule'),
   gutter: propTypes.number.def(12),
-  span: propTypes.number.def(4)
+  span: propTypes.number.def(4),
 })
 const getStateName = (state: string) => {
   console.log(state)
@@ -71,27 +71,23 @@ const state = reactive({
 })
 const data = ref([])
 const column = ref<IColumn[]>([])
-if (props.type !== 'rule') {
-  column.value.push({
-    label: '状态',
-    key: 'state',
-    slot: true,
-  })
-}
 column.value = [
   ...column.value,
   {
     label: '执行结果',
     key: 'success',
     slot: true,
-  }, {
+  },
+  {
     label: '详细信息',
     key: 'content',
-    }, {
+  },
+  {
     label: '执行时间',
     key: 'logAt',
     type: 'date',
-  }]
+  },
+]
 
 const dialog = ref(false)
 const logDialogRef = ref()
@@ -108,24 +104,29 @@ const getData = () => {
     ...state.page,
     ...state.query,
     ruleId: state.id,
-  }).then(res => {
-    state.total = res.data.total
-    data.value = res.data.rows
-  }).finally(() => {
-    state.loading = false
+    taskId: state.id,
   })
+    .then((res) => {
+      state.total = res.data.total
+      data.value = res.data.rows
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 // 删除所有日志
 const handleDelete = () => {
   state.loading = true
   const fun = props.type === 'rule' ? clearRulesLog : clearTaskLog
-  fun(state.id).then(res => {
-    ElMessage.success('删除成功')
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  fun(state.id)
+    .then((res) => {
+      ElMessage.success('删除成功')
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
   console.log(24234)
 }
 defineExpose({
