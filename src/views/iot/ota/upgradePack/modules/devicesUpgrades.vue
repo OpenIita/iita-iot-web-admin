@@ -51,8 +51,8 @@ const handleSubmit = () => {
   upgradeUpgradePack({
     otaId: state.id,
     deviceIds: dataValue.value
-  }).then(() => {
-    ElMessage.success('操作成功')
+  }).then((res) => {
+    ElMessage.warning(res.data.result)
     handleClose()
   })
   state.visible = true

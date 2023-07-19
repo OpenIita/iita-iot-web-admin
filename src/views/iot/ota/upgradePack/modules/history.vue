@@ -1,9 +1,17 @@
 <template>
-  <el-dialog v-model="state.visible" title="升级历史">
+  <el-dialog v-model="state.visible">
+    <template #header>
+      <div class="my-header flex align-center">
+        <span class="mr-4">升级历史</span>
+        <el-tooltip class="box-item" effect="dark" content="只展示成功数据，升级数量为升级总数" placement="top">
+          <el-icon :size="18"><Warning /></el-icon>
+        </el-tooltip>
+      </div>
+    </template>
     <el-collapse v-if="state.visible && data?.length > 0" v-model="state.activeName" accordion>
       <el-collapse-item
         v-for="(item, index) in data"
-        :title="`时间：${item.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量:${item.counts}`"
+        :title="`时间：${item.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;升级数量:${item.counts}`"
         :name="index"
         :key="index"
       >
@@ -17,7 +25,7 @@
             <el-tag v-else class="ml-2" size="small" type="success">成功</el-tag>
           </div>
           <el-tooltip class="box-item" effect="dark" content="查看详情" placement="top">
-            <el-button link type="primary" icon="View" />
+            <el-button @click="handleView(dItem.deviceId)" link type="primary" icon="View" />
           </el-tooltip>
         </div>
       </el-collapse-item>
@@ -34,24 +42,28 @@ import { formatDate } from '@/utils'
 const state = reactive({
   visible: false,
   id: '',
-  activeName: '1',
+  activeName: 0,
 })
 const data = ref<any[]>([])
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
+const router = useRouter()
+const handleView = (id) => {
+  router.push(`/equipment/devicesDetail/${id}`)
+}
 const getData = () => {
   proxy?.$modal.loading('加载中...')
   getUpgradePackLot({
-    id: state.id,
+    packageId: state.id,
     pageSize: 1000000,
   }).then(res => {
     const list: Promise<any>[] = []
     const dataList: any[] = []
     res.data.rows.forEach((item) => {
-      if (item.counts > 0) {
+      if (item.total > 0) {
         dataList.push({
           title: formatDate(item.createAt),
-          counts: item.counts,
+          counts: item.total,
           data: []
         })
         list.push(resultUpgradePack({
@@ -68,7 +80,6 @@ const getData = () => {
       })
       // 逆转数组
       dataList.reverse()
-      console.log('dataList', dataList)
       // 过滤空数据
       dataList.forEach((item => {
         if (item.data?.length > 0) data.value.push(item)
@@ -104,6 +115,7 @@ defineExpose({
     border-bottom: none;
   }
   .title {
+    align-items: center;
     .name {
       display: inline-block;
       font-size: 14px;
@@ -114,5 +126,8 @@ defineExpose({
 :deep(.el-collapse-item__header) {
   font-weight: 600;
   font-size: 16px;
+}
+:deep(.el-collapse-item__content) {
+  padding-bottom: 10px;
 }
 </style>
