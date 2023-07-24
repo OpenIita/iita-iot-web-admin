@@ -120,7 +120,7 @@ service.interceptors.response.use(
         }).then(() => {
           isRelogin.show = false
           useUserStore().logout().then(() => {
-            location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index'
+            location.href = import.meta.env.VITE_APP_CONTEXT_PATH
           })
         }).catch(() => {
           isRelogin.show = false
