@@ -621,6 +621,9 @@ const options = reactive({
       .el-button {
         padding: 8px;
       }
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
   }
 }
