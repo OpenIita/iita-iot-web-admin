@@ -23,7 +23,7 @@
       menu-slot
     >
       <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="small">在线</el-tag>
+        <el-tag v-if="scope.row.state?.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
       <template #menuSlot="scope">
@@ -39,6 +39,7 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getChildrenDeviceList } from '../../api/devices.api'
+import { deleteDevices } from '../../api/devices.api'
 
 import { ElPopconfirm } from 'element-plus'
 import YtTable from '@/components/common/yt-table'
@@ -127,8 +128,12 @@ const data = ref([
   }
 ])
 
-const handleDelete = (row: any) => {
-  console.log(row)
+const handleDelete = async (row: any) => {
+  state.loading = true
+  await deleteDevices(row.id)
+  ElMessage.success('删除成功!')
+  state.loading = false
+  getData()
 }
 
 const getData = () => {
