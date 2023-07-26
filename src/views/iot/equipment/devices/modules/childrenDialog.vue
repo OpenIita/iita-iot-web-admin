@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-model="state.show" title="子设备列表" width="1100px">
+  <el-dialog
+    v-model="state.show"
+    title="子设备列表"
+    width="1100px"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <yt-table
       v-if="state.show"
       :column="columns"

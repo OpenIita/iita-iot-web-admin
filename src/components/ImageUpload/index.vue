@@ -34,7 +34,15 @@
       的文件
     </div>
 
-    <el-dialog v-model="dialogVisible" title="预览" width="800px" append-to-body>
+    <el-dialog
+      v-model="dialogVisible"
+      title="预览"
+      width="800px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <img :src="dialogImageUrl" style="display: block; max-width: 100%; margin: 0 auto" />
     </el-dialog>
   </div>

@@ -4,10 +4,18 @@
       <el-button type="primary" @click="handleSelect">选择</el-button>
     </template>
   </el-input>
-  <el-dialog title="选择设备" v-model="dialogState.show" width="1200px">
+  <el-dialog
+    title="选择设备"
+    v-model="dialogState.show"
+    width="1200px"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <yt-crud
       v-if="dialogState.show"
-      ref="ytCrudRef"
+      ref="crudRef"
       :data="data"
       :column="column"
       :table-props="{
@@ -67,11 +75,11 @@ const state = reactive({
   query: {},
 })
 // 单击
-const ytCrudRef = ref()
+const crudRef = ref()
 
 const rowClick = (row: any) => {
   if (props.multiple) {
-    ytCrudRef.value.getTableRef().tableRef.toggleRowSelection(toRaw(row), undefined)
+    crudRef.value.getTableRef().tableRef.toggleRowSelection(toRaw(row), undefined)
     return
   }
   emits('update:id', row.id)
@@ -83,7 +91,7 @@ const rowClick = (row: any) => {
 }
 // 多选
 const handleMultiple = () => {
-  const rows = ytCrudRef.value.getTableRef().tableRef.getSelectionRows()
+  const rows = crudRef.value.getTableRef().tableRef.getSelectionRows()
   dialogState.data = {
     id: rows.map((m: any) => m.id),
     deviceName: rows.map((m: any) => m.deviceName).join(',')

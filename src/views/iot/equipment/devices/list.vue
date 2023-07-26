@@ -2,6 +2,7 @@
   <div>
     <yt-crud
       v-bind="options"
+      ref="crudRef"
       @onLoad="getData"
       :fun-props="{
         exportBtn: true,

@@ -1,6 +1,15 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" v-model="visible" width="800px" top="5vh" append-to-body>
+  <el-dialog
+    title="导入表"
+    v-model="visible"
+    width="800px"
+    top="5vh"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <el-form v-if="visible" :model="queryParams" ref="queryFormRef" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input v-model="queryParams.tableName" placeholder="请输入表名称" clearable @keyup.enter="handleQuery" />

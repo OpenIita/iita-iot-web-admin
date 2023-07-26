@@ -68,7 +68,15 @@
       </el-table>
     </el-card>
 
-    <el-dialog :title="dialog.title" v-model="dialog.visible" destroy-on-close append-to-bod width="600px">
+    <el-dialog
+      :title="dialog.title"
+      v-model="dialog.visible"
+      width="600px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="dialog.visible" ref="deptFormRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">

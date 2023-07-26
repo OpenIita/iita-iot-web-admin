@@ -1,5 +1,12 @@
 <template>
-  <el-dialog v-model="state.dialogShow" :title="productModelForm.id ? '编辑' : '新增' + '功能'">
+  <el-dialog
+    v-model="state.dialogShow"
+    :title="productModelForm.id ? '编辑' : '新增' + '功能'"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <el-form v-if="state.dialogShow" ref="productModelFormRef" :model="productModelForm" :rules="state.scriptRules" label-width="80px">
       <el-form-item label="型号" style="width: 300px" prop="model">
         <el-radio v-model="state.modelType" label="1">默认</el-radio>

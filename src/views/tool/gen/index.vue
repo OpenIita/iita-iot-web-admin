@@ -87,7 +87,17 @@
     </el-card>
 
     <!-- 预览界面 -->
-    <el-dialog :title="dialog.title" v-model="dialog.visible" width="80%" top="5vh" append-to-body class="scrollbar">
+    <el-dialog
+      :title="dialog.title"
+      v-model="dialog.visible"
+      width="80%"
+      top="5vh"
+      class="scrollbar"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-tabs v-if="dialog.visible" v-model="preview.activeName">
         <el-tab-pane v-for="(value, key) in preview.data" :label="key" :name="key" :key="value">
           <el-link :underline="false" icon="DocumentCopy" v-copyText="value" v-copyText:callback="copyTextSuccess" style="float:right"

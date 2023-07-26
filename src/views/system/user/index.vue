@@ -145,7 +145,16 @@
     </el-row>
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="dialog.title" v-model="dialog.visible" width="600px" append-to-body @close="closeDialog">
+    <el-dialog
+      :title="dialog.title"
+      v-model="dialog.visible"
+      width="600px"
+      @close="closeDialog"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="dialog.visible" :model="form" :rules="rules" ref="userFormRef" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -240,7 +249,15 @@
     </el-dialog>
 
     <!-- 用户导入对话框 -->
-    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+    <el-dialog
+      :title="upload.title"
+      v-model="upload.open"
+      width="400px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-upload
         v-if="upload.open"
         ref="uploadRef"

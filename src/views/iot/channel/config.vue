@@ -1,39 +1,37 @@
 <template>
-  <div>
-    <yt-crud
-      ref="crudRef"
-      :data="data"
-      :column="column"
-      v-model:page="state.page"
-      v-model:query="state.query"
-      :total="state.total"
-      :loading="state.loading"
-      :table-props="{
+  <yt-crud
+    ref="crudRef"
+    :data="data"
+    :column="column"
+    v-model:page="state.page"
+    v-model:query="state.query"
+    :total="state.total"
+    :loading="state.loading"
+    :table-props="{
         selection: false,
       }"
-      @onLoad="getData"
-      @saveFun="onSave"
-      @delFun="onDelete"
-    >
-      <template #paramFormItem="{ row }">
-        <el-card v-if="row.channelId" class="box-card" shadow="never">
-          <template #header>
-            <div class="clearfix">
-              <span>参数配置</span>
-            </div>
-          </template>
-          <div v-for="item in state.typeObj" :key="item.code">
-            <div v-if="item.code === getChannelCode(row.channelId)">
-              <el-form-item v-for="opt in item.list" :key="opt.value" :label="opt.label + ':'">
-                <el-switch v-if="opt.type === 'switch'" v-model="row.param[opt.value]" />
-                <el-input v-else v-model="row.param[opt.value]" :placeholder="'请输入' + opt.label" />
-              </el-form-item>
-            </div>
+    @onLoad="getData"
+    @saveFun="onSave"
+    @delFun="onDelete"
+  >
+    <template #paramFormItem="{ row }">
+      <el-card v-if="row.channelId" class="box-card" shadow="never">
+        <template #header>
+          <div class="clearfix">
+            <span>参数配置</span>
           </div>
-        </el-card>
-      </template>
-    </yt-crud>
-  </div>
+        </template>
+        <div v-for="item in state.typeObj" :key="item.code">
+          <div v-if="item.code === getChannelCode(row.channelId)">
+            <el-form-item v-for="opt in item.list" :key="opt.value" :label="opt.label + ':'">
+              <el-switch v-if="opt.type === 'switch'" v-model="row.param[opt.value]" />
+              <el-input v-else v-model="row.param[opt.value]" :placeholder="'请输入' + opt.label" />
+            </el-form-item>
+          </div>
+        </div>
+      </el-card>
+    </template>
+  </yt-crud>
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
