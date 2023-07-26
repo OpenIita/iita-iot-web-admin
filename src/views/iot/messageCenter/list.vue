@@ -1,27 +1,25 @@
 <template>
-  <div>
-    <yt-crud
-      ref="crudRef"
-      :data="data"
-      :column="column"
-      v-model:page="state.page"
-      v-model:query="state.query"
-      :total="state.total"
-      :loading="state.loading"
-      @onLoad="getData"
-      :fun-props="{
+  <yt-crud
+    ref="crudRef"
+    :data="data"
+    :column="column"
+    v-model:page="state.page"
+    v-model:query="state.query"
+    :total="state.total"
+    :loading="state.loading"
+    @onLoad="getData"
+    :fun-props="{
         addBtn: false,
       }"
-      :table-props="{
+    :table-props="{
         editBtn: false,
         delBtn: false,
       }"
-    >
-      <template #status="{ row }">
-        <el-switch v-model="row.status" disabled />
-      </template>
-    </yt-crud>
-  </div>
+  >
+    <template #status="{ row }">
+      <el-switch v-model="row.status" disabled />
+    </template>
+  </yt-crud>
 </template>
 
 <script lang="ts" setup>

@@ -1,7 +1,17 @@
 <template>
   <div class="user-info-head" @click="editCropper()">
     <img :src="options.img as string" title="点击上传头像" class="img-circle img-lg" />
-    <el-dialog :title="title" v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">
+    <el-dialog
+      :title="title"
+      v-model="open"
+      width="800px"
+      @opened="modalOpened"
+      @close="closeDialog"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-row v-if="open">
         <el-col :xs="24" :md="12" :style="{ height: '350px' }">
           <vue-cropper

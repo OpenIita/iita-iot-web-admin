@@ -1,5 +1,16 @@
 <template>
-  <el-dialog title="设备升级" @close="handleClose" width="800" v-model="state.visible" :before-close="beforeClose" v-loading="state.loading">
+  <el-dialog
+    title="设备升级"
+    @close="handleClose"
+    width="800"
+    v-model="state.visible"
+    :before-close="beforeClose"
+    v-loading="state.loading"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <el-transfer
       v-model="dataValue"
       :props="{

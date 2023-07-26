@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-model="dialogModel" width="80%" append-to-body :fullscreen="isFullscreen">
+  <el-dialog
+    v-model="dialogModel"
+    width="80%"
+    :fullscreen="isFullscreen"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <template #header v-if="dialogModel">
       <span class="el-dialog__title">{{ title + '编写' }}</span>
       <div class="header-icon">

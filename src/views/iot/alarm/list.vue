@@ -1,24 +1,22 @@
 <template>
-  <div>
-    <yt-crud
-      ref="crudRef"
-      :data="data"
-      :column="column"
-      :fun-props="{
+  <yt-crud
+    ref="crudRef"
+    :data="data"
+    :column="column"
+    :fun-props="{
         addBtn: false,
       }"
-      :table-props="{
+    :table-props="{
         Selection: false,
         delBtn: false,
         editBtn: false,
       }"
-      @onLoad="getData"
-      :loading="state.loading"
-      :total="state.total"
-      v-model:page="state.page"
-      v-model:query="state.query"
-    />
-  </div>
+    @onLoad="getData"
+    :loading="state.loading"
+    :total="state.total"
+    v-model:page="state.page"
+    v-model:query="state.query"
+  />
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'

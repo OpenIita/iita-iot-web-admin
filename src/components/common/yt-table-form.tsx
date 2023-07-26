@@ -136,7 +136,9 @@ export default defineComponent({
         title={dialogObj.title}
         v-model={dialogObj.visible}
         width={props.width}
-        append-to-body
+        close-on-press-escape={false}
+        close-on-click-modal={false}
+        append-to-body={true}
         beforeClose={beforeClose}
         destroy-on-close
       >

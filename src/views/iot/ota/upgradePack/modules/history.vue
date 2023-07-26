@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.visible" title="升级历史">
+  <el-dialog v-model="state.visible" title="升级历史" :close-on-press-escape="false" :close-on-click-modal="false" append-to-body destroy-on-close>
     <el-collapse v-if="state.visible && data?.length > 0" v-model="state.activeName" accordion>
       <el-collapse-item v-for="(item, index) in data" :title="item.title" :name="index" :key="index">
         <div class="dn-list flex" v-for="dItem in item.data" :key="dItem.id">
