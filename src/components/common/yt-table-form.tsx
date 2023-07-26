@@ -20,7 +20,6 @@ export default defineComponent({
   },
   emtis: ['openDialog', 'onSuccess', 'openBeforeFun'],
   setup(props, { emit, slots, expose }) {
-    console.log('slots', slots.customFormItem)
     const columns = ref<IColumn[]>([])
     watch(
       () => props.column,

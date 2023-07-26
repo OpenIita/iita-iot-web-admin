@@ -77,7 +77,6 @@ const rowClick = (row: any) => {
   emits('update:pk', row.productKey)
   dialogState.data = row
   dialogState.show = false
-  console.log(row)
 }
 // 多选
 const handleMultiple = () => {
@@ -101,7 +100,6 @@ const dialogState = reactive({
 })
 
 const handleSelect = () => {
-  console.log('handleSelect')
   dialogState.show = true
 }
 // 分类字典
@@ -203,7 +201,6 @@ const getName = (str, type: 'id' | 'productKey') => {
   return allData.value.find(f => f[type] === str)?.name || ''
 }
 const name = computed(() => {
-  console.log(props.pk)
   if (props.id) return getName(props.id, 'id')
   if (props.pk) return getName(props.pk, 'productKey')
   return dialogState.data?.name || ''
