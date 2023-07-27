@@ -117,14 +117,7 @@
             <div class="a-link">
               <a href="http://iotkit-open-source.gitee.io/document/"
                 >文档地址
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" class="2qofvgpt7__design-iconfont" width="12" height="12">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M2.6252 2.29922C2.4457 2.29922 2.3002 2.44473 2.3002 2.62422V11.3742C2.3002 11.5537 2.4457 11.6992 2.6252 11.6992H11.3752C11.5547 11.6992 11.7002 11.5537 11.7002 11.3742V8.59571C11.7002 8.29196 11.9464 8.04571 12.2502 8.04571C12.554 8.04571 12.8002 8.29196 12.8002 8.59571V11.3742C12.8002 12.1612 12.1622 12.7992 11.3752 12.7992H2.6252C1.8382 12.7992 1.2002 12.1612 1.2002 11.3742V2.62422C1.2002 1.83721 1.83819 1.19922 2.6252 1.19922H5.2502C5.55395 1.19922 5.80019 1.44546 5.80019 1.74922C5.80019 2.05298 5.55395 2.29922 5.2502 2.29922H2.6252ZM7.61719 1.74922C7.61719 1.44546 7.86343 1.19922 8.16719 1.19922H12.2505C12.5543 1.19922 12.8005 1.44546 12.8005 1.74922V5.83255C12.8005 6.13631 12.5543 6.38255 12.2505 6.38255C11.9468 6.38255 11.7005 6.13631 11.7005 5.83255V3.07632L7.91449 6.86235C7.69971 7.07714 7.35147 7.07714 7.13668 6.86235C6.92189 6.64756 6.92189 6.29932 7.13668 6.08453L10.922 2.29922H8.16719C7.86343 2.29922 7.61719 2.05298 7.61719 1.74922Z"
-                    fill="#0070FF"
-                  ></path>
-                </svg>
+                <svg-icon icon-class="external" />
               </a>
             </div>
           </div>
@@ -134,9 +127,10 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { getContributorList } from './api/index.api'
 import { postOptions } from './types/index.type'
-
 import UserItem from './components/user-item.vue'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 
