@@ -1,5 +1,14 @@
 <template>
-  <el-dialog title="产品物模型" width="70%" v-model="state.visible" append-to-body top="20px">
+  <el-dialog
+    title="产品物模型"
+    width="70%"
+    v-model="state.visible"
+    top="20px"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <div v-if="state.visible" v-loading="state.loading">
       <el-tabs type="border-card" v-model="activeTab">
         <el-tab-pane label="功能列表" :name="0">

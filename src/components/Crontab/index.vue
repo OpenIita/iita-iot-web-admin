@@ -1,5 +1,12 @@
 <template>
-  <el-dialog title="Cron表达式生成器" v-model="cronDialog">
+  <el-dialog
+    title="Cron表达式生成器"
+    v-model="cronDialog"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <table-index v-if="cronDialog" ref="cronBoxRef" @fill="cronFill" />
     <template #footer>
       <el-button type="primary" @click="submitFill">确定</el-button>

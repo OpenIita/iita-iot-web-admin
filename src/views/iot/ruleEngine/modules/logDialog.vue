@@ -9,6 +9,10 @@
     v-model:query="state.query"
     @on-load="getData"
     v-model="dialog"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
   >
     <div v-if="dialog" class="mb10">
       <el-button type="primary" plain icon="Refresh" @click="getData">刷新</el-button>

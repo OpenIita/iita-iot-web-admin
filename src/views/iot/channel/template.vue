@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <yt-crud
-      ref="crudRef"
-      :data="data"
-      :column="column"
-      v-model:page="state.page"
-      v-model:query="state.query"
-      :total="state.total"
-      :loading="state.loading"
-      :table-props="{
+  <yt-crud
+    ref="crudRef"
+    :data="data"
+    :column="column"
+    v-model:page="state.page"
+    v-model:query="state.query"
+    :total="state.total"
+    :loading="state.loading"
+    :table-props="{
         selection: false,
       }"
-      @onLoad="getData"
-      @saveFun="onSave"
-      @delFun="onDelete"
-    />
-  </div>
+    @onLoad="getData"
+    @saveFun="onSave"
+    @delFun="onDelete"
+  />
 </template>
 
 <script lang="ts" setup>

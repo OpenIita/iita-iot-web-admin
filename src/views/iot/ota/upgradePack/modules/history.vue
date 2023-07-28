@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.visible">
+  <el-dialog v-model="state.visible" :close-on-press-escape="false" :close-on-click-modal="false" append-to-body destroy-on-close>
     <template #header>
       <div class="my-header flex align-center">
         <span class="mr-4">升级历史</span>

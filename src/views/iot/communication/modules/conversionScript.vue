@@ -1,27 +1,18 @@
 <template>
-  <el-dialog v-model="dialogModel" width="80%" append-to-body :fullscreen="isFullscreen">
+  <el-dialog
+    v-model="dialogModel"
+    width="80%"
+    :fullscreen="isFullscreen"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    append-to-body
+    destroy-on-close
+  >
     <template #header v-if="dialogModel">
       <span class="el-dialog__title">{{ title + '编写' }}</span>
       <div class="header-icon">
         <el-icon v-if="!isFullscreen" @click="isFullscreen = true"><FullScreen /></el-icon>
-        <svg
-          v-else
-          @click="isFullscreen = false"
-          t="1685346536331"
-          class="icon"
-          viewBox="0 0 1024 1024"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          p-id="1707"
-          width="20"
-          height="20"
-        >
-          <path
-            d="M354.133333 682.666667H256v-42.666667h170.666667v170.666667H384v-98.133334L243.2 853.333333l-29.866667-29.866666L354.133333 682.666667z m358.4 0l140.8 140.8-29.866666 29.866666-140.8-140.8V810.666667h-42.666667v-170.666667h170.666667v42.666667h-98.133334zM354.133333 384L213.333333 243.2l29.866667-29.866667L384 354.133333V256h42.666667v170.666667H256V384h98.133333z m358.4 0H810.666667v42.666667h-170.666667V256h42.666667v98.133333L823.466667 213.333333l29.866666 29.866667L712.533333 384z"
-            fill="#909399"
-            p-id="1708"
-          ></path>
-        </svg>
+        <svg-icon v-else @click="isFullscreen = false" icon-class="unfull" />
       </div>
     </template>
     <!-- <el-row>

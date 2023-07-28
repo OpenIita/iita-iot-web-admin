@@ -118,7 +118,15 @@
     </el-card>
 
     <!-- 操作日志详细 -->
-    <el-dialog title="操作日志详细" v-model="dialog.visible" width="700px" append-to-body>
+    <el-dialog
+      title="操作日志详细"
+      v-model="dialog.visible"
+      width="700px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="dialog.visible" :model="form" label-width="100px">
         <el-row>
           <el-col :span="12">

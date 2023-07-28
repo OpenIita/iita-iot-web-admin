@@ -93,7 +93,16 @@
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog v-if="dialog.visible" :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
+    <el-dialog
+      v-if="dialog.visible"
+      :title="dialog.title"
+      v-model="dialog.visible"
+      width="500px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form ref="dictFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="字典名称" prop="dictName">
           <el-input v-model="form.dictName" placeholder="请输入字典名称" />

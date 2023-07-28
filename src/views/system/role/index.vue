@@ -97,7 +97,15 @@
       />
     </el-card>
 
-    <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
+    <el-dialog
+      :title="dialog.title"
+      v-model="dialog.visible"
+      width="500px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="dialog.visible" ref="roleFormRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
@@ -151,7 +159,15 @@
     </el-dialog>
 
     <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="dialog.title" v-model="openDataScope" width="500px" append-to-body>
+    <el-dialog
+      :title="dialog.title"
+      v-model="openDataScope"
+      width="500px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="dialog.visible" :model="form" label-width="80px" ref="dataScopeRef">
         <el-form-item label="角色名称">
           <el-input v-model="form.roleName" :disabled="true" />

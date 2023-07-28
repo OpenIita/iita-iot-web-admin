@@ -189,7 +189,16 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog :title="state.title" v-model="state.propertyWriteFormVisible" width="40%" @close="closeDialog">
+    <el-dialog
+      :title="state.title"
+      v-model="state.propertyWriteFormVisible"
+      width="40%"
+      @close="closeDialog"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="state.propertyWriteFormVisible" label-width="120px" :model="state.propertyWriteForm" ref="propertyWriteForm">
         <div style="display: none">
           <el-input v-model="state.propertyWriteForm.identifier" type="hidden" />
@@ -206,7 +215,16 @@
       </template>
     </el-dialog>
 
-    <el-dialog :title="state.title" v-model="state.serviceFormVisible" width="40%" @close="closeDialog">
+    <el-dialog
+      :title="state.title"
+      v-model="state.serviceFormVisible"
+      width="40%"
+      @close="closeDialog"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="state.serviceFormVisible" label-width="120px" :model="state.serviceForm" ref="serviceForm">
         <div>
           <el-input v-model="state.serviceForm.identifier" type="hidden" />
@@ -227,7 +245,15 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="添加设备标签" v-model="state.showAddTag" width="400px">
+    <el-dialog
+      title="添加设备标签"
+      v-model="state.showAddTag"
+      width="400px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
       <el-form v-if="state.showAddTag" ref="formRef" :model="state.tagForm" :rules="state.rules" label-width="80px">
         <el-form-item label="标签名称" prop="name">
           <el-input v-model="state.tagForm.name" />

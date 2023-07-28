@@ -2,6 +2,7 @@
   <div>
     <yt-crud
       v-bind="options"
+      ref="crudRef"
       :loading="state.loading"
       :total="state.total"
       v-model:page="state.page"
