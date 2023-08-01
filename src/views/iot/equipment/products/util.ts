@@ -36,6 +36,7 @@ export const ParseProperty = (model, enumItems, boolItem) => {
 
   const property = {
     description: modelRaw.description,
+    unit: modelRaw.unit,
     identifier: modelRaw.identifier,
     name: modelRaw.name,
     dataType: dataType,

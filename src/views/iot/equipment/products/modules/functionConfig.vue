@@ -133,6 +133,10 @@ const column = ref<IColumn[]>([
     key: 'description',
   },
   {
+    label: '单位',
+    key: 'unit',
+  },
+  {
     label: '标识符',
     key: 'identifier',
   },
@@ -164,6 +168,7 @@ const getInfo = (model) => {
       name: p.name,
       identifier: p.identifier,
       description: p.description,
+      unit: p.unit,
       dataTypeName: p.dataType.type,
       params: params == '{}' ? '' : params,
     })
