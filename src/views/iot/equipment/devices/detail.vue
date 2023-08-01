@@ -56,6 +56,11 @@
               <el-button @click="showPropertyHistory(scope.row)" size="small">历史</el-button>
             </template>
           </el-table-column>
+          <el-table-column prop="occurred" label="修改时间">
+            <template v-slot="scope">
+              <span>{{ formatDate(scope.row.occurred)}} </span>
+            </template>
+          </el-table-column>
           <el-table-column label="可读写" width="80">
             <template v-slot="scope">
               <el-tag v-if="!scope.row.write" type="info" size="small" effect="plain">只读</el-tag>
@@ -458,6 +463,7 @@ const getdata = () => {
             dataTypeName: p.dataType.type,
             params: params == '{}' ? '' : params,
             value: '',
+            occurred: ''
           })
         })
         model.events.forEach((e) => {
@@ -515,7 +521,8 @@ const fillProperty = (prop) => {
     props.push({
       identifier: p.identifier,
       name: p.name,
-      value: prop[p.identifier],
+      value: prop[p.identifier]?.value? prop[p.identifier].value: prop[p.identifier],
+      occurred: prop[p.identifier]?.occurred? prop[p.identifier].occurred:'' ,
       write: p.accessMode != 'r',
     })
   })
