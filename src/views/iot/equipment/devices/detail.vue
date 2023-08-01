@@ -521,8 +521,8 @@ const fillProperty = (prop) => {
     props.push({
       identifier: p.identifier,
       name: p.name,
-      value: prop[p.identifier]?.value? prop[p.identifier].value: prop[p.identifier],
-      occurred: prop[p.identifier]?.occurred? prop[p.identifier].occurred:'' ,
+      value: prop[p.identifier]?.value??  prop[p.identifier],
+      occurred: prop[p.identifier]?.occurred??'' ,
       write: p.accessMode != 'r',
     })
   })
@@ -646,7 +646,7 @@ const showWriteProperty = (prop) => {
   state.propertyWriteForm.identifier = prop.identifier
   state.propertyWriteForm.productKey = state.deviceDetail.productKey
   state.propertyWriteForm.deviceName = state.deviceDetail.deviceName
-  state.propertyWriteForm.value = prop.value
+  state.propertyWriteForm.value = prop.value?.value ? prop.value.value : prop.value
 }
 const submitPropertyWriteForm = () => {
   let form = state.propertyWriteForm
