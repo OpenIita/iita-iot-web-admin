@@ -109,6 +109,19 @@ export const dynamicRoutes: RouteOption[] = [
     ],
   },
   {
+    path: '/contributor/',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'detail/:id/:type',
+        component: () => import('@/views/contributor/detail.vue'),
+        name: 'contributorDetail',
+        meta: { title: '贡献者详情', activeMenu: '/contributor', icon: '' },
+      },
+    ],
+  },
+  {
     path: '/system/role-auth',
     component: Layout,
     hidden: true,
