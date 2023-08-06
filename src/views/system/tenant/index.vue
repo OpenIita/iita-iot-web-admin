@@ -171,7 +171,7 @@ const tenantFormRef = ref<FormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 const initFormData: TenantForm = {
@@ -193,14 +193,14 @@ const initFormData: TenantForm = {
   status: '0',
 }
 const data = reactive<PageData<TenantForm, TenantQuery>>({
-  form: {...initFormData},
+  form: { ...initFormData },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    tenantId: '',
-    contactUserName: '',
-    contactPhone: '',
-    companyName: ''
+    tenantId: undefined,
+    contactUserName: undefined,
+    contactPhone: undefined,
+    companyName: undefined,
   },
   rules: {
     id: [{ required: true, message: 'id不能为空', trigger: 'blur' }],
@@ -210,13 +210,13 @@ const data = reactive<PageData<TenantForm, TenantQuery>>({
     companyName: [{ required: true, message: '企业名称不能为空', trigger: 'blur' }],
     username: [
       { required: true, message: '用户名不能为空', trigger: 'blur' },
-      { min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' }
+      { min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' },
     ],
     password: [
       { required: true, message: '密码不能为空', trigger: 'blur' },
-      { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
-    ]
-  }
+      { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' },
+    ],
+  },
 })
 
 const { queryParams, form, rules } = toRefs(data)
@@ -246,8 +246,6 @@ const handleStatusChange = async (row: TenantVO) => {
   } catch {
     row.status = row.status === '0' ? '1' : '0'
   }
-
-
 }
 
 // 取消按钮
@@ -258,7 +256,7 @@ const cancel = () => {
 
 // 表单重置
 const reset = () => {
-  form.value = {...initFormData}
+  form.value = { ...initFormData }
   tenantFormRef.value?.resetFields()
 }
 
@@ -276,7 +274,7 @@ const resetQuery = () => {
 
 // 多选框选中数据
 const handleSelectionChange = (selection: TenantVO[]) => {
-  ids.value = selection.map(item => item.id)
+  ids.value = selection.map((item) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -312,9 +310,9 @@ const submitForm = () => {
     if (valid) {
       buttonLoading.value = true
       if (form.value.id) {
-        await updateTenant(form.value).finally(() => buttonLoading.value = false)
+        await updateTenant(form.value).finally(() => (buttonLoading.value = false))
       } else {
-        await addTenant(form.value).finally(() => buttonLoading.value = false)
+        await addTenant(form.value).finally(() => (buttonLoading.value = false))
       }
       proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
@@ -328,11 +326,9 @@ const handleDelete = async (row?: TenantVO) => {
   const _ids = row?.id || ids.value
   await proxy?.$modal.confirm('是否确认删除租户编号为"' + _ids + '"的数据项？')
   loading.value = true
-  await delTenant(_ids).finally(() => loading.value = false)
+  await delTenant(_ids).finally(() => (loading.value = false))
   getList()
   proxy?.$modal.msgSuccess('删除成功')
-
-
 }
 
 /** 同步租户套餐按钮操作 */
@@ -343,16 +339,22 @@ const handleSyncTenantPackage = async (row: TenantVO) => {
     await syncTenantPackage(row.tenantId, row.packageId)
     getList()
     proxy?.$modal.msgSuccess('同步成功')
-  } catch {return} finally {
+  } catch {
+    return
+  } finally {
     loading.value = false
   }
 }
 
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download('system/tenant/export', {
-    ...queryParams.value
-  }, `tenant_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/tenant/export',
+    {
+      ...queryParams.value,
+    },
+    `tenant_${new Date().getTime()}.xlsx`
+  )
 }
 
 onMounted(() => {
