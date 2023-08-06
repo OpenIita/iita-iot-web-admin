@@ -57,11 +57,9 @@ export function changeTenantStatus(id: string | number, tenantId: string | numbe
 // 删除租户
 export function delTenant(id: string | number | Array<string | number>) {
   return request({
-    url: '/system/tenant',
+    url: '/system/tenant/delete',
     method: 'post',
-    data: {
-      id,
-    },
+    data: [id],
   })
 }
 
