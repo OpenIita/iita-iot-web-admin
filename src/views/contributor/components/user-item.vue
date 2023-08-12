@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
-import defaultImg from '@/assets/images/profile.jpg'
+import defaultImg from '@/assets/images/profile.png'
 
 const props = defineProps({
   data: propTypes.object.def({
@@ -30,7 +30,7 @@ const props = defineProps({
     id: '',
     context: '',
     title: '',
-  })
+  }),
 })
 const router = useRouter()
 const goView = () => {
@@ -45,7 +45,7 @@ const goView = () => {
 .user-item {
   padding: 16px;
   margin-bottom: 16px;
-  border: 1px solid #e2e8efff;;
+  border: 1px solid #e2e8efff;
   background: #fafbfcff;
   border-radius: 6px;
   cursor: pointer;
@@ -74,7 +74,7 @@ const goView = () => {
       justify-content: space-between;
     }
     .desc {
-      color: #54575E;
+      color: #54575e;
       font-size: 12px;
       margin-bottom: 12px;
       padding-bottom: 12px;
@@ -85,9 +85,9 @@ const goView = () => {
         padding: 4px 10px;
         border: 1px solid;
         font-size: 12px;
-        color: #DBF7F5;
+        color: #dbf7f5;
         background-color: rgba(219, 247, 245, 1);
-        border-color: #DBF7F5;
+        border-color: #dbf7f5;
         border-radius: 2px;
         margin-right: 6px;
         &:last-child {
