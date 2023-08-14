@@ -3,7 +3,7 @@ import { TenantForm, TenantQuery, TenantVO } from './types'
 import { AxiosPromise } from 'axios'
 
 // 查询租户列表
-export function listTenant(query: TenantQuery): AxiosPromise<TenantVO[]> {
+export function listTenant(query: TenantQuery): AxiosPromise<any> {
   return request({
     url: '/system/tenant/list',
     method: 'post',
@@ -14,7 +14,7 @@ export function listTenant(query: TenantQuery): AxiosPromise<TenantVO[]> {
 // 查询租户详细
 export function getTenant(id: string | number): AxiosPromise<TenantVO> {
   return request({
-    url: '/system/tenant',
+    url: '/system/tenant/getDetail',
     method: 'post',
     data: {
       id,
@@ -25,7 +25,7 @@ export function getTenant(id: string | number): AxiosPromise<TenantVO> {
 // 新增租户
 export function addTenant(data: TenantForm) {
   return request({
-    url: '/system/tenant',
+    url: '/system/tenant/add',
     method: 'post',
     data,
   })
@@ -34,7 +34,7 @@ export function addTenant(data: TenantForm) {
 // 修改租户
 export function updateTenant(data: TenantForm) {
   return request({
-    url: '/system/tenant',
+    url: '/system/tenant/edit',
     method: 'post',
     data,
   })
@@ -59,7 +59,7 @@ export function delTenant(id: string | number | Array<string | number>) {
   return request({
     url: '/system/tenant/delete',
     method: 'post',
-    data: [id],
+    data: id,
   })
 }
 

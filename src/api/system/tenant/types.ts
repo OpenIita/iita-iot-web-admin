@@ -2,6 +2,7 @@ export interface TenantVO extends BaseEntity {
   id: number | string
   tenantId: number | string
   username: string
+  password: string
   contactUserName: string
   contactPhone: string
   companyName: string
