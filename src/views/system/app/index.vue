@@ -25,7 +25,7 @@
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
-import { listApp, addApp,delApp } from '@/api/system/app'
+import { listApp, addApp,delApp,updateApp } from '@/api/system/app'
 import { AppVO } from '@/api/system/app/types'
 
 const column: IColumn[] = [{
@@ -37,6 +37,7 @@ const column: IColumn[] = [{
   label: 'appId',
   key: 'appId',
   search: true,
+  editDisabled:true,
   rules: [{ required: true, message: 'appId不能为空' }],
 }, {
   label: 'appSecret',
@@ -47,7 +48,17 @@ const column: IColumn[] = [{
   label: '应用类型',
   key: 'appType',
   sortable: true,
+  type: 'select',
   rules: [{ required: true, message: '应用类型不能为空' }],
+  componentProps: {
+    options: [{
+      label: 'APP',
+      value: '0',
+    }, {
+      label: '小程序',
+      value: '1',
+    }],
+  }
 }, {
   label: '备注',
   key: 'remark',
@@ -65,9 +76,9 @@ const state = reactive({
   loading: false
 })
 // 保存数据
-const onSave = async ({type, data, cancel}: any) => {
+const onSave = async ({data, cancel}: any) => {
   state.loading = true
-  await addApp(toRaw(data))
+  data.id ? await updateApp(toRaw(data)) : await addApp(toRaw(data))
   state.loading = false
   cancel()
   getData()
