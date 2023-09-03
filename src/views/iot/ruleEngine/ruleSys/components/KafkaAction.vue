@@ -10,7 +10,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="转换脚本">
-        <code-editor style="width: 100%" :code="service.script" />
+        <code-editor style="width: 100%" v-model:code="service.script" />
       </el-form-item>
     </el-form>
   </div>
