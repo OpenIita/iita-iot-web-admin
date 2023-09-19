@@ -185,7 +185,7 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
     })
     return
   }
-  if (res.code === 200) {
+  if (res.code === 200 && res.data) {
     uploadList.value.push({ name: res.data.fileName || res.data.originalName, url: res.data.url, ossId: res.data.ossId, size: res.data.size })
     uploadedSuccessfully()
   } else {
