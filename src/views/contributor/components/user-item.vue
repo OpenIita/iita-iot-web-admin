@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { propTypes } from '@/utils/propTypes'
-import defaultImg from '@/assets/images/profile.png'
+import defaultImg from '@/assets/images/profile.jpg'
 
 const props = defineProps({
   data: propTypes.object.def({
