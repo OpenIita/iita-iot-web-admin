@@ -53,7 +53,6 @@ import { propTypes } from '@/utils/propTypes'
 import { ComponentInternalInstance } from 'vue'
 import { ElUpload, UploadFile } from 'element-plus'
 
-
 const props = defineProps({
   isSlot: propTypes.bool.def(false),
   isShowList: propTypes.bool.def(true),
@@ -76,7 +75,7 @@ const props = defineProps({
   // 是否显示提示
   isShowTip: {
     type: Boolean,
-    default: true
+    default: true,
   },
   uploadUrl: {
     type: String,
@@ -85,12 +84,12 @@ const props = defineProps({
   // 上传参数
   params: {
     type: Object,
-    default: () => {}
+    default: () => {},
   },
   // 是否覆盖
   isCover: propTypes.bool.def(false),
   // 图片上传类型： ossId || url
-  uploadType: propTypes.string.def('ossId')
+  uploadType: propTypes.string.def('ossId'),
 })
 const paramsData = ref(props.params || {})
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
@@ -103,41 +102,43 @@ const uploadUrl = ref(baseUrl + props.uploadUrl) // 上传文件服务器地址
 const headers = ref({ Authorization: 'Bearer ' + getToken() })
 
 const fileList = ref<any[]>([])
-const showTip = computed(
-  () => props.isShowTip && (props.fileType || props.fileSize)
-)
+const showTip = computed(() => props.isShowTip && (props.fileType || props.fileSize))
 
 const fileUploadRef = ref(ElUpload)
 
-watch(() => props.modelValue, async val => {
-  if (val) {
-    let temp = 1
-    // 首先将值转为数组
-    let list: any[] = []
-    if (Array.isArray(val)) {
-      list = val
-    } else {
-      if (props.uploadType === 'ossId') {
-        const res =  await listByIds(val as string)
-        list = res.data.map((oss) => {
-          const data = { name: oss.originalName, url: oss.url, ossId: oss.id }
-          return data
-        })
+watch(
+  () => props.modelValue,
+  async (val) => {
+    if (val) {
+      let temp = 1
+      // 首先将值转为数组
+      let list: any[] = []
+      if (Array.isArray(val)) {
+        list = val
       } else {
-        list = val.split(',').map(m => ({ name: getFileName(m), url: m }))
+        if (props.uploadType === 'ossId') {
+          const res = await listByIds(val as string)
+          list = res.data.map((oss) => {
+            const data = { name: oss.originalName, url: oss.url, ossId: oss.id }
+            return data
+          })
+        } else {
+          list = val.split(',').map((m) => ({ name: getFileName(m), url: m }))
+        }
       }
+      // 然后将数组转为对象数组
+      fileList.value = list.map((item) => {
+        item = { name: item.name, url: item.url, ossId: item.ossId }
+        item.uid = item.uid || new Date().getTime() + temp++
+        return item
+      })
+    } else {
+      fileList.value = []
+      return []
     }
-    // 然后将数组转为对象数组
-    fileList.value = list.map(item => {
-      item = {name: item.name, url: item.url, ossId: item.ossId}
-      item.uid = item.uid || new Date().getTime() + temp++
-      return item
-    })
-  } else {
-    fileList.value = []
-    return []
-  }
-},{ deep: true, immediate: true })
+  },
+  { deep: true, immediate: true }
+)
 
 // 上传前校检格式和大小
 const handleBeforeUpload = (file: any) => {
@@ -176,7 +177,7 @@ const handleUploadError = () => {
 }
 
 // 上传成功回调
-const handleUploadSuccess = (res:any, file: UploadFile) => {
+const handleUploadSuccess = (res: any, file: UploadFile) => {
   if (typeof res === 'string') {
     proxy?.$modal.closeLoading()
     emit('stringSuccess', {
@@ -185,13 +186,15 @@ const handleUploadSuccess = (res:any, file: UploadFile) => {
     })
     return
   }
-  if (res.code === 200 && res.data) {
-    uploadList.value.push({ name: res.data.fileName || res.data.originalName, url: res.data.url, ossId: res.data.ossId, size: res.data.size })
+  if (res.code === 200) {
+    if (res.data) {
+      uploadList.value.push({ name: res.data.fileName || res.data.originalName, url: res.data.url, ossId: res.data.ossId, size: res.data.size })
+    }
     uploadedSuccessfully()
   } else {
     number.value--
     proxy?.$modal.closeLoading()
-    proxy?.$modal.msgError(res.msg)
+    proxy?.$modal.msgError(res.message)
     fileUploadRef.value.handleRemove(file)
     uploadedSuccessfully()
   }
@@ -206,15 +209,17 @@ const handleDelete = (index: number) => {
 }
 
 // 上传结束处理
-const uploadedSuccessfully =() => {
+const uploadedSuccessfully = () => {
   if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url).concat(toRaw(uploadList.value))
+    fileList.value = fileList.value.filter((f) => f.url).concat(toRaw(uploadList.value))
     uploadList.value = []
     number.value = 0
     emit('uploadSuccess', toRaw(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
-    proxy?.$modal.closeLoading()
+  } else {
+    emit('uploadSuccess')
   }
+  proxy?.$modal.closeLoading()
 }
 
 // 获取文件名称
@@ -231,7 +236,7 @@ const getFileName = (name: string) => {
 const listToString = (list: any[], separator?: string) => {
   let strs = ''
   separator = separator || ','
-  list.forEach(item => {
+  list.forEach((item) => {
     if (props.uploadType === 'ossId' && item.ossId) {
       strs += item.ossId + separator
     }

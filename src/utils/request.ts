@@ -154,6 +154,8 @@ service.interceptors.response.use(
       message = '后端接口连接异常'
     } else if (message.includes('timeout')) {
       message = '系统接口请求超时'
+    } else if (error.response.status == 500 && error.response.data) {
+      message = error.response.data.message
     } else if (message.includes('Request failed with status code')) {
       message = '系统接口' + message.substr(message.length - 3) + '异常'
     }

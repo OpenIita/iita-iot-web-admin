@@ -120,7 +120,6 @@ const state = reactive({
 const loading = ref(false)
 // 上传jar成功
 const uploadJarSuccess = (res, row) => {
-  console.log(res)
   getData()
 }
 
@@ -142,9 +141,14 @@ const handleSave = () => {
 
 const setState = (id: number, state: any) => {
   loading.value = true
-  changeState({ id: id, state: state }).then(() => {
-    getData()
-  })
+  changeState({ id: id, state: state }).then(
+    () => {
+      getData()
+    },
+    () => {
+      loading.value = false
+    }
+  )
 }
 
 const getData = () => {
