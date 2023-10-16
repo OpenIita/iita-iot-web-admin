@@ -133,7 +133,7 @@ const data = ref([])
 const onSave = ({type, data, cancel}: any) => {
   state.loading = true
   const obj = toRaw(data)
-  obj.listeners = obj.listeners.map(m => {
+  obj.listeners = (obj.listeners || [])?.map(m => {
     const mObj = {
       type: m.type,
       pk: m.pk,
@@ -149,7 +149,7 @@ const onSave = ({type, data, cancel}: any) => {
       config: JSON.stringify(mObj)
     }
   })
-  obj.filters = obj.filters.map(m => {
+  obj.filters = (obj.filters || [])?.map(m => {
     const mObj = {
       type: 'device',
       pk: m.pk,
@@ -166,7 +166,7 @@ const onSave = ({type, data, cancel}: any) => {
       config: JSON.stringify(mObj)
     }
   })
-  obj.actions = obj.actions.map(m => {
+  obj.actions = (obj.actions || [])?.map(m => {
     return {
       ...m,
       config: JSON.stringify(m),
