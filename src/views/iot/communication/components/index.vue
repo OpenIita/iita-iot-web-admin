@@ -355,14 +355,15 @@ const column = ref<IColumn[]>([{
       value: 'biz',
     }]
   },
-  formWatch: (scope) => {
-    scope.column.forEach((f: IColumn) => {
-      if (f.key === 'converter') {
-        f.formHide = scope.value === 'biz'
-      }
-    })
-    column.value = scope.column
-  }
+  // 与转换器类型监听冲突了
+  // formWatch: (scope) => {
+  //   scope.column.forEach((f: IColumn) => {
+  //     if (f.key === 'converter') {
+  //       f.formHide = scope.value === 'biz'
+  //     }
+  //   })
+  //   column.value = scope.column
+  // }
 }, {
   label: '转换器类型',
   key: 'converType',
