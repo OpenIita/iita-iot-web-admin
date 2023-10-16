@@ -1,24 +1,25 @@
 ## 平台简介
 
-* 本仓库为前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [TS](https://www.typescriptlang.org/) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
-* 配套后端代码仓库地址
-* [奇特物联开源 / iotkit-parent V0.4.5(注意版本号)](https://gitee.com/iotkit-open-source/iotkit-parent.git)
+- 本仓库为前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [TS](https://www.typescriptlang.org/) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
+- 配套后端代码仓库地址
+- [铱塔智联开源 / iot-iita](https://gitee.com/open-iita/iotkit-parent/tree/dev-V0.5.0/)
 
 ## 前端目录结构
+
 ```
 |-- .editorconfig              编辑器配置
 |-- .env.development           开发环境配置
 |-- .env.production            生产环境配置
 |-- .eslintignore              eslint忽略配置
 |-- .eslintrc-auto-import.json eslint自动导入json校验
-|-- .eslintrc.js               eslint规则配置  
+|-- .eslintrc.js               eslint规则配置
 |-- .gitignore                 git忽略
 |-- .prettierignore            prettier忽略
 |-- commitlint.config.js       git commit 格式校验
 |-- index.html                 项目单页面主页
-|-- package.json               项目配置  
+|-- package.json               项目配置
 |-- pnpm-lock.yaml             pnpm依赖锁
-|-- README.md                  
+|-- README.md
 |-- tsconfig.json              ts配置
 |-- vite.config.ts             vite配置
 |-- bin                        脚本
@@ -55,14 +56,14 @@
 
 ## 前端运行
 
-|环境|要求|
-|--|--|
-|nodejs|14.16.x+|
-|pnpm|任意版本|
-|vue|3.2.45+|
-|element-plus|2.2.27+|
-|vite|2.0.0+|
-|typeScript|4.x+|
+| 环境         | 要求     |
+| ------------ | -------- |
+| nodejs       | 14.16.x+ |
+| pnpm         | 任意版本 |
+| vue          | 3.2.45+  |
+| element-plus | 2.2.27+  |
+| vite         | 2.0.0+   |
+| typeScript   | 4.x+     |
 
 [常见问题](http://iotkit-open-source.gitee.io/document/pages/772a9f/#creating-server-tcp-listening-socket-127-0-0-1-6379-bind-no-such-file-or-directory)
 
@@ -81,7 +82,7 @@ pnpm install
 # 启动服务
 pnpm run dev
 
-# 构建生产环境 
+# 构建生产环境
 yarn build:prod
 
 # 前端访问地址

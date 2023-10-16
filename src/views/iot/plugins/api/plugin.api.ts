@@ -13,20 +13,20 @@ enum Api {
 }
 
 export interface IPluginVO {
-  id:number
-  pluginId:string
-  name:string
-  file:string
-  version:string
-  description:string
-  deployType:string
-  type:string
-  protocol:string
-  state:string
-  configSchema:string
-  config:string
-  script:string
-  createTime:number
+  id: number
+  pluginId: string
+  name: string
+  file: string
+  version: string
+  description: string
+  deployType: string
+  type: string
+  protocol: string
+  state: string
+  configSchema: string
+  config: string
+  script: string
+  createTime: number
 }
 
 interface IPage {
@@ -52,7 +52,7 @@ export const deletePlugin = (data: (string | number)[]) => {
 }
 
 // 编辑
-export const editPlugin= (data: IPluginVO) => {
+export const editPlugin = (data: IPluginVO) => {
   return request({
     url: Api.edit,
     method: 'post',
@@ -60,7 +60,7 @@ export const editPlugin= (data: IPluginVO) => {
   })
 }
 // 新增
-export const addPlugin= (data: IPluginVO) => {
+export const addPlugin = (data: IPluginVO) => {
   return request({
     url: Api.add,
     method: 'post',
