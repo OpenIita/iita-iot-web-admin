@@ -14,12 +14,18 @@
         {{ data.version }}
       </el-form-item>
       <el-form-item label="状态:">
-        <el-button v-if="data.state == 'running'" type="success" size="small" plain @click="setState(data.id, 'stopped')" :loading="loading"
-          >运行中</el-button
-        >
-        <el-button v-if="data.state == 'stopped'" type="danger" size="small" plain @click="setState(data.id, 'running')" :loading="loading"
-          >已停止</el-button
-        >
+        <el-switch
+          v-model="data.state"
+          active-text="运行中"
+          inactive-text="已停止"
+          active-value="running"
+          inactive-value="stopped"
+          inline-prompt
+          size="large"
+          :loading="loading"
+          style="--el-switch-on-color: #029D40; --el-switch-off-color: #DFDFDF"
+          @change="setState(data)"
+        />
       </el-form-item>
     </el-form>
     <el-form :inline="true" label-width="80px">
@@ -28,7 +34,6 @@
       </el-form-item>
       <el-form-item>
         <upload-file
-          v-model:value="data.file"
           :fileType="['jar']"
           :limit="1"
           :fileSize="100"
@@ -139,9 +144,9 @@ const handleSave = () => {
   })
 }
 
-const setState = (id: number, state: any) => {
+const setState = (data: any) => {
   loading.value = true
-  changeState({ id: id, state: state }).then(
+  changeState({ id: data.id, state: data.state }).then(
     () => {
       getData()
     },

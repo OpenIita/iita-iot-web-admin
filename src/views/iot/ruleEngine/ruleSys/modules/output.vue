@@ -36,6 +36,7 @@
           <div class="condition-box" v-if="item.type === 'tcp'">
             <TcpAction :config="item" />
           </div>
+          <div class="condition-box" v-if="item.type === 'alarm'">保存后，在警告配置中关联此规则</div>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -61,20 +62,24 @@ for (let i = 0; i < 10; i++) {
 }
 const activeName = ref<number[]>(arr)
 const dataList = ref<any[]>(props.list || [])
-watch(() => dataList.value.length, (newV) => {
-  const arr = dataList.value.map(m => {
-    if (m.config) {
-      const obj = JSON.parse(m.config || '{}')
-      return obj
-    }
-    return m
-  })
-  dataList.value = arr
-  emits('update:list', arr)
-}, {
-  // deep: true,
-  immediate: true,
-})
+watch(
+  () => dataList.value.length,
+  (newV) => {
+    const arr = dataList.value.map((m) => {
+      if (m.config) {
+        const obj = JSON.parse(m.config || '{}')
+        return obj
+      }
+      return m
+    })
+    dataList.value = arr
+    emits('update:list', arr)
+  },
+  {
+    // deep: true,
+    immediate: true,
+  }
+)
 // 新增输出
 const handleAdd = () => {
   dataList.value.push({
@@ -125,7 +130,7 @@ const actionTypeChange = (item) => {
           host: '',
           port: 1883,
           script: `this.translate=function(msg){
-        }`
+        }`,
         },
       ]
     }
@@ -190,6 +195,5 @@ onUnmounted(() => {
       }
     }
   }
-
 }
 </style>

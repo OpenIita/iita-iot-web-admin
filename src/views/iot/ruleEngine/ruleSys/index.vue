@@ -44,7 +44,7 @@
             <filtera v-if="activeName === 2" v-model:filters="row.filters" />
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output v-if="activeName === 3" v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp" />
+            <Output v-if="activeName === 3" v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp,alarm" />
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -68,55 +68,66 @@ const handleViewLog = (id: string) => {
   logDialogRef.value.openDialog(id)
 }
 const activeName = ref(1)
-const column: IColumn[] = [{
-  label: '规则名称',
-  key: 'name',
-  rules: [{ required: true, message: '规则名称不能为空' }],
-}, {
-  label: '状态',
-  key: 'state',
-  slot: true,
-  formHide: true,
-}, {
-  label: '规则类型',
-  key: 'type',
-  type: 'select',
-  search: true,
-  componentProps: {
-    defaultValue: 'scene',
-    clearable: false,
-    options: [{
-      label: '场景联动',
-      value: 'scene',
-    }, {
-      label: '数据流转',
-      value: 'flow'
-    }]
-  }
-}, {
-  label: '执行日志',
-  key: 'log',
-  slot: true,
-  formHide: true,
-}, {
-  label: '场景描述',
-  key: 'desc',
-  hide: true,
-  componentProps: {
-    type: 'textarea',
-    row: 3,
-  }
-}, {
-  label: '自定义表单项',
-  key: 'custom',
-  hide: true,
-  formItemSlot: true,
-}, {
-  label: '创建时间',
-  key: 'createAt',
-  type: 'date',
-  formHide: true,
-}]
+const column: IColumn[] = [
+  {
+    label: '规则名称',
+    key: 'name',
+    rules: [{ required: true, message: '规则名称不能为空' }],
+  },
+  {
+    label: '状态',
+    key: 'state',
+    slot: true,
+    formHide: true,
+  },
+  {
+    label: '规则类型',
+    key: 'type',
+    type: 'select',
+    search: true,
+    componentProps: {
+      defaultValue: 'scene',
+      clearable: false,
+      options: [
+        {
+          label: '场景联动',
+          value: 'scene',
+        },
+        {
+          label: '数据流转',
+          value: 'flow',
+        },
+      ],
+    },
+  },
+  {
+    label: '执行日志',
+    key: 'log',
+    slot: true,
+    formHide: true,
+  },
+  {
+    label: '场景描述',
+    key: 'desc',
+    hide: true,
+    componentProps: {
+      type: 'textarea',
+      row: 3,
+    },
+  },
+  {
+    label: '自定义表单项',
+    key: 'custom',
+    hide: true,
+    formItemSlot: true,
+  },
+  {
+    label: '创建时间',
+    key: 'createAt',
+    type: 'date',
+    formHide: true,
+  },
+]
 const state = reactive({
   page: {
     pageSize: 10,
@@ -130,32 +141,32 @@ const state = reactive({
 })
 const data = ref([])
 // 保存数据
-const onSave = ({type, data, cancel}: any) => {
+const onSave = ({ type, data, cancel }: any) => {
   state.loading = true
   const obj = toRaw(data)
-  obj.listeners = (obj.listeners || [])?.map(m => {
+  obj.listeners = (obj.listeners || [])?.map((m) => {
     const mObj = {
       type: m.type,
       pk: m.pk,
       deviceDn: m.deviceDn,
       device: m.device,
-      conditions: m.conditions.map(m2 => ({
+      conditions: m.conditions.map((m2) => ({
         ...m2,
         device: m.device,
       })),
     }
     return {
       ...mObj,
-      config: JSON.stringify(mObj)
+      config: JSON.stringify(mObj),
     }
   })
-  obj.filters = (obj.filters || [])?.map(m => {
+  obj.filters = (obj.filters || [])?.map((m) => {
     const mObj = {
       type: 'device',
       pk: m.pk,
       deviceDn: m.deviceDn,
       device: m.device,
-      conditions: m.conditions.map(m2 => ({
+      conditions: m.conditions.map((m2) => ({
         ...m2,
         device: m.device,
       })),
@@ -163,22 +174,24 @@ const onSave = ({type, data, cancel}: any) => {
     }
     return {
       ...mObj,
-      config: JSON.stringify(mObj)
+      config: JSON.stringify(mObj),
     }
   })
-  obj.actions = (obj.actions || [])?.map(m => {
+  obj.actions = (obj.actions || [])?.map((m) => {
     return {
       ...m,
       config: JSON.stringify(m),
     }
   })
-  saveRule(obj).then(res => {
-    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-    cancel()
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  saveRule(obj)
+    .then((res) => {
+      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+      cancel()
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 const getData = () => {
   state.loading = true
@@ -193,30 +206,36 @@ const getData = () => {
 }
 const handleDelete = (row) => {
   state.loading = true
-  deleteRule(row.id).then(res => {
-    ElMessage.success('删除成功!')
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  deleteRule(row.id)
+    .then((res) => {
+      ElMessage.success('删除成功!')
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 const handleOpen = (row) => {
   state.loading = true
-  resumeRule(row.id).then(res => {
-    ElMessage.success('开启成功!')
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  resumeRule(row.id)
+    .then((res) => {
+      ElMessage.success('开启成功!')
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 const handlePause = (row) => {
   state.loading = true
-  pauseRule(row.id).then(res => {
-    ElMessage.success('停止成功!')
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
+  pauseRule(row.id)
+    .then((res) => {
+      ElMessage.success('停止成功!')
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 const options = reactive({
   formProps: {
