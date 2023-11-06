@@ -52,7 +52,7 @@ export const deletePlugin = (data: (string | number)[]) => {
 }
 
 // 编辑
-export const editPlugin = (data: IPluginVO) => {
+export const editPlugin = (data: any) => {
   return request({
     url: Api.edit,
     method: 'post',
