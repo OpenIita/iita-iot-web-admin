@@ -149,7 +149,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <Pagination :data="state.formInline" @onPagePaging="getEvents" />
+        <Pagination :data="state.formInline" :total="state.formInline.total" :page="state.formInline.page" @pagination="getEvents" />
       </el-tab-pane>
 
       <el-tab-pane label="模拟上报" name="report">
@@ -292,7 +292,7 @@ import {
 
 import PropertyChart from './modules/PropertyChart.vue'
 import DeviceConfig from './modules/detail/DeviceConfig.vue'
-import  Map  from '@/components/Map/index.vue'
+import Map from '@/components/Map/index.vue'
 import DeviceSimulator from './modules/detail/DeviceSimulator.vue'
 
 const route = useRoute()
@@ -342,7 +342,7 @@ const state = reactive<any>({
   services: [],
   events: [],
   eventMap: {},
-  mapLnglat:'',
+  mapLnglat: '',
   tags: [],
   formInline: {
     type: '',
@@ -365,10 +365,7 @@ const state = reactive<any>({
   },
   dataType: '',
   currHistoryProperty: {},
-  historyTime: [
-    new Date(new Date().getTime() - 24 * 3600 * 1000),
-    new Date(new Date().getTime() + 24 * 3600 * 1000),
-  ],
+  historyTime: [new Date(new Date().getTime() - 24 * 3600 * 1000), new Date(new Date().getTime() + 24 * 3600 * 1000)],
   pickerOptions: {
     shortcuts: [
       {
@@ -463,7 +460,7 @@ const getdata = () => {
             dataTypeName: p.dataType.type,
             params: params == '{}' ? '' : params,
             value: '',
-            occurred: ''
+            occurred: '',
           })
         })
         model.events.forEach((e) => {
@@ -482,12 +479,12 @@ const getdata = () => {
           })
         })
         model.services.forEach((s) => {
-          let input = {};
-          (s.inputData || []).forEach((p) => {
+          let input = {}
+          ;(s.inputData || []).forEach((p) => {
             input[p.identifier] = p.name
           })
-          let output = {};
-          (s.outputData || []).forEach((p) => {
+          let output = {}
+          ;(s.outputData || []).forEach((p) => {
             output[p.identifier] = p.name
           })
           modelFuncs.push({
@@ -521,8 +518,8 @@ const fillProperty = (prop) => {
     props.push({
       identifier: p.identifier,
       name: p.name,
-      value: prop[p.identifier]?.value??  prop[p.identifier],
-      occurred: prop[p.identifier]?.occurred??'' ,
+      value: prop[p.identifier]?.value ?? prop[p.identifier],
+      occurred: prop[p.identifier]?.occurred ?? '',
       write: p.accessMode != 'r',
     })
   })
@@ -548,17 +545,17 @@ const submitAddTag = () => {
 }
 const logSearch = () => {
   state.formInline.page = 1
-  getEvents()
+  getEvents({ page: 1 })
 }
-const getEvents = () => {
-  console.log('deviceLogs')
+const getEvents = (e) => {
+  console.log('deviceLogs', e)
+  state.formInline.page = e.page
   deviceLogs({
     deviceId: state.deviceId,
-    ...state.formInline
+    ...state.formInline,
   }).then((res) => {
-    state.formInline.total = res.total
+    state.formInline.total = res.data.total
     let logs: any[] = []
-    console.log('res.data', res.data)
     res.data.rows.map((de) => {
       let row = {
         time: de.time,
@@ -626,19 +623,21 @@ const refreshPropertyHistory = () => {
     deviceId: state.deviceId,
     name: state.currHistoryProperty.identifier,
     start: start.getTime(),
-    end: end.getTime()
-  }).then((res) => {
-    state.propertyHistory.name = state.currHistoryProperty.name
-    state.propertyHistory.data = res.data
-  }).finally(() => {
-    loading.value = false
+    end: end.getTime(),
   })
+    .then((res) => {
+      state.propertyHistory.name = state.currHistoryProperty.name
+      state.propertyHistory.data = res.data
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 const timeRangeChange = () => {
   refreshPropertyHistory()
 }
 const handleClick = (tab) => {
-  tab.name == 'event' ? getEvents() : getdata()
+  tab.paneName == 'event' ? getEvents({ page: 1 }) : getdata()
 }
 const showWriteProperty = (prop) => {
   state.propertyWriteFormVisible = true
@@ -746,7 +745,7 @@ const closeDialog = () => {
   state.serviceFormVisible = false
 }
 const locateChange = (e) => {
-  state.propertyWriteForm.value=e[0] * 1+','+e[1] * 1
+  state.propertyWriteForm.value = e[0] * 1 + ',' + e[1] * 1
 }
 
 getdata()

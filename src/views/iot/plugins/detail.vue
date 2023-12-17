@@ -69,7 +69,6 @@
       <el-collapse-item title="转换脚本(可选)" name="2">
         <code-editor v-model:code="data.script" />
         <el-button :loading="loading" @click="handleSave" type="primary" style="margin-top: 5px;">保存</el-button>
-        <div class="el-upload__tip">注：修改转换脚本要重启插件生效</div>
       </el-collapse-item>
     </el-collapse>
   </div>
