@@ -37,7 +37,7 @@
 import { IColumn } from '@/components/common/types/tableCommon'
 
 import YtCrud from '@/components/common/yt-crud.vue'
-import { getConfigList,getChannelsList, IChannelsVO,addConfig,delConfigById,IChannelConfigsVO } from './api/configs.api'
+import { getConfigList, getChannelsList, IChannelsVO, addConfig, delConfigById, IChannelConfigsVO } from './api/configs.api'
 
 const data = ref<IChannelConfigsVO[]>([])
 const channelOptions = ref<IChannelsVO[]>([])
@@ -52,107 +52,123 @@ const state = reactive({
   typeObj: [
     {
       code: 'Email',
-      list: [{
-        label: '邮件发送人',
-        value: 'from',
-      }, {
-        label: '邮件主机',
-        value: 'host',
-      }, {
-        label: '用户名',
-        value: 'userName',
-      }, {
-        label: '密码',
-        value: 'passWord',
-      }, {
-        label: '邮件授权',
-        value: 'mailSmtpAuth',
-        type: 'switch',
-      }, {
-        label: '邮件接收人',
-        value: 'to',
-      }]
+      list: [
+        {
+          label: '邮件发送人',
+          value: 'from',
+        },
+        {
+          label: '邮件主机',
+          value: 'host',
+        },
+        {
+          label: '用户名',
+          value: 'userName',
+        },
+        {
+          label: '密码',
+          value: 'passWord',
+        },
+        {
+          label: '邮件授权',
+          value: 'mailSmtpAuth',
+          type: 'switch',
+        },
+        {
+          label: '邮件接收人',
+          value: 'to',
+        },
+      ],
     },
     {
       code: 'QyWechat',
-      list: [{
-        label: '机器人webhook',
-        value: 'qyWechatWebhook',
-      }]
+      list: [
+        {
+          label: '机器人webhook',
+          value: 'qyWechatWebhook',
+        },
+      ],
     },
     {
       code: 'DingTalk',
-      list: [{
-        label: '机器人密钥',
-        value: 'dingTalkSecret',
-      }, {
-        label: '机器人webhook',
-        value: 'dingTalkWebhook',
-      }]
-    }
+      list: [
+        {
+          label: '机器人webhook',
+          value: 'dingTalkWebhook',
+        },
+      ],
+    },
   ],
   channelCode: '',
 })
-const column = ref<IColumn[]>([{
-  label: '通道配置名称',
-  key: 'title',
-  tableWidth: 200,
-  search: true,
-  rules: [{ required: true, message: '通道配置名称不能为空' }],
-}, {
-  label: '通道类型',
-  key: 'channelId',
-  tableWidth: 150,
-  type: 'select',
-  rules: [{ required: true, message: '请选择类型' }],
-  componentProps: {
-    labelAlias: 'title',
-    valueAlias: 'id'
-  }
-}, {
-  label: '通道参数',
-  key: 'paramStr',
-  formHide: true,
-}, {
-  label: '参数配置',
-  key: 'param',
-  hide: true,
-  formItemSlot: true,
-  componentProps: {
-    defaultValue: {},
-  }
-}])
+const column = ref<IColumn[]>([
+  {
+    label: '通道配置名称',
+    key: 'title',
+    tableWidth: 200,
+    search: true,
+    rules: [{ required: true, message: '通道配置名称不能为空' }],
+  },
+  {
+    label: '通道类型',
+    key: 'channelId',
+    tableWidth: 150,
+    type: 'select',
+    rules: [{ required: true, message: '请选择类型' }],
+    componentProps: {
+      labelAlias: 'title',
+      valueAlias: 'id',
+    },
+  },
+  {
+    label: '通道参数',
+    key: 'paramStr',
+    formHide: true,
+  },
+  {
+    label: '参数配置',
+    key: 'param',
+    hide: true,
+    formItemSlot: true,
+    componentProps: {
+      defaultValue: {},
+    },
+  },
+])
 
 const getData = () => {
   state.loading = true
   getConfigList({
     ...state.page,
     ...state.query,
-  }).then(res => {
-    data.value = res.data.rows?.map(m => ({
-      ...m,
-      paramStr: m.param,
-      param: JSON.parse(m.param),
-    })) || []
-    state.total = res.data.total
-  }).finally(() => {
-    state.loading = false
   })
+    .then((res) => {
+      data.value =
+        res.data.rows?.map((m) => ({
+          ...m,
+          paramStr: m.param,
+          param: JSON.parse(m.param),
+        })) || []
+      state.total = res.data.total
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 const getChannelCode = (id: number) => {
-  const obj = channelOptions.value.find(f => f.id == id)
+  const obj = channelOptions.value.find((f) => f.id == id)
   return obj?.code || ''
 }
 
 // 获取通道类型
 const getChannel = () => {
-  getChannelsList().then(res => {
+  getChannelsList().then((res) => {
     console.log(res.data)
     channelOptions.value = res.data || []
-    column.value.forEach(item => {
+    column.value.forEach((item) => {
       if (item.key === 'channelId') {
-        item.componentProps.options = channelOptions.value.map(m => ({
+        item.componentProps.options = channelOptions.value.map((m) => ({
           ...m,
           id: (m.id || '').toString(),
         }))
@@ -163,16 +179,17 @@ const getChannel = () => {
 getChannel()
 
 // 保存数据
-const onSave = ({type, data, cancel}: any) => {
+const onSave = ({ type, data, cancel }: any) => {
   state.loading = true
-  addConfig(toRaw(data)).then(res => {
-    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-    cancel()
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
-
+  addConfig(toRaw(data))
+    .then((res) => {
+      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+      cancel()
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 // 删除

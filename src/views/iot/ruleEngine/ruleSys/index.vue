@@ -44,7 +44,7 @@
             <filtera v-if="activeName === 2" v-model:filters="row.filters" />
           </el-tab-pane>
           <el-tab-pane label="输出" :name="3">
-            <Output v-if="activeName === 3" v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp,alarm" />
+            <Output v-if="activeName === 3" v-model:list="row.actions" type="rule" actions="device,http,mqtt,kafka,tcp,alert" />
           </el-tab-pane>
         </el-tabs>
       </template>

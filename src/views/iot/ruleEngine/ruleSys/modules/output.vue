@@ -8,7 +8,7 @@
               <div class="cu-title" @click.stop>
                 <el-radio-group v-model="item.type" @change="actionTypeChange(item)">
                   <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio>
-                  <el-radio v-if="actions.indexOf('alarm') >= 0" :label="'alarm'">告警消息 </el-radio>
+                  <el-radio v-if="actions.indexOf('alert') >= 0" :label="'alert'">告警消息 </el-radio>
                   <el-radio v-if="actions.indexOf('scene') >= 0" :label="'scene'">场景控制 </el-radio>
                   <el-radio v-if="actions.indexOf('http') >= 0" :label="'http'">http推送 </el-radio>
                   <el-radio v-if="actions.indexOf('mqtt') >= 0" :label="'mqtt'">mqtt推送 </el-radio>
@@ -36,7 +36,10 @@
           <div class="condition-box" v-if="item.type === 'tcp'">
             <TcpAction :config="item" />
           </div>
-          <div class="condition-box" v-if="item.type === 'alarm'">保存后，在警告配置中关联此规则</div>
+          <div class="condition-box" v-if="item.type === 'alert'">
+            <AlertAction :config="item" />
+            保存后，在警告配置中关联此规则
+          </div>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -50,6 +53,7 @@ import HttpAction from '../components/HttpAction.vue'
 import MqttAction from '../components/MqttAction.vue'
 import KafkaAction from '../components/KafkaAction.vue'
 import TcpAction from '../components/TcpAction.vue'
+import AlertAction from '../components/AlertAction.vue'
 
 const props = defineProps({
   list: propTypes.array.def([]),
