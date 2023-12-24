@@ -181,7 +181,13 @@ getChannel()
 // 保存数据
 const onSave = ({ type, data, cancel }: any) => {
   state.loading = true
-  addConfig(toRaw(data))
+  let data2: any = {}
+  for (let p in data) {
+    data2[p] = data[p]
+  }
+  data2['param'] = JSON.stringify(data['param'])
+
+  addConfig(data2)
     .then((res) => {
       ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
       cancel()
