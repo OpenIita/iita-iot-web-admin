@@ -108,6 +108,13 @@ const actionTypeChange = (item) => {
         }`,
         },
       ]
+    } else if (item.type == 'alert') {
+      item.services = [
+        {
+          script: `this.translate=function(msg){
+        }`,
+        },
+      ]
     } else if (item.type == 'mqtt') {
       item.services = [
         {
