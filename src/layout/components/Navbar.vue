@@ -100,8 +100,8 @@ const dynamicTenantEvent = async (tenantId: string) => {
   if (companyName.value != null && companyName.value !== '') {
     await dynamicTenant(tenantId)
     dynamic.value = true
-    proxy?.$tab.closeAllPage()
-    proxy?.$router.push('/')
+    // proxy?.$tab.closeAllPage()
+    // proxy?.$router.push('/')
   }
 }
 
@@ -133,7 +133,7 @@ const logout = async () => {
   await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
-    type: 'warning'
+    type: 'warning',
   })
   await userStore.logout()
   location.href = import.meta.env.VITE_APP_CONTEXT_PATH
@@ -144,9 +144,9 @@ const setLayout = () => {
   emits('setLayout')
 }
 // 定义Command方法对象 通过key直接调用方法
-const commandMap: {[key: string]: any} = {
+const commandMap: { [key: string]: any } = {
   setLayout,
-  logout
+  logout,
 }
 const handleCommand = (command: string) => {
   // 判断是否存在该方法
@@ -157,9 +157,8 @@ const handleCommand = (command: string) => {
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-select .el-input__wrapper) {
-  height:30px;
+  height: 30px;
 }
 
 .flex {

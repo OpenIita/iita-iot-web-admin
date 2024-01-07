@@ -68,9 +68,7 @@ export function dynamicTenant(tenantId: string | number) {
   return request({
     url: '/system/tenant/dynamic',
     method: 'post',
-    data: {
-      tenantId,
-    },
+    data: tenantId,
   })
 }
 
