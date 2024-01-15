@@ -62,7 +62,7 @@
 import { getObjectModel } from '@/views/iot/equipment/api/products.api'
 
 import SelectDevice from '@/components/YtSelect/select-device.vue'
-export default defineComponent ({
+export default defineComponent({
   name: 'DeviceAction',
   props: {
     services: {
@@ -85,11 +85,12 @@ export default defineComponent ({
     }
   },
   emits: ['update:services'],
-  mounted () {
+  mounted() {
+    console.log('1111', this.services)
     this.servicesRef = this.services
     this.services.map((m, i) => {
       if (m.device && i === 0) {
-        const firstObj =m.device ?m.device.split('/') : ''
+        const firstObj = m.device ? m.device.split('/') : ''
         if (firstObj) {
           this.selectedPk = firstObj[0] || ''
           this.selectedDn = firstObj[1] === '#' ? '' : firstObj[1]
@@ -108,13 +109,13 @@ export default defineComponent ({
       this.selectedPk = device.productKey
       this.getProductObjectModel(device.productKey)
     },
-    getProductObjectModel (pk) {
+    getProductObjectModel(pk) {
       getObjectModel(pk).then((res) => {
         const data = res.data || {}
         this.initThingModel(pk, data)
       })
     },
-    initThingModel (pk, res) {
+    initThingModel(pk, res) {
       this.propertiesList = []
       this.servicesList = []
       if (!res) return
@@ -125,7 +126,7 @@ export default defineComponent ({
         this.servicesList.push(s)
       })
     },
-    addService () {
+    addService() {
       console.log(this.selectedPk + '/' + (this.selectedDn || '#'))
       this.servicesRef.push({
         device: this.selectedPk + '/' + (this.selectedDn || '#'),
@@ -133,7 +134,7 @@ export default defineComponent ({
         inputData: [],
       })
     },
-    serviceSelected (service) {
+    serviceSelected(service) {
       this.servicesList.forEach((s) => {
         if (service.identifier == s.identifier) {
           service.inputData = s.inputData
@@ -141,9 +142,7 @@ export default defineComponent ({
       })
     },
     delService(service) {
-      let idx = this.servicesRef.findIndex(
-        (s) => s.identifier == service.identifier
-      )
+      let idx = this.servicesRef.findIndex((s) => s.identifier == service.identifier)
       this.servicesRef.splice(idx, 1)
     },
     findService(identifier) {

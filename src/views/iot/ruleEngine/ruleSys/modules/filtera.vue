@@ -98,7 +98,10 @@ const hadnleSelectDevice = (device, row) => {
   getProductObjectModel(device.productKey)
 }
 const getProductObjectModel = (pk) => {
-  getObjectModel(pk).then(res => {
+  if (!pk) {
+    return
+  }
+  getObjectModel(pk).then((res) => {
     const data = res.data || {}
     initThingModel(pk, data)
   })
@@ -112,13 +115,14 @@ const initThingModel = (pk, res) => {
     name: '属性',
     items: items,
   })
-  res?.model?.properties && res.model.properties.forEach((p) => {
-    items.push({
-      type: 'property',
-      identifier: p.identifier,
-      name: p.name,
+  res?.model?.properties &&
+    res.model.properties.forEach((p) => {
+      items.push({
+        type: 'property',
+        identifier: p.identifier,
+        name: p.name,
+      })
     })
-  })
 
   modelItems.push({
     name: '状态',
@@ -134,42 +138,45 @@ const initThingModel = (pk, res) => {
   handleEmits()
 }
 const handleEmits = () => {
-  const arr = toRaw(list.value).map(m => {
-    if (m.config) {
-      const obj = JSON.parse(m.config || '{}')
-      if (obj.conditions[0]) {
-        const firstObj = obj.conditions[0].device ? obj.conditions[0].device.split('/') : ''
-        if (firstObj) {
-          obj.pk = firstObj[0] || ''
-          obj.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
-        }
-      }
-      if (!stateMap.value.has(obj.pk)) getProductObjectModel(obj.pk)
-      return {
-        ...obj,
+  const arr = toRaw(list.value).map((m) => {
+    let config = m
+    if (config.config) {
+      config = JSON.parse(config.config || '{}')
+    }
+    if (config.conditions[0]) {
+      const firstObj = config.conditions[0].device ? config.conditions[0].device.split('/') : ''
+      if (firstObj) {
+        config.pk = firstObj[0] || ''
+        config.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
       }
     }
+    if (!stateMap.value.has(config.pk)) getProductObjectModel(config.pk)
     return {
-      ...m,
-      device: `${m.pk}/${m.deviceDn || '#'}`
+      ...config,
     }
   })
   list.value = arr
   emits('update:filters', arr)
 }
-watch(() => list.value.length, (newV) => {
-  handleEmits()
-}, {
-  immediate: true,
-  // deep: true,
-})
+watch(
+  () => list.value.length,
+  (newV) => {
+    handleEmits()
+  },
+  {
+    immediate: true,
+    // deep: true,
+  }
+)
 // 新增监听器
 const handleAdd = () => {
   list.value.push({
     deviceRadio: '指定设备',
-    conditions: [{
-      parameters: [],
-    }],
+    conditions: [
+      {
+        parameters: [],
+      },
+    ],
   })
 }
 
@@ -212,7 +219,6 @@ const comparators = ref([
     value: '*',
   },
 ])
-
 
 // 新增条件
 const handleAddCondition = (item: any) => {
@@ -301,6 +307,5 @@ onUnmounted(() => {
       }
     }
   }
-
 }
 </style>

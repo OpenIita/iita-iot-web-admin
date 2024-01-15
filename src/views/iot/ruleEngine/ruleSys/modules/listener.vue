@@ -117,7 +117,10 @@ const handleSelectProduct = (product) => {
 }
 
 const getProductObjectModel = (pk) => {
-  getObjectModel(pk).then(res => {
+  if (!pk) {
+    return
+  }
+  getObjectModel(pk).then((res) => {
     const data = res.data || {}
     initThingModel(pk, data)
   })
@@ -127,7 +130,7 @@ const initThingModel = (pk, res) => {
     modelItems: [],
     properties: [],
     events: [],
-    services: []
+    services: [],
   }
 
   state.modelItems.push({
@@ -161,104 +164,112 @@ const initThingModel = (pk, res) => {
     identifier: 'report',
     name: '属性上报',
   })
-  res?.model?.events && res.model.events.forEach((s) => {
-    items.push({
-      type: 'event',
-      identifier: s.identifier,
-      name: s.name,
+  res?.model?.events &&
+    res.model.events.forEach((s) => {
+      items.push({
+        type: 'event',
+        identifier: s.identifier,
+        name: s.name,
+      })
     })
-  })
-  res.model.services && res.model.services.forEach((s) => {
-    items.push({
-      type: 'service',
-      identifier: s.identifier,
-      name: s.name,
+  res.model.services &&
+    res.model.services.forEach((s) => {
+      items.push({
+        type: 'service',
+        identifier: s.identifier,
+        name: s.name,
+      })
     })
-  })
 
   state.properties.push({
     identifier: '*',
     name: '任意',
   })
-  res?.model?.properties && res.model.properties.forEach((p) => {
-    state.properties.push({
-      identifier: p.identifier,
-      name: p.name,
-    })
-  })
-
-  res?.model?.events && res.model.events.forEach((s) => {
-    let items: any[] = []
-    state.events.push({
-      identifier: s.identifier,
-      items: items,
-    })
-
-    s.outputData.forEach((p) => {
-      items.push({
+  res?.model?.properties &&
+    res.model.properties.forEach((p) => {
+      state.properties.push({
         identifier: p.identifier,
         name: p.name,
       })
     })
-  })
 
-  res?.model?.services && res.model.services.forEach((s) => {
-    let items: any[] = []
-    state.services.push({
-      identifier: s.identifier,
-      items: items,
-    })
+  res?.model?.events &&
+    res.model.events.forEach((s) => {
+      let items: any[] = []
+      state.events.push({
+        identifier: s.identifier,
+        items: items,
+      })
 
-    s.outputData.forEach((p) => {
-      items.push({
-        identifier: p.identifier,
-        name: p.name,
+      s.outputData.forEach((p) => {
+        items.push({
+          identifier: p.identifier,
+          name: p.name,
+        })
       })
     })
-  })
+
+  res?.model?.services &&
+    res.model.services.forEach((s) => {
+      let items: any[] = []
+      state.services.push({
+        identifier: s.identifier,
+        items: items,
+      })
+
+      s.outputData.forEach((p) => {
+        items.push({
+          identifier: p.identifier,
+          name: p.name,
+        })
+      })
+    })
   stateMap.value.set(pk, state)
   handleEmits()
 }
 
 const stateMap = ref(new Map())
 const handleEmits = () => {
-  const arr = toRaw(list.value).map(m => {
-    if (m.config) {
-      const obj = JSON.parse(m.config || '{}')
-      const data = obj.conditions[0]
-      if (data) {
-        const firstObj = data.device ? data.device.split('/') : ''
-        if (firstObj) {
-          obj.pk = firstObj[0] || ''
-          obj.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
-        }
-      }
-      if (!stateMap.value.has(obj.pk)) getProductObjectModel(obj.pk)
-      return {
-        ...obj,
+  const arr = toRaw(list.value).map((m) => {
+    let config = m
+    if (config.config) {
+      config = JSON.parse(config.config || '{}')
+    }
+    const data = config.conditions[0]
+    if (data) {
+      const firstObj = data.device ? data.device.split('/') : ''
+      if (firstObj) {
+        config.pk = firstObj[0] || ''
+        config.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
       }
     }
+    if (!stateMap.value.has(config.pk)) getProductObjectModel(config.pk)
     return {
-      ...m,
-      device: `${m.pk}/${m.deviceDn || '#'}`
+      ...config,
     }
   })
   list.value = arr
   emits('update:listeners', arr)
 }
-watch(() => list.value.length, (newV) => {
-  handleEmits()
-}, {
-  immediate: true,
-  // deep: true,
-})
+watch(
+  () => list.value.length,
+  (newV) => {
+    handleEmits()
+  },
+  {
+    immediate: true,
+    // deep: true,
+  }
+)
 // 新增监听器
 const handleAdd = () => {
   list.value.push({
     type: 'device',
-    conditions: [{
-      parameters: [],
-    }],
+    conditions: [
+      {
+        parameters: [],
+      },
+    ],
   })
 }
 
@@ -314,7 +325,6 @@ const conditionChange = (cond, list, e) => {
   }
 }
 
-
 // 新增条件
 const handleAddCondition = (item: any) => {
   if (!item.conditions) item.conditions = []
@@ -334,8 +344,6 @@ const addParmeter = (cond: any) => {
 const removeParmeter = (index: number, cond: any) => {
   cond.parameters.splice(index, 1)
 }
-
-
 
 onUnmounted(() => {
   console.log('onUnmounted')
@@ -396,6 +404,5 @@ onUnmounted(() => {
       }
     }
   }
-
 }
 </style>
