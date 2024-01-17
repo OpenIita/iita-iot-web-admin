@@ -85,31 +85,26 @@ const state = reactive({
   boolItem: {},
   enumItems: [{}],
   scriptRules: {
-    model: [
-      { required: true, message: '设备型号不能为空', trigger: 'blur' },
-    ],
-    script: [
-      { required: true, message: '脚本内容不能为空', trigger: 'blur' },
-    ],
-  }
+    model: [{ required: true, message: '设备型号不能为空', trigger: 'blur' }],
+    script: [{ required: true, message: '脚本内容不能为空', trigger: 'blur' }],
+  },
 })
 const rules = reactive({
-  name: [
-    { required: true, message: '请输入名称', trigger: 'blur' },
-  ],
-  identifier: [
-    { required: true, message: '请输入标识符', trigger: 'blur' },
-  ],
+  name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+  identifier: [{ required: true, message: '请输入标识符', trigger: 'blur' }],
 })
-watch(() => props.model, (newV) => {
-  state.model = newV
-})
+watch(
+  () => props.model,
+  (newV) => {
+    state.model = newV
+  }
+)
 const modelFormRef = ref()
 const openDialog = (row?: any, props?: any) => {
   if (row) {
     state.modelForm = row
     state.isAdd = false
-    state.modelType = (row.model?.endsWith && row.model.endsWith('_default')) ? '1' : '2'
+    state.modelType = row.model?.endsWith && row.model.endsWith('_default') ? '1' : '2'
     if (props.enumItems) state.enumItems = props.enumItems
     if (props.boolItem) state.boolItem = props.boolItem
   } else {
@@ -165,21 +160,21 @@ const saveThingModel = async () => {
   if (valid) {
     if (state.isAdd) {
       if (state.modelForm.type == 'property') {
-        //删除旧的
-        const idx = state.model.properties.findIndex(
-          (p: any) => p.identifier == state.modelForm.raw.identifier
-        )
-        if (idx >= 0) {
-          state.model.properties.splice(idx, 1)
+        if (state.model.properties) {
+          //删除旧的
+          const idx = state.model.properties.findIndex((p: any) => p.identifier == state.modelForm.raw.identifier)
+          if (idx >= 0) {
+            state.model.properties.splice(idx, 1)
+          }
         }
         state.model.properties.push(newProperty())
       } else if (state.modelForm.type == 'service') {
-        //删除旧的
-        const idx = state.model.services.findIndex(
-          (p: any) => p.identifier == state.modelForm.raw.identifier
-        )
-        if (idx >= 0) {
-          state.model.services.splice(idx, 1)
+        if (state.model.services) {
+          //删除旧的
+          const idx = state.model.services.findIndex((p: any) => p.identifier == state.modelForm.raw.identifier)
+          if (idx >= 0) {
+            state.model.services.splice(idx, 1)
+          }
         }
 
         state.model.services.push({
@@ -189,12 +184,12 @@ const saveThingModel = async () => {
           outputData: state.modelForm.raw.outputData,
         })
       } else if (state.modelForm.type == 'event') {
-        //删除旧的
-        const idx = state.model.events.findIndex(
-          (p: any) => p.identifier == state.modelForm.raw.identifier
-        )
-        if (idx >= 0) {
-          state.model.events.splice(idx, 1)
+        if (state.model.events) {
+          //删除旧的
+          const idx = state.model.events.findIndex((p: any) => p.identifier == state.modelForm.raw.identifier)
+          if (idx >= 0) {
+            state.model.events.splice(idx, 1)
+          }
         }
 
         state.model.events.push({
