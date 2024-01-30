@@ -10,6 +10,10 @@
             <el-tab-pane label="事件上报">
               <DeviceSimulatorProperties :properties="events" :deviceDetail="deviceDetail" propertiesTyp="事件上报" />
             </el-tab-pane>
+            <el-tab-pane label="状态变更">
+              <el-button type="primary" @click="deviceState('online')">设备上线</el-button>
+              <el-button type="primary" @click="deviceState('offline')">设备下线</el-button>
+            </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="下行指令调试" name="down">
@@ -41,6 +45,7 @@
 <script>
 import DeviceSimulatorProperties from './DeviceSimulatorProperties.vue'
 import DeviceLog from './DeviceLog.vue'
+import { deviceSimulateSend } from '@/views/iot/equipment/api/devices.api'
 // import MqttClient from './MqttClient.vue'
 
 export default{
@@ -90,6 +95,30 @@ export default{
       },
       services(){
         return this.thingModelFunctions.filter(o=> o.type=='service')
+      }
+    },
+    methods: {
+      deviceState(row){
+        deviceSimulateSend({
+                deviceId: this.deviceDetail.deviceId,
+                productKey: this.deviceDetail.productKey,
+                deviceName: this.deviceDetail.deviceName,
+                type: 'state',
+                identifier: row,
+                data: {},
+            }).then((res) => {
+                if (res.code === 200) {
+                  ElMessage({
+                    type: 'success',
+                    message: '操作成功',
+                })
+              } else {
+                ElMessage({
+                  type: 'error',
+                  message: res.message,
+                })
+              }
+            })
       }
     },
     created(){
