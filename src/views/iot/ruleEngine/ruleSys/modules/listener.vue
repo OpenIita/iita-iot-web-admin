@@ -239,6 +239,7 @@ const handleEmits = () => {
     if (!stateMap.value.has(config.pk)) getProductObjectModel(config.pk)
     return {
       ...config,
+      device: `${m.pk}/${m.deviceDn || '#'}`
     }
   })
   list.value = arr

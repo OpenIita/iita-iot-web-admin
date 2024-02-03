@@ -503,7 +503,7 @@ const getdata = () => {
       fillProperty(prop)
     }
 
-    let deviceTag = res.tag
+    let deviceTag = data.tag
     state.tags = []
     for (var p in deviceTag) {
       var tag = deviceTag[p]
