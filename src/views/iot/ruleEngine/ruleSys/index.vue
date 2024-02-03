@@ -144,12 +144,12 @@ const data = ref([])
 const onSave = ({ type, data, cancel }: any) => {
   state.loading = true
   const obj = toRaw(data)
+  console.log('save:', obj)
   obj.listeners = (obj.listeners || [])?.map((m) => {
     const mObj = {
       type: m.type,
       pk: m.pk,
-      deviceDn: m.deviceDn,
-      device: m.device,
+      dn: m.dn,
       conditions: m.conditions.map((m2) => ({
         ...m2,
         device: m.device,
@@ -161,11 +161,13 @@ const onSave = ({ type, data, cancel }: any) => {
     }
   })
   obj.filters = (obj.filters || [])?.map((m) => {
+    if (m.conditions == undefined && m.config) {
+      m = JSON.parse(m.config)
+    }
     const mObj = {
       type: 'device',
       pk: m.pk,
-      deviceDn: m.deviceDn,
-      device: m.device,
+      dn: m.dn,
       conditions: m.conditions.map((m2) => ({
         ...m2,
         device: m.device,
@@ -178,6 +180,8 @@ const onSave = ({ type, data, cancel }: any) => {
     }
   })
   obj.actions = (obj.actions || [])?.map((m) => {
+    console.log('111111：', m)
+    m.saved = true
     return {
       ...m,
       config: JSON.stringify(m),

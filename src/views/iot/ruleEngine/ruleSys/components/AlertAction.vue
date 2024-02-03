@@ -29,7 +29,7 @@ const props = defineProps({
 
 const configRef = ref<any>(props.config)
 const init = (data) => {
-  if (!configRef.value.services) configRef.value.services = data
+  if (!configRef.value.services) configRef.value.services = data.services
   if (configRef.value.services.length > 1) {
     configRef.value.services.splice(1, configRef.value.services.length - 1)
   }

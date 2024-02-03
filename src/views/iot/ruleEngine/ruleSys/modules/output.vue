@@ -6,7 +6,7 @@
           <template #title>
             <div class="flex" style="justify-content: space-between;width: 100%;">
               <div class="cu-title" @click.stop>
-                <el-radio-group v-model="item.type" @change="actionTypeChange(item)">
+                <el-radio-group v-model="item.type" @change="actionTypeChange(item)" :disabled="!!item.saved">
                   <el-radio v-if="actions.indexOf('device') >= 0" :label="'device'">设备控制 </el-radio>
                   <el-radio v-if="actions.indexOf('alert') >= 0" :label="'alert'">告警消息 </el-radio>
                   <el-radio v-if="actions.indexOf('scene') >= 0" :label="'scene'">场景控制 </el-radio>
@@ -104,14 +104,14 @@ const actionTypeChange = (item) => {
       item.services = [
         {
           url: '',
-          script: `this.translate=function(msg){
+          script: `this.translate=function(msg,device){
         }`,
         },
       ]
     } else if (item.type == 'alert') {
       item.services = [
         {
-          script: `this.translate=function(msg){
+          script: `this.translate=function(msg,device){
         }`,
         },
       ]
@@ -122,7 +122,7 @@ const actionTypeChange = (item) => {
           port: 1883,
           username: '',
           password: '',
-          script: `this.translate=function(msg){
+          script: `this.translate=function(msg,device){
         }`,
         },
       ]
@@ -131,7 +131,7 @@ const actionTypeChange = (item) => {
         {
           services: '',
           ack: '',
-          script: `this.translate=function(msg){
+          script: `this.translate=function(msg,device){
         }`,
         },
       ]
@@ -140,7 +140,7 @@ const actionTypeChange = (item) => {
         {
           host: '',
           port: 1883,
-          script: `this.translate=function(msg){
+          script: `this.translate=function(msg,device){
         }`,
         },
       ]

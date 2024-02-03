@@ -16,15 +16,15 @@
                   </el-radio-group>
                 </div>
                 <div class="item" v-if="item.deviceRadio === '指定设备'">
-                  <select-device v-model:dn="item.deviceDn" placeholder="选择设备" @on-select="(row) => hadnleSelectDevice(row, item)" />
+                  <select-device v-model:dn="item.dn" placeholder="选择设备" @on-select="(row) => hadnleSelectDevice(row, item)" />
                 </div>
               </div>
               <div style="padding-right: 10px;">
-                <el-button @click="removeListener(index)">删除</el-button>
+                <el-button @click="removeFliter(index)">删除</el-button>
               </div>
             </div>
           </template>
-          <div class="condition-box" v-if="item.deviceDn || item.deviceRadio === '使用当前设备'">
+          <div class="condition-box" v-if="item.dn || item.deviceRadio === '使用当前设备'">
             <div class="main">
               <div class="title">条件</div>
               <div class="main-box">
@@ -143,13 +143,6 @@ const handleEmits = () => {
     if (config.config) {
       config = JSON.parse(config.config || '{}')
     }
-    if (config.conditions[0]) {
-      const firstObj = config.conditions[0].device ? config.conditions[0].device.split('/') : ''
-      if (firstObj) {
-        config.pk = firstObj[0] || ''
-        config.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
-      }
-    }
     if (!stateMap.value.has(config.pk)) getProductObjectModel(config.pk)
     return {
       ...config,
@@ -168,7 +161,7 @@ watch(
     // deep: true,
   }
 )
-// 新增监听器
+// 新增过滤器
 const handleAdd = () => {
   list.value.push({
     deviceRadio: '指定设备',
@@ -180,8 +173,8 @@ const handleAdd = () => {
   })
 }
 
-// 删除监听器
-const removeListener = (index: number) => {
+// 删除过滤器
+const removeFliter = (index: number) => {
   list.value.splice(index, 1)
 }
 // 条件

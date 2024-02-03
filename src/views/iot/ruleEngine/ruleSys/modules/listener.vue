@@ -13,7 +13,7 @@
                   <select-product v-model:pk="item.pk" @on-select="(row) => handleSelectProduct(row)" />
                 </div>
                 <div class="item" v-if="item.pk">
-                  <select-device v-model:dn="item.deviceDn" placeholder="默认全部设备" :product-pk="item.pk || ''" @on-select="handleEmits" />
+                  <select-device v-model:dn="item.dn" placeholder="默认全部设备" :product-pk="item.pk || ''" @on-select="handleEmits" />
                 </div>
               </div>
               <div style="padding-right: 10px;">
@@ -232,16 +232,9 @@ const stateMap = ref(new Map())
 const handleEmits = () => {
   const arr = toRaw(list.value).map((m) => {
     let config = m
+    console.log('config:', config)
     if (config.config) {
       config = JSON.parse(config.config || '{}')
-    }
-    const data = config.conditions[0]
-    if (data) {
-      const firstObj = data.device ? data.device.split('/') : ''
-      if (firstObj) {
-        config.pk = firstObj[0] || ''
-        config.deviceDn = firstObj[1] === '#' ? '' : firstObj[1]
-      }
     }
     if (!stateMap.value.has(config.pk)) getProductObjectModel(config.pk)
     return {
