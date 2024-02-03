@@ -182,6 +182,9 @@ const onSave = ({ type, data, cancel }: any) => {
   obj.actions = (obj.actions || [])?.map((m) => {
     console.log('111111：', m)
     m.saved = true
+    if (m.config) {
+      return m
+    }
     return {
       ...m,
       config: JSON.stringify(m),
