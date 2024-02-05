@@ -713,7 +713,9 @@ const sendDeviceMsg = (fun) => {
     let val = fun.value
     switch (fun.dataTypeName) {
       case 'int32':
+        break
       case 'bool':
+        break
       case 'enum':
       if(!(val in fun.raw.dataType.specs)){
           ElMessage({
