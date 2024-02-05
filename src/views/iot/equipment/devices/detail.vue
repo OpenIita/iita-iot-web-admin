@@ -715,7 +715,13 @@ const sendDeviceMsg = (fun) => {
       case 'int32':
       case 'bool':
       case 'enum':
-        val = parseInt(val)
+      if(!(val in fun.raw.dataType.specs)){
+          ElMessage({
+            type: 'info',
+            message: '数据类型错误',
+          })  
+          return
+        }
         break
       case 'float':
         val = parseFloat(val)
