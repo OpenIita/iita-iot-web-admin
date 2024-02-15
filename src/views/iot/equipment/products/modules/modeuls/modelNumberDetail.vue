@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="state.dialogShow"
-    :title="productModelForm.id ? '编辑' : '新增' + '功能'"
+    :title="(productModelForm.id ?'编辑' : '新增') + '型号转换脚本'"
     :close-on-press-escape="false"
     :close-on-click-modal="false"
     append-to-body
@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="脚本" prop="script" class="product-script">
         <el-radio v-model="productModelForm.type" label="JavaScript">JavaScript</el-radio>
-        <el-radio v-model="productModelForm.type" label="LuaScript">LuaScript</el-radio>
+        <!-- <el-radio v-model="productModelForm.type" label="LuaScript">LuaScript</el-radio> -->
         <div style="width: 100%">
           <code-editor v-if="productModelForm.type === 'JavaScript'" mode="text/javascript" v-model:code="productModelForm.script"></code-editor>
           <code-editor v-if="productModelForm.type === 'LuaScript'" mode="text/x-lua" v-model:code="productModelForm.script"></code-editor>
@@ -57,19 +57,15 @@ const state = reactive({
   data: {} as any,
   dialogShow: false,
   scriptRules: {
-    model: [
-      { required: true, message: '设备型号不能为空', trigger: 'blur' },
-    ],
-    script: [
-      { required: true, message: '脚本内容不能为空', trigger: 'blur' },
-    ],
-  }
+    model: [{ required: true, message: '设备型号不能为空', trigger: 'blur' }],
+    script: [{ required: true, message: '脚本内容不能为空', trigger: 'blur' }],
+  },
 })
 const emits = defineEmits(['onSuccess'])
 const openDialog = (row?: any) => {
   if (row) {
     productModelForm.value = row
-    state.modelType = (row.model && row.model?.endsWith('_default')) ? '1' : '2'
+    state.modelType = row.model && row.model?.endsWith('_default') ? '1' : '2'
   }
   state.dialogShow = true
 }
@@ -79,12 +75,11 @@ const cancelProductModel = () => {
 const productModelFormRef = ref()
 const handleSaveProductModel = () => {
   if (state.modelType == '1') {
-    productModelForm.value.model =
-      productModelForm.value.productKey + '_default'
+    productModelForm.value.model = productModelForm.value.productKey + '_default'
   }
   productModelFormRef.value.validate((valid: any) => {
     if (valid) {
-      saveProductModel(productModelForm.value).then(res => {
+      saveProductModel(productModelForm.value).then((res) => {
         ElMessage.success('保存成功')
         cancelProductModel()
         emits('onSuccess')

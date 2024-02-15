@@ -78,18 +78,18 @@ const router = useRouter()
 // const title = import.meta.env.VITE_APP_TITLE
 const loginForm = ref<LoginData>({
   tenantId: '000000',
-  username: 'openiita',
-  password: '123456',
+  username: 'admin',
+  password: 'admin123',
   rememberMe: false,
   code: '',
-  uuid: ''
+  uuid: '',
 })
 
 const loginRules: FormRules = {
   tenantId: [{ required: true, trigger: 'blur', message: '请输入您的租户编号' }],
   username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
   password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
-  code: [{ required: true, trigger: 'change', message: '请输入验证码' }]
+  code: [{ required: true, trigger: 'change', message: '请输入验证码' }],
 }
 
 const codeUrl = ref('')
@@ -99,7 +99,6 @@ const captchaEnabled = ref(true)
 // 租户开关
 const tenantEnabled = ref(true)
 
-
 // 注册开关
 const register = ref(false)
 const redirect = ref(undefined)
@@ -108,7 +107,7 @@ const loginRef = ref<FormInstance>()
 const tenantList = ref<TenantVO[]>([])
 
 const handleLogin = () => {
-  loginRef.value?.validate(async (valid:boolean, fields: any) => {
+  loginRef.value?.validate(async (valid: boolean, fields: any) => {
     if (valid) {
       loading.value = true
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
@@ -164,10 +163,9 @@ const getCookie = () => {
     tenantId: tenantId === undefined ? loginForm.value.tenantId : tenantId,
     username: username === undefined ? loginForm.value.username : username,
     password: password === undefined ? loginForm.value.password : (decrypt(password) as string),
-    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
   }
 }
-
 
 /**
  * 获取租户列表
@@ -327,8 +325,8 @@ onMounted(() => {
       line-height: 40px;
       width: 50%;
       text-align: center;
-      color: #87909D;
-      font-family: Arial,serif;
+      color: #87909d;
+      font-family: Arial, serif;
       font-size: 12px;
       letter-spacing: 1px;
     }
