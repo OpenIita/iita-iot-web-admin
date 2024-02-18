@@ -28,6 +28,7 @@
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button icon="Download" @click="exportSysData">导出系统数据</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -150,7 +151,7 @@ const queryFormRef = ref<FormInstance>()
 const configFormRef = ref<FormInstance>()
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 const initFormData: ConfigForm = {
   id: undefined,
@@ -158,10 +159,10 @@ const initFormData: ConfigForm = {
   configKey: '',
   configValue: '',
   configType: 'Y',
-  remark: ''
+  remark: '',
 }
 const data = reactive<PageData<ConfigForm, ConfigQuery>>({
-  form: {...initFormData},
+  form: { ...initFormData },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
@@ -172,8 +173,8 @@ const data = reactive<PageData<ConfigForm, ConfigQuery>>({
   rules: {
     configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
     configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
-    configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }]
-  }
+    configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }],
+  },
 })
 
 const { queryParams, form, rules } = toRefs(data)
@@ -193,7 +194,7 @@ const cancel = () => {
 }
 /** 表单重置 */
 const reset = () => {
-  form.value = {...initFormData}
+  form.value = { ...initFormData }
   configFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
@@ -209,7 +210,7 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: ConfigVO[]) => {
-  ids.value = selection.map(item => item.configId)
+  ids.value = selection.map((item) => item.configId)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -225,7 +226,7 @@ const handleAdd = () => {
 const handleUpdate = (row?: ConfigVO) => {
   dialog.visible = true
   dialog.title = '修改参数'
-  const configId = row?.id ? row.id: ids.value[0]
+  const configId = row?.id ? row.id : ids.value[0]
   nextTick(async () => {
     reset()
     const res = await getConfig(configId)
@@ -245,7 +246,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: ConfigVO) => {
-  const configIds = row?.id ? [row.id]: ids.value[0]
+  const configIds = row?.id ? [row.id] : ids.value[0]
 
   await proxy?.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
   await delConfig(configIds)
@@ -254,14 +255,22 @@ const handleDelete = async (row?: ConfigVO) => {
 }
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download('system/config/export', {
-    ...queryParams.value
-  }, `config_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/config/export',
+    {
+      ...queryParams.value,
+    },
+    `config_${new Date().getTime()}.xlsx`
+  )
 }
 /** 刷新缓存按钮操作 */
 const handleRefreshCache = async () => {
   await refreshCache()
   proxy?.$modal.msgSuccess('刷新缓存成功')
+}
+
+const exportSysData = async () => {
+  proxy?.download('system/config/exportSysData', {}, `data_${new Date().getTime()}.zip`)
 }
 
 onMounted(() => {
