@@ -162,26 +162,26 @@
           element-loading-text="拼命加载中"
           style="width: 100%"
         >
-          <el-table-column type="expand" label="上报">
-            <template v-slot="fun">
-              <el-form inline v-model="fun.row" label-width="80px">
-                <el-form-item label="值" v-if="fun.row.type == 'property'">
-                  <el-input v-model="fun.row.value" size="small" />
-                </el-form-item>
-                <el-form-item label="内容" v-else>
-                  <el-input type="textarea" v-model="fun.row.content" size="small" rows="4" />
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" size="small" @click="sendDeviceMsg(fun.row)">发送</el-button>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
           <el-table-column sortable prop="type" label="功能类型" width="100" />
           <el-table-column sortable prop="name" label="功能名称" width="180" />
           <el-table-column sortable prop="identifier" label="标识符" width="150" />
           <el-table-column sortable prop="dataTypeName" label="数据类型" width="100" />
           <el-table-column sortable prop="params" label="数据定义" />
+          <el-table-column label="上报">
+            <template #default="scope">
+              <el-form inline v-model="scope.row" label-width="80px">
+                <el-form-item label="值" v-if="scope.row.type == 'property'">
+                  <el-input v-model="scope.row.value" size="small" />
+                </el-form-item>
+                <el-form-item label="内容" v-else>
+                  <el-input type="textarea" v-model="scope.row.content" size="small" rows="4" />
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" size="small" @click="sendDeviceMsg(scope.row)">发送</el-button>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
         </el-table>
       </el-tab-pane>
 
@@ -717,11 +717,11 @@ const sendDeviceMsg = (fun) => {
       case 'bool':
         break
       case 'enum':
-      if(!(val in fun.raw.dataType.specs)){
+        if (!(val in fun.raw.dataType.specs)) {
           ElMessage({
             type: 'info',
             message: '数据类型错误',
-          })  
+          })
           return
         }
         break
