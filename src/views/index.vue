@@ -92,10 +92,6 @@
 </template>
 
 <script setup name="Index" lang="ts">
-const goTarget = (url: string) => {
-  window.open(url, '__blank')
-}
-
 import * as echarts from 'echarts/core'
 import { TooltipComponent, LegendComponent, TitleComponent, ToolboxComponent, GridComponent } from 'echarts/components'
 import { PieChart, LineChart, GaugeChart } from 'echarts/charts'
@@ -121,8 +117,12 @@ const chartDeviceOffline = ref()
 const chartDeviceActive = ref()
 const chartMsgStat = ref()
 
+const goTarget = (url: string) => {
+  window.open(url, '__blank')
+}
+
 onMounted(() => {
-  document.getElementById('breadcrumb-container').style.display = 'none'
+  document.getElementById('breadcrumb-container')!.style.display = 'none'
 
   echarts.init(chartDeviceNumStat.value).setOption({
     tooltip: {
