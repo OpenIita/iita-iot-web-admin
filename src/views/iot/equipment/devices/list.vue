@@ -37,7 +37,7 @@
       </template>
       <template #customTable>
         <el-row class="card-list flex">
-          <el-col class="card-item" v-for="(item, index) in data" :key="index" :class="item.state.online ? 'success-box' : 'error-box'">
+          <el-col class="card-item" v-for="(item, index) in data" :key="index" :class="item.online ? 'success-box' : 'error-box'">
             <div class="text-box">
               <div class="title flex align-center">
                 <div class="title-l">
@@ -47,18 +47,18 @@
                   {{ item.deviceName }}
                 </div>
                 <div class="title-r">
-                  <status-tag :type="item.state.online ? 'success' : 'danger'" :text="item.state.online ? '在线' : '离线'" />
+                  <status-tag :type="item.online ? 'success' : 'danger'" :text="item.online ? '在线' : '离线'" />
                 </div>
               </div>
               <div class="text flex">
                 <div class="txt">
                   <div class="txt-item">
                     <div class="label">所属产品</div>
-                    <div class="value active">{{ getProductName(item.productKey) }}</div>
+                    <div class="value active">{{ getProductName(item.product) }}</div>
                   </div>
                   <div class="txt-item">
                     <div class="label">设备类型</div>
-                    <div class="value">{{ getNodeTypeName(item.productKey) }}</div>
+                    <div class="value">{{ getNodeTypeName(item.product) }}</div>
                   </div>
                   <div class="txt-item">
                     <div class="copy-tag" v-copyText="item.deviceId" v-copyText:callback="copyIdSuccess">
@@ -73,13 +73,7 @@
               </div>
             </div>
             <div class="btn-group">
-              <el-button
-                v-if="item.productKey === 'openiitagateway01'"
-                class="cu-btn"
-                type="success"
-                icon="Box"
-                plain
-                @click="showChidrenDevices(item)"
+              <el-button v-if="item.parentId ==null" class="cu-btn" type="success" icon="Box" plain @click="showChidrenDevices(item)"
                 >子设备</el-button
               >
               <el-button class="cu-btn" type="primary" icon="EditPen" plain @click="crudRef.handleUpdate(item)">编辑</el-button>
@@ -95,7 +89,7 @@
         </el-row>
       </template>
       <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="small">在线</el-tag>
+        <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
       <template #menuSlot="scope">
@@ -131,8 +125,8 @@
 import defaultImg from '@/assets/images/pic_device.png'
 import { IColumn } from '@/components/common/types/tableCommon'
 import { ComponentInternalInstance } from 'vue'
-import { getDevicesList, deleteDevices, saveDevices,getParentDevices, deleteBatchDevices } from '../api/devices.api'
-import { getProductsList,IProductsVO } from '../api/products.api'
+import { getDevicesList, deleteDevices, saveDevices, getParentDevices, deleteBatchDevices } from '../api/devices.api'
+import { getProductsList, IProductsVO } from '../api/products.api'
 
 import Map from '@/components/Map/index.vue'
 import ChildrenDialog from './modules/childrenDialog.vue'
@@ -158,22 +152,24 @@ const layoutType = ref('card')
 const router = useRouter()
 const handleView = (row: any) => {
   if (!row.id) return
-  let showMap=false
+  let showMap = false
   productOptions.value.forEach((p) => {
-    if (p.productKey == row.productKey ) {
-      showMap=p.isOpenLocate
+    if (p.productKey == row.productKey) {
+      showMap = p.isOpenLocate
     }
   })
   router.push(`devicesDetail/${row.id}?showMap=${showMap}`)
 }
-const nodeTypeOptions =  [
+const nodeTypeOptions = [
   {
     value: 0,
     label: '网关设备',
-  }, {
+  },
+  {
     value: 1,
     label: '网关子设备',
-  }, {
+  },
+  {
     value: 2,
     label: '直连设备',
   },
@@ -196,100 +192,104 @@ const productOptions = ref<IProductsVO[]>([])
 // 组列表
 const groupOptions = [
   {
-    'id': 'g3',
-    'name': '组3',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '2223333',
-    'deviceQty': 17,
-    'createAt': 1659872082792
+    id: 'g3',
+    name: '组3',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '2223333',
+    deviceQty: 17,
+    createAt: 1659872082792,
   },
   {
-    'id': 'g2',
-    'name': '组2',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '222',
-    'deviceQty': 21,
-    'createAt': 1659872082803
+    id: 'g2',
+    name: '组2',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '222',
+    deviceQty: 21,
+    createAt: 1659872082803,
   },
   {
-    'id': 'g1',
-    'name': '分组1',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '1111',
-    'deviceQty': 10,
-    'createAt': 1659872082805
-  }
+    id: 'g1',
+    name: '分组1',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '1111',
+    deviceQty: 10,
+    createAt: 1659872082805,
+  },
 ]
-const column = ref<IColumn[]>([{
-  label: '设备ID',
-  key: 'deviceId',
-  formHide: true,
-  rules: [{ required: true, message: 'ProductKey不能为空' }],
-}, {
-  label: '产品',
-  key: 'productKey',
-  type: 'select',
-  search: true,
-  colSpan:12,
-  tableWidth: 120,
-  editDisabled: true,
-  componentProps: {
-    labelAlias: 'name',
-    valueAlias: 'productKey',
-    options: [],
+const column = ref<IColumn[]>([
+  {
+    label: '设备ID',
+    key: 'deviceId',
+    formHide: true,
+    rules: [{ required: true, message: 'ProductKey不能为空' }],
   },
-  rules: [{ required: true, message: '产品名称不能为空' }],
-  formWatch: (scope) => {
-    scope.column.forEach((f: IColumn) => {
-      if (['parentId', 'longitude', 'latitude'].includes(f.key)) {
-        if (!scope.value) {
-          f.formHide = true
-          state.showDeviceMap = false
-          return
-        }
-        productOptions.value.forEach((p)=>{
-          if (p.productKey == scope.value ) {
-            if (f.key === 'parentId') {
-              f.formHide = p.nodeType !== 1
-            } else {
-              const flag = p.isOpenLocate && 'manual' == p.locateUpdateType
-              state.showDeviceMap = flag
-              f.formHide = !flag
-            }
-
+  {
+    label: '产品',
+    key: 'productKey',
+    type: 'select',
+    search: true,
+    colSpan: 12,
+    tableWidth: 120,
+    editDisabled: true,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'productKey',
+      options: [],
+    },
+    rules: [{ required: true, message: '产品名称不能为空' }],
+    formWatch: (scope) => {
+      scope.column.forEach((f: IColumn) => {
+        if (['parentId', 'longitude', 'latitude'].includes(f.key)) {
+          if (!scope.value) {
+            f.formHide = true
+            state.showDeviceMap = false
+            return
           }
-        })
-      }
-    })
-    column.value = scope.column
-  }
-}, {
-  label: '设备类型',
-  key: 'type',
-  slot: true,
-  formHide: true,
-}, {
-  label: '网关设备',
-  key: 'parentId',
-  type: 'select',
-  colSpan: 12,
-  tableWidth: 120,
-  hide: true,
-  formHide: true,
-  componentProps: {
-    labelAlias: 'deviceName',
-    valueAlias: 'id',
-    options: [],
-    placeholder: '子设备可选择父设备'
+          productOptions.value.forEach((p) => {
+            if (p.productKey == scope.value) {
+              if (f.key === 'parentId') {
+                f.formHide = p.nodeType !== 1
+              } else {
+                const flag = p.isOpenLocate && 'manual' == p.locateUpdateType
+                state.showDeviceMap = flag
+                f.formHide = !flag
+              }
+            }
+          })
+        }
+      })
+      column.value = scope.column
+    },
   },
-}, {
-  label: '设备DN',
-  key: 'deviceName',
-  tableWidth: 240,
-  componentProps: {
-    placeholder: '一般为设备mac'
+  {
+    label: '设备类型',
+    key: 'type',
+    slot: true,
+    formHide: true,
   },
-  rules: [{ required: true, message: '设备DN不能为空' }],
+  {
+    label: '网关设备',
+    key: 'parentId',
+    type: 'select',
+    colSpan: 12,
+    tableWidth: 120,
+    hide: true,
+    formHide: true,
+    componentProps: {
+      labelAlias: 'deviceName',
+      valueAlias: 'id',
+      options: [],
+      placeholder: '子设备可选择父设备',
+    },
+  },
+  {
+    label: '设备DN',
+    key: 'deviceName',
+    tableWidth: 240,
+    componentProps: {
+      placeholder: '一般为设备mac',
+    },
+    rules: [{ required: true, message: '设备DN不能为空' }],
   },
   {
     label: '设备经度',
@@ -311,72 +311,77 @@ const column = ref<IColumn[]>([{
     hide: true,
     formItemSlot: true,
   },
-// , {
-//     label: '分组',
-//     key: 'group',
-//     type: 'select',
-//     componentProps: {
-//       labelAlias: 'name',
-//       valueAlias: 'id',
-//       options: groupOptions,
-//     },
-//   }
-{
-  label: '状态',
-  key: 'state',
-  type: 'select',
-  componentProps: {
-    options: [
-      {
-        label: '在线',
-        value: 'online',
-      },
-      {
-        label: '离线',
-        value: 'offline',
-      }
-    ]
+  // , {
+  //     label: '分组',
+  //     key: 'group',
+  //     type: 'select',
+  //     componentProps: {
+  //       labelAlias: 'name',
+  //       valueAlias: 'id',
+  //       options: groupOptions,
+  //     },
+  //   }
+  {
+    label: '状态',
+    key: 'online',
+    type: 'select',
+    componentProps: {
+      options: [
+        {
+          label: '在线',
+          value: true,
+        },
+        {
+          label: '离线',
+          value: false,
+        },
+      ],
+    },
+    search: true,
+    formHide: true,
+    tableWidth: 80,
+    slot: true,
   },
-  search: true,
-  formHide: true,
-  tableWidth: 80,
-  slot: true,
-}, {
-  label: '关键字',
-  key: 'keyword',
-  search: true,
-  hide: true,
-  formHide: true,
-}, {
-  label: '创建时间',
-  key: 'createAt',
-  tableWidth: 180,
-  sortable: true,
-  type: 'date',
-  formHide: true,
-}])
+  {
+    label: '关键字',
+    key: 'keyword',
+    search: true,
+    hide: true,
+    formHide: true,
+  },
+  {
+    label: '创建时间',
+    key: 'createAt',
+    tableWidth: 180,
+    sortable: true,
+    type: 'date',
+    formHide: true,
+  },
+])
 const crudRef = ref()
 const data = ref<any[]>([])
-const getData =  () => {
+const getData = () => {
   state.loading = true
   getDevicesList({
     ...state.page,
     ...state.query,
-  }).then((res) => {
-    data.value = res.data.rows
-    state.total = res.data.total
-  }).finally(() => {
-    state.loading = false
   })
+    .then((res) => {
+      data.value = res.data.rows
+      state.total = res.data.total
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 const getDict = () => {
   getProductsList({
     pageNum: 1,
     pageSize: 99999,
-  }).then(res => {
+  }).then((res) => {
     productOptions.value = res.data.rows || []
-    column.value.forEach(item => {
+    column.value.forEach((item) => {
       if (item.key === 'productKey') {
         item.componentProps.options = productOptions.value
       }
@@ -384,15 +389,21 @@ const getDict = () => {
   })
 }
 getDict()
-const getProductName = (key: string) => {
-  return productOptions.value.find(f => f.productKey === key)?.name || ''
+const getProductName = (p: any) => {
+  if (!p) {
+    return ''
+  }
+  return p['name']
 }
-const getNodeTypeName = (key) => {
-  const type = productOptions.value.find(f => f.productKey === key)?.nodeType
-  return nodeTypeOptions.find(f => f.value === type)?.label || ''
+const getNodeTypeName = (p) => {
+  if (!p) {
+    return '直连设备'
+  }
+  const nodeType = p.nodeType ? p.nodeType : 0
+  return ['网关设备', '网关子设备', '直连设备'][nodeType]
 }
 // 保存数据
-const onSave = async ({type, data, cancel}: any) => {
+const onSave = async ({ type, data, cancel }: any) => {
   state.loading = true
   await saveDevices(toRaw(data))
 
@@ -401,9 +412,9 @@ const onSave = async ({type, data, cancel}: any) => {
   getData()
 }
 // 弹窗前置操作
-const openBeforeFun = ({type, data}) => {
+const openBeforeFun = ({ type, data }) => {
   if (type === 'add') {
-    state.mapLnglat=''
+    state.mapLnglat = ''
   } else if (type === 'update') {
     const latitude = data?.locate?.latitude || ''
     const longitude = data?.locate?.longitude || ''
@@ -412,7 +423,7 @@ const openBeforeFun = ({type, data}) => {
 }
 const parentDevices = async () => {
   let data = await getParentDevices()
-  column.value.forEach(item => {
+  column.value.forEach((item) => {
     if (item.key === 'parentId') {
       item.componentProps.options = data.data
     }
@@ -423,7 +434,7 @@ parentDevices()
 const handleDelete = async (row: any) => {
   state.loading = true
   if (row instanceof Array) {
-    await deleteBatchDevices(row.map(m => m.id))
+    await deleteBatchDevices(row.map((m) => m.id))
   } else {
     await deleteDevices(row.id)
   }
@@ -431,7 +442,7 @@ const handleDelete = async (row: any) => {
   state.loading = false
   getData()
 }
-const locateChange=(e, row)=> {
+const locateChange = (e, row) => {
   if (!e) return
   row.longitude = e[0] || ''
   row.latitude = e[1] || ''
@@ -444,10 +455,10 @@ const options = reactive({
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep(.el-radio-button__inner) {
+::v-deep(.el-radio-button__inner) {
   padding: 8px;
 }
-::v-deep(.el-radio-button__original-radio:checked+.el-radio-button__inner) {
+::v-deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
   border: 1px solid #0070ffff;
   background: #0070ff1a;
   box-shadow: none;
@@ -511,8 +522,8 @@ const options = reactive({
             }
             .copy-tag {
               padding: 4px 8px;
-              background-color: #FFF7EF;
-              color: #FF7D00;
+              background-color: #fff7ef;
+              color: #ff7d00;
               display: inline-flex;
               align-items: center;
               transition: 0.3s ease;
@@ -524,20 +535,19 @@ const options = reactive({
               svg {
                 margin-right: 8px;
               }
-
             }
           }
           border-radius: 2px;
           .label {
             display: inline-block;
             margin-right: 10px;
-            color: #717C8E;
+            color: #717c8e;
           }
           .value {
             display: inline-block;
-            color: #0B1D30;
+            color: #0b1d30;
             &.active {
-              color: #0070FF;
+              color: #0070ff;
             }
           }
         }
@@ -553,7 +563,7 @@ const options = reactive({
     }
     .btn-group {
       padding: 12px 16px;
-      border-top: 1px solid #DCDFE1;
+      border-top: 1px solid #dcdfe1;
       .cu-btn {
         width: calc((100% - 73px) / 3);
       }
@@ -576,7 +586,7 @@ const options = reactive({
     .cu-btn {
       width: calc((100% - 59px) / 3);
     }
-    .el-button+.el-button {
+    .el-button + .el-button {
       margin-left: 6px;
     }
   }

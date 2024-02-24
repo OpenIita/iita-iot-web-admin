@@ -23,7 +23,7 @@
       menu-slot
     >
       <template #state="scope">
-        <el-tag v-if="scope.row.state?.online" type="success" size="small">在线</el-tag>
+        <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
       <template #menuSlot="scope">
@@ -48,7 +48,7 @@ const state = reactive({
   show: false,
   row: {} as any,
   page: {
-    pageSize: 10,
+    pageSize: 100,
     pageNum: 1,
   },
   total: 0,
@@ -81,71 +81,79 @@ const columns = ref<IColumn[]>([
     type: 'date',
     sortable: true,
     tableWidth: 180,
-  }
+  },
 ])
 const data = ref([
   {
-    'id': '16465723451670abc123000030000011a',
-    'deviceId': '16465723451670abc123000030000011a',
-    'productKey': 'Rf4QSjbm65X45753',
-    'productName': '一路开关',
-    'deviceName': 'ABC12300003',
-    'model': 'S01',
-    'secret': null,
-    'parentId': '16465226744430aabbccdd22000000143',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': [],
-    'state': {
-      'online': true,
-      'onlineTime': 1681868220001,
-      'offlineTime': 1680171375073
+    id: '16465723451670abc123000030000011a',
+    deviceId: '16465723451670abc123000030000011a',
+    productKey: 'Rf4QSjbm65X45753',
+    productName: '一路开关',
+    deviceName: 'ABC12300003',
+    model: 'S01',
+    secret: null,
+    parentId: '16465226744430aabbccdd22000000143',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    subUid: [],
+    state: {
+      online: true,
+      onlineTime: 1681868220001,
+      offlineTime: 1680171375073,
     },
-    'property': null,
-    'tag': {},
-    'group': {},
-    'createAt': 1646572345167
+    property: null,
+    tag: {},
+    group: {},
+    createAt: 1646572345167,
   },
   {
-    'id': '16465723448670abc1230000200000115',
-    'deviceId': '16465723448670abc1230000200000115',
-    'productKey': 'Rf4QSjbm65X45753',
-    'productName': '一路开关',
-    'deviceName': 'ABC12300002',
-    'model': 'S01',
-    'secret': null,
-    'parentId': '16465226744430aabbccdd22000000143',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'subUid': [],
-    'state': {
-      'online': true,
-      'onlineTime': 1681868220123,
-      'offlineTime': 1680171375097
+    id: '16465723448670abc1230000200000115',
+    deviceId: '16465723448670abc1230000200000115',
+    productKey: 'Rf4QSjbm65X45753',
+    productName: '一路开关',
+    deviceName: 'ABC12300002',
+    model: 'S01',
+    secret: null,
+    parentId: '16465226744430aabbccdd22000000143',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    subUid: [],
+    state: {
+      online: true,
+      onlineTime: 1681868220123,
+      offlineTime: 1680171375097,
     },
-    'property': null,
-    'tag': {},
-    'group': {},
-    'createAt': 1646572344867
-  }
+    property: null,
+    tag: {},
+    group: {},
+    createAt: 1646572344867,
+  },
 ])
 
 const handleDelete = async (row: any) => {
   state.loading = true
-  await deleteDevices(row.id)
-  ElMessage.success('删除成功!')
-  state.loading = false
-  getData()
+  await deleteDevices(row.id)
+  ElMessage.success('删除成功!')
+  state.loading = false
+  getData()
 }
 
 const getData = () => {
   getChildrenDeviceList({
     ...state.page,
     coverData: state.row.id,
-  }).then(res => {
-    data.value = res.data
-    console.log(res)
-  }).finally(() => {
-    state.loading = false
   })
+    .then((res) => {
+      state.page.pageSize = res.data.length
+      state.page.pageNum = 1
+      state.total = res.data.length
+      res.data.forEach((d: any) => {
+        d['productName'] = d['product']?.name
+      })
+      data.value = res.data
+      console.log(res)
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 
 const openDialog = (row: any) => {
