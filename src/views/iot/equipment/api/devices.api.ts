@@ -8,6 +8,7 @@ enum Api {
   devicesBatchDel = '/device/batchDelete',
   devicesAdd = '/device/add',
   devicesUpdate = '/device/save',
+  devicesUnbind = '/device/unbind',
   devicesDetail = '/device/detail',
   devicesTagAdd = '/device/tag/add',
   deviceConfigSave = '/device/config/save',
@@ -77,6 +78,16 @@ export const saveDevices = (data: IDevicesVO) => {
     data,
   })
 }
+
+// 解绑
+export const unbindDevice = (data: string) => {
+  return request({
+    url: Api.devicesUnbind,
+    method: 'post',
+    data,
+  })
+}
+
 // 获取设备详情
 export const getDevicesDetail = (data) => {
   return request({

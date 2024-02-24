@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import { getChildrenDeviceList } from '../../api/devices.api'
-import { deleteDevices } from '../../api/devices.api'
+import { unbindDevice } from '../../api/devices.api'
 
 import { ElPopconfirm } from 'element-plus'
 import YtTable from '@/components/common/yt-table'
@@ -130,7 +130,7 @@ const data = ref([
 
 const handleDelete = async (row: any) => {
   state.loading = true
-  await deleteDevices(row.id)
+  await unbindDevice(row.id)
   ElMessage.success('删除成功!')
   state.loading = false
   getData()
