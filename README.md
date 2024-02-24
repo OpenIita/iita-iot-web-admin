@@ -2,7 +2,7 @@
 
 - 本仓库为前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [TS](https://www.typescriptlang.org/) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
 - 配套后端代码仓库地址
-- [铱塔智联开源 / iot-iita](https://gitee.com/open-iita/iotkit-parent/tree/dev-V0.5.0/)
+- [铱塔智联开源 / iot-iita](https://gitee.com/open-iita/iotkit-parent)
 
 ## 前端目录结构
 
@@ -94,25 +94,4 @@ http://localhost:8082
 - api 前缀和 `.env.production` 文件中的一致
 - 服务器上静态资源的目录 `/www/wwwroot` 根据实际情况调整
 
-```nginx
-server
-{
-    listen 80;
-    server_name your.domain;
-	index index.html;
-    root /www/wwwroot;
-
-    location /api/
-    {
-        rewrite /api(.*) $1 break;
-        proxy_pass http://127.0.0.1:8086/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header REMOTE-HOST $remote_addr;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-        proxy_http_version 1.1;
-    }
-}
-```
+- **详见：** [知识库](https://open-iita.feishu.cn/wiki/Km67wBKNNiFMrMkldCJcxa6vnLe)
