@@ -22,12 +22,12 @@
       </template>
       <template #triggerExpression1FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
-          <crontab-box v-model="row['triggerExpression']" />
+          <crontab-box v-model="row[column.key]" />
         </el-form-item>
       </template>
       <template #triggerExpression2FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'random'" :label="column.label" :prop="column.key">
-          <el-radio-group v-model="row['triggerExpression']">
+          <el-radio-group v-model="row[column.key]">
             <el-radio-button label="second">秒</el-radio-button>
             <el-radio-button label="minute">分</el-radio-button>
             <el-radio-button label="hour">时</el-radio-button>
@@ -148,6 +148,14 @@ const getData = () => {
   getVirtualDevicesList({
     ...state.page,
   }).then((res) => {
+    // 循环res.data.rows, 通过判断row.trigger来判断是否显示triggerExpression1FormItem和triggerExpression2FormItem
+    res.data.rows.forEach((item: any) => {
+      if (item.trigger === 'cron') {
+        item.triggerExpression1 = item.triggerExpression
+      } else if (item.trigger === 'random') {
+        item.triggerExpression2 = item.triggerExpression
+      }
+    })
     data.value = res.data.rows
     state.total = res.data.total
   })
@@ -170,6 +178,12 @@ getDict()
 // 保存数据
 const onSave = ({type, data, cancel}: any) => {
   state.loading = true
+  // 将data中的triggerExpression1和triggerExpression2转换成triggerExpression
+  data.triggerExpression = data.triggerExpression1 || data.triggerExpression2
+  // 删除data中的triggerExpression1和triggerExpression2
+  delete data.triggerExpression1
+  delete data.triggerExpression2
+
   saveVirtualDevices(toRaw(data)).then(res => {
     ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
     cancel()
