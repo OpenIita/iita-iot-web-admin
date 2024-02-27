@@ -25,11 +25,13 @@ import { propTypes } from '@/utils/propTypes'
 import tableIndex from './tabIndex.vue'
 
 const props = defineProps({
-  value: propTypes.string.def('')
+  modelValue: propTypes.string.def('')
 })
 
-const stringValue = ref(props.value)
-const emits = defineEmits(['update:value'])
+const stringValue = ref(props.modelValue)
+console.log(props)
+
+const emits = defineEmits(['update:modelValue'])
 const cronBoxRef = ref()
 const cronDialog = ref(false)
 const submitFill = () => {
@@ -53,7 +55,7 @@ const cronFill = (string: string) => {
   cronDialog.value = false
 }
 watch(() => stringValue.value, (newV) => {
-  emits('update:value', newV)
+  emits('update:modelValue', newV)
 })
 const openDialog = () => {
   cronDialog.value = true

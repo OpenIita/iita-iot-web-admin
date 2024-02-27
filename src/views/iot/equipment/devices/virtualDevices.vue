@@ -22,12 +22,12 @@
       </template>
       <template #triggerExpression1FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
-          <crontab-box v-model="row[column.key]" />
+          <crontab-box v-model="row['triggerExpression']" />
         </el-form-item>
       </template>
       <template #triggerExpression2FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'random'" :label="column.label" :prop="column.key">
-          <el-radio-group v-model="row[column.key]">
+          <el-radio-group v-model="row['triggerExpression']">
             <el-radio-button label="second">秒</el-radio-button>
             <el-radio-button label="minute">分</el-radio-button>
             <el-radio-button label="hour">时</el-radio-button>
