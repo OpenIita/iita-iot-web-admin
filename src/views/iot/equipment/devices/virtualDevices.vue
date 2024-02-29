@@ -17,8 +17,8 @@
         </el-tooltip>
       </template>
       <template #state="scope">
-        <el-tag v-if="scope.row.state === 'running'" type="success" size="small">运行中</el-tag>
-        <el-tag v-else-if="scope.row.state === 'stopped'" type="danger" size="small">已停止</el-tag>
+        <el-tag class="state" v-if="scope.row.state === 'running'" type="success" size="small" @click="setState(scope.row.id, 'stopped')">运行中</el-tag>
+        <el-tag class="state" v-else-if="scope.row.state === 'stopped'" type="danger" size="small" @click="setState(scope.row.id, 'running')">已停止</el-tag>
       </template>
       <template #triggerExpression1FormItem="{column, row}">
         <el-form-item v-if="row.trigger === 'cron'" :label="column.label" :prop="column.key">
@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
-import { deleteVirtualDevices, batchDeleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices } from '../api/virtualDevices.api'
+import { deleteVirtualDevices, batchDeleteVirtualDevices, getVirtualDevicesList, saveVirtualDevices, setVirtualDeviceState } from '../api/virtualDevices.api'
 import { getProductsList, IProductsVO } from '../api/products.api'
 
 import CrontabBox from '@/components/Crontab/index.vue'
@@ -206,6 +206,15 @@ const onDelete = async (row: any) => {
   state.loading = false
   getData()
 }
+
+const setState = (id, state) => {
+  setVirtualDeviceState({id: id, state: state}).then(() => {
+    ElMessage.success('设置成功!')
+    getData()
+  })
+}
+
+
 const options = reactive({
   ref: 'crudRef',
   tableProps: {
@@ -224,3 +233,10 @@ const options = reactive({
   column,
 })
 </script>
+
+
+<style lang="scss" scoped>
+.state {
+  cursor: pointer;
+}
+</style>
