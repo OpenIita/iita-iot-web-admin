@@ -110,10 +110,23 @@ const column = ref<IColumn[]>([{
 }, {
   label: '状态',
   key: 'state',
+  type: 'select',
   search: true,
   formHide: true,
   tableWidth: 80,
   slot: true,
+  componentProps: {
+    defaultValue: '',
+    options: [
+      {
+        value: 'running',
+        label: '运行中',
+      }, {
+        value: 'stopped',
+        label: '已停止',
+      }
+    ]
+  }
 }, {
   label: 'cron表达式',
   key: 'triggerExpression1',
@@ -146,7 +159,7 @@ const data = ref()
 const getData = () => {
   state.loading = true
   getVirtualDevicesList({
-    ...state.page,
+    ...state.page, ...state.query
   }).then((res) => {
     // 循环res.data.rows, 通过判断row.trigger来判断是否显示triggerExpression1FormItem和triggerExpression2FormItem
     res.data.rows.forEach((item: any) => {
