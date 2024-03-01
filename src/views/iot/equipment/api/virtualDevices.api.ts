@@ -11,6 +11,7 @@ enum Api {
   update = '/virtual_device/modify',
   run = '/virtual_device/run',
   set = '/virtual_device/setState',
+  saveDevices = '/virtual_device/saveDevices'
 }
 
 export interface IVirtualDevicesVO {
@@ -88,6 +89,15 @@ export const setVirtualDeviceState = (data: IChangeStateVO) => {
 export const runVirtualDevices = (data: (string | number)[]) => {
   return request({
     url: Api.run,
+    method: 'post',
+    data,
+  })
+}
+
+// 保存关联设备
+export const saveVirtualDevicesBindDevices = (data) => {
+  return request({
+    url: Api.saveDevices,
     method: 'post',
     data,
   })
