@@ -11,7 +11,9 @@ enum Api {
   update = '/virtual_device/modify',
   run = '/virtual_device/run',
   set = '/virtual_device/setState',
-  saveDevices = '/virtual_device/saveDevices'
+  saveDevices = '/virtual_device/saveDevices',
+  saveScript = '/virtual_device/saveScript',
+  getLogs = '/virtual_device/logs/list',
 }
 
 export interface IVirtualDevicesVO {
@@ -98,6 +100,25 @@ export const runVirtualDevices = (data: (string | number)[]) => {
 export const saveVirtualDevicesBindDevices = (data) => {
   return request({
     url: Api.saveDevices,
+    method: 'post',
+    data,
+  })
+}
+
+
+// 保存脚本
+export const saveVirtualDevicesScript = (data) => {
+  return request({
+    url: Api.saveScript,
+    method: 'post',
+    data,
+  })
+}
+
+// 取虚拟设备执行日志
+export const getVirtualDevicesLogs = (data): AxiosPromise<any> => {
+  return request({
+    url: Api.getLogs,
     method: 'post',
     data,
   })

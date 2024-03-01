@@ -31,10 +31,10 @@
         <bind-devices v-if="state.activeName === 'config'" :detail="data"/>
       </el-tab-pane>
       <el-tab-pane label="脚本" name="script">
-        <script-box v-if="state.activeName === 'script'" />
+        <script-box v-if="state.activeName === 'script'" :script="data.script"/>
       </el-tab-pane>
       <el-tab-pane label="日志" name="log">
-        <device-log v-if="state.activeName === 'log'" />
+        <device-log v-if="state.activeName === 'log'" ref="childLogRef"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -80,14 +80,14 @@ getVirtualDevicesDetail(id).then((res) => {
   data.value = res.data
 })
 
-
+const childLogRef = ref<any>();
 const run = (id) => {
   runVirtualDevices(id).then(() => {
     ElNotification.success({
-    title: '成功',
-    message: '执行成功',
-  })
-    // this.getLogs()
+      title: '成功',
+      message: '执行成功',
+    })
+    childLogRef.value.getLogs()
   })
 }
 
