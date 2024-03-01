@@ -60,6 +60,7 @@ import { ref } from 'vue'
 import { getDevicesList } from '../../../api/devices.api'
 import { saveVirtualDevicesBindDevices } from '../../../api/virtualDevices.api'
 
+
 const route = useRoute()
 const { id } = route.params
 
@@ -76,14 +77,14 @@ const props = defineProps({
 
 const state = reactive({
   deviceList: [],
-  bindDevices: [],
+  bindDevices: props.detail.devices,
   total: 0,
   page: {
     pageSize: 10,
     pageNum: 1,
   },
   query: {
-    productKey: '',
+    productKey: props.detail.productKey,
     keyword: '',
   },
   loading: false,
@@ -94,17 +95,18 @@ watch(
   (newDetail) => {
     // 在这里执行相应的更新逻辑
     state.query.productKey = newDetail.productKey
-    getData(state)
+    getData()
     state.bindDevices = newDetail.devices
   },
 );
 
-const getData = (state) => {
+const getData = () => {
   getDevicesList({...state.page, ...state.query}).then( res => {
       state.deviceList = res.data.rows || []
       state.total = res.data.total
   })
 }
+getData()
 
 const selectDevice = (row) => {
   if ( state.bindDevices.findIndex((d) => {
@@ -130,13 +132,13 @@ const saveBindDevices = () => {
 
 const search = () => {
   state.page.pageNum = 1
-  getData(state)
+  getData()
 }
 
 const getPageEvents = (e)=> {
   state.page.pageSize = e.limit
   state.page.pageNum = e.page
-  getData(state)
+  getData()
 }
 
 </script>

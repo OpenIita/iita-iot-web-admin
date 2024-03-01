@@ -6,7 +6,7 @@
   >
     <el-table-column sortable label="时间" prop="logAt">
       <template #default="scope">
-        <div>{{ scope.row.logAt }}</div>
+        <div>{{ dayjs(scope.row.logAt).format('YYYY-MM-DD HH:mm:ss') }}</div>
       </template>
     </el-table-column>
 
@@ -17,6 +17,7 @@
 
 <script lang="ts" setup>
 import { getVirtualDevicesLogs } from '../../../api/virtualDevices.api'
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const { id } = route.params
