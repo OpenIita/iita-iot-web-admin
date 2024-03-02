@@ -23,6 +23,14 @@ enum Api {
   childrenDeviceList = '/device/children/list',
   childrenDevice = '',
   getParentDevices = '/device/getParentDevices',
+
+  deviceGroupsList = '/device/groups/list',
+  deviceGroupsAdd = '/device/group/add',
+  deviceGroupsUpdate = '/device/group/edit',
+  deviceGroupsDel = '/device/group/delete',
+  deviceGroupsClear = '/device/group/clear',
+  deviceGroupsAddDevices = '/device/group/addDevices',
+  deviceGroupsRemoveDevices = '/device/group/removeDevices',
 }
 export interface IDevicesVO {
   id: number | string
@@ -42,6 +50,20 @@ export interface IDevicesVO {
   uid: string
   updateBy: number
   updateTime: string
+}
+
+export interface IDeviceGroupVo {
+  id: number | string
+  createAt: number
+  deviceQty: number
+  name: string
+  remark: string
+  uid: string
+}
+
+export interface IDeviceAddGroupVo {
+  group: string
+  devices: string[]
 }
 
 // 获取列表
@@ -193,5 +215,70 @@ export const getParentDevices = () => {
   return request({
     url: Api.getParentDevices,
     method: 'post',
+  })
+}
+
+
+// 获取设备分组列表
+export const getDeviceGroupsList = (data): AxiosPromise<any> => {
+  return request({
+    url: Api.deviceGroupsList,
+    method: 'post',
+    data,
+  })
+}
+
+
+// 编辑、保存设备分组
+export const saveDeviceGroup = (data: IDeviceGroupVo) => {
+  return request({
+    url: data.id ? Api.deviceGroupsUpdate : Api.deviceGroupsAdd,
+    method: 'post',
+    data,
+  })
+}
+
+// 删除设备分组
+export const deleteDeviceGroup = (data: string) => {
+  return request({
+    url: Api.deviceGroupsDel,
+    method: 'post',
+    data,
+  })
+}
+
+// 删除设备分组
+export const clearDeviceGroup = (data: string) => {
+  return request({
+    url: Api.deviceGroupsClear,
+    method: 'post',
+    data,
+  })
+}
+
+// 清空组下所有设备
+export const addDevicesGroup = (data: string) => {
+  return request({
+    url: Api.deviceGroupsClear,
+    method: 'post',
+    data,
+  })
+}
+
+// 添加设备到组
+export const addDeviceToDeviceGroup = (data: IDeviceAddGroupVo) => {
+  return request({
+    url: Api.deviceGroupsAddDevices,
+    method: 'post',
+    data,
+  })
+}
+
+// 将设备从组中移除
+export const removeDeviceFromDeviceGroup = (data: IDeviceAddGroupVo) => {
+  return request({
+    url: Api.deviceGroupsRemoveDevices,
+    method: 'post',
+    data,
   })
 }

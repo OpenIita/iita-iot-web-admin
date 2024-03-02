@@ -24,8 +24,16 @@
       @delFun="handleDelete"
       @saveFun="onSave"
       @openBeforeFun="openBeforeFun"
+      @change="onChange"
     >
+    <template #online="scope">
+      <el-tag class="state" v-if="scope.row.online === true" type="success" size="small">在线</el-tag>
+      <el-tag class="state" v-else-if="scope.row.online === false" type="danger" size="small">离线</el-tag>
+    </template>
+
       <template #rightToolbar>
+        <el-button type="primary" class="addDeviceToGroup" :disabled="multipleSelection.length === 0"  @click="handleToGroup">添加设备到组</el-button>
+
         <el-radio-group v-model="layoutType">
           <el-radio-button label="table">
             <svg-icon icon-class="table2" />
@@ -34,6 +42,7 @@
             <svg-icon icon-class="card" />
           </el-radio-button>
         </el-radio-group>
+
       </template>
       <template #customTable>
         <el-row class="card-list flex">
@@ -92,6 +101,11 @@
         <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
+
+      <template #group="scope">
+        <el-tag v-for="i,k in scope.row.group" :key="k">{{ i.name }}</el-tag>
+      </template>
+
       <template #menuSlot="scope">
         <!-- TODO: 没接口,nodeType无法获取，得改成 ！= 0 -->
         <el-tooltip class="box-item" effect="dark" content="子设备" placement="top">
@@ -118,6 +132,33 @@
       </template>
     </yt-crud>
     <children-dialog ref="childrenDialogRef" />
+
+    <el-dialog title="添加设备到组" v-model="state.showDeviceToGroup" width="350px" append-to-body>
+
+      <el-row style="align-items: center;">
+        <el-col :span="7">
+          <span><b> 请选择分组：</b></span>
+        </el-col>
+
+        <el-col :span="16">
+          <el-select v-model="state.toGroupId" placeholder="请选择分组">
+            <el-option
+              v-for="item in groupOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="state.showDeviceToGroup = false">取 消</el-button>
+          <el-button type="primary" @click="handleAddDeviceToDeviceGroup">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -127,6 +168,7 @@ import { IColumn } from '@/components/common/types/tableCommon'
 import { ComponentInternalInstance } from 'vue'
 import { getDevicesList, deleteDevices, saveDevices, getParentDevices, deleteBatchDevices } from '../api/devices.api'
 import { getProductsList, IProductsVO } from '../api/products.api'
+import { getDeviceGroupsList, addDeviceToDeviceGroup } from '../api/devices.api'
 
 import Map from '@/components/Map/index.vue'
 import ChildrenDialog from './modules/childrenDialog.vue'
@@ -145,6 +187,8 @@ const state = reactive({
   showDeviceMap: false,
   mapLnglat: '' as any,
   query: {},
+  showDeviceToGroup: false,
+  toGroupId: ''
 })
 const layoutType = ref('card')
 
@@ -190,32 +234,17 @@ const copyIdSuccess = () => {
 const productOptions = ref<IProductsVO[]>([])
 
 // 组列表
-const groupOptions = [
-  {
-    id: 'g3',
-    name: '组3',
-    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    remark: '2223333',
-    deviceQty: 17,
-    createAt: 1659872082792,
-  },
-  {
-    id: 'g2',
-    name: '组2',
-    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    remark: '222',
-    deviceQty: 21,
-    createAt: 1659872082803,
-  },
-  {
-    id: 'g1',
-    name: '分组1',
-    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    remark: '1111',
-    deviceQty: 10,
-    createAt: 1659872082805,
-  },
-]
+const groupOptions = ref()
+
+const getGroupsList = () => {
+  getDeviceGroupsList({pageNum: 1, pageSize: 99999, name: ''}).then(res => {
+    groupOptions.value = res.data.rows
+  })
+}
+
+getGroupsList()
+
+
 const column = ref<IColumn[]>([
   {
     label: '设备ID',
@@ -311,16 +340,18 @@ const column = ref<IColumn[]>([
     hide: true,
     formItemSlot: true,
   },
-  // , {
-  //     label: '分组',
-  //     key: 'group',
-  //     type: 'select',
-  //     componentProps: {
-  //       labelAlias: 'name',
-  //       valueAlias: 'id',
-  //       options: groupOptions,
-  //     },
-  //   }
+  {
+      label: '分组',
+      key: 'group',
+      type: 'select',
+      search: true,
+      componentProps: {
+        labelAlias: 'name',
+        valueAlias: 'id',
+        options: groupOptions,
+      },
+      slot: true,
+  },
   {
     label: '状态',
     key: 'online',
@@ -442,6 +473,32 @@ const handleDelete = async (row: any) => {
   state.loading = false
   getData()
 }
+
+
+const multipleSelection = ref([])
+
+const onChange = (data) => {
+  multipleSelection.value = data
+}
+
+// 添加设备到组弹框
+const handleToGroup = () => {
+  state.showDeviceToGroup = true
+}
+
+// 添加设备到组
+const handleAddDeviceToDeviceGroup = () => {
+  addDeviceToDeviceGroup({group: state.toGroupId, devices: multipleSelection.value.map( m=> m.deviceId )}).then(res => {
+    if (res.code == 200){
+      ElMessage.success('添加成功!')
+      state.showDeviceToGroup = false
+      getData()
+    }else{
+      ElMessage.error(res.msg)
+    }
+  })
+}
+
 const locateChange = (e, row) => {
   if (!e) return
   row.longitude = e[0] || ''
@@ -467,6 +524,12 @@ const options = reactive({
       fill: #0070ffff;
     }
   }
+}
+.addDeviceToGroup{
+  margin-right: 10px;
+}
+.el-radio-group{
+  flex-wrap: nowrap;
 }
 .card-list {
   .card-item {

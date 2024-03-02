@@ -142,7 +142,7 @@ const rowClick = (row: any) => {
 // 多选
 const multipleSelection = ref([])
 const handleSelectionChange = (val) => {
-  console.log('val', val)
+  emits('change', val)
 }
 const changeAll = (e) => {
   console.log()
