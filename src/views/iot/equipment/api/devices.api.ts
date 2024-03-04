@@ -61,11 +61,6 @@ export interface IDeviceGroupVo {
   uid: string
 }
 
-export interface IDeviceAddGroupVo {
-  group: string
-  devices: string[]
-}
-
 // 获取列表
 export const getDevicesList = (data): AxiosPromise<any> => {
   return request({
@@ -266,7 +261,7 @@ export const addDevicesGroup = (data: string) => {
 }
 
 // 添加设备到组
-export const addDeviceToDeviceGroup = (data: IDeviceAddGroupVo) => {
+export const addDeviceToDeviceGroup = (data) => {
   return request({
     url: Api.deviceGroupsAddDevices,
     method: 'post',
@@ -275,7 +270,7 @@ export const addDeviceToDeviceGroup = (data: IDeviceAddGroupVo) => {
 }
 
 // 将设备从组中移除
-export const removeDeviceFromDeviceGroup = (data: IDeviceAddGroupVo) => {
+export const removeDeviceFromDeviceGroup = (data) => {
   return request({
     url: Api.deviceGroupsRemoveDevices,
     method: 'post',

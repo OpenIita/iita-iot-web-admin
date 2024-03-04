@@ -461,7 +461,12 @@ const handleDelete = async (row: any) => {
   getData()
 }
 
+<<<<<<< HEAD
 const multipleSelection = ref([])
+=======
+
+const multipleSelection = ref<{deviceId: string}[]>([])
+>>>>>>> ae246fe49d0df469b41c2b04104c2a06647e02cd
 
 const onChange = (data) => {
   multipleSelection.value = data
