@@ -160,7 +160,7 @@
 
     <!-- 分配角色数据权限对话框 -->
     <el-dialog
-      :title="dialog.title"
+      :title="dialog2.title"
       v-model="openDataScope"
       width="500px"
       :close-on-press-escape="false"
@@ -168,7 +168,7 @@
       append-to-body
       destroy-on-close
     >
-      <el-form v-if="dialog.visible" :model="form" label-width="80px" ref="dataScopeRef">
+      <el-form v-if="dialog2.visible" :model="form" label-width="80px" ref="dataScopeRef">
         <el-form-item label="角色名称">
           <el-input v-model="form.roleName" :disabled="true" />
         </el-form-item>
@@ -282,6 +282,10 @@ const data = reactive<PageData<RoleForm, RoleQuery>>({
 const { form, queryParams, rules } = toRefs(data)
 
 const dialog = reactive<DialogOption>({
+  visible: false,
+  title: '',
+})
+const dialog2 = reactive<DialogOption>({
   visible: false,
   title: '',
 })
@@ -492,7 +496,8 @@ const handleDataScope = async (row: RoleVO) => {
   const response = await getRole(row.id)
   Object.assign(form.value, response.data)
   openDataScope.value = true
-  dialog.title = '分配数据权限'
+  dialog2.title = '分配数据权限到用户'
+  dialog2.visible = true
   nextTick(async () => {
     const res = await roleDeptTreeselect
     nextTick(() => {

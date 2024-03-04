@@ -166,6 +166,8 @@ const saveThingModel = async () => {
           if (idx >= 0) {
             state.model.properties.splice(idx, 1)
           }
+        } else {
+          state.model.properties = []
         }
         state.model.properties.push(newProperty())
       } else if (state.modelForm.type == 'service') {
@@ -175,6 +177,8 @@ const saveThingModel = async () => {
           if (idx >= 0) {
             state.model.services.splice(idx, 1)
           }
+        } else {
+          state.model.services = []
         }
 
         state.model.services.push({
@@ -190,6 +194,8 @@ const saveThingModel = async () => {
           if (idx >= 0) {
             state.model.events.splice(idx, 1)
           }
+        } else {
+          state.model.events = []
         }
 
         state.model.events.push({
