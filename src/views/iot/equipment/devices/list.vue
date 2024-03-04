@@ -26,13 +26,8 @@
       @openBeforeFun="openBeforeFun"
       @change="onChange"
     >
-    <template #online="scope">
-      <el-tag class="state" v-if="scope.row.online === true" type="success" size="small">在线</el-tag>
-      <el-tag class="state" v-else-if="scope.row.online === false" type="danger" size="small">离线</el-tag>
-    </template>
-
       <template #rightToolbar>
-        <el-button type="primary" class="addDeviceToGroup" :disabled="multipleSelection.length === 0"  @click="handleToGroup">添加设备到组</el-button>
+        <el-button type="primary" class="addDeviceToGroup" :disabled="multipleSelection.length === 0" @click="handleToGroup">添加设备到组</el-button>
 
         <el-radio-group v-model="layoutType">
           <el-radio-button label="table">
@@ -42,7 +37,6 @@
             <svg-icon icon-class="card" />
           </el-radio-button>
         </el-radio-group>
-
       </template>
       <template #customTable>
         <el-row class="card-list flex">
@@ -97,7 +91,7 @@
           </el-col>
         </el-row>
       </template>
-      <template #state="scope">
+      <template #online="scope">
         <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
@@ -134,7 +128,6 @@
     <children-dialog ref="childrenDialogRef" />
 
     <el-dialog title="添加设备到组" v-model="state.showDeviceToGroup" width="350px" append-to-body>
-
       <el-row style="align-items: center;">
         <el-col :span="7">
           <span><b> 请选择分组：</b></span>
@@ -142,12 +135,7 @@
 
         <el-col :span="16">
           <el-select v-model="state.toGroupId" placeholder="请选择分组">
-            <el-option
-              v-for="item in groupOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
+            <el-option v-for="item in groupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-col>
       </el-row>
@@ -188,7 +176,7 @@ const state = reactive({
   mapLnglat: '' as any,
   query: {},
   showDeviceToGroup: false,
-  toGroupId: ''
+  toGroupId: '',
 })
 const layoutType = ref('card')
 
@@ -237,13 +225,12 @@ const productOptions = ref<IProductsVO[]>([])
 const groupOptions = ref()
 
 const getGroupsList = () => {
-  getDeviceGroupsList({pageNum: 1, pageSize: 99999, name: ''}).then(res => {
+  getDeviceGroupsList({ pageNum: 1, pageSize: 99999, name: '' }).then((res) => {
     groupOptions.value = res.data.rows
   })
 }
 
 getGroupsList()
-
 
 const column = ref<IColumn[]>([
   {
@@ -341,16 +328,16 @@ const column = ref<IColumn[]>([
     formItemSlot: true,
   },
   {
-      label: '分组',
-      key: 'group',
-      type: 'select',
-      search: true,
-      componentProps: {
-        labelAlias: 'name',
-        valueAlias: 'id',
-        options: groupOptions,
-      },
-      slot: true,
+    label: '分组',
+    key: 'group',
+    type: 'select',
+    search: true,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'id',
+      options: groupOptions,
+    },
+    slot: true,
   },
   {
     label: '状态',
@@ -474,7 +461,6 @@ const handleDelete = async (row: any) => {
   getData()
 }
 
-
 const multipleSelection = ref([])
 
 const onChange = (data) => {
@@ -488,12 +474,12 @@ const handleToGroup = () => {
 
 // 添加设备到组
 const handleAddDeviceToDeviceGroup = () => {
-  addDeviceToDeviceGroup({group: state.toGroupId, devices: multipleSelection.value.map( m=> m.deviceId )}).then(res => {
-    if (res.code == 200){
+  addDeviceToDeviceGroup({ group: state.toGroupId, devices: multipleSelection.value.map((m) => m.deviceId) }).then((res) => {
+    if (res.code == 200) {
       ElMessage.success('添加成功!')
       state.showDeviceToGroup = false
       getData()
-    }else{
+    } else {
       ElMessage.error(res.msg)
     }
   })
@@ -525,10 +511,10 @@ const options = reactive({
     }
   }
 }
-.addDeviceToGroup{
+.addDeviceToGroup {
   margin-right: 10px;
 }
-.el-radio-group{
+.el-radio-group {
   flex-wrap: nowrap;
 }
 .card-list {

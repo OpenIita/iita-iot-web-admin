@@ -146,8 +146,26 @@ service.interceptors.response.use(
   (error: any) => {
     let { message } = error
     if (error.response.status == 401) {
-      ElMessage({ message: '未授权的请求', type: 'error', duration: 5 * 1000 })
-      return Promise.reject(error)
+      if (!isRelogin.show) {
+        isRelogin.show = true
+        ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            isRelogin.show = false
+            useUserStore()
+              .logout()
+              .then(() => {
+                location.href = import.meta.env.VITE_APP_CONTEXT_PATH
+              })
+          })
+          .catch(() => {
+            isRelogin.show = false
+          })
+      }
+      return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
     }
 
     if (message == 'Network Error') {
