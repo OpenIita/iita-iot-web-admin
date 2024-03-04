@@ -475,7 +475,7 @@ const handleDelete = async (row: any) => {
 }
 
 
-const multipleSelection = ref([])
+const multipleSelection = ref<{deviceId: string}[]>([])
 
 const onChange = (data) => {
   multipleSelection.value = data
