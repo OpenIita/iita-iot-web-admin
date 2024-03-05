@@ -33,7 +33,7 @@
       @on-load="getData"
     >
       <template #state="scope">
-        <el-tag v-if="scope.row.state.online" type="success" size="small">在线</el-tag>
+        <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
     </yt-crud>
@@ -94,7 +94,7 @@ const handleMultiple = () => {
   const rows = crudRef.value.getTableRef().tableRef.getSelectionRows()
   dialogState.data = {
     id: rows.map((m: any) => m.id),
-    deviceName: rows.map((m: any) => m.deviceName).join(',')
+    deviceName: rows.map((m: any) => m.deviceName).join(','),
   }
   emits('update:id', dialogState.data.id)
   dialogState.show = false
@@ -122,9 +122,9 @@ const getDict = () => {
   getProductsList({
     pageNum: 1,
     pageSize: 10000000,
-  }).then(res => {
+  }).then((res) => {
     productOptions.value = res.data.rows || []
-    column.value.forEach(item => {
+    column.value.forEach((item) => {
       if (item.key === 'productKey') {
         item.componentProps.options = productOptions.value
       }
@@ -135,81 +135,86 @@ getDict()
 // 组列表
 const groupOptions = [
   {
-    'id': 'g3',
-    'name': '组3',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '2223333',
-    'deviceQty': 17,
-    'createAt': 1659872082792
+    id: 'g3',
+    name: '组3',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '2223333',
+    deviceQty: 17,
+    createAt: 1659872082792,
   },
   {
-    'id': 'g2',
-    'name': '组2',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '222',
-    'deviceQty': 21,
-    'createAt': 1659872082803
+    id: 'g2',
+    name: '组2',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '222',
+    deviceQty: 21,
+    createAt: 1659872082803,
   },
   {
-    'id': 'g1',
-    'name': '分组1',
-    'uid': 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
-    'remark': '1111',
-    'deviceQty': 10,
-    'createAt': 1659872082805
-  }
+    id: 'g1',
+    name: '分组1',
+    uid: 'fa1c5eaa-de6e-48b6-805e-8f091c7bb831',
+    remark: '1111',
+    deviceQty: 10,
+    createAt: 1659872082805,
+  },
 ]
-const column = ref<IColumn[]>([{
-  label: '产品',
-  key: 'productKey',
-  type: 'select',
-  search: !props.productPk,
-  componentProps: {
-    labelAlias: 'name',
-    valueAlias: 'productKey',
-    options: productOptions.value,
-  },
-  rules: [{ required: true, message: '产品名称不能为空' }],
-}, {
-  label: '设备DN',
-  key: 'deviceName',
-  componentProps: {
-    placeholder: '一般为设备mac'
-  },
-  rules: [{ required: true, message: '设备DN不能为空' }],
-  },
-//   {
-//   label: '分组',
-//   key: 'group',
-//   type: 'select',
-//   search: true,
-//   componentProps: {
-//     labelAlias: 'name',
-//     valueAlias: 'id',
-//     options: groupOptions,
-//   },
-// },
+const column = ref<IColumn[]>([
   {
-  label: '状态',
-  key: 'state',
-  search: true,
-  formHide: true,
-  tableWidth: 80,
-  slot: true,
-}, {
-  label: '关键字',
-  key: 'key',
-  search: true,
-  hide: true,
-  formHide: true,
-}, {
-  label: '创建时间',
-  key: 'createAt',
-  tableWidth: 180,
+    label: '产品',
+    key: 'productKey',
+    type: 'select',
+    search: !props.productPk,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'productKey',
+      options: productOptions.value,
+    },
+    rules: [{ required: true, message: '产品名称不能为空' }],
+  },
+  {
+    label: '设备DN',
+    key: 'deviceName',
+    componentProps: {
+      placeholder: '一般为设备mac',
+    },
+    rules: [{ required: true, message: '设备DN不能为空' }],
+  },
+  //   {
+  //   label: '分组',
+  //   key: 'group',
+  //   type: 'select',
+  //   search: true,
+  //   componentProps: {
+  //     labelAlias: 'name',
+  //     valueAlias: 'id',
+  //     options: groupOptions,
+  //   },
+  // },
+  {
+    label: '状态',
+    key: 'state',
+    search: true,
+    formHide: true,
+    tableWidth: 80,
+    slot: true,
+  },
+  {
+    label: '关键字',
+    key: 'key',
+    search: true,
+    hide: true,
+    formHide: true,
+  },
+  {
+    label: '创建时间',
+    key: 'createAt',
+    tableWidth: 180,
     type: 'date',
-  sortable: true,
-  formHide: true,
-}])
+    sortable: true,
+    formHide: true,
+  },
+])
 const data = ref([])
 
 const getData = () => {
