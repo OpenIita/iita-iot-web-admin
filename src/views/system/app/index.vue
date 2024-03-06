@@ -46,6 +46,7 @@ const column: IColumn[] = [
     label: 'appSecret',
     key: 'appSecret',
     search: false,
+    hide:true,
     rules: [{ required: true, message: 'appSecret不能为空' }],
   },
   {
