@@ -32,7 +32,7 @@
       @row-click="rowClick"
       @on-load="getData"
     >
-      <template #state="scope">
+      <template #online="scope">
         <el-tag v-if="scope.row.online" type="success" size="small">在线</el-tag>
         <el-tag v-else type="danger" size="small">离线</el-tag>
       </template>
@@ -193,15 +193,29 @@ const column = ref<IColumn[]>([
   // },
   {
     label: '状态',
-    key: 'state',
+    key: 'online',
+    type: 'select',
     search: true,
     formHide: true,
-    tableWidth: 80,
     slot: true,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'value',
+      options: [
+        {
+          name: '在线',
+          value: true,
+        },
+        {
+          name: '离线',
+          value: false,
+        },
+      ],
+    },
   },
   {
     label: '关键字',
-    key: 'key',
+    key: 'keyword',
     search: true,
     hide: true,
     formHide: true,
@@ -221,7 +235,7 @@ const getData = () => {
   state.loading = true
   getDevicesList({
     ...state.query,
-    productKey: props.productPk,
+    productKey: props.productPk || state.query['productKey'],
     ...state.page,
   }).then((res) => {
     data.value = res.data.rows || []
