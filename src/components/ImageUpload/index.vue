@@ -118,7 +118,7 @@ watch(() => props.modelValue, async val => {
     if (Array.isArray(val)) {
       list = val as OssVO[]
     } else {
-      if (props.uploadType === 'ossIf') {
+      if (props.uploadType === 'ossId') {
         const res = await listByIds(val as string)
         list = res.data
       } else {
