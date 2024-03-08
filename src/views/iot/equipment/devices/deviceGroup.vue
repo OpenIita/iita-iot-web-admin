@@ -20,18 +20,57 @@
   @delFun="onDelete"
   @saveFun="onSave"
   >
+    <template #rightToolbar>
+      <el-col :span="12" style="margin-right: 5px">
+        <el-button plain @click="handleImport">
+          <svg-icon icon-class="upload" />
+          <span style="color: rgb(0, 112, 255);">导入分组</span>
+        </el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button plain @click="handleDownloadTemplate">
+          <svg-icon icon-class="download" />
+          <span style="color: rgb(0, 112, 255);">下载模板</span>
+        </el-button>
+      </el-col>
+    </template>
     <template #menuSlot="scope">
       <el-tooltip class="box-item" effect="dark" content="查看分组设备" placement="top">
         <el-button link type="primary" icon="cpu" @click="handleToDevices(scope.row.id)" />
       </el-tooltip>
     </template>
   </yt-crud>
+
+   <!-- 添加文件上传 -->
+   <el-dialog
+      :title="fileUploadDialog.title"
+      v-model="fileUploadDialog.visible"
+      width="500px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
+      <el-form v-if="fileUploadDialog.visible" ref="ossFormRef" :model="uploadForm" :rules="formRules" label-width="80px">
+        <el-form-item label="文件名">
+          <fileUpload v-model="uploadForm.file" :fileSize="10" :fileType="['xlsx']" :limit="1" uploadUrl="/device/group/importData"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
 </template>
 <script lang="ts" setup>
 import { IColumn } from '@/components/common/types/tableCommon'
 import YtCrud from '@/components/common/yt-crud.vue'
 import { getDeviceGroupsList,saveDeviceGroup,deleteDeviceGroup, IDeviceGroupVo } from '../api/devices.api'
-
+import { ComponentInternalInstance } from 'vue'
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 const column: IColumn[] = [{
   label: '分组id',
@@ -65,6 +104,30 @@ const state = reactive({
 })
 
 const data = ref()
+
+const fileUploadDialog = ref({
+  title: '导入分组数据',
+  visible: false
+})
+
+const uploadForm = ref({
+  file: ''
+})
+
+
+const formRules = ref()
+
+const submitForm = () => {
+  if (uploadForm.value.file !== '') {
+    fileUploadDialog.value.visible = false
+    getData()
+  }
+}
+
+const cancel = () => {
+  fileUploadDialog.value.visible = false
+}
+
 
 const getData = () => {
   state.loading = true
@@ -102,6 +165,14 @@ const router = useRouter()
 const handleToDevices = (id: string) => {
   if (!id) return
   router.push(`deviceGroupDetail/${id}`)
+}
+
+const handleDownloadTemplate = () => {
+  proxy?.download('device/group/exportData', {}, `device_group_template_${new Date().getTime()}.xlsx`)
+}
+
+const handleImport = () => {
+  fileUploadDialog.value.visible = true
 }
 
 
