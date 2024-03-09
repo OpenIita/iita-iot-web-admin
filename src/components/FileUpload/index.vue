@@ -190,13 +190,13 @@ const handleUploadSuccess = (res: any, file: UploadFile) => {
     if (res.data) {
       uploadList.value.push({ name: res.data.fileName || res.data.originalName, url: res.data.url, ossId: res.data.ossId, size: res.data.size })
     }
-    uploadedSuccessfully()
+    uploadedSuccessfully(res)
   } else {
     number.value--
     proxy?.$modal.closeLoading()
     proxy?.$modal.msgError(res.message)
     fileUploadRef.value.handleRemove(file)
-    uploadedSuccessfully()
+    uploadedSuccessfully(res)
   }
 }
 
@@ -209,7 +209,7 @@ const handleDelete = (index: number) => {
 }
 
 // 上传结束处理
-const uploadedSuccessfully = () => {
+const uploadedSuccessfully = (res) => {
   if (number.value > 0 && uploadList.value.length === number.value) {
     fileList.value = fileList.value.filter((f) => f.url).concat(toRaw(uploadList.value))
     uploadList.value = []
@@ -217,7 +217,7 @@ const uploadedSuccessfully = () => {
     emit('uploadSuccess', toRaw(fileList.value))
     emit('update:modelValue', listToString(fileList.value))
   } else {
-    emit('uploadSuccess')
+    emit('uploadSuccess', res)
   }
   proxy?.$modal.closeLoading()
 }

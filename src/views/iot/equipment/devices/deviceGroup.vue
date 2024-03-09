@@ -51,17 +51,12 @@
       append-to-body
       destroy-on-close
     >
-      <el-form v-if="fileUploadDialog.visible" ref="ossFormRef" :model="uploadForm" :rules="formRules" label-width="80px">
+      <el-form v-if="fileUploadDialog.visible" ref="ossFormRef" label-width="80px">
         <el-form-item label="文件名">
-          <fileUpload v-model="uploadForm.file" :fileSize="10" :fileType="['xlsx']" :limit="1" uploadUrl="/device/group/importData"/>
+          <fileUpload :fileSize="10" :fileType="['xlsx']" :limit="1" uploadType="url"
+          uploadUrl="/device/group/importData" @upload-success="handleUploadSuccess"/>
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </template>
     </el-dialog>
 
 </template>
@@ -110,24 +105,11 @@ const fileUploadDialog = ref({
   visible: false
 })
 
-const uploadForm = ref({
-  file: ''
-})
-
-
-const formRules = ref()
-
-const submitForm = () => {
-  if (uploadForm.value.file !== '') {
-    fileUploadDialog.value.visible = false
-    getData()
-  }
-}
-
-const cancel = () => {
+const handleUploadSuccess = (res) => {
+  ElMessage.success(res.message)
   fileUploadDialog.value.visible = false
+  getData()
 }
-
 
 const getData = () => {
   state.loading = true
