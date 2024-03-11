@@ -106,9 +106,11 @@ const fileUploadDialog = ref({
 })
 
 const handleUploadSuccess = (res) => {
-  ElMessage.success(res.message)
+  if (res.code == 200) {
+    ElMessage.success(res.message)
+    getData()
+  }
   fileUploadDialog.value.visible = false
-  getData()
 }
 
 const getData = () => {

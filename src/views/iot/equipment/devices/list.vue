@@ -26,7 +26,21 @@
       @openBeforeFun="openBeforeFun"
       @change="onChange"
     >
+
       <template #rightToolbar>
+
+        <el-col :span="12" style="margin-right: 15px;display: flex;">
+          <el-button plain @click="handleImport">
+            <svg-icon icon-class="upload" />
+            <span style="color: rgb(0, 112, 255);">导入设备</span>
+          </el-button>
+
+          <el-button plain @click="handleDownloadTemplate">
+            <svg-icon icon-class="download" />
+            <span style="color: rgb(0, 112, 255);">下载模板</span>
+          </el-button>
+        </el-col>
+
         <el-button type="primary" class="addDeviceToGroup" :disabled="multipleSelection.length === 0" @click="handleToGroup">添加设备到组</el-button>
 
         <el-radio-group v-model="layoutType">
@@ -147,6 +161,26 @@
         </span>
       </template>
     </el-dialog>
+
+
+   <!-- 添加文件上传 -->
+   <el-dialog
+      :title="fileUploadDialog.title"
+      v-model="fileUploadDialog.visible"
+      width="500px"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      append-to-body
+      destroy-on-close
+    >
+      <el-form v-if="fileUploadDialog.visible" ref="ossFormRef" label-width="80px">
+        <el-form-item label="文件名">
+          <fileUpload :fileSize="10" :fileType="['xlsx']" :limit="1" uploadType="url"
+          uploadUrl="/device/importData" @upload-success="handleUploadSuccess"/>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -483,6 +517,27 @@ const handleAddDeviceToDeviceGroup = () => {
       ElMessage.error(res.msg)
     }
   })
+}
+
+const handleUploadSuccess = (res) => {
+  if (res.code == 200){
+    ElMessage.success(res.message)
+    getData()
+  }
+  fileUploadDialog.value.visible = false
+}
+
+const fileUploadDialog = ref({
+  title: '导入设备数据',
+  visible: false
+})
+
+const handleImport = () => {
+  fileUploadDialog.value.visible = true
+}
+
+const handleDownloadTemplate = () => {
+  proxy?.download('device/exportData', {}, `device_template_${new Date().getTime()}.xlsx`)
 }
 
 const locateChange = (e, row) => {
