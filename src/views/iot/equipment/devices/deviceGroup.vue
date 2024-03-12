@@ -118,6 +118,7 @@ const getData = () => {
   getDeviceGroupsList({...state.page, ...state.query}).then(res => {
     console.log(res)
     data.value = res.data.rows
+    state.total = res.data.total
   }).finally(() => {
     state.loading = false
   })
