@@ -149,7 +149,13 @@
             </template>
           </el-table-column>
         </el-table>
-        <Pagination :data="state.formInline" :total="state.formInline.total" :pageNum="state.formInline.pageNum" @pagination="getEvents" />
+        <Pagination
+          :data="state.formInline"
+          :total="state.formInline.total"
+          :page="state.formInline.pageNum"
+          :limit="state.formInline.pageSize"
+          @pagination="getEvents"
+        />
       </el-tab-pane>
 
       <el-tab-pane label="模拟上报" name="report">
@@ -545,12 +551,12 @@ const submitAddTag = () => {
 }
 const logSearch = () => {
   state.formInline.pageNum = 1
-  getEvents({ pageNum: 1 })
+  getEvents({ page: 1, limit: 20 })
 }
 const getEvents = (e) => {
   console.log('deviceLogs', e)
-  state.formInline.pageNum = e.pageNum
-  state.formInline.pageSize = e.pageSize
+  state.formInline.pageNum = e.page
+  state.formInline.pageSize = e.limit
   deviceLogs({
     deviceId: state.deviceId,
     ...state.formInline,
