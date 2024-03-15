@@ -30,11 +30,11 @@ const props = defineProps({
     required: false,
     type: Number
   },
-  page: {
+  pageNum: {
     type: Number,
     default: 1
   },
-  limit: {
+  pageSize: {
     type: Number,
     default: 20
   },
@@ -72,42 +72,42 @@ const props = defineProps({
 })
 
 const customPageSize = computed(() => {
-  if (!props.pageSizes.includes(props.limit)) {
+  if (!props.pageSizes.includes(props.pageSize)) {
     const pageSizes = deepClone(props.pageSizes)
-    pageSizes.push(props.limit)
+    pageSizes.push(props.pageSize)
     return pageSizes.sort((a, b) => a - b)
   }
   return props.pageSizes
 })
 
-const emit = defineEmits(['update:page', 'update:limit', 'pagination'])
+const emit = defineEmits(['update:pageNum', 'update:pageSize', 'pagination'])
 const currentPage = computed({
   get() {
-    return props.page
+    return props.pageNum
   },
   set(val) {
-    emit('update:page', val)
+    emit('update:pageNum', val)
   }
 })
 const pageSize = computed({
   get() {
-    return props.limit
+    return props.pageSize
   },
   set(val){
-    emit('update:limit', val)
+    emit('update:pageSize', val)
   }
 })
 function handleSizeChange(val: number) {
   if (props.total && currentPage.value * val > props.total) {
     currentPage.value = 1
   }
-  emit('pagination', { page: currentPage.value, limit: val })
+  emit('pagination', { pageNum: currentPage.value, pageSize: val })
   if (props.autoScroll) {
     scrollTo(0, 800)
   }
 }
 function handleCurrentChange(val: number) {
-  emit('pagination', { page: val, limit: pageSize.value })
+  emit('pagination', { pageNum: val, pageSize: pageSize.value })
   if (props.autoScroll) {
     scrollTo(0, 800)
   }

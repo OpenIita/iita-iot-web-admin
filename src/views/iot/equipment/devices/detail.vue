@@ -149,7 +149,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <Pagination :data="state.formInline" :total="state.formInline.total" :page="state.formInline.page" @pagination="getEvents" />
+        <Pagination :data="state.formInline" :total="state.formInline.total" :pageNum="state.formInline.pageNum" @pagination="getEvents" />
       </el-tab-pane>
 
       <el-tab-pane label="模拟上报" name="report">
@@ -347,8 +347,8 @@ const state = reactive<any>({
   formInline: {
     type: '',
     identifier: '',
-    page: 1,
-    size: 10,
+    pageNum: 1,
+    pageSize: 10,
     total: 0,
   },
   deviceLogs: [],
@@ -544,12 +544,13 @@ const submitAddTag = () => {
   })
 }
 const logSearch = () => {
-  state.formInline.page = 1
-  getEvents({ page: 1 })
+  state.formInline.pageNum = 1
+  getEvents({ pageNum: 1 })
 }
 const getEvents = (e) => {
   console.log('deviceLogs', e)
-  state.formInline.page = e.page
+  state.formInline.pageNum = e.pageNum
+  state.formInline.pageSize = e.pageSize
   deviceLogs({
     deviceId: state.deviceId,
     ...state.formInline,
