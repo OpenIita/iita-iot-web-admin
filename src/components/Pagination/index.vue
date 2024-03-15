@@ -16,7 +16,7 @@
 
 <script lang="ts">
 export default {
-  name: 'Pagination'
+  name: 'Pagination',
 }
 </script>
 
@@ -28,47 +28,47 @@ import { PropType } from 'vue'
 const props = defineProps({
   total: {
     required: false,
-    type: Number
+    type: Number,
   },
   page: {
     type: Number,
-    default: 1
+    default: 1,
   },
   limit: {
     type: Number,
-    default: 20
+    default: 20,
   },
   pageSizes: {
     type: Array as PropType<number[]>,
     default() {
       return [5, 10, 20, 30, 50, 100]
-    }
+    },
   },
   // 移动端页码按钮的数量端默认值5
   pagerCount: {
     type: Number,
-    default: document.body.clientWidth < 992 ? 5 : 7
+    default: document.body.clientWidth < 992 ? 5 : 7,
   },
   layout: {
     type: String,
-    default: 'total, sizes, prev, pager, next, jumper'
+    default: 'total, sizes, prev, pager, next, jumper',
   },
   background: {
     type: Boolean,
-    default: true
+    default: true,
   },
   autoScroll: {
     type: Boolean,
-    default: true
+    default: true,
   },
   hidden: {
     type: Boolean,
-    default: false
+    default: false,
   },
   float: {
     type: String,
-    default: 'right'
-  }
+    default: 'right',
+  },
 })
 
 const customPageSize = computed(() => {
@@ -87,15 +87,15 @@ const currentPage = computed({
   },
   set(val) {
     emit('update:page', val)
-  }
+  },
 })
 const pageSize = computed({
   get() {
     return props.limit
   },
-  set(val){
+  set(val) {
     emit('update:limit', val)
-  }
+  },
 })
 function handleSizeChange(val: number) {
   if (props.total && currentPage.value * val > props.total) {
@@ -118,7 +118,7 @@ function handleCurrentChange(val: number) {
 .pagination-container {
   background: #fff;
   padding: 32px 16px;
-  .el-pagination{
+  .el-pagination {
     float: v-bind(float);
   }
 }
