@@ -75,7 +75,7 @@
         v-if="showTable"
       >
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="对象存储主键" align="center" prop="ossId" v-if="false" />
+        <el-table-column label="对象存储主键" align="center" prop="id" v-if="false" />
         <el-table-column label="文件名" align="center" prop="fileName" />
         <el-table-column label="原名" align="center" prop="originalName" />
         <el-table-column label="文件后缀" align="center" prop="fileSuffix" />
@@ -163,7 +163,7 @@ const daterangeCreateTime = ref<[DateModelType, DateModelType]>(['', ''])
 
 const dialog = reactive<DialogOption>({
   visible: false,
-  title: ''
+  title: '',
 })
 
 // 默认排序
@@ -183,10 +183,8 @@ const data = reactive<PageData<OssForm, OssQuery>>({
     pageSize: 10,
   },
   rules: {
-    file: [
-      { required: true, message: '文件不能为空', trigger: 'blur' }
-    ]
-  }
+    file: [{ required: true, message: '文件不能为空', trigger: 'blur' }],
+  },
 })
 
 const { queryParams, form, rules } = toRefs(data)
@@ -197,7 +195,7 @@ const getList = async () => {
   const res = await proxy?.getConfigKey('sys.oss.previewListResource')
   previewListResource.value = res?.msg === undefined ? true : res.msg === 'true'
   console.log(daterangeCreateTime)
-  const params = daterangeCreateTime.value[0] ?  proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : {}
+  const params = daterangeCreateTime.value[0] ? proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : {}
   const response: any = await listOss(params)
   ossList.value = response.data.rows
   total.value = response.total
@@ -206,7 +204,7 @@ const getList = async () => {
 }
 function checkFileSuffix(fileSuffix: string[]) {
   let arr = ['png', 'jpg', 'jpeg']
-  return arr.some(type => {
+  return arr.some((type) => {
     return fileSuffix.indexOf(type) > -1
   })
 }
@@ -236,7 +234,7 @@ function resetQuery() {
 }
 /** 选择条数  */
 function handleSelectionChange(selection: OssVO[]) {
-  ids.value = selection.map(item => item.ossId)
+  ids.value = selection.map((item) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -250,15 +248,15 @@ const handleHeaderCLick = (column: any) => {
     return
   }
   switch (column.multiOrder) {
-  case 'descending':
-    column.multiOrder = 'ascending'
-    break
-  case 'ascending':
-    column.multiOrder = ''
-    break
-  default:
-    column.multiOrder = 'descending'
-    break
+    case 'descending':
+      column.multiOrder = 'ascending'
+      break
+    case 'ascending':
+      column.multiOrder = ''
+      break
+    default:
+      column.multiOrder = 'descending'
+      break
   }
   handleOrderChange(column.property, column.multiOrder)
 }
@@ -272,8 +270,8 @@ const handleOrderChange = (prop: string, order: string) => {
       isAscArr[propIndex] = order
     } else {
       //如果order为null 则删除排序字段和属性
-      isAscArr.splice(propIndex, 1)//删除排序
-      orderByArr.splice(propIndex, 1)//删除属性
+      isAscArr.splice(propIndex, 1) //删除排序
+      orderByArr.splice(propIndex, 1) //删除属性
     }
   } else {
     //排序里不存在则新增排序
@@ -314,7 +312,7 @@ const submitForm = () => {
 }
 /** 下载按钮操作 */
 const handleDownload = (row: OssVO) => {
-  proxy?.$download.oss(row.ossId)
+  proxy?.$download.oss(row.id)
 }
 /** 用户状态修改  */
 const handlePreviewListResource = async (preview: boolean) => {
@@ -326,10 +324,10 @@ const handlePreviewListResource = async (preview: boolean) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OssVO) => {
-  const ossIds = row?.ossId || ids.value
+  const ossIds = row ? [row.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除OSS对象存储编号为"' + ossIds + '"的数据项?')
   loading.value = true
-  await delOss(ossIds).finally(() => loading.value = false)
+  await delOss(ossIds).finally(() => (loading.value = false))
   getList()
   proxy?.$modal.msgSuccess('删除成功')
 }
