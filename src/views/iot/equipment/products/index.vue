@@ -108,28 +108,30 @@ import { getCategoriesAll } from '../api/categories.api'
 import { ElDivider } from 'element-plus'
 
 const crudRef = ref()
-const nodeTypeOptions =  [
+const nodeTypeOptions = [
   {
     value: 0,
     label: '网关设备',
-  }, {
+  },
+  {
     value: 1,
     label: '网关子设备',
-  }, {
+  },
+  {
     value: 2,
     label: '直连设备',
   },
 ]
 const getNodeTypeNmae = (type) => {
-  return nodeTypeOptions.find(f => f.value === type)?.label || ''
+  return nodeTypeOptions.find((f) => f.value === type)?.label || ''
 }
 let cateOptions: any[] = []
 
 const getCateName = (id: string) => {
-  return cateOptions.find(f => f.id === id)?.name || ''
+  return cateOptions.find((f) => f.id === id)?.name || ''
 }
 const data = ref<IProductsVO[]>([])
-const randomString=(len:number)=> {
+const randomString = (len: number) => {
   len = len || 32
   var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
   var maxPos = $chars.length
@@ -137,121 +139,142 @@ const randomString=(len:number)=> {
   for (var i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
   }
-  if (data.value.findIndex(f => f.productKey === pwd) !== -1) {
+  if (data.value.findIndex((f) => f.productKey === pwd) !== -1) {
     return randomString(len)
   }
   return pwd
 }
-const column = ref<IColumn[]>([{
-  label: '产品密钥',
-  key: 'productSecret',
-  hide: true,
-  addHide: true,
-  editDisabled: true,
-}, {
-  label: '产品Key',
-  key: 'productKey',
-  search: true,
-  editDisabled: true,
-  addDisabled: true,
-  rules: [{ required: true, message: '产品Key不能为空' }],
-}, {
-  label: '产品名称',
-  key: 'name',
-  search: true,
-  rules: [{ required: true, message: '产品名称不能为空' }],
-}, {
-  label: '品类',
-  key: 'category',
-  type: 'select',
-  tableWidth: 80,
-  componentProps: {
-    labelAlias: 'name',
-    valueAlias: 'id',
+const column = ref<IColumn[]>([
+  {
+    label: '产品密钥',
+    key: 'productSecret',
+    hide: true,
+    addHide: true,
+    editDisabled: true,
   },
-  rules: [{ required: true, message: '品类不能为空' }],
-}, {
-  label: '节点类型',
-  key: 'nodeType',
-  type: 'radio',
-  componentProps: {
-    defaultValue: 0,
-    options: nodeTypeOptions,
-  }
-}, {
-  label: '透传设备',
-  key: 'transparent',
-  type: 'radio',
-  tableWidth: 80,
-  componentProps: {
-    defaultValue: true,
-    options: [
-      {
-        value: true,
-        label: '是',
-      }, {
-        value: false,
-        label: '否',
-      }
-    ]
-  }
-}, {
-  label: '设备定位',
-  key: 'isOpenLocate',
-  type: 'radio',
-  tableWidth: 80,
-  componentProps: {
-    defaultValue: false,
-    options: [
-      {
-        value: true,
-        label: '开启',
-      }, {
-        value: false,
-        label: '关闭',
-      }
-    ]
+  {
+    label: '产品Key',
+    key: 'productKey',
+    search: true,
+    editDisabled: true,
+    addDisabled: true,
+    rules: [{ required: true, message: '产品Key不能为空' }],
   },
-  formWatch: (scope) => {
-    scope.column.forEach((f: IColumn) => {
-      if (f.key === 'locateUpdateType') {
-        f.formHide = !scope.value
-      }
-    })
-    column.value = scope.column
-  }
-}, {
-  label: '定位方式',
-  key: 'locateUpdateType',
-  type: 'radio',
-  tableWidth: 80,
-  formHide:true,
-  componentProps: {
-    defaultValue: 'manual',
-    options: [
-      {
-        value: 'manual',
-        label: '手动定位',
-      }, {
-        value: 'device',
-        label: '设备上报',
-      }
-    ]
-  }
-}, {
-  label: '产品图片',
-  key: 'img',
-  type: 'image',
-  componentProps: {
-    uploadType: 'url',
-  }
-}, {
-  label: '创建时间',
-  key: 'createAt',
-  type: 'date',
-  sortable: true,
-  formHide: true,
-}])
+  {
+    label: '产品名称',
+    key: 'name',
+    search: true,
+    rules: [{ required: true, message: '产品名称不能为空' }],
+  },
+  {
+    label: '品类',
+    key: 'category',
+    type: 'select',
+    tableWidth: 80,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'id',
+    },
+    rules: [{ required: true, message: '品类不能为空' }],
+  },
+  {
+    label: '节点类型',
+    key: 'nodeType',
+    type: 'radio',
+    componentProps: {
+      defaultValue: 0,
+      options: nodeTypeOptions,
+    },
+  },
+  {
+    label: '透传设备',
+    key: 'transparent',
+    type: 'radio',
+    tableWidth: 80,
+    componentProps: {
+      defaultValue: false,
+      options: [
+        {
+          value: true,
+          label: '是',
+        },
+        {
+          value: false,
+          label: '否',
+        },
+      ],
+    },
+  },
+  {
+    label: '保活时长(秒)',
+    key: 'keepAliveTime',
+    type: 'number',
+    search: false,
+    rules: [{ required: true, message: '保活时长不能为空' }],
+  },
+  {
+    label: '设备定位',
+    key: 'isOpenLocate',
+    type: 'radio',
+    tableWidth: 80,
+    componentProps: {
+      defaultValue: false,
+      options: [
+        {
+          value: true,
+          label: '开启',
+        },
+        {
+          value: false,
+          label: '关闭',
+        },
+      ],
+    },
+    formWatch: (scope) => {
+      scope.column.forEach((f: IColumn) => {
+        if (f.key === 'locateUpdateType') {
+          f.formHide = !scope.value
+        }
+      })
+      column.value = scope.column
+    },
+  },
+  {
+    label: '定位方式',
+    key: 'locateUpdateType',
+    type: 'radio',
+    tableWidth: 80,
+    formHide: true,
+    componentProps: {
+      defaultValue: 'manual',
+      options: [
+        {
+          value: 'manual',
+          label: '手动定位',
+        },
+        {
+          value: 'device',
+          label: '设备上报',
+        },
+      ],
+    },
+  },
+  {
+    label: '产品图片',
+    key: 'img',
+    type: 'image',
+    componentProps: {
+      uploadType: 'url',
+    },
+  },
+  {
+    label: '创建时间',
+    key: 'createAt',
+    type: 'date',
+    sortable: true,
+    formHide: true,
+  },
+])
 
 const state = reactive({
   total: 0,
@@ -260,7 +283,7 @@ const state = reactive({
     pageNum: 1,
   },
   query: {},
-  loading: false
+  loading: false,
 })
 const layoutType = ref('card')
 const getData = () => {
@@ -268,19 +291,21 @@ const getData = () => {
   getProductsList({
     ...state.page,
     ...state.query,
-  }).then(res => {
-    data.value = res.data.rows || []
-    state.total = res.data.total
-  }).finally(() => {
-    state.loading = false
   })
+    .then((res) => {
+      data.value = res.data.rows || []
+      state.total = res.data.total
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 // 获取字典
 const getDict = () => {
-  getCategoriesAll().then(res => {
+  getCategoriesAll().then((res) => {
     res = res || {}
     cateOptions = res.data || []
-    column.value.forEach(item => {
+    column.value.forEach((item) => {
       if (item.key === 'category') {
         item.componentProps.options = cateOptions
       }
@@ -291,7 +316,7 @@ const getDict = () => {
 const handleExport = () => {
   ElMessage({
     type: 'warning',
-    message: '功能尚未完善，请耐心等待哟'
+    message: '功能尚未完善，请耐心等待哟',
   })
 }
 // 删除
@@ -299,44 +324,45 @@ const handleDel = (rows) => {
   console.log('rows', rows)
   let key = rows.productKey
   state.loading = true
-  deleteProduct(key).then(res => {
-    if (res.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '删除成功'
-      })
-      getData()
-    } else {
-      ElMessage({
-        type: 'error',
-        message: res.message
-      })
-    }
-  }).finally(() => {
-    state.loading = false
-  })
+  deleteProduct(key)
+    .then((res) => {
+      if (res.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功',
+        })
+        getData()
+      } else {
+        ElMessage({
+          type: 'error',
+          message: res.message,
+        })
+      }
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
 // 上传前置操作
-const openBeforeFun = ({type, data}) => {
+const openBeforeFun = ({ type, data }) => {
   if (type === 'add') {
     data.productKey = randomString(16)
   }
 }
 getDict()
 // 保存数据
-const onSave = ({type, data, cancel}: any) => {
+const onSave = ({ type, data, cancel }: any) => {
   state.loading = true
-  saveProducts(toRaw(data)).then(res => {
-    ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
-    cancel()
-    getData()
-  }).finally(() => {
-    state.loading = false
-  })
-
+  saveProducts(toRaw(data))
+    .then((res) => {
+      ElMessage.success(type === 'add' ? '添加成功' : '编辑成功')
+      cancel()
+      getData()
+    })
+    .finally(() => {
+      state.loading = false
+    })
 }
-
-
 
 const objectModelRef = ref()
 const openObjectModel = (row: any) => {
@@ -348,7 +374,7 @@ const openObjectModel = (row: any) => {
 ::v-deep(.el-radio-button__inner) {
   padding: 8px;
 }
-::v-deep(.el-radio-button__original-radio:checked+.el-radio-button__inner) {
+::v-deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
   border: 1px solid #0070ffff;
   background: #0070ff1a;
   box-shadow: none;
@@ -396,13 +422,13 @@ const openObjectModel = (row: any) => {
           .label {
             display: inline-block;
             margin-right: 10px;
-            color: #717C8E;
+            color: #717c8e;
           }
           .value {
             display: inline-block;
-            color: #0B1D30;
+            color: #0b1d30;
             &.active {
-              color: #0070FF;
+              color: #0070ff;
             }
           }
         }
@@ -418,7 +444,7 @@ const openObjectModel = (row: any) => {
     }
     .btn-group {
       padding: 12px 16px;
-      border-top: 1px solid #DCDFE1;
+      border-top: 1px solid #dcdfe1;
       .cu-btn {
         width: calc((100% - 73px) / 3);
       }
@@ -437,7 +463,7 @@ const openObjectModel = (row: any) => {
     .cu-btn {
       width: calc((100% - 59px) / 3);
     }
-    .el-button+.el-button {
+    .el-button + .el-button {
       margin-left: 6px;
     }
   }

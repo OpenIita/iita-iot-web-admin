@@ -52,7 +52,7 @@ const props = defineProps({
   id: propTypes.string.def(''),
   pk: propTypes.string.def(''),
   // 是否多选
-  multiple: propTypes.bool.def(false)
+  multiple: propTypes.bool.def(false),
 })
 const emits = defineEmits(['onSelect', 'update:id', 'update:pk'])
 const state = reactive({
@@ -83,7 +83,7 @@ const handleMultiple = () => {
   const rows = crudRef.value.getTableRef().tableRef.getSelectionRows()
   dialogState.data = {
     id: rows.map((m: any) => m.id),
-    name: rows.map((m: any) => m.name).join(',')
+    name: rows.map((m: any) => m.name).join(','),
   }
   emits('update:id', dialogState.data.id)
   dialogState.show = false
@@ -105,9 +105,9 @@ const handleSelect = () => {
 // 分类字典
 const cateOptions = ref<any[]>([])
 const getDict = () => {
-  getCategoriesAll().then(res => {
+  getCategoriesAll().then((res) => {
     cateOptions.value = res?.data || []
-    column.value.forEach(item => {
+    column.value.forEach((item) => {
       if (item.key === 'category') {
         item.componentProps.options = cateOptions
       }
@@ -115,64 +115,73 @@ const getDict = () => {
   })
 }
 getDict()
-const column = ref<IColumn[]>([{
-  label: 'ProductKey',
-  key: 'productKey',
-  rules: [{ required: true, message: 'ProductKey不能为空' }],
-}, {
-  label: '产品名称',
-  search: true,
-  key: 'name',
-  rules: [{ required: true, message: '产品名称不能为空' }],
-}, {
-  label: '品类',
-  key: 'category',
-  search: true,
-  type: 'select',
-  tableWidth: 150,
-  componentProps: {
-    labelAlias: 'name',
-    valueAlias: 'id',
-    options: cateOptions.value,
+const column = ref<IColumn[]>([
+  {
+    label: 'ProductKey',
+    key: 'productKey',
+    rules: [{ required: true, message: 'ProductKey不能为空' }],
   },
-  rules: [{ required: true, message: '品类不能为空' }],
-}, {
-  label: '节点类型',
-  key: 'nodeType',
-  type: 'radio',
-  componentProps: {
-    defaultValue: 0,
-    options: [
-      {
-        value: 0,
-        label: '网关设备',
-      }, {
-        value: 1,
-        label: '网关子设备',
-      }, {
-        value: 2,
-        label: '直连设备',
-      },
-    ]
-  }
-}, {
-  label: '透传设备',
-  key: 'transparent',
-  type: 'switch',
-  tableWidth: 80,
-  componentProps: {
-    defaultValue: 'true',
-    options: [
-      {
-        value: 'true',
-        label: '是',
-      }, {
-        value: 'false',
-        label: '否',
-      }
-    ]
-  }
-}])
+  {
+    label: '产品名称',
+    search: true,
+    key: 'name',
+    rules: [{ required: true, message: '产品名称不能为空' }],
+  },
+  {
+    label: '品类',
+    key: 'category',
+    search: true,
+    type: 'select',
+    tableWidth: 150,
+    componentProps: {
+      labelAlias: 'name',
+      valueAlias: 'id',
+      options: cateOptions.value,
+    },
+    rules: [{ required: true, message: '品类不能为空' }],
+  },
+  {
+    label: '节点类型',
+    key: 'nodeType',
+    type: 'radio',
+    componentProps: {
+      defaultValue: 0,
+      options: [
+        {
+          value: 0,
+          label: '网关设备',
+        },
+        {
+          value: 1,
+          label: '网关子设备',
+        },
+        {
+          value: 2,
+          label: '直连设备',
+        },
+      ],
+    },
+  },
+  {
+    label: '透传设备',
+    key: 'transparent',
+    type: 'switch',
+    tableWidth: 80,
+    componentProps: {
+      defaultValue: 'false',
+      options: [
+        {
+          value: 'true',
+          label: '是',
+        },
+        {
+          value: 'false',
+          label: '否',
+        },
+      ],
+    },
+  },
+])
 const data = ref<any[]>([])
 const getData = () => {
   state.loading = true
@@ -190,7 +199,7 @@ const getAllData = () => {
   getProductsList({
     pageNum: 1,
     pageSize: 100000,
-  }).then(res => {
+  }).then((res) => {
     if (res.code === 200) {
       allData.value = res.data.rows || []
     }
@@ -198,7 +207,7 @@ const getAllData = () => {
 }
 getAllData()
 const getName = (str, type: 'id' | 'productKey') => {
-  return allData.value.find(f => f[type] === str)?.name || ''
+  return allData.value.find((f) => f[type] === str)?.name || ''
 }
 const name = computed(() => {
   if (props.id) return getName(props.id, 'id')
