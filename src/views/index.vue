@@ -5,7 +5,7 @@
         <el-col :span="6">
           <el-card class="box-card card1" shadow="never">
             <div class="title">品类数量</div>
-            <div class="text numbers">20</div>
+            <div class="text numbers">{{ statsData.categoryTotal }}</div>
             <el-divider />
             <div class="increase">今日新增 <sup>↝ 0</sup></div>
           </el-card>
@@ -13,7 +13,7 @@
         <el-col :span="6">
           <el-card class="box-card card2" shadow="never">
             <div class="title">产品数量</div>
-            <div class="text numbers">32</div>
+            <div class="text numbers">{{ statsData.productTotal }}</div>
             <el-divider />
             <div class="increase">今日新增 <sup>↝ 0</sup></div>
           </el-card>
@@ -21,7 +21,7 @@
         <el-col :span="6">
           <el-card class="box-card card3" shadow="never">
             <div class="title">设备数量</div>
-            <div class="text numbers">1012</div>
+            <div class="text numbers">{{ statsData.deviceTotal }}</div>
             <el-divider />
             <div class="increase">今日新增 <sup>↝ 0</sup></div>
           </el-card>
@@ -29,7 +29,7 @@
         <el-col :span="6">
           <el-card class="box-card card4" shadow="never">
             <div class="title">上报数据量</div>
-            <div class="text numbers">2921</div>
+            <div class="text numbers">{{ statsData.reportTotal }}</div>
             <el-divider />
             <div class="increase">今日新增 <sup>↝ 0</sup></div>
           </el-card>
@@ -97,6 +97,7 @@ import { TooltipComponent, LegendComponent, TitleComponent, ToolboxComponent, Gr
 import { PieChart, LineChart, GaugeChart } from 'echarts/charts'
 import { LabelLayout, UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
+import { stats } from '@/api/index'
 
 echarts.use([
   TooltipComponent,
@@ -121,261 +122,272 @@ const goTarget = (url: string) => {
   window.open(url, '__blank')
 }
 
+const statsData = ref({
+  categoryTotal: 0,
+  productTotal: 0,
+  deviceTotal: 0,
+  reportTotal: 0,
+  onlineTotal: 0,
+  offlineTotal: 0,
+  neverOnlineTotal: 0,
+  deviceStatsOfCategory: [],
+  reportDataStats: []
+})
+
+
 onMounted(() => {
   document.getElementById('breadcrumb-container')!.style.display = 'none'
 
-  echarts.init(chartDeviceNumStat.value).setOption({
-    tooltip: {
-      trigger: 'item',
-    },
-    legend: {
-      top: '5%',
-      right: '10%',
-      align: 'left',
-      orient: 'vertical',
-      icon: 'circle',
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'pie',
-        radius: ['50%', '80%'],
-        avoidLabelOverlap: false,
-        center: ['30%', '50%'],
-        label: {
-          show: false,
-          position: 'outside',
-        },
-        emphasis: {
+  stats().then((res) => {
+    statsData.value = res.data
+    console.log(statsData)
+
+    echarts.init(chartDeviceNumStat.value).setOption({
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        top: '5%',
+        right: '10%',
+        align: 'left',
+        orient: 'vertical',
+        icon: 'circle',
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['50%', '80%'],
+          avoidLabelOverlap: false,
+          center: ['30%', '50%'],
           label: {
+            show: false,
+            position: 'outside',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 20,
+              fontWeight: 'bold',
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: statsData.value.deviceStatsOfCategory,
+        },
+      ],
+    })
+
+
+    echarts.init(chartDeviceOnline.value).setOption({
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 360,
+          endAngle: 0,
+          progress: {
             show: true,
+            width: 12,
+            itemStyle: {
+              color: '#00dd99',
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              width: 12,
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            show: false,
+          },
+          pointer: {
+            show: false,
+          },
+          anchor: {
+            show: false,
+          },
+          title: {
+            show: false,
+          },
+          detail: {
+            valueAnimation: true,
             fontSize: 20,
-            fontWeight: 'bold',
+            offsetCenter: [0, '0'],
+            formatter: function (value) {
+              return value + '个'
+            },
           },
+          data: [
+            {
+              value: statsData.value.onlineTotal,
+            },
+          ],
         },
-        labelLine: {
-          show: false,
-        },
-        data: [
-          { value: 1048, name: '一路开关' },
-          { value: 735, name: '插座' },
-          { value: 580, name: '二路开关' },
-          { value: 484, name: '门磁' },
-          { value: 300, name: '门锁' },
-          { value: 300, name: '水表' },
-          { value: 300, name: '电表' },
-          { value: 300, name: '水泵' },
-          { value: 220, name: '智能风扇' },
-          { value: 300, name: '调光灯' },
-        ],
-      },
-    ],
-  })
+      ],
+    })
 
-  echarts.init(chartDeviceOnline.value).setOption({
-    series: [
-      {
-        type: 'gauge',
-        startAngle: 360,
-        endAngle: 0,
-        progress: {
-          show: true,
-          width: 12,
-          itemStyle: {
-            color: '#00dd99',
-          },
-        },
-        axisLine: {
-          lineStyle: {
+    echarts.init(chartDeviceOffline.value).setOption({
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 360,
+          endAngle: 0,
+          progress: {
+            show: true,
             width: 12,
+            itemStyle: {
+              color: '#ff5500',
+            },
           },
-        },
-        axisTick: {
-          show: false,
-        },
-        splitLine: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-        },
-        pointer: {
-          show: false,
-        },
-        anchor: {
-          show: false,
-        },
-        title: {
-          show: false,
-        },
-        detail: {
-          valueAnimation: true,
-          fontSize: 20,
-          offsetCenter: [0, '0'],
-          formatter: function (value) {
-            return value + '个'
+          axisLine: {
+            lineStyle: {
+              width: 12,
+            },
           },
-        },
-        data: [
-          {
-            value: 82,
+          axisTick: {
+            show: false,
           },
-        ],
-      },
-    ],
-  })
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            show: false,
+          },
+          pointer: {
+            show: false,
+          },
+          anchor: {
+            show: false,
+          },
+          title: {
+            show: false,
+          },
+          detail: {
+            valueAnimation: true,
+            fontSize: 20,
+            offsetCenter: [0, '0'],
+            formatter: function (value) {
+              return value + '个'
+            },
+          },
+          data: [
+            {
+              value: statsData.value.offlineTotal,
+            },
+          ],
+        },
+      ],
+    })
 
-  echarts.init(chartDeviceOffline.value).setOption({
-    series: [
-      {
-        type: 'gauge',
-        startAngle: 360,
-        endAngle: 0,
-        progress: {
-          show: true,
-          width: 12,
-          itemStyle: {
-            color: '#ff5500',
-          },
-        },
-        axisLine: {
-          lineStyle: {
+
+    echarts.init(chartDeviceActive.value).setOption({
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 360,
+          endAngle: 0,
+          progress: {
+            show: true,
             width: 12,
+            itemStyle: {
+              color: '#0055bb',
+            },
           },
-        },
-        axisTick: {
-          show: false,
-        },
-        splitLine: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-        },
-        pointer: {
-          show: false,
-        },
-        anchor: {
-          show: false,
-        },
-        title: {
-          show: false,
-        },
-        detail: {
-          valueAnimation: true,
-          fontSize: 20,
-          offsetCenter: [0, '0'],
-          formatter: function (value) {
-            return value + '个'
+          axisLine: {
+            lineStyle: {
+              width: 12,
+            },
           },
-        },
-        data: [
-          {
-            value: 14,
+          axisTick: {
+            show: false,
           },
-        ],
-      },
-    ],
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            show: false,
+          },
+          pointer: {
+            show: false,
+          },
+          anchor: {
+            show: false,
+          },
+          title: {
+            show: false,
+          },
+          detail: {
+            valueAnimation: true,
+            fontSize: 20,
+            offsetCenter: [0, '0'],
+            formatter: function (value) {
+              return value + '个'
+            },
+          },
+          data: [
+            {
+              value: statsData.value.neverOnlineTotal,
+            },
+          ],
+        },
+      ],
+    })
+
   })
 
-  echarts.init(chartDeviceActive.value).setOption({
-    series: [
-      {
-        type: 'gauge',
-        startAngle: 360,
-        endAngle: 0,
-        progress: {
-          show: true,
-          width: 12,
-          itemStyle: {
-            color: '#0055bb',
-          },
-        },
-        axisLine: {
-          lineStyle: {
-            width: 12,
-          },
-        },
-        axisTick: {
-          show: false,
-        },
-        splitLine: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-        },
-        pointer: {
-          show: false,
-        },
-        anchor: {
-          show: false,
-        },
-        title: {
-          show: false,
-        },
-        detail: {
-          valueAnimation: true,
-          fontSize: 20,
-          offsetCenter: [0, '0'],
-          formatter: function (value) {
-            return value + '个'
-          },
-        },
-        data: [
-          {
-            value: 3,
-          },
-        ],
-      },
-    ],
-  })
-
+  // todo 后台没有返回下行消息量
   echarts.init(chartMsgStat.value).setOption({
-    title: {},
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      data: ['上行消息量', '下行消息量'],
-      textStyle: {
-        fontWeight: 'bolder',
+      title: {},
+      tooltip: {
+        trigger: 'axis',
       },
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
+      legend: {
+        data: ['上行消息量', '下行消息量'],
+        textStyle: {
+          fontWeight: 'bolder',
+        },
       },
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: ['02-01', '02-02', '02-03', '02-04', '02-05', '02-06', '02-07'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '上行消息量',
-        type: 'line',
-        stack: 'Total',
-        data: [120, 132, 101, 134, 90, 230, 210],
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
       },
-      {
-        name: '下行消息量',
-        type: 'line',
-        stack: 'Total',
-        data: [220, 182, 191, 234, 290, 330, 310],
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
       },
-    ],
-  })
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['02-01', '02-02', '02-03', '02-04', '02-05', '02-06', '02-07'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: '上行消息量',
+          type: 'line',
+          stack: 'Total',
+          data: [120, 132, 101, 134, 90, 230, 210],
+        },
+        {
+          name: '下行消息量',
+          type: 'line',
+          stack: 'Total',
+          data: [220, 182, 191, 234, 290, 330, 310],
+        },
+      ],
+    })
 })
 </script>
 
