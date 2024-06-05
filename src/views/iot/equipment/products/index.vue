@@ -172,7 +172,7 @@ const column = ref<IColumn[]>([
     key: 'productKey',
     search: true,
     editDisabled: true,
-    addDisabled: true,
+    addDisabled: false,
     rules: [{ required: true, message: '产品Key不能为空' }],
   },
   {
