@@ -53,7 +53,7 @@
       </template>
       <template #expressionFormItem="{column, row}">
         <el-form-item v-if="row.type === 'timer'" :label="column.label" :prop="column.key">
-          <crontab-box v-model:value="row.expression" />
+          <crontab-box :modelValue="row.expression" />
         </el-form-item>
       </template>
       <template #secondsFormItem="{column, row}">
