@@ -236,7 +236,7 @@ function resetQuery() {
 }
 /** 选择条数  */
 function handleSelectionChange(selection: OssVO[]) {
-  ids.value = selection.map(item => item.ossId)
+  ids.value = selection.map(item => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -314,7 +314,7 @@ const submitForm = () => {
 }
 /** 下载按钮操作 */
 const handleDownload = (row: OssVO) => {
-  proxy?.$download.oss(row.ossId)
+  proxy?.$download.oss(row.id)
 }
 /** 用户状态修改  */
 const handlePreviewListResource = async (preview: boolean) => {
@@ -326,7 +326,7 @@ const handlePreviewListResource = async (preview: boolean) => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: OssVO) => {
-  const ossIds = row?.ossId || ids.value
+  const ossIds = row?.id ? [row?.id] : ids.value
   await proxy?.$modal.confirm('是否确认删除OSS对象存储编号为"' + ossIds + '"的数据项?')
   loading.value = true
   await delOss(ossIds).finally(() => loading.value = false)

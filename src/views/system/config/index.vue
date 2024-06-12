@@ -210,7 +210,7 @@ const resetQuery = () => {
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: ConfigVO[]) => {
-  ids.value = selection.map((item) => item.configId)
+  ids.value = selection.map((item) => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -246,7 +246,7 @@ const submitForm = () => {
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: ConfigVO) => {
-  const configIds = row?.id ? [row.id] : ids.value[0]
+  const configIds = row?.id ? [row.id] : ids.value
 
   await proxy?.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
   await delConfig(configIds)

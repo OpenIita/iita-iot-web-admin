@@ -4,12 +4,13 @@ import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import { blobValidate } from '@/utils/ruoyi'
 import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
+import { generateUUID } from '@/utils'
 
 const baseURL = import.meta.env.VITE_APP_BASE_API
 let downloadLoadingInstance: LoadingInstance
 export default {
   async oss(ossId: string | number) {
-    const url = baseURL + '/resource/oss/download/' + ossId
+    const url = baseURL + '/resource/oss/downloadById'
     downloadLoadingInstance = ElLoading.service({ text: '正在下载数据，请稍候', background: 'rgba(0, 0, 0, 0.7)' })
     try {
       const res = await axios({
@@ -17,6 +18,7 @@ export default {
         url: url,
         responseType: 'blob',
         headers: { Authorization: 'Bearer ' + getToken() },
+        data: { requestId: generateUUID(), data: ossId },
       })
       const isBlob = blobValidate(res.data)
       if (isBlob) {
