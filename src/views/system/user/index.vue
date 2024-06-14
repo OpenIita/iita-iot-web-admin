@@ -304,6 +304,7 @@ import { RoleVO } from '@/api/system/role/types'
 import { PostVO } from '@/api/system/post/types'
 import { DateModelType, ElTree, ElUpload, UploadFile, FormInstance } from 'element-plus'
 import { to } from 'await-to-js'
+import useUserStore from "@/store/modules/user";
 const router = useRouter()
 const { proxy } = getCurrentInstance() as ComponentInternalInstance
 const { sys_normal_disable, sys_user_sex } = toRefs<any>(proxy?.useDict('sys_normal_disable', 'sys_user_sex'))
@@ -566,7 +567,8 @@ const handleAdd = () => {
   nextTick(async () => {
     reset()
     await initTreeData()
-    const { data } = await getUser()
+    const { userId } = useUserStore()
+    const { data } = await getUser(userId)
     postOptions.value = data.posts
     roleOptions.value = data.roles
     form.value.password = initPassword.value
