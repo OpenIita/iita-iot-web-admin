@@ -199,7 +199,7 @@ const handleStatusChange = async (row: TenantPkgVO) => {
   if (err) {
     row.status = row.status === '0' ? '1' : '0'
   } else {
-    await changePackageStatus(row.packageId, row.status)
+    await changePackageStatus(row.id, row.status)
     proxy?.$modal.msgSuccess(text + '成功')
   }
 }
@@ -233,7 +233,7 @@ const resetQuery = () => {
 
 // 多选框选中数据
 const handleSelectionChange = (selection: TenantPkgVO[]) => {
-  ids.value = selection.map(item => item.packageId)
+  ids.value = selection.map(item => item.id)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -279,7 +279,7 @@ const handleUpdate = (row?: TenantPkgVO) => {
   dialog.title = '修改租户套餐'
   nextTick(async () => {
     reset()
-    const _packageId = row?.packageId || ids.value[0]
+    const _packageId = row?.id || ids.value[0]
     const packageMenu = getPackageMenuTreeselect(_packageId)
     const response = await getTenantPackage(_packageId)
     loading.value = false
@@ -316,7 +316,7 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: TenantPkgVO) => {
-  const _packageIds = row?.packageId || ids.value
+  const _packageIds = row?.id? [row.id]: ids.value
   await proxy?.$modal.confirm('是否确认删除租户套餐编号为"' + _packageIds + '"的数据项？').finally(() => {
     loading.value = false
   })

@@ -42,9 +42,7 @@ export const tenantPackageMenuTreeselect = (packageId: string | number): AxiosPr
   return request({
     url: '/system/menu/tenantPackageMenuTreeselect',
     method: 'post',
-    data: {
-      packageId,
-    },
+    data: packageId,
   })
 }
 

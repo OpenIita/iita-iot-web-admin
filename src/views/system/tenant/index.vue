@@ -34,11 +34,11 @@
               >修改</el-button
             >
           </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:tenant:remove']">
-              删除
-            </el-button>
-          </el-col>
+<!--          <el-col :span="1.5">-->
+<!--            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:tenant:remove']">-->
+<!--              删除-->
+<!--            </el-button>-->
+<!--          </el-col>-->
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:tenant:export']">导出</el-button>
           </el-col>
@@ -110,7 +110,7 @@
         </el-form-item>
         <el-form-item label="租户套餐" prop="packageId">
           <el-select v-model="form.packageId" :disabled="!!form.tenantId" placeholder="请选择租户套餐" clearable style="width: 100%">
-            <el-option v-for="item in packageList" :key="item.packageId" :label="item.packageName" :value="item.packageId" />
+            <el-option v-for="item in packageList" :key="item.id" :label="item.packageName" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="过期时间" prop="expireTime">
@@ -323,7 +323,7 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: TenantVO) => {
-  const _ids = row?.id || ids.value
+  const _ids = row?.id
   await proxy?.$modal.confirm('是否确认删除租户编号为"' + _ids + '"的数据项？')
   loading.value = true
   await delTenant(_ids).finally(() => (loading.value = false))
