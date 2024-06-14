@@ -29,67 +29,76 @@ service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 对应国际化资源文件后缀
     config.headers['Content-Language'] = getLanguage()
-
+    const unit = config.data
     const isToken = (config.headers || {}).isToken === false
     // 是否需要防止数据重复提交
     const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
     if (getToken() && !isToken) {
-      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      // config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
-    // get请求映射params参数
-    if (config.method === 'get' && config.params) {
-      let url = config.url + '?' + tansParams(config.params)
-      url = url.slice(0, -1)
-      config.params = {}
-      config.url = url
+    if (unit?.unit) {
+      config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     }
-    const requestId = generateUUID()
-    if (config.data && config.data.constructor == Object) {
-      const { pageNum, pageSize, ...data } = config.data || {}
-      const pageObj: any = {}
-      if (pageNum) pageObj.pageNum = pageNum
-      if (pageSize) pageObj.pageSize = pageSize
-      config.data = {
-        ...pageObj,
-        requestId: requestId,
-        data: data == null ? {} : data.coverData ? data.coverData : data,
+    if (!unit?.unit) {
+      // get请求映射params参数
+      if (config.method === 'get' && config.params) {
+        let url = config.url + '?' + tansParams(config.params)
+        url = url.slice(0, -1)
+        config.params = {}
+        config.url = url
       }
-      if (config.data.data.file) config.data.file = config.data.data.file
-      if (config.data.data.avatarfile) config.data.avatarfile = config.data.data.avatarfile
-    } else {
-      config.data = {
-        requestId: requestId,
-        data: typeof config.data == 'undefined' ? {} : config.data,
+
+
+      const requestId = generateUUID()
+      if (config.data && config.data.constructor == Object) {
+        const { pageNum, pageSize, ...data } = config.data || {}
+        const pageObj: any = {}
+        if (pageNum) pageObj.pageNum = pageNum
+        if (pageSize) pageObj.pageSize = pageSize
+        config.data = {
+          ...pageObj,
+          requestId: requestId,
+          data: data == null ? {} : data.coverData ? data.coverData : data,
+        }
+        if (config.data.data.file) config.data.file = config.data.data.file
+        if (config.data.data.avatarfile) config.data.avatarfile = config.data.data.avatarfile
+      } else {
+        config.data = {
+          requestId: requestId,
+          data: typeof config.data == 'undefined' ? {} : config.data,
+        }
+      }
+
+      if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
+        const requestObj = {
+          url: config.url,
+          data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
+          time: new Date().getTime(),
+        }
+        const sessionObj = cache.session.getJSON('sessionObj')
+        if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
+          cache.session.setJSON('sessionObj', requestObj)
+        } else {
+          const s_url = sessionObj.url // 请求地址
+          const s_data = sessionObj.data // 请求数据
+          const s_time = sessionObj.time // 请求时间
+          const interval = 500 // 间隔时间(ms)，小于此时间视为重复提交
+          if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
+            const message = '数据正在处理，请勿重复提交'
+            console.warn(`[${s_url}]: ` + message)
+            return Promise.reject(new Error(message))
+          } else {
+            cache.session.setJSON('sessionObj', requestObj)
+          }
+        }
+      }
+      // FormData数据去请求头Content-Type
+      if (config.data instanceof FormData) {
+        delete config.headers['Content-Type']
       }
     }
 
-    if (!isRepeatSubmit && (config.method === 'post' || config.method === 'put')) {
-      const requestObj = {
-        url: config.url,
-        data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
-        time: new Date().getTime(),
-      }
-      const sessionObj = cache.session.getJSON('sessionObj')
-      if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
-        cache.session.setJSON('sessionObj', requestObj)
-      } else {
-        const s_url = sessionObj.url // 请求地址
-        const s_data = sessionObj.data // 请求数据
-        const s_time = sessionObj.time // 请求时间
-        const interval = 500 // 间隔时间(ms)，小于此时间视为重复提交
-        if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-          const message = '数据正在处理，请勿重复提交'
-          console.warn(`[${s_url}]: ` + message)
-          return Promise.reject(new Error(message))
-        } else {
-          cache.session.setJSON('sessionObj', requestObj)
-        }
-      }
-    }
-    // FormData数据去请求头Content-Type
-    if (config.data instanceof FormData) {
-      delete config.headers['Content-Type']
-    }
     return config
   },
   (error: any) => {
@@ -174,6 +183,8 @@ service.interceptors.response.use(
       message = '系统接口请求超时'
     } else if (error.response.status == 500 && error.response.data) {
       message = error.response.data.message
+    } else if (error.response.status == 403) {
+      message = '没有权限'
     } else if (message.includes('Request failed with status code')) {
       message = '系统接口' + message.substr(message.length - 3) + '异常'
     }
