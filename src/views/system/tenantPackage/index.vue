@@ -302,7 +302,7 @@ const submitForm = () => {
     if (valid) {
       buttonLoading.value = true
       form.value.menuIds = getMenuAllCheckedKeys()
-      if (form.value.packageId != null) {
+      if (form.value.id != null) {
         await updateTenantPackage(form.value).finally(() => buttonLoading.value = false)
       } else {
         await addTenantPackage(form.value).finally(() => buttonLoading.value = false)
