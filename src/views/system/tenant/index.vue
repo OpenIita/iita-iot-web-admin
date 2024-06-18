@@ -34,11 +34,11 @@
               >修改</el-button
             >
           </el-col>
-<!--          <el-col :span="1.5">-->
-<!--            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:tenant:remove']">-->
-<!--              删除-->
-<!--            </el-button>-->
-<!--          </el-col>-->
+          <!--          <el-col :span="1.5">-->
+          <!--            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:tenant:remove']">-->
+          <!--              删除-->
+          <!--            </el-button>-->
+          <!--          </el-col>-->
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:tenant:export']">导出</el-button>
           </el-col>
@@ -322,7 +322,7 @@ const submitForm = () => {
 }
 
 /** 删除按钮操作 */
-const handleDelete = async (row?: TenantVO) => {
+const handleDelete = async (row: TenantVO) => {
   const _ids = row?.id
   await proxy?.$modal.confirm('是否确认删除租户编号为"' + _ids + '"的数据项？')
   loading.value = true

@@ -39,7 +39,7 @@
 
       <el-table v-loading="loading" :data="tenantPackageList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="租户套餐id" align="center" prop="packageId" v-if="false" />
+        <el-table-column label="租户套餐id" align="center" prop="id" v-if="false" />
         <el-table-column label="套餐名称" align="center" prop="packageName" />
         <el-table-column label="备注" align="center" prop="remark" />
         <el-table-column label="状态" align="center" prop="status">
@@ -139,7 +139,7 @@ const dialog = reactive<DialogOption>({
 
 
 const initFormData: TenantPkgForm = {
-  packageId: undefined,
+  id: undefined,
   packageName: '',
   menuIds: '',
   remark: '',
@@ -153,7 +153,7 @@ const data = reactive<PageData<TenantPkgForm, TenantPkgQuery>>({
     packageName: ''
   },
   rules: {
-    packageId: [{ required: true, message: '租户套餐id不能为空', trigger: 'blur' }],
+    id: [{ required: true, message: '租户套餐id不能为空', trigger: 'blur' }],
     packageName: [{ required: true, message: '套餐名称不能为空', trigger: 'blur' }]
   }
 })
