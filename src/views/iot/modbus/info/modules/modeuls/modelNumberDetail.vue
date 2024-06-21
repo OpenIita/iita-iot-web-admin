@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { saveProductModel } from '../../../api/products.api'
+import { saveProductModel } from '@/views/iot/equipment/api/products.api'
 
 import CodeEditor from '@/components/CodeEditor/index.vue'
 
