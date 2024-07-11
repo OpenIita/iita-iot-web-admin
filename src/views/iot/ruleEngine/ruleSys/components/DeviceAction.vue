@@ -119,10 +119,10 @@ export default defineComponent({
       this.propertiesList = []
       this.servicesList = []
       if (!res) return
-      res.model.properties.forEach((p) => {
+      res?.model?.properties.forEach((p) => {
         this.propertiesList.push(p)
       })
-      res.model.services.forEach((s) => {
+      res?.model?.services.forEach((s) => {
         this.servicesList.push(s)
       })
     },

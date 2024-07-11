@@ -172,7 +172,7 @@ const initThingModel = (pk, res) => {
         name: s.name,
       })
     })
-  res.model.services &&
+  res?.model?.services &&
     res.model.services.forEach((s) => {
       items.push({
         type: 'service',
