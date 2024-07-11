@@ -149,8 +149,8 @@ const onSave = ({ type, data, cancel }: any) => {
     const mObj = {
       type: m.type,
       pk: m.pk,
-      dn: m.dn,
-      conditions: m.conditions.map((m2) => ({
+      dn: m?.dn,
+      conditions: m?.conditions.map((m2) => ({
         ...m2,
         device: m.device,
       })),
@@ -161,16 +161,16 @@ const onSave = ({ type, data, cancel }: any) => {
     }
   })
   obj.filters = (obj.filters || [])?.map((m) => {
-    if (m.conditions == undefined && m.config) {
+    if (m?.conditions == undefined && m?.config) {
       m = JSON.parse(m.config)
     }
     const mObj = {
       type: 'device',
       pk: m.pk,
       dn: m.dn,
-      conditions: m.conditions.map((m2) => ({
+      conditions: m?.conditions.map((m2) => ({
         ...m2,
-        device: m.device,
+        device: m?.device,
       })),
       deviceRadio: m.deviceRadio,
     }
