@@ -17,7 +17,7 @@ export default {
         method: 'post',
         url: url,
         responseType: 'blob',
-        headers: { Authorization: 'Bearer ' + getToken() },
+        headers: { token: getToken() },
         data: { requestId: generateUUID(), data: ossId },
       })
       const isBlob = blobValidate(res.data)
