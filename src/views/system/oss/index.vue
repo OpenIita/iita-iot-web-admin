@@ -110,7 +110,7 @@
         </el-table-column>
       </el-table>
 
-      <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
+      <pagination :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
     <!-- 添加或修改OSS对象存储对话框 -->
     <el-dialog
@@ -196,11 +196,11 @@ const getList = async () => {
   loading.value = true
   const res = await proxy?.getConfigKey('sys.oss.previewListResource')
   previewListResource.value = res?.msg === undefined ? true : res.msg === 'true'
-  console.log(daterangeCreateTime)
-  const params = daterangeCreateTime.value[0] ?  proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : {}
+  console.log(daterangeCreateTime.value)
+  const params = daterangeCreateTime.value[0] ?  proxy?.addDateRange(queryParams.value, daterangeCreateTime.value, 'CreateTime') : queryParams.value
   const response: any = await listOss(params)
   ossList.value = response.data.rows
-  total.value = response.total
+  total.value = response.data.total
   loading.value = false
   showTable.value = true
 }
